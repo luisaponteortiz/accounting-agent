@@ -1,0 +1,172 @@
+{
+ "title": "Fable corrective tickets after independent verification of RD-01, RD-02 and PRV-11 to PRV-13 (bundle FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE, SHA-256 0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9)",
+ "authored": "2026-11-16",
+ "notice": "Review output only. Authorises no implementation, connection, posting, payment, model call, hosting, deployment or policy activation, and opens no readiness gate. All data fictional. No file of the delivered bundle, of the working source or of an earlier review folder was changed during this review; the correction described under 'experimental_validation' was tried only in a temporary copy and is not a delivered fix.",
+ "companion_files": [
+  "FABLE_RD_ACCEPTANCE_REPORT.md",
+  "FABLE_RD_ACCEPTANCE_RESULTS.json",
+  "fable_rd_acceptance_probes.py",
+  "fable_rd_acceptance_output.txt",
+  "fable_rd_order_search.py",
+  "evidence/"
+ ],
+ "recommendation": "RD-01, RD-02 and PRV-11 to PRV-13 are accepted as specified: every assertion in the five tickets holds in an independent run, and the two gate families I deepened to five deliveries (240 orders) have no double approval. RB-01 as a whole is still not accepted, because the requirement is 'regardless of arrival order' and two further kinds of delivery leave one charge approved in two periods (RE-01 P1, RE-02 P2). Both are older than this pass and are not regressions. Before another correction pass is commissioned, the owner should decide whether to keep the requirement open-ended or to bound it by a stated feed contract (see 'owner_choice'). Batch 3 stays closed.",
+ "priority_counts": {"P0": 0, "P1": 1, "P2": 2, "P3": 1},
+ "implementation_order": ["RE-01", "RE-02", "PRV-14", "PRV-15"],
+ "order_note": "RE-01 and RE-02 are in the same module and share the pending-claim helper, so deliver them together. PRV-14 must be in the same change because AGENTS.md requires the register to follow every independent result. PRV-15 is one line either way.",
+ "owner_choice": {
+  "why": "This is the fourth review in a row in which every ticket passes and a neighbouring delivery fails. RD-01 and RD-02 needed one unusual delivery each; RE-01 and RE-02 need two unusual things at once (provider sequence numbers with out-of-order delivery, or one row that declares two different replacement targets). The remaining failures are getting rarer, but the requirement as written has no edge at which a reviewer can stop.",
+  "option_A_recommended_first": "Decide the feed contract for gate G2 now, in DECISIONS.md, at least for these three points: (1) are provider sequence numbers or timestamps used at all, and can messages arrive out of that order; (2) can one row declare a replacement target more than once, and if so does the later claim replace the earlier or add to it; (3) can a claim arrive in a later message than the row. Then restate AAOS-BNK-03 and AAOS-CTL-04 as 'regardless of arrival order within the feed contract of D-0xx'. Deliveries outside the contract are then refused at intake or held for a person, which is a small and testable control, and the requirement becomes verifiable.",
+  "option_B": "Keep the requirement open-ended and commission RE-01 and RE-02 as below. This closes both orders (confirmed in a temporary copy), but I cannot promise that a fifth review finds nothing.",
+  "note": "Both options can be combined: fix RE-01 and RE-02 and record the contract. Neither is a matter for the developer to decide."
+ },
+ "completion_gate": [
+  "python3 exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py . exits 0, unmodified: 13 OK, no WEAK, no NOTE and no ERROR.",
+  "python3 exports/FABLE_RD_ACCEPTANCE/fable_rd_order_search.py . : 336 runs; families X+Yp+Yc+Yr+Z, X+Yp+Yc+Z+V, X+Y5+Y4c+Z, X+Yc+Yt+Yp and X+Yc+Yt+Z have 0 double, and in family X+B+Yb+Yc no order in which Yc is delivered after Yb ends in a double. The script still exits 1 while UC-16 is undecided, because the 10 orders in which Yb is the last claim and B9 had already arrived are counted as double (compare evidence/experiment/rd-extended-search.json: 10 double, all with Yb last).",
+  "python3 exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py . still exits 0 with 15 OK and X08 NOTE; fable_rc_order_search.py still exits 0 with 120 runs and 0 double; the RB script still reports 16 OK and NOTE for N02c and N04e only; the RA script still reports 14 OK.",
+  "make test, make check, make batch2-gate, make reverification-gate, make acceptance-gate, make rb-gate, make rc-gate and make rd-gate still pass; reviewer cases stay at 29 PASS, 10 FIXED, 21 DEFERRED-OK; U4 remains the only NOTE in the older acceptance gate.",
+  "The RD probe script is wired into make test and into a gate target, unmodified. An API change that makes a probe unrunnable is returned with the adapted probe and a diff for review.",
+  "All 205 test methods of this checkpoint remain; no earlier test file is modified except by adding methods; no skip or expected failure hides a correction.",
+  "Each contract change is recorded in DECISIONS.md, and AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 are updated in the same change (PRV-14)."
+ ],
+ "confirmed_defects": [
+  {
+   "id": "RE-01",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "regression": "No. The RC source (bundle 9a85c78a...) gives the same result (evidence/baseline-rc-source-rd-probes.txt, probe E03). The path is untouched by RD-01 and RD-02.",
+   "title": "A replacement claim carried by a message that the provider ordered before the governing version, and that is delivered late, is dropped",
+   "affected_requirements": ["RB-01", "RA-01", "RV-01", "C-01", "T-12", "AAOS-BNK-03", "AAOS-CTL-04", "AAOS-GOV-03"],
+   "source": [
+    "accounting_agent/source_control.py source_revision lines 38-46: a version whose provider order (as_of sequence or timestamp) is older than the governing head is stored and audited as 'older_or_conflicting_source_retained', and the function returns before the head update.",
+    "The claim handling is after that return: line 48-49 (SOURCE_SUPERSESSION_UNRESOLVED) and lines 50-53 (link and approved-source events). So a claim on a retained older message is neither linked nor recorded, whether or not its target exists.",
+    "accounting_agent/service.py intake lines 378-386: the intake answers changed=False, so nothing is resolved or re-evaluated.",
+    "Decision D-023 says a claim persists when a later version of the row omits it. In provider order this is exactly that case (sequence 4 carries the claim, sequence 5 omits it); delivered in provider order the control holds (probe E03c). Only the arrival order differs."
+   ],
+   "probe": "E03, both variants (fable_rd_acceptance_probes.py); control E03c. In fable_rd_order_search.py: family X+Y5+Y4c+Z, every one of the 12 orders in which Y4c is delivered after Y5; the 12 orders with Y4c first are held.",
+   "minimal_reproduction": [
+    "Approve A1 (3 Nov, 40.00) and lock November; December is open.",
+    "Intake A1Y dated 3 Dec, 40.00, provider sequence 5, with its receipt and a December statement, no claim. It is admitted to December and is eligible.",
+    "Intake A1Y again, the same bytes, provider sequence 4, with supersedes='demo_card_001:A1' (variant 'known-target'; A1 exists). The intake answers changed=False.",
+    "Run December card preparation; an independent reviewer approves A1Y; finalize December without acknowledgement.",
+    "Variant 'unknown-target': the sequence-4 message claims A1X, and A1X then arrives claiming A1. Same result.",
+    "Control E03c: deliver sequence 4 (with the claim) first and sequence 5 second. A1Y and its receipt are held under November in both variants."
+   ],
+   "expected": "The same outcome as in provider order: A1Y and its receipt are held under November (known target), or A1Y carries both transition blockers until A1X arrives and is then held (unknown target).",
+   "actual": "No link, no event, no blocker. A1Y is approved in December, A1 stays approved in locked November, and December finalizes without acknowledgement. The only trace is the retained older snapshot and its audit row.",
+   "accounting_or_control_consequence": "The same expense and liability are approved in two periods, one locked. Whether the control holds depends on which of two provider messages reaches the system first, which is the situation provider ordering exists to make harmless.",
+   "smallest_sufficient_correction": [
+    "In source_revision, in the branch that retains an older or conflicting version: when that message declares a claim and the identity has neither a link nor a pending claim, record the claim for the identity. If the claimed row exists, link its head to the identity's current head and write the approved-source events, as lines 50-53 do; otherwise record SOURCE_SUPERSESSION_UNRESOLVED for the current head, as line 49 does. Count the intake as changed, so that resolution and re-evaluation run.",
+    "A claim that the identity already holds (a link, or a pending claim) is not replaced by the older message's claim: the newer statement wins.",
+    "No schema change is needed."
+   ],
+   "tried_in_a_temporary_copy": "Yes, together with RE-02. See 'experimental_validation'.",
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe E03 reports OK in both variants: A1Y and its receipt are listed under November with SOURCE_MOVED_FROM_LOCKED_PERIOD and December has no governing artifact for A1Y.",
+    "Probe E03c is unchanged.",
+    "fable_rd_order_search.py: family X+Y5+Y4c+Z has 0 double in 24 orders.",
+    "Delivering the same older message again adds no link and no accounting event.",
+    "An older message's claim does not replace a link or a pending claim that the identity already has."
+   ],
+   "regression_tests": ["probes E03, E03c", "fable_rd_order_search.py family X+Y5+Y4c+Z", "new unit tests: older-sequenced message with a claim on a known and on an unknown target, eligible and already approved; the older message repeated; an older claim against an identity that already has a link"],
+   "decision_requiring_client_authority": "Feed semantics for gate G2: whether the provider supplies an order (sequence or time) at all, whether messages can arrive out of that order, and whether a claim on an older message stands when the newer version omits it. Until that is decided the claim must persist, as D-023 already says for in-order delivery."
+  },
+  {
+   "id": "RE-02",
+   "priority": "P2",
+   "classification": "confirmed_defect",
+   "regression": "No for the control outcome: the RC source gives the same double approval (evidence/baseline-rc-source-rd-probes.txt, probe E06). One side effect is new in this pass: see 'side_effect_new_in_this_pass'.",
+   "title": "A later claim by a row that already has a link is honoured when its target has arrived and ignored when it has not",
+   "affected_requirements": ["RB-01", "RA-01", "T-12", "AAOS-BNK-03", "AAOS-CTL-04", "AAOS-GOV-03"],
+   "source": [
+    "accounting_agent/source_control.py pending_claim line 116: an identity that has any link has no pending claim, whatever was declared after that link.",
+    "Line 32 uses that lookup to decide whether a claim is new. For a linked identity it always is, so the claim is recorded (new version, SOURCE_SUPERSESSION_UNRESOLVED) but service.py context lines 260-262 show no unresolved blocker for it and resolve_pending_supersessions line 129 never links it.",
+    "When the claimed row has already arrived, by contrast, line 31 adds the new link and supersession_link (line 61, latest link of the identity) makes it govern. So the same two messages give different chains depending on which arrives first.",
+    "This follows my own RD-02 correction text ('for as long as the identity has no link') and the sentence added to the AAOS-BNK-03 and AAOS-CTL-04 criteria in this pass ('no ... second pending-resolution link for an already linked identity is permitted'). The developer implemented what was specified; the gap is in the specification."
+   ],
+   "side_effect_new_in_this_pass": "Because the lookup is always empty for a linked identity, repeating the same claim is no longer a no-op for it: each repeat adds a source version, a binding, a blocked move row, an unresolved event and four audit rows, and advances the generation (probe E02: three repeats, three of each). On the RC source the same repeats added nothing. It fails in the safe direction (the row stays held), but it contradicts the RD-01 assertion 'repeating the claim adds no snapshot, binding, move, link or event' for this case.",
+   "probe": "E06 (both orders) and E02 (fable_rd_acceptance_probes.py). In fable_rd_order_search.py: family X+B+Yb+Yc, orders 'B Yb Yc X' and 'Yb B Yc X'.",
+   "minimal_reproduction": [
+    "Approve A1 (3 Nov, 40.00) and lock November; December is open.",
+    "Intake B9 (2 Dec, 40.00) with its receipt. Intake A1Y (3 Dec, 40.00) with its receipt, supersedes='demo_card_001:B9', and a December statement. A1Y replaces B9 in December.",
+    "Intake A1Y again, the same bytes, with supersedes='demo_card_001:A1X'. A1X has not been received. A new version and an unresolved event are recorded.",
+    "Intake A1X dated 2 Dec with its receipt and supersedes='demo_card_001:A1'. It is held under November.",
+    "Run December. A1Y shows only SOURCE_TRANSITION_REQUIRES_REVIEW (for B9). Record settlement_verified, re-run, an independent reviewer approves A1Y. Finalize December without acknowledgement.",
+    "Control: swap the last two deliveries (A1X first, then the claim). A1Y and its receipt are held under November."
+   ],
+   "expected": "The same outcome in both orders. Which outcome is a feed-policy decision (UC-16). Until it is made, the stronger control is the one the system already applies when the target is known: the latest claim governs, so A1Y carries both transition blockers until A1X arrives and is then held under November.",
+   "actual": "With the claim first, A1Y is approved in December while A1 is approved in locked November, and December finalizes without acknowledgement. The claim exists as an event that nothing reads.",
+   "accounting_or_control_consequence": "The same expense can be approved in two periods when a provider corrects a replacement link before the corrected target has been delivered. Narrower than RE-01, because it needs one row to declare two different targets.",
+   "smallest_sufficient_correction": [
+    "In pending_claim, let a link settle a claim only when the link was made on the claim's own version of the row or a later one. A claim recorded after the identity's latest link is pending.",
+    "Nothing else changes: line 32 then treats the repeated claim as a no-op, context shows both blockers, and resolve_pending_supersessions links the target's head to the claimant's current head with the existing cycle refusal and approved-source events."
+   ],
+   "tried_in_a_temporary_copy": "Yes, together with RE-01. See 'experimental_validation'.",
+   "depends_on": ["RE-01 (shares pending_claim)"],
+   "acceptance_assertions": [
+    "Probe E06 reports OK: in both orders A1Y and its receipt are listed under November and December has no governing artifact for A1Y.",
+    "Probe E02 reports OK: the second and third repeat of the claim add no source snapshot, binding, move, link or accounting event.",
+    "Probes Y05 (latest target, open target, cycle, unrelated intake after a resolved chain, release and relock), Q02i, Q03 and N01f are unchanged.",
+    "The sentence 'no ... second pending-resolution link for an already linked identity is permitted' in AAOS-BNK-03 and AAOS-CTL-04 is replaced by the rule actually implemented (PRV-14)."
+   ],
+   "regression_tests": ["probes E06, E02", "fable_rd_order_search.py family X+B+Yb+Yc", "probes Y05, Q02i, Q03, N01f", "new unit tests: linked identity declares a later claim on an unknown row, target arrives; the claim repeated twice; unrelated intake afterwards"],
+   "decision_requiring_client_authority": "UC-16: what a second replacement claim by the same row means."
+  }
+ ],
+ "experimental_validation": {
+  "what": "RE-01 and RE-02 were applied together to a temporary copy of this bundle's source (source_control.py only: 10 lines added in the retained-version branch of source_revision, 5 lines replaced by 7 in pending_claim). The delivered bundle and the working source were not changed, and this is not a delivered fix.",
+  "patch": "evidence/experimental-correction-re.patch",
+  "results_in_the_temporary_copy": "See evidence/experiment/exit-codes.txt and FABLE_RD_ACCEPTANCE_RESULTS.json, key 'experiment'.",
+  "limits": "No new unit tests were written for the copy. The RE-01 rule 'only when the identity has neither a link nor a pending claim' is the simplest safe choice; a developer may prefer to compare the provider order of the two claims. Treat the patch as a worked reference, not as the answer."
+ },
+ "structural_note": "The search in the gate (120 orders) and the two five-delivery families I added (240 orders) now pass, so the invariant holds for every ordering of a three-link chain with one unclaimed delivery, one revision and one withdrawal. What fails are deliveries with a second dimension the search did not have: an explicit provider order, and a row with two targets. Each new dimension multiplies the space. That is why I recommend deciding the feed contract (owner_choice) instead of extending the search again.",
+ "register_and_check_gaps": [
+  {
+   "id": "PRV-14", "priority": "P2", "classification": "documentation_defect",
+   "title": "The register must record this review, and the check must read its verdicts",
+   "affected_requirements": ["AAOS-BNK-03", "AAOS-CTL-04", "AAOS-GOV-03", "AAOS-GOV-02"],
+   "evidence": "FABLE_RD_ACCEPTANCE_REPORT.md: RD-01, RD-02 and PRV-11 to PRV-13 accepted; RB-01 not accepted (RE-01, RE-02). The three records currently say they await re-verification of X01, X01d, X02 and the 120 orders, all of which now pass in an independent run.",
+   "proposed_correction": "In the same change as the RE corrections: (1) keep AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 at Verification failed, state that RD-01 and RD-02 were independently accepted at checkpoint 0d188fa6... and cite RE-01 and RE-02 in Scope note and Evidence; (2) extend both acceptance criteria with 'including a claim carried by a message ordered before the governing version and delivered after it, and a later claim by a row that already has a link, whether or not its target has arrived', and replace the sentence about a second pending-resolution link; (3) add FABLE_RD_ACCEPTANCE_RESULTS.json (key register_verdicts) and FABLE_RD_ACCEPTANCE_REPORT.md to the pinned reviewer inputs of scripts/check_product_requirements.py as the third authority, later verdict winning per record, and regenerate docs/INDEPENDENT_VERIFICATION_RESULTS.json from the three files; (4) update the Current evidence section and the crosswalk rows T-12, RA-01 and RB-01; (5) record the owner's choice between option A and option B in DECISIONS.md once made.",
+   "dependencies": ["RE-01, RE-02"],
+   "acceptance_criteria": ["The three records name RE-01 and RE-02 and stay failed until probes E03 and E06 and the extended search pass in an independent run.", "The check fails when docs/INDEPENDENT_VERIFICATION_RESULTS.json disagrees with the latest of the three reviewer files.", "The Current evidence section states that RD-01 and RD-02 were accepted, that RB-01 was not, and names RE-01 and RE-02."]
+  },
+  {
+   "id": "PRV-15", "priority": "P3", "classification": "confirmed_code_defect",
+   "title": "The register says the order of the seven result rows is preserved; the check does not look at the order",
+   "affected_requirements": ["AAOS-GOV-02"],
+   "evidence": "evidence/fable-rd-register-faults.txt, cases H13 and H14: swapping two rows of docs/INDEPENDENT_VERIFICATION_RESULTS.json, or reversing all seven, is accepted. AAOS-GOV-02 Acceptance criteria (added in this pass) says 'preserve the current seven-row order'. PRV-12 as I specified it did not ask for an order check, so PRV-12 is met; the sentence promises more than the check does. The delivered file does keep the original order.",
+   "proposed_correction": "Either compare the order of the ids with the order derived from the reviewer files, or delete the clause from AAOS-GOV-02.",
+   "dependencies": [],
+   "acceptance_criteria": ["Fault cases H13 and H14 are rejected, or the clause is gone."]
+  }
+ ],
+ "unverified_or_open_concerns": [
+  {"id": "UC-4", "status": "unchanged, accepted NOTE", "note": "Probe U4 still reports NOTE in the older acceptance gate. Feed-semantics question for gate G2."},
+  {"id": "UC-5", "status": "unchanged", "note": "Synthetic authority grants have no revocation and no rule that the administrator differs from the subject. Must be designed before gate G1."},
+  {"id": "UC-6", "status": "unchanged, by reading only, NOT_RUN", "note": "A duplicated payment row can only be settled or referred."},
+  {"id": "UC-7", "status": "unchanged", "note": "Receipt rows in a blocked chain still carry had_approval 0 although the charge they support was approved. No control effect."},
+  {"id": "UC-8", "status": "unchanged, by reading only, NOT_RUN", "note": "RA-05 across a period boundary. Covered only by the delivered tests."},
+  {"id": "UC-9", "status": "unchanged, by reading only, NOT_RUN", "note": "Journals in replacement chains. pending_claim and resolve_pending_supersessions are not limited to transactions, so a journal's claim is now recorded and linked by identity; but rebind_chained_sources still re-evaluates transaction heads only and journal_validate has no unresolved-transition blocker. I agree with the developer's reading in docs/corrections_rd/journal-scope-reading.txt: a late middle link may leave a journal descendant unevaluated. Not executed by either of us; not part of RD."},
+  {"id": "UC-10", "status": "unchanged, probe N02c, NOTE", "note": "Withdrawal of contradicting evidence is not disclosed. Document-policy decision."},
+  {"id": "UC-11", "status": "unchanged, probe N04e, NOTE", "note": "A restated prior statement with no card activity has no acceptance route. Fails in the safe direction."},
+  {"id": "UC-13", "status": "unchanged", "note": "Workpaper lists a replaced statement twice. Cosmetic."},
+  {"id": "UC-14", "status": "unchanged, probe X08, NOTE", "note": "A replacement of an already withdrawn charge is held under the closed period. Safe direction; feed-semantics decision for gate G2."},
+  {"id": "UC-15", "status": "unchanged, by reading", "note": "A settlement_verified acceptance recorded before the RC checkpoint lapses under this source. Safe direction; only temporary fictional databases exist."},
+  {"id": "UC-16", "status": "new, fable_rd_order_search.py family X+B+Yb+Yc, NOTE", "note": "A row that is held under locked November as a member of A1's chain is released into December, with no reopen and no disposition, when the provider later says that the same row replaces a different, open December row that has already arrived (orders such as 'X B Yc Yb': 10 of the 24 orders). The system applies 'the latest claim replaces the earlier one'; the earlier target A1X stays held under November as the visible trace. If a second claim instead adds to the first, this is a double approval. When the open row arrives after that later claim, the row stays held (orders 'X Yc Yb B' and 'Yc X Yb B'), so the release itself depends on arrival order, in the safe direction. All of this is the same on the RC source and is not changed by the experimental correction. The stronger control would be that a later claim never releases a locked-origin hold without a reopen or a recorded disposition. Needs the feed-contract decision."},
+  {"id": "UC-17", "status": "new, by reading", "note": "The reviewer-file hash pins of PRV-12 live in scripts/check_product_requirements.py, an ordinary project file. Altering a reviewer file and its pin together would pass 'make check'; it is caught by tests/test_rd_review_gate.py (input-checksums.json) only while that list is not altered too. This is inherent to a self-checking repository and is the reason independent review compares against the returned response ZIP. No action proposed."}
+ ],
+ "verified_since_last_review": [
+  {"id": "RD-01", "status": "ACCEPTED", "evidence": "probes X01, X01d, X01b, X01c (unmodified originals); Y01, Y02, E01, E05 (new); order search families X+Yp+Yc+Z, X+Yp+Yc+V, X+Yp+Yc+Yr 0 of 72"},
+  {"id": "RD-02", "status": "ACCEPTED", "evidence": "probe X02, Q02i, Q03, N01d, N01e, N01f, R01c, R01d (unmodified originals); Y03, Y04, Y05, E04 (new); order search 0 of 120; extended five-delivery families 0 of 240"},
+  {"id": "RB-01", "status": "NOT ACCEPTED", "evidence": "E03 and E06 WEAK; 14 of 336 extended delivery orders end with one charge approved in two periods against the latest declared claim (RE-01: 12, RE-02: 2); a further 10 depend on UC-16"},
+  {"id": "PRV-11", "status": "ACCEPTED", "evidence": "evidence/register-diff.txt, evidence/inventory-and-states.txt"},
+  {"id": "PRV-12", "status": "ACCEPTED", "evidence": "evidence/fable-rc-register-faults-on-rd.txt (44 of 44, G16 to G18 rejected), evidence/fable-rd-register-faults.txt (H02 to H27: 24 of 26; the two gaps are PRV-15)"},
+  {"id": "PRV-13", "status": "ACCEPTED", "evidence": "G44 rejected; evidence/fable-rd-register-faults.txt H30 to H39, 10 of 10"}
+ ],
+ "decisions_requiring_client_authority": [
+  "The owner's choice between bounding AAOS-BNK-03 and AAOS-CTL-04 by a feed contract and keeping them open-ended (owner_choice).",
+  "Feed semantics (gate G2), now also: whether provider order metadata is used and whether delivery can be out of that order (RE-01); what a second replacement claim by one row means, and whether it can release a row held under a locked period (RE-02, UC-16). The earlier questions stand: voiding a row in a closed cycle, a replacement before the row it replaces, a link in a later message, a later version that omits a claim, whether a removed replacement restores the original, and UC-14.",
+  "The decisions listed in FABLE_RB_CORRECTIONS.json (document policy, statement policy, separation of policy approval and review, treatment of fees and payments, close checklist, authority to disposition, finalize and lock) are unchanged and remain open."
+ ]
+}

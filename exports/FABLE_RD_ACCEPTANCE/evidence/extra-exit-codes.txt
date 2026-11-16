@@ -1,0 +1,7 @@
+rc-register-faults exit=0
+extended-search-rd exit=1
+rd-probes-on-baseline exit=1
+rd-probes-on-rd exit=1
+DONE
+rd-probes-final-on-rd exit=1
+rd-probes-final-on-baseline exit=1

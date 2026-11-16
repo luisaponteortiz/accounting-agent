@@ -1,0 +1,37 @@
+payload differences vs baseline (mine): 210 | listed by developer: 207
+differences not listed (excluding declared self-artifacts and the manifest): []
+listed but not a difference: []
+listed hashes that differ from the bundle: []
+statuses: {'modified': 13, 'added': 194}
+output_envelope: ['exports/FABLE_RD_AND_PRV_CORRECTIONS_FINAL_VERIFICATION.json', 'exports/FABLE_RD_AND_PRV_CORRECTIONS_PACKAGE_CHECK.json', 'exports/FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.REVIEW_MANIFEST.json', 'exports/FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip', 'exports/FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip.sha256']
+   AAOS-ONB-01 | Product decision: Proposed | state: Deferred | record identical to baseline: True
+   AAOS-ONB-02 | Product decision: Proposed | state: Deferred | record identical to baseline: True
+   AAOS-INT-07 | Product decision: Proposed | state: Deferred | record identical to baseline: True
+   AAOS-GL-06 | Product decision: Proposed | state: Deferred | record identical to baseline: True
+   AAOS-BNK-07 | Product decision: Proposed | state: Deferred | record identical to baseline: True
+   AAOS-RPT-03 | Product decision: Proposed | state: Deferred | record identical to baseline: True
+   AAOS-BB-01 | state: Not started | every field identical to baseline: True
+   AAOS-BB-02 | state: Not started | every field identical to baseline: True
+   AAOS-KNO-04 | state: Independently verified | every field identical to baseline: True
+   AAOS-CTL-01 | state: Independently verified | every field identical to baseline: True
+   AAOS-BNK-02 | state: Independently verified | every field identical to baseline: True
+   AAOS-BNK-03 | state: Verification failed | changed fields: ['Scope note', 'Evidence', 'Acceptance criteria'] | RD-01 & RD-02 named: True | 9a85 cited: True
+   AAOS-CTL-04 | state: Verification failed | changed fields: ['Scope note', 'Evidence', 'Acceptance criteria'] | RD-01 & RD-02 named: True | 9a85 cited: True
+   AAOS-GOV-03 | state: Verification failed | changed fields: ['Scope note', 'Evidence'] | RD-01 & RD-02 named: True | 9a85 cited: True
+   AAOS-CTL-09 | state: Independently verified | changed fields: ['Scope note', 'Evidence'] | RD-01 & RD-02 named: True | 9a85 cited: True
+   AAOS-GOV-02 | state: Developer-tested | changed fields: ['Scope note', 'Acceptance criteria'] | RD-01 & RD-02 named: False | 9a85 cited: False
+   decisions changed: [] | states changed: []
+   Product decision counts: {'Approved': 77, 'Proposed': 9, 'Rejected': 2} | state counts: {'Not started': 25, 'Developer-tested': 20, 'Verification failed': 3, 'Deferred': 36, 'Independently verified': 4}
+   CTL-09 scope note mentions Q02: True | ure; that document-policy question is outside the verified RB-02 scope (N02c NOTE). RC transition-chain acceptance binding was independently verified by probe Q02 at checkpoint 9a85c78a40fd9b5f675b4d135274808056b34097ad907e38e962bf25b0762454. RD-01/RD-02 keep AAOS-BNK-03/AAOS-CTL-04 failed; this result grants no wider readiness.
+   crosswalk T-12 : True True
+   crosswalk RA-01 : True True
+   crosswalk RB-01 : True True
+FINAL_VERIFICATION.json: {"bundle": "FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip", "bundle_sha256": "0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9", "manifest_sha256": "9d27ea03c4f374ff2e4a801250206332ebf5aa47f003e47d933ea0059cc44f33", "payload_files": 936, "crc_and_every_payload_hash_verified": true, "protected_inputs_verified_in_working_and_bundle": 484, "extracted_payload_changes_after_commands": [], "extra_files_after_commands": [], "five_commits_unchanged": true, "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]", "sqlite": "3.51.0", "platform": "macOS-26.5.2-x86_64-i386-64bit", "commands": [{"command": ["make", "check"], "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-rd-final-0dvvxhvz/project", "started_utc": "2026-11-16T16:33:23.689636+00:00", "elapsed_seconds": 1.384, "exit_code": 0}, {"command": ["/Library/Developer/CommandLineTools/usr/bin/python3", "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py", "."], "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-rd-final-0dvvxhvz/project", "started_utc": "2026-11-16T16:33:25.074814+00:00", "elapsed_seconds": 42.469, "exit_code": 0}, {"command": ["/Library/Developer/CommandLineTools/usr/bin/python3", "exports/FABLE_RC_ACCEPTANCE/evidence/scripts/fable_rc_register_faults.py", "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-rd-final-0dvvxhvz/project"], "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-rd-final-0dvvxhvz/project", "s
+FINAL_VERIFICATION folder: ['make-check.json', 'make-check.stderr.txt', 'make-check.stdout.txt', 'rb-register-faults.json', 'rb-register-faults.stderr.txt', 'rb-register-faults.stdout.txt', 'rc-register-faults.json', 'rc-register-faults.stderr.txt', 'rc-register-faults.stdout.txt', 'rd-gate.json', 'rd-gate.stderr.txt', 'rd-gate.stdout.txt']
+== DECISIONS.md: lines removed or changed relative to the baseline
+(end)
+== DECISIONS.md: decision ids added
+D-016 D-017 D-022 D-023 D-024 D-025 
+== D-016 / D-017 lines identical to baseline
+D-016 lines=1 identical
+D-017 lines=1 identical

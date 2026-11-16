@@ -1,0 +1,37 @@
+--- newRef/accounting_agent/source_control.py	2026-11-16 11:32:52
++++ expT/accounting_agent/source_control.py	2026-11-16 12:09:08
+@@ -43,6 +43,17 @@
+         db.execute('INSERT INTO source_metadata VALUES(?,?,?,?,?,?,?,?)',(sid,actor.scope,system,order_type,order_value,int(removed),reason,packet.get('period_id') or value.get('period_id')))
+         if not accepted:
+             self.store.audit(db,actor.scope,actor.id,'older_or_conflicting_source_retained',{'snapshot_id':sid,'governing_snapshot_id':old['id'] if old else None})
++            # Experimental RE-01: the retained older message may carry the only
++            # statement of a replacement claim. Record it for the identity when
++            # the identity has neither a link nor a pending claim.
++            if supersedes and old and not self.supersession_link(db,actor.scope,old['id']) and not self.pending_claim(db,actor.scope,kind,key):
++                if predecessor:
++                    db.execute("INSERT INTO source_links(scope,old_snapshot_id,new_snapshot_id,reason,created) VALUES(?,?,?,'superseded',?)",(actor.scope,predecessor['snapshot_id'],old['id'],utcnow()))
++                    for ancestor_key in {ref['source_key'] for ref in self.supersession_refs(db,actor.scope,old['id'])}:
++                        self.source_approval_events(db,actor,ancestor_key,old['id'],'APPROVED_SOURCE_SUPERSEDED')
++                else:
++                    self.accounting_event(db,actor,None,key,'SOURCE_SUPERSESSION_UNRESOLVED',{'snapshot_id':old['id'],'target_key':old_key})
++                return sid,True
+             return sid,False
+         db.execute('INSERT INTO source_heads(scope,kind,source_key,snapshot_id,removed) VALUES(?,?,?,?,?) ON CONFLICT(scope,kind,source_key) DO UPDATE SET snapshot_id=excluded.snapshot_id,removed=excluded.removed',(actor.scope,kind,key,sid,int(removed)))
+         if supersedes and not predecessor:
+@@ -113,10 +124,14 @@
+     def pending_claim(self,db,scope,kind,key):
+         """Latest recorded claim for an identity, until that identity has a link."""
+         head=db.execute('SELECT snapshot_id FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(scope,kind,key)).fetchone()
+-        if not head or self.supersession_link(db,scope,head['snapshot_id']):return None
++        if not head:return None
++        link=self.supersession_link(db,scope,head['snapshot_id'])
+         for event in db.execute("SELECT payload FROM accounting_events WHERE scope=? AND code='SOURCE_SUPERSESSION_UNRESOLVED' AND item_key=? ORDER BY id DESC",(scope,key)):
+             claim=json.loads(event['payload'])
+-            if db.execute('SELECT 1 FROM snapshots WHERE scope=? AND id=? AND kind=? AND source_key=?',(scope,claim['snapshot_id'],kind,key)).fetchone():return claim
++            if db.execute('SELECT 1 FROM snapshots WHERE scope=? AND id=? AND kind=? AND source_key=?',(scope,claim['snapshot_id'],kind,key)).fetchone():
++                # Experimental RE-02: only a link made on the claim's own version
++                # or a later one settles it; an older link does not.
++                return None if link and link['new_snapshot_id']>=claim['snapshot_id'] else claim
+         return None
+ 
+     def resolve_pending_supersessions(self,db,actor):

@@ -1,0 +1,24 @@
+P01 real probe output of my run, exit 0                                                       want=ACCEPTED got=ACCEPTED ok  
+P02 real output, exit 1                                                                       want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+P03 summary row X02 missing                                                                   want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+P04 summary row X02 duplicated                                                                want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+P05 unknown id X99 in place of X02                                                            want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+P06 an extra unknown id X99 added                                                             want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+P07 X01 reported WEAK                                                                         want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+P08 X01d reported ERROR                                                                       want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+P09 the X08 NOTE altered to OK                                                                want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+P10 an OK probe (Q03) altered to NOTE                                                         want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+P11 empty output                                                                              want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+O01 real order-search output and JSON of my run, exit 0                                       want=ACCEPTED got=ACCEPTED ok  
+O02 real output, exit 1                                                                       want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+O03 one order row missing                                                                     want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+O04 one order row missing but runs still says 120                                             want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+O05 one order duplicated in place of another                                                  want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+O06 one order row has double=True                                                             want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+O07 a double approval hidden behind double=False (A1 approved and a December approval listed) want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+O08 top-level double count set to 1                                                           want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+O09 summary line says double=1                                                                want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+O10 summary line missing                                                                      want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+O11 an order from an unknown family in place of a real one                                    want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+O12 one order row given a permutation that is not of its family                               want=REJECTED got=REJECTED ok  ValueError: RD gate requires exit 0 and all exact 120 delivery orders with zero double approval
+cases 23 | agree 23 | gaps 0

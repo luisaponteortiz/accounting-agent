@@ -1,0 +1,81 @@
+== 1. patch applied to the baseline reproduces every source/test/script/Makefile byte
+   files patched tree 61 | new bundle 61 | identical True | differing []
+   source/test/script/Makefile files differing from baseline: ['Makefile', 'accounting_agent/service.py', 'accounting_agent/source_control.py', 'scripts/build_rd_review_bundle.py', 'scripts/check_product_requirements.py', 'scripts/verify_rc_review.py', 'scripts/verify_rd_bundle.py', 'tests/test_product_requirements.py', 'tests/test_rd_review_gate.py', 'tests/test_review_corrections_rd.py']
+== 2. protected inputs (input-checksums.json)
+   new bundle: 484 listed, 0 mismatching []
+   working project: 484 listed, 0 mismatching []
+   of these, present in the baseline bundle: 415, differing from baseline: 0 []
+   not in the baseline bundle (later reviewer/owner inputs): 69, e.g. ['CODEX_RD_CORRECTIONS_PROMPT.md', 'exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip.sha256', 'exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip', 'exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_RESPONSE.zip.sha256']
+   protected list contains exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py                      True
+   protected list contains exports/FABLE_RC_ACCEPTANCE/fable_rc_order_search.py                           True
+   protected list contains exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py                      True
+   protected list contains exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py                      True
+   protected list contains exports/FABLE_RC_ACCEPTANCE/evidence/scripts/fable_rc_register_faults.py       True
+   protected list contains exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py                True
+   protected list contains exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_RESULTS.json                   True
+   protected list contains exports/FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_CORRECTIONS.json       True
+   protected list contains tests/schema_v1.sql                                                            False
+   protected list contains accounting_agent/storage.py                                                    False
+== 3. RC review folder against the returned response ZIP
+   new bundle: response entries 62 | identical 62 | differing 0 | not found 0
+   working project: response entries 62 | identical 62 | differing 0 | not found 0
+   files in working exports/FABLE_RC_ACCEPTANCE: 62 | (.DS_Store etc. included)
+== 4. earlier archives and sidecars in the working project
+   exports/FABLE_ACCOUNTING_REVIEW_BUNDLE.zip                                     matches record True | sidecar none
+   exports/FABLE_BATCH_1_REVIEW_BUNDLE.zip                                        matches record True | sidecar none
+   exports/FABLE_CORRECTIONS_AND_BATCH_2_REVIEW_BUNDLE.zip                        matches record True | sidecar True
+   exports/FABLE_CORRECTIVE_C01_C06_REVIEW_BUNDLE.zip                             matches record True | sidecar none
+   exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip                    matches record True | sidecar True
+   exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_RESPONSE.zip                  matches record True | sidecar True
+   exports/FABLE_RA_CORRECTIONS_REVIEW_BUNDLE.zip                                 matches record True | sidecar True
+   exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip                matches record True | sidecar True
+   exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip             matches record True | sidecar True
+   exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE.zip           matches record True | sidecar True
+   exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE_V2.zip        matches record True | sidecar True
+   exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip                         matches record True | sidecar True
+   exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_RESPONSE.zip                       matches record True | sidecar True
+   exports/FABLE_REVERIFICATION_CORRECTIONS_REVIEW_BUNDLE.zip                     matches record True | sidecar True
+   zip files in working exports: 15; not in the developer list: ['FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip']
+   V2 hash: 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d
+== 5. earlier bundles carried inside the new bundle equal the working copies
+   FABLE_ACCOUNTING_REVIEW_BUNDLE.zip                                     identical True
+   FABLE_BATCH_1_REVIEW_BUNDLE.zip                                        identical True
+   FABLE_CORRECTIONS_AND_BATCH_2_REVIEW_BUNDLE.zip                        identical True
+   FABLE_CORRECTIVE_C01_C06_REVIEW_BUNDLE.zip                             identical True
+   FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip                    identical True
+   FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_RESPONSE.zip                  identical True
+   FABLE_RA_CORRECTIONS_REVIEW_BUNDLE.zip                                 identical True
+   FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip                identical True
+   FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip             identical True
+   FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE.zip           identical True
+   FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE_V2.zip        identical True
+   FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip                         identical True
+   FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_RESPONSE.zip                       identical True
+   FABLE_REVERIFICATION_CORRECTIONS_REVIEW_BUNDLE.zip                     identical True
+== 6. schema
+   accounting_agent/storage.py      identical to baseline True
+   tests/schema_v1.sql              identical to baseline True
+== 7. working project git state (read-only)
+   branch review/fable-rc-acceptance | HEAD 5a12ab0 | commits on branch 5
+   log:
+     5a12ab0 2026-11-16 10:58:21 -0500 Record Codex RC/PRV developer corrections in the register and decision log
+     963006a 2026-11-16 10:55:59 -0500 Add Fable RC/PRV independent review and Codex RD correction prompt
+     db5d1ed 2026-11-16 01:43:43 -0500 Record PR-11 confirmation in the register (D-016, D-017)
+     83b5893 2026-11-16 01:41:33 -0500 Add decision log with PR-11 owner confirmation (D-016)
+     e51b0d7 2026-11-16 01:40:52 -0500 Add Fable RB/PR independent review and Codex correction prompt
+   recorded git-history-final.txt:
+     commit 5a12ab0f49ff60cf1434e27b08d2866214333931
+     Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+     AuthorDate: Mon Nov 16 10:58:21 2026 -0500
+     Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+     CommitDate: Mon Nov 16 10:58:21 2026 -0500
+     
+         Record Codex RC/PRV developer corrections in the register and decision log
+         
+         Commits the developer's edits from the RC/PRV correction pass exactly as
+         delivered. Both files are byte-identical to the versions in the reviewed
+         bundle FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip (SHA-256
+         9a85c78a40fd9b5f675b4d135274808056b34097ad907e38e962bf25b0762454):
+   reflog entries: 7 | last: 5a12ab0 HEAD@{0}: commit: Record Codex RC/PRV developer corrections in the register and decision log
+   tracked files modified: M DECISIONS.md ;  M docs/PRODUCT_REQUIREMENTS.md
+   stash: none | tags: none

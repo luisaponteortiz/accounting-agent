@@ -1,0 +1,68 @@
+== sidecar
+0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9  FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip
+== shasum of the submitted ZIP
+0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9
+== adjacent package check
+{
+  "bundle": "FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "bundle_sha256": "0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9",
+  "manifest_sha256": "9d27ea03c4f374ff2e4a801250206332ebf5aa47f003e47d933ea0059cc44f33",
+  "payload_files": 936,
+  "all_payload_hashes_and_crc_verified": true,
+  "protected_inputs_verified": 484,
+  "baseline_test_methods_retained": 192,
+  "independent_acceptance": "PENDING",
+  "human_G0": "NOT_GRANTED",
+  "batch3": "CLOSED"
+}
+
+== archive structure (before extraction)
+entries 937 dirs 0 bad [] symlinks []
+dupes 0
+testzip None
+top-level ['.gitignore', 'AGENTS.md', 'CODEX_RC_CORRECTIONS_PROMPT.md', 'CODEX_RD_CORRECTIONS_PROMPT.md', 'DECISIONS.md', 'FABLE_ACCOUNTING_HANDOFF.md', 'FABLE_PRODUCT_AND_RA_REVIEW_PROMPT.md', 'FABLE_RA_CORRECTIONS_HANDOFF.md', 'FABLE_RA_REVIEW_PROMPT.md', 'FABLE_RB_CORRECTIONS_HANDOFF.md', 'FABLE_RB_REVIEW_PROMPT.md', 'FABLE_RC_CORRECTIONS_HANDOFF.md', 'FABLE_RC_REVIEW_PROMPT.md', 'FABLE_RD_CORRECTIONS_HANDOFF.md', 'FABLE_RD_REVIEW_PROMPT.md', 'FABLE_REVERIFICATION_PROMPT.md', 'FABLE_REVIEW_PROMPT.md', 'FABLE_RV_CORRECTIONS_HANDOFF.md', 'Makefile', 'PROGRESS.md', 'README.md', 'REVIEW_FREEZE.md', 'REVIEW_MANIFEST.json', 'START_HERE.md', 'accounting_agent', 'data', 'docs', 'exports', 'review', 'scripts', 'ss_agent_system_handoff', 'tests']
+uncompressed MB 173.705471
+== manifest anchor
+inner manifest sha 9d27ea03c4f374ff2e4a801250206332ebf5aa47f003e47d933ea0059cc44f33
+external manifest sha 9d27ea03c4f374ff2e4a801250206332ebf5aa47f003e47d933ea0059cc44f33 identical bytes True
+manifest keys ['label', 'scope', 'hash_rule', 'files']
+== every manifest entry, diff against the RC baseline, and comparison with the working project
+manifest entries 936 payload files 936
+missing from disk []
+not in manifest []
+hash mismatches []
+vs baseline: added 196 removed 0 changed 14
+REMOVED: []
+CHANGED:
+   AGENTS.md
+   DECISIONS.md
+   Makefile
+   PROGRESS.md
+   REVIEW_FREEZE.md
+   REVIEW_MANIFEST.json
+   START_HERE.md
+   accounting_agent/service.py
+   accounting_agent/source_control.py
+   docs/CONNECTION_READINESS.md
+   docs/INDEPENDENT_VERIFICATION_RESULTS.json
+   docs/PRODUCT_REQUIREMENTS.md
+   scripts/check_product_requirements.py
+   tests/test_product_requirements.py
+ADDED by prefix:
+   CODEX_RD_CORRECTIONS_PROMPT.md 1
+   FABLE_RD_CORRECTIONS_HANDOFF.md 1
+   FABLE_RD_REVIEW_PROMPT.md 1
+   scripts/build_rd_review_bundle.py 1
+   scripts/verify_rc_review.py 1
+   scripts/verify_rd_bundle.py 1
+   tests/test_rd_review_gate.py 1
+   tests/test_review_corrections_rd.py 1
+bundle vs working project: missing in project [] differing []
+== pinned inputs
+9a85c78a40fd9b5f675b4d135274808056b34097ad907e38e962bf25b0762454  exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip
+1c47259742cfed78a2dcd2059c8cdadb72787df208d9d9232ddd8946bcfcbc23  exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_RESPONSE.zip
+4ae020a6d2111d4db33bd30d909f4968c60b89e8114ba044189f21d3e66c913f  CODEX_RD_CORRECTIONS_PROMPT.md
+13db1078aa5045474b44976a3f9fcde08219f623e90d9575e134205ee7992f34  FABLE_RD_REVIEW_PROMPT.md
+== pristine reference extraction unchanged after all runs (re-hash against manifest)
+mismatches [] extra files []
+final re-hash of pristine extraction: mismatches 0 extra 0

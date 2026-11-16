@@ -1,0 +1,273 @@
+python3 scripts/verify_rc_review.py
+Q01 [RC-01] every RC-01 assertion: withdrawal after the lock, fresh and late link; listing; blocked move; reopen; relock
+    [fresh] exceptions: [('demo_card_001:A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD'), ('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [fresh] moves: [('demo_card_001:B1', '2026-11', '2026-12', 1, 1), ('receipt-B1', '2026-11', '2026-12', 1, 0)]
+    assert [fresh] December has no governing artifact for B1                              yes
+    assert [fresh] B1 and its receipt are held under November as MOVED                    yes
+    assert [fresh] a blocked move row with had_approval exists for B1                     yes
+    assert [fresh] no move row has the same origin and destination                        yes
+    assert [fresh] state.source_exceptions lists the withdrawal of A1 under November      yes
+    assert [fresh] A1 is still approved and governing in locked November                  yes
+    [fresh] finalize December without acknowledgement: ('refused', 409, 'Package control remains open')
+    assert [fresh] December cannot be finalized silently while B1 is held                 yes
+    [fresh] after reopen -> November: ['demo_card_001:A2'] | December: ['demo_card_001:B1', 'demo_card_001:D1'] | B1: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | exceptions: []
+    assert [fresh] after reopen November has no governing A1                              yes
+    assert [fresh] after reopen December has exactly one item for the charge, with TRANSITION yes
+    assert [fresh] after reopen the withdrawal is admitted and no longer listed           yes
+    assert [fresh] no version of A1 was rewritten or dropped                              yes
+    settlement_verified on demo_card_001:B1: ('ok', 1)
+    independent approval of demo_card_001:B1: ('ok', None)
+    assert [fresh] B1 approvable once, A1 not governing                                   yes
+    [fresh] relock November: ('ok', None)
+    [fresh] after relock and a revision of B1 -> B1: {'id': 26, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW']} | held: []
+    assert [fresh] after relock a revision of B1 stays in December                        yes
+    [late] B1 approved in December before the withdrawal and the claim: ('ok', None)
+    [late] exceptions: [('demo_card_001:A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD'), ('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [late] moves: [('demo_card_001:B1', '2026-11', '2026-12', 1, 1), ('receipt-B1', '2026-11', '2026-12', 1, 0)]
+    assert [late] December has no governing artifact for B1                               yes
+    assert [late] B1 and its receipt are held under November as MOVED                     yes
+    assert [late] a blocked move row with had_approval exists for B1                      yes
+    assert [late] no move row has the same origin and destination                         yes
+    assert [late] state.source_exceptions lists the withdrawal of A1 under November       yes
+    assert [late] A1 is still approved and governing in locked November                   yes
+    [late] finalize December without acknowledgement: ('refused', 409, 'Package control remains open')
+    assert [late] December cannot be finalized silently while B1 is held                  yes
+    [late] after reopen -> November: ['demo_card_001:A2'] | December: ['demo_card_001:B1', 'demo_card_001:D1'] | B1: {'id': 21, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | exceptions: []
+    assert [late] after reopen November has no governing A1                               yes
+    assert [late] after reopen December has exactly one item for the charge, with TRANSITION yes
+    assert [late] after reopen the withdrawal is admitted and no longer listed            yes
+    assert [late] no version of A1 was rewritten or dropped                               yes
+    settlement_verified on demo_card_001:B1: ('ok', 1)
+    independent approval of demo_card_001:B1: ('ok', None)
+    assert [late] B1 approvable once, A1 not governing                                    yes
+    [late] relock November: ('ok', None)
+    [late] after relock and a revision of B1 -> B1: {'id': 31, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW']} | held: []
+    assert [late] after relock a revision of B1 stays in December                         yes
+    => OK
+
+Q02 [RC-02] every RC-02 assertion: late link on a middle source, terminal eligible and already approved; events; reopen; lapse of the earlier acceptance
+    [eligible] exceptions: [('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [eligible] moves: [('demo_card_001:B1', '2026-11', '2026-12', 1, 1), ('demo_card_001:C1', '2026-11', '2026-12', 1, 1), ('receipt-C1', '2026-11', '2026-12', 1, 0)]
+    [eligible] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1'), ('ITEM_LEFT_POPULATION', '2026-12', 'demo_card_001:B1'), ('ITEM_LEFT_POPULATION', '2026-12', 'demo_card_001:C1')]
+    assert [eligible] December has no governing artifact for C1 or B1                     yes
+    assert [eligible] C1, B1 and the receipt of C1 are held under November as MOVED       yes
+    assert [eligible] A1 still approved and governing in locked November                  yes
+    [eligible] finalize December without acknowledgement: ('refused', 409, 'Package control remains open')
+    assert [eligible] December cannot be finalized silently while C1 is held              yes
+    [eligible] after reopen -> November: ['demo_card_001:A2'] | December: ['demo_card_001:C1'] | C1: {'id': 23, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']}
+    assert [eligible] after reopen November has no governing A1                           yes
+    assert [eligible] after reopen December has exactly one governing item, C1            yes
+    assert [eligible] C1 carries TRANSITION and is not approved (earlier acceptance lapsed) yes
+    assert [eligible] A1 was never admitted to December                                   yes
+    [eligible] C1 disclosed chain: ['demo_card_001:A1', 'demo_card_001:B1']
+    assert [eligible] C1 discloses the whole chain B1 and A1                              yes
+    settlement_verified on demo_card_001:C1: ('ok', 1)
+    independent approval of demo_card_001:C1: ('ok', None)
+    assert [eligible] C1 approvable once after a new acceptance; A1 and B1 not governing  yes
+    settlement_verified on demo_card_001:C1: ('ok', 1)
+    independent approval of demo_card_001:C1: ('ok', None)
+    assert [approved] C1 is approved in December before the late link                     yes
+    [approved] exceptions: [('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [approved] moves: [('demo_card_001:B1', '2026-11', '2026-12', 1, 1), ('demo_card_001:C1', '2026-11', '2026-12', 1, 1), ('receipt-C1', '2026-11', '2026-12', 1, 0)]
+    [approved] events: [('APPROVED_SOURCE_REVISED', '2026-12', 'demo_card_001:C1'), ('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1'), ('ITEM_LEFT_POPULATION', '2026-12', 'demo_card_001:B1'), ('ITEM_LEFT_POPULATION', '2026-12', 'demo_card_001:C1')]
+    assert [approved] December has no governing artifact for C1 or B1                     yes
+    assert [approved] C1, B1 and the receipt of C1 are held under November as MOVED       yes
+    assert [approved] A1 still approved and governing in locked November                  yes
+    assert [approved] an accounting event names the December approval of C1               yes
+    assert [approved] ITEM_LEFT_POPULATION is recorded for C1                             yes
+    assert [approved] a blocked move row with had_approval exists for C1                  yes
+    [approved] C1 artifacts kept: [(15, 'stale', False), (11, 'stale', False)] | approval decisions kept for C1: 1
+    assert [approved] the earlier approval decision of C1 is kept; no C1 artifact governs yes
+    assert [approved] no decision row was removed                                         yes
+    [approved] finalize December without acknowledgement: ('refused', 409, 'Package control remains open')
+    assert [approved] December cannot be finalized silently while C1 is held              yes
+    [approved] after reopen -> November: ['demo_card_001:A2'] | December: ['demo_card_001:C1'] | C1: {'id': 27, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']}
+    assert [approved] after reopen November has no governing A1                           yes
+    assert [approved] after reopen December has exactly one governing item, C1            yes
+    assert [approved] C1 carries TRANSITION and is not approved (earlier acceptance lapsed) yes
+    assert [approved] A1 was never admitted to December                                   yes
+    [approved] C1 disclosed chain: ['demo_card_001:A1', 'demo_card_001:B1']
+    assert [approved] C1 discloses the whole chain B1 and A1                              yes
+    settlement_verified on demo_card_001:C1: ('ok', 2)
+    independent approval of demo_card_001:C1: ('ok', None)
+    assert [approved] C1 approvable once after a new acceptance; A1 and B1 not governing  yes
+    => OK
+
+Q02i [RC-02] no-op rule: an intake that does not touch a chain adds no binding, move, link or chain event for it (held chain, released chain, open-period chain)
+    assert [held] chain is held                                                           yes
+    [held] unrelated intake of 2 sources (+ replay True) -> row deltas: {'snapshots': 3, 'source_periods': 2, 'source_moves': 0, 'source_links': 0, 'decisions': 0, 'chain_events': 0}
+    assert [held] 2 new snapshots, 2 new bindings, no move, link or chain event           yes
+    relock November: ('ok', None)
+    [released-relocked] unrelated intake of 2 sources (+ replay True) -> row deltas: {'snapshots': 3, 'source_periods': 2, 'source_moves': 0, 'source_links': 0, 'decisions': 0, 'chain_events': 0}
+    assert [released-relocked] 2 new snapshots, 2 new bindings, no move, link or chain event yes
+    assert [released-relocked] C1 still governs December, nothing held                    yes
+    [open] unrelated intake of 2 sources (+ replay True) -> row deltas: {'snapshots': 3, 'source_periods': 2, 'source_moves': 0, 'source_links': 0, 'decisions': 0, 'chain_events': 0}
+    assert [open] 2 new snapshots, 2 new bindings, no move, link or chain event           yes
+    assert [open] no quarantine and no move row at all                                    yes
+    => OK
+
+Q03 [RC-03] every RC-03 assertion: target arrives without the claimant being re-sent; claimant already replaced; newest first; open target; cycle
+    assert [a] before its target arrives A1Y is held as unresolved                        yes
+    assert [a] after A1X arrives A1Y is listed under November                             yes
+    [a] exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Z', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Z', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')] | links: [('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y'), ('demo_card_001:A1Y', 'demo_card_001:A1Z')]
+    assert [a] after A1Z arrives December has no governing A1Z and A1Z is under November  yes
+    assert [a] nothing of the chain governs December; A1 approved in November             yes
+    [b] before the target: December ['demo_card_001:A1Z'] | A1Z: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']}
+    [b] exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Z', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Z', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')] | links: [('demo_card_001:A1Y', 'demo_card_001:A1Z'), ('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    assert [b] the replaced claimant A1Y is linked to A1X                                 yes
+    assert [b] December has no governing chain member; A1Z and A1X under November         yes
+    assert [b] not approved in two periods                                                yes
+    assert [b] after reopen only A1Z governs December and A1 has left November            yes
+    [c] exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Z', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Z', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')] | links: [('demo_card_001:A1Y', 'demo_card_001:A1Z'), ('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    assert [c] newest first without any re-send: nothing governs December; A1Z and A1X held yes
+    assert [c] not approved in two periods                                                yes
+    assert [c] after reopen only A1Z is admitted; A1 and A1X never entered December       yes
+    assert [d] open November: A1Y first shows UNRESOLVED                                  yes
+    [d] A1Y: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | December: ['demo_card_001:A1Y'] | November: ['demo_card_001:A2'] | exceptions: [] | moves: [('demo_card_001:A1X', '2026-11', '2026-12', 0, 0)]
+    assert [d] claim resolved: TRANSITION stays, UNRESOLVED is gone                       yes
+    assert [d] ordinary supersession: only A1Y in December, A1 left November, no quarantine, no blocked move yes
+    [e] P2 arrives claiming P1 while P1 claims P2: ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    [e] a later unrelated intake: ('ok', {'changed': True, 'generation': 5, 'replay': False})
+    [e] links between P1 and P2: [('demo_card_001:P1', 'demo_card_001:P2')] | December: ['demo_card_001:E9', 'demo_card_001:P2']
+    assert [e] at most one link between the two; the application still prepares           yes
+    => OK
+
+X01 [RC-03] the claim is declared by re-sending an unchanged row (same bytes) before its target has arrived; the target then arrives and is held
+    A1Y re-sent unchanged with supersedes=A1X (A1X not yet received): ('ok', {'changed': False, 'generation': 3, 'replay': False})
+    claim recorded as an event: []
+    A1X arrives (supersedes locked A1) -> December demo_card_001:A1Y: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []} | held under November: ['demo_card_001:A1X', 'receipt-A1X']
+    exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:A1', 'demo_card_001:A1X')]
+    independent approval of demo_card_001:A1Y: ('ok', None)
+    finalize December without acknowledgement: ('ok', 1)
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:A1Y: {'id': 7, 'eligible': True, 'status': 'approve', 'blockers': []} | approved in both periods: True
+    => WEAK
+
+X01b [RC-03] control for X01: the same steps, but the claim is repeated once more after the target has arrived
+    claim repeated after A1X arrived -> December demo_card_001:A1Y: None | held under November: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y']
+    exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:A1Y: None | approved in both periods: False
+    => OK
+
+X01c [RC-03] control for X01: the claim is carried inside the row (supersedes_source_id), so the bytes change
+    A1Y re-sent with supersedes_source_id=A1X inside the row: ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    claim recorded as an event: [('SOURCE_SUPERSESSION_UNRESOLVED', None, 'demo_card_001:A1Y')]
+    A1X arrives -> December demo_card_001:A1Y: None | held under November: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y']
+    exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:A1Y: None | approved in both periods: False
+    => OK
+
+X01d [RC-03] X01 with the claimant already approved in December when the unchanged row is re-sent with its claim
+    A1Y approved in December before any claim: ('ok', None)
+    December A1Y: {'id': 7, 'eligible': True, 'status': 'approve', 'blockers': []} | held: ['demo_card_001:A1X', 'receipt-A1X'] | events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')]
+    finalize December without acknowledgement: ('ok', 1)
+    approved in both periods with no new decision: True
+    => WEAK
+
+X02 [RC-03] the claimant is revised (claim not repeated) while its claim is still unresolved; the target then arrives and is held
+    [claim repeated=False] revised A1Y: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [claim repeated=False] A1X arrives -> December demo_card_001:A1Y: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} | held under November: ['demo_card_001:A1X', 'receipt-A1X']
+    exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:A1', 'demo_card_001:A1X')]
+    revised_evidence_accepted on demo_card_001:A1Y: ('ok', 1)
+    independent approval of demo_card_001:A1Y: ('ok', None)
+    finalize December without acknowledgement: ('ok', 1)
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:A1Y: {'id': 15, 'eligible': True, 'status': 'approve', 'blockers': []} | approved in both periods: True
+    [claim repeated=True] revised A1Y: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    [claim repeated=True] A1X arrives -> December demo_card_001:A1Y: None | held under November: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y']
+    exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:A1Y: None | approved in both periods: False
+    => WEAK
+
+X03 [RC-01+RC-03] withdrawn locked root and an unresolved claim together: B1 claims A1X before A1X arrives; A1X claims the withdrawn A1
+    A1X arrives -> December demo_card_001:B1: None | held under November: ['demo_card_001:A1X', 'demo_card_001:B1', 'receipt-A1X', 'receipt-B1']
+    exceptions: [('demo_card_001:A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD'), ('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:B1')]
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:B1: None | approved in both periods: False
+    => OK
+
+X04 [RC-01+RC-02] withdrawn locked root and a late middle link together: C1 replaces B1 in December, A1 is withdrawn, B1 then claims A1
+    [pre_approved=False] B1 claims the withdrawn A1 -> December demo_card_001:C1: None | held under November: ['demo_card_001:B1', 'demo_card_001:C1', 'receipt-C1']
+    exceptions: [('demo_card_001:A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD'), ('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:B1', 'demo_card_001:C1'), ('demo_card_001:A1', 'demo_card_001:B1')]
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:C1: None | approved in both periods: False
+    settlement_verified on demo_card_001:C1: ('ok', 1)
+    independent approval of demo_card_001:C1: ('ok', None)
+    [pre_approved=True] B1 claims the withdrawn A1 -> December demo_card_001:C1: None | held under November: ['demo_card_001:B1', 'demo_card_001:C1', 'receipt-C1']
+    exceptions: [('demo_card_001:A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD'), ('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:B1', 'demo_card_001:C1'), ('demo_card_001:A1', 'demo_card_001:B1')]
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:C1: None | approved in both periods: False
+    => OK
+
+X05 [RC-02] the late middle link and the terminal source arrive in one batch, terminal listed first
+    C1 and the late link on B1 in one batch -> December demo_card_001:C1: None | held under November: ['demo_card_001:B1', 'demo_card_001:C1', 'receipt-C1']
+    exceptions: [('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:B1', 'demo_card_001:C1'), ('demo_card_001:A1', 'demo_card_001:B1')]
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:C1: None | approved in both periods: False
+    => OK
+
+X06 [RC-02] four-deep chain: the late link is declared two levels above the admitted terminal source
+    settlement_verified on demo_card_001:D1: ('ok', 1)
+    independent approval of demo_card_001:D1: ('ok', None)
+    B1 claims A1 with C1 and D1 above it -> December demo_card_001:D1: None | held under November: ['demo_card_001:B1', 'demo_card_001:D1', 'receipt-D1']
+    exceptions: [('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:D1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-D1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:B1', 'demo_card_001:C1'), ('demo_card_001:C1', 'demo_card_001:D1'), ('demo_card_001:A1', 'demo_card_001:B1')]
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:D1: None | approved in both periods: False
+    after reopen -> December: ['demo_card_001:D1'] | D1: {'id': 23, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']}
+    => OK
+
+X07 [RC-02] a second charge with its own unchanged chain in December is untouched when another chain is quarantined
+    settlement_verified on demo_card_001:N1: ('ok', 1)
+    independent approval of demo_card_001:N1: ('ok', None)
+    N1 before: {'id': 13, 'eligible': True, 'status': 'approve', 'blockers': []} | after: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']} | held: ['demo_card_001:B1', 'demo_card_001:C1', 'receipt-C1']
+    N1/M1 events before: [] | after: []
+    => OK
+
+X08 [RC-01] the withdrawal is admitted on reopen and November is relocked; a new replacement then claims the withdrawn charge
+    after reopen -> November governing: ['demo_card_001:A2'] | exceptions: []
+    relock November: ('ok', None)
+    B1 claims the validly withdrawn A1 after the relock -> December demo_card_001:B1: None | held under November: ['demo_card_001:B1', 'receipt-B1']
+    exceptions: [('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:A1', 'demo_card_001:B1')]
+    November A1: None | December demo_card_001:B1: None | approved in both periods: False
+    reading: A1 governing in November: False | B1 in December: False
+    => NOTE
+
+X09 [RC-03] restart: the pending claim survives a new service instance on the same database and is resolved when the target arrives
+    after restart A1X arrives -> December demo_card_001:A1Y: None | held under November: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y']
+    exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    links: [('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December demo_card_001:A1Y: None | approved in both periods: False
+    => OK
+
+SUMMARY
+Q01    RC-01        OK
+Q02    RC-02        OK
+Q02i   RC-02        OK
+Q03    RC-03        OK
+X01    RC-03        WEAK
+X01b   RC-03        OK
+X01c   RC-03        OK
+X01d   RC-03        WEAK
+X02    RC-03        WEAK
+X03    RC-01+RC-03  OK
+X04    RC-01+RC-02  OK
+X05    RC-02        OK
+X06    RC-02        OK
+X07    RC-02        OK
+X08    RC-01        NOTE
+X09    RC-03        OK
+{"counts": {"OK": 12, "WEAK": 3, "NOTE": 1, "ERROR": 0}}
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-16-065c90/c0d8330b-3fc9-4325-861d-55770c726f32/scratchpad/negT/scripts/verify_rc_review.py", line 49, in <module>
+    main()
+  File "/private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-16-065c90/c0d8330b-3fc9-4325-861d-55770c726f32/scratchpad/negT/scripts/verify_rc_review.py", line 39, in main
+    validate_probes(probe.returncode, probe.stdout)
+  File "/private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-16-065c90/c0d8330b-3fc9-4325-861d-55770c726f32/scratchpad/negT/scripts/verify_rc_review.py", line 22, in validate_probes
+    raise ValueError('RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only')
+ValueError: RD gate requires exit 0, exact 16 ids, 15 OK and X08 NOTE only
+make: *** [rd-gate] Error 1
+make rd-gate on RD bundle with the two application files reverted to the RC baseline: exit=2

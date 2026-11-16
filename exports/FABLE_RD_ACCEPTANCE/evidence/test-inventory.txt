@@ -1,0 +1,19 @@
+baseline methods 192 | new methods 205
+baseline methods missing in new: []
+baseline methods whose body changed: []
+added methods 13 {'test_product_requirements.py': 4, 'test_rd_review_gate.py': 4, 'test_review_corrections_rd.py': 5}
+   + test_product_requirements.py test_PRV12_omitted_changed_and_invented_results_cannot_promote_records
+   + test_product_requirements.py test_PRV12_both_reviewer_authority_files_are_hash_pinned
+   + test_product_requirements.py test_PRV12_stale_checkpoint_metadata_is_rejected
+   + test_product_requirements.py test_PRV13_terms_must_include_the_display_name_in_the_client_heading
+   + test_rd_review_gate.py test_unmodified_16_probes_and_120_orders_meet_exact_contracts
+   + test_rd_review_gate.py test_gate_rejects_probe_error_missing_duplicate_unknown_and_changed_note
+   + test_rd_review_gate.py test_gate_rejects_missing_duplicate_or_double_order_and_false_summary
+   + test_rd_review_gate.py test_all_protected_inputs_remain_byte_identical
+   + test_review_corrections_rd.py test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target
+   + test_review_corrections_rd.py test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop
+   + test_review_corrections_rd.py test_RD02_amount_revision_keeps_claim_with_or_without_repeat_and_restart
+   + test_review_corrections_rd.py test_RD02_retired_claimant_resent_unchanged_without_claim
+   + test_review_corrections_rd.py test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced
+skip/expectedFailure mentions in new tests: [('test_reviewer_probes.py', 'est_expired_partial_slot_is_recorded_as_skipped(self):         create_fixture_mandat'), ('test_reviewer_probes.py', "      self.assertTrue(all(o['status']=='skipped_no_catch_up' for o in self.os.state("), ('test_reviewer_probes.py', "']))      def test_concurrent_ticks_and_skipped_occurrences(self):         from conc"), ('test_reviewer_probes.py', "ssertEqual([o['status'] for o in occ],['skipped_no_catch_up','skipped_no_catch_up','"), ('test_reviewer_probes.py', "] for o in occ],['skipped_no_catch_up','skipped_no_catch_up','completed'])         s")]
+changed earlier test file: test_product_requirements.py | baseline bytes are a prefix of the new file: True | appended bytes: 4054

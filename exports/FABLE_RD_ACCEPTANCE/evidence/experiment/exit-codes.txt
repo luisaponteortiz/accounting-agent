@@ -1,0 +1,13 @@
+rc-probes exit=0 :: python3 exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py .
+order-search exit=0 :: python3 exports/FABLE_RC_ACCEPTANCE/fable_rc_order_search.py .
+rb-probes exit=0 :: python3 exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py .
+ra-probes exit=0 :: python3 exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py .
+rd-probes exit=0 :: python3 /private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-16-065c90/c0d8330b-3fc9-4325-861d-55770c726f32/scratchpad/out/fable_rd_acceptance_probes.py .
+rd-extended-search exit=1 :: python3 /private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-16-065c90/c0d8330b-3fc9-4325-861d-55770c726f32/scratchpad/out/fable_rd_order_search.py . --json /private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-16-065c90/c0d8330b-3fc9-4325-861d-55770c726f32/scratchpad/out/evidence/experiment/rd-extended-search.json
+make-test exit=0 :: make test
+acceptance-gate exit=0 :: make acceptance-gate
+reverification-gate exit=0 :: make reverification-gate
+batch2-gate exit=0 :: make batch2-gate
+rc-gate exit=0 :: make rc-gate
+DONE
+rd-probes-final exit=0 :: python3 /private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-16-065c90/c0d8330b-3fc9-4325-861d-55770c726f32/scratchpad/out/fable_rd_acceptance_probes.py .   (the final 13-probe script; the rd-probes line above ran the 12-probe version, before Y06 was added)

@@ -1,0 +1,268 @@
+
+=== Y01 [RD-01] unchanged row re-sent with a claim on an unknown target: recorded once, both blockers before the target, held after; eligible and approved
+    assert [eligible] A1Y is eligible in December before any claim                        yes
+    [eligible] A1Y re-sent unchanged with supersedes=A1X (not received): ('ok', {'changed': False, 'generation': 3, 'replay': False})
+    [eligible] row deltas after the claim: {'source_snapshots': 0, 'batch_snapshots': 1, 'bindings': 0, 'moves': 0, 'links': 0, 'events': 0, 'decisions': 0, 'heads': 0, 'artifacts': 0, 'packages': 0, 'audit': 1}
+    assert [eligible] the intake answers changed=True                                     NO
+    assert [eligible] exactly one new source version                                      NO
+    assert [eligible] exactly one SOURCE_SUPERSESSION_UNRESOLVED event for A1Y            NO
+    assert [eligible] no link yet                                                         yes
+    assert [eligible] earlier snapshots, decisions, artifacts, audit rows are an unchanged prefix yes
+    [eligible] governing A1Y straight after the claim (no new run): {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    [eligible] A1Y after re-preparing, target still unknown: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    assert [eligible] both transition blockers before the target arrives                  NO
+    assert [eligible] A1Y is not eligible and not approved                                NO
+    [eligible] independent approval attempt while unresolved: ('ok', None)
+    assert [eligible] approval refused while unresolved                                   NO
+    [eligible] settlement_verified attempt while unresolved: ('refused', 409, 'No governing exception for this source')
+    assert [eligible] the unresolved blocker cannot be cleared by a disposition           NO
+    [eligible] finalize December while unresolved: ('ok', 1)
+    assert [eligible] December cannot be finalized while unresolved                       NO
+    [eligible] after A1X: held=['demo_card_001:A1X', 'receipt-A1X'] links=[('demo_card_001:A1', 'demo_card_001:A1X')]
+    assert [eligible] December has no governing artifact for A1Y                          NO
+    assert [eligible] A1Y and its receipt are held under November as MOVED                NO
+    assert [eligible] A1X and its receipt are held under November as MOVED                yes
+    assert [eligible] A1 is still approved and governing in November                      yes
+    assert [eligible] links are A1->A1X and A1X->A1Y                                      NO
+    assert [eligible] no earlier snapshot, decision, artifact, event or audit row rewritten yes
+    assert [eligible] audit chain verifies                                                yes
+    [eligible] finalize December after the hold: ('ok', 2)
+    assert [eligible] not approved in both periods                                        NO
+    assert [approved before] A1Y is eligible in December before any claim                 yes
+    [approved before] A1Y approved in December: ('ok', None)
+    assert [approved before] A1Y approved and governing before the claim                  yes
+    [approved before] A1Y re-sent unchanged with supersedes=A1X (not received): ('ok', {'changed': False, 'generation': 3, 'replay': False})
+    [approved before] row deltas after the claim: {'source_snapshots': 0, 'batch_snapshots': 1, 'bindings': 0, 'moves': 0, 'links': 0, 'events': 0, 'decisions': 0, 'heads': 0, 'artifacts': 0, 'packages': 0, 'audit': 1}
+    assert [approved before] the intake answers changed=True                              NO
+    assert [approved before] exactly one new source version                               NO
+    assert [approved before] exactly one SOURCE_SUPERSESSION_UNRESOLVED event for A1Y     NO
+    assert [approved before] no link yet                                                  yes
+    assert [approved before] earlier snapshots, decisions, artifacts, audit rows are an unchanged prefix yes
+    [approved before] governing A1Y straight after the claim (no new run): {'id': 7, 'eligible': True, 'status': 'approve', 'blockers': []}
+    assert [approved before] the earlier approval no longer governs, even before a new run NO
+    [approved before] finalize December before re-preparing: ('ok', 1)
+    assert [approved before] December cannot be finalized on the earlier approval         NO
+    [approved before] A1Y after re-preparing, target still unknown: {'id': 7, 'eligible': True, 'status': 'approve', 'blockers': []}
+    assert [approved before] both transition blockers before the target arrives           NO
+    assert [approved before] A1Y is not eligible and not approved                         NO
+    [approved before] independent approval attempt while unresolved: ('refused', 409, 'Duplicate or invalid review transition')
+    assert [approved before] approval refused while unresolved                            yes
+    [approved before] settlement_verified attempt while unresolved: ('refused', 409, 'No governing exception for this source')
+    assert [approved before] the unresolved blocker cannot be cleared by a disposition    NO
+    [approved before] finalize December while unresolved: ('ok', 2)
+    assert [approved before] December cannot be finalized while unresolved                NO
+    [approved before] after A1X: held=['demo_card_001:A1X', 'receipt-A1X'] links=[('demo_card_001:A1', 'demo_card_001:A1X')]
+    assert [approved before] December has no governing artifact for A1Y                   NO
+    assert [approved before] A1Y and its receipt are held under November as MOVED         NO
+    assert [approved before] A1X and its receipt are held under November as MOVED         yes
+    assert [approved before] A1 is still approved and governing in November               yes
+    assert [approved before] links are A1->A1X and A1X->A1Y                               NO
+    [approved before] approved-source events naming the December approval: []
+    assert [approved before] an approved-source event names the former December approval  NO
+    assert [approved before] ITEM_LEFT_POPULATION recorded for A1Y                        NO
+    assert [approved before] the approval decision remains (1)                            yes
+    assert [approved before] no earlier snapshot, decision, artifact, event or audit row rewritten yes
+    assert [approved before] audit chain verifies                                         yes
+    [approved before] finalize December after the hold: ('ok', 3)
+    assert [approved before] not approved in both periods                                 NO
+--- Y01: WEAK
+
+=== Y02 [RD-01] the same unresolved claim repeated twice in new envelopes, then an exact packet replay
+    assert first claim: changed=True                                                      NO
+    repeat y-claim-2 -> {'changed': False, 'generation': 3, 'replay': False} ; deltas {'source_snapshots': 0, 'batch_snapshots': 1, 'bindings': 0, 'moves': 0, 'links': 0, 'events': 0, 'decisions': 0, 'heads': 0, 'artifacts': 0, 'packages': 0, 'audit': 1}
+    assert y-claim-2: changed=False and not a replay                                      yes
+    assert y-claim-2: no source snapshot, binding, move, link, decision or accounting event added yes
+    assert y-claim-2: only the batch envelope (1) and its intake audit row are added      yes
+    audit rows added by y-claim-2: 1
+    repeat y-claim-3 -> {'changed': False, 'generation': 3, 'replay': False} ; deltas {'source_snapshots': 0, 'batch_snapshots': 1, 'bindings': 0, 'moves': 0, 'links': 0, 'events': 0, 'decisions': 0, 'heads': 0, 'artifacts': 0, 'packages': 0, 'audit': 1}
+    assert y-claim-3: changed=False and not a replay                                      yes
+    assert y-claim-3: no source snapshot, binding, move, link, decision or accounting event added yes
+    assert y-claim-3: only the batch envelope (1) and its intake audit row are added      yes
+    audit rows added by y-claim-3: 1
+    assert the governing December artifact is unchanged by the repeats (still blocked, still governing) NO
+    exact replay -> {'changed': False, 'generation': 3, 'replay': True}
+    assert exact packet replay: replay=True, changed=False                                yes
+    assert exact packet replay adds no snapshot of any kind and no lifecycle row          yes
+    assert exactly one unresolved event in total                                          NO
+--- Y02: WEAK
+
+=== Y03 [RD-02] claimant revised (amount) with and without the claim, service restarted, target arrives
+    [claim repeated=False] revised A1Y: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    assert [claim repeated=False] the revised version still carries both transition blockers NO
+    assert [claim repeated=False] unresolved events for A1Y: 1                            yes
+    [claim repeated=False] revised_evidence_accepted: ('ok', 1)
+    assert [claim repeated=False] accepting the revised evidence does not release the unresolved hold NO
+    assert [claim repeated=False] after a restart the hold is still shown                 NO
+    [claim repeated=False] after A1X: held=['demo_card_001:A1X', 'receipt-A1X'] links=[('demo_card_001:A1', 'demo_card_001:A1X')]
+    assert [claim repeated=False] A1Y and its receipt held under November                 NO
+    assert [claim repeated=False] the link is on the CURRENT head of A1Y                  NO
+    independent approval of demo_card_001:A1Y: ('ok', None)
+    assert [claim repeated=False] not approved in both periods                            NO
+    [claim repeated=True] revised A1Y: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    assert [claim repeated=True] the revised version still carries both transition blockers yes
+    assert [claim repeated=True] unresolved events for A1Y: 2                             yes
+    [claim repeated=True] revised_evidence_accepted: ('ok', 1)
+    assert [claim repeated=True] accepting the revised evidence does not release the unresolved hold yes
+    assert [claim repeated=True] after a restart the hold is still shown                  yes
+    [claim repeated=True] after A1X: held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] links=[('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    assert [claim repeated=True] A1Y and its receipt held under November                  yes
+    assert [claim repeated=True] the link is on the CURRENT head of A1Y                   yes
+    assert [claim repeated=True] not approved in both periods                             yes
+--- Y03: WEAK
+
+=== Y04 [RD-02] claimant retired by its own replacement and re-sent without the claim: orders Yc Z Yp X and Z Yc Yp X
+    [Yc Z Yp X] after Yc: removed flags {'A1Y': 0}, unresolved events for A1Y: 1
+    [Yc Z Yp X] after Z: removed flags {'A1Y': 1, 'A1Z': 0}, unresolved events for A1Y: 1
+    [Yc Z Yp X] after Yp: removed flags {'A1Y': 1, 'A1Z': 0}, unresolved events for A1Y: 1
+    [Yc Z Yp X] before A1X: A1Z {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | A1Y None
+    assert [Yc Z Yp X] before the target: no member of the chain is eligible without a transition blocker yes
+    assert [Yc Z Yp X] before the target: A1Y, if in the population, shows the unresolved hold yes
+    [Yc Z Yp X] after A1X: held=['demo_card_001:A1X', 'receipt-A1X'] links=[('demo_card_001:A1Y', 'demo_card_001:A1Z'), ('demo_card_001:A1', 'demo_card_001:A1X')]
+    assert [Yc Z Yp X] the claim resolved onto A1Y (link A1X->A1Y exists)                 NO
+    assert [Yc Z Yp X] A1Z and its receipt held under November                            NO
+    settlement_verified on demo_card_001:A1Z: ('ok', 1)
+    independent approval of demo_card_001:A1Z: ('ok', None)
+    assert [Yc Z Yp X] no chain member approved in December (['A1Z'])                     NO
+    assert [Yc Z Yp X] audit chain verifies                                               yes
+    [Z Yc Yp X] after Z: removed flags {'A1Z': 0}, unresolved events for A1Y: 0
+    [Z Yc Yp X] after Yc: removed flags {'A1Z': 0, 'A1Y': 1}, unresolved events for A1Y: 1
+    [Z Yc Yp X] after Yp: removed flags {'A1Z': 0, 'A1Y': 1}, unresolved events for A1Y: 1
+    [Z Yc Yp X] before A1X: A1Z {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | A1Y None
+    assert [Z Yc Yp X] before the target: no member of the chain is eligible without a transition blocker yes
+    assert [Z Yc Yp X] before the target: A1Y, if in the population, shows the unresolved hold yes
+    [Z Yc Yp X] after A1X: held=['demo_card_001:A1X', 'receipt-A1X'] links=[('demo_card_001:A1Y', 'demo_card_001:A1Z'), ('demo_card_001:A1', 'demo_card_001:A1X')]
+    assert [Z Yc Yp X] the claim resolved onto A1Y (link A1X->A1Y exists)                 NO
+    assert [Z Yc Yp X] A1Z and its receipt held under November                            NO
+    settlement_verified on demo_card_001:A1Z: ('ok', 1)
+    independent approval of demo_card_001:A1Z: ('ok', None)
+    assert [Z Yc Yp X] no chain member approved in December (['A1Z'])                     NO
+    assert [Z Yc Yp X] audit chain verifies                                               yes
+--- Y04: WEAK
+
+=== Y05 [RD-02] most recent target wins; open target; cycle refusal; already linked identity; unrelated intake
+    assert (a) re-declaring a different unknown target records a second claim             NO
+    assert (a) the earlier target arriving creates no link                                NO
+    (a) links=[('demo_card_001:A1X', 'demo_card_001:A1Y'), ('demo_card_001:A1', 'demo_card_001:A1W')] held=['demo_card_001:A1W', 'receipt-A1W']
+    assert (a) the latest target is linked and A1Y is held under November                 NO
+    (b) A1Y {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | B9 None | links [('demo_card_001:B9', 'demo_card_001:A1Y')] | held []
+    assert (b) open target: linked, the target is retired, the claimant stays in December with a review blocker and no hold yes
+    (c) A1X arrives claiming A1Y, which claims A1X: ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    (c) links=[('demo_card_001:A1Y', 'demo_card_001:A1X')]
+    assert (c) at most one direction is linked                                            yes
+    (c) A1Y repeats its claim on A1X: ('refused', 400, 'Supersession cycle is not permitted')
+    assert (c) the closing claim is refused or ignored; still at most one link            yes
+    assert (d) unrelated intake adds no link, move or chain binding                       yes
+    assert (d) a second unrelated intake adds no chain event (3) and no chain binding (6) yes
+    (e) reopen November: ('ok', None)
+    (e) relock November: ('refused', 409, 'Unsettled preparation requires explicit acknowledgement')
+    (e) relock November with acknowledgement: ('ok', None)
+    assert (e) November is locked again                                                   yes
+    (e) held after relock: []
+    assert (e) after release and relock, unrelated intake adds no link, move or chain binding yes
+--- Y05: WEAK
+
+=== Y06 [RD-01] finalized packages: November finalized and locked, December finalized with A1Y approved, then the late claim and its target
+    finalize November: ('ok', 1)
+    A1Y approved in December: ('ok', None)
+    finalize December: ('ok', 2)
+    assert both packages finalized before the claim                                       yes
+    after the claim: changed=False | package rows 2 -> 2 | POST_FINALIZATION_CHANGE (period, item): []
+    assert the claim is recorded (changed=True, one unresolved event)                     NO
+    assert no package row is rewritten or added by the claim                              yes
+    assert a POST_FINALIZATION_CHANGE event is recorded for December before the target arrives NO
+    assert no POST_FINALIZATION_CHANGE event for locked November from the claim           yes
+    assert the December approval no longer governs                                        NO
+    after A1X: held=['demo_card_001:A1X', 'receipt-A1X'] | POST_FINALIZATION_CHANGE: [('2026-11', 'package:1')]
+    assert A1Y and its receipt are held under November                                    NO
+    assert A1 still approved and governing in November                                    yes
+    assert no package, snapshot, decision, artifact, event or audit row rewritten         yes
+    assert audit chain verifies                                                           yes
+    packages in export: [(1, '2026-11', None), (2, '2026-12', None)]
+--- Y06: WEAK
+
+=== E01 [RD-01] the unchanged row that receives the late claim sits in a LOCKED period (A1 itself claims an unknown row)
+    A1 re-sent unchanged with supersedes=A0 (not received): ('ok', {'changed': False, 'generation': 2, 'replay': False})
+    deltas: {'source_snapshots': 0, 'batch_snapshots': 1, 'bindings': 0, 'moves': 0, 'links': 0, 'events': 0, 'decisions': 0, 'heads': 0, 'artifacts': 0, 'packages': 0, 'audit': 1}
+    November A1 before: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | after: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []}
+    exceptions: []
+    events: []
+    A1 still approved and governing in locked November: True
+--- E01: OK
+
+=== E02 [RD-01] an identity that already has a link declares a second claim on an unknown row, repeatedly
+    repeat 0 -> {'changed': False, 'generation': 4, 'replay': False} ; deltas {'batch_snapshots': 1, 'audit': 1}
+    repeat 1 -> {'changed': False, 'generation': 4, 'replay': False} ; deltas {'batch_snapshots': 1, 'audit': 1}
+    repeat 2 -> {'changed': False, 'generation': 4, 'replay': False} ; deltas {'batch_snapshots': 1, 'audit': 1}
+    A1Y in December: None | held: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] | unresolved events for A1Y: 0
+    after A1W arrives: links=[('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')] held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y']
+    repeats after the first are lifecycle no-ops: True
+    A1Y still held under November: True
+--- E02: OK
+
+=== E03 [RD-01] the claim arrives in a message ORDERED BEFORE the governing version (provider sequence), delivered late
+    [unknown-target] A1Y sequence 4 (older) delivered late with supersedes=A1X (not received): ('ok', {'changed': False, 'generation': 3, 'replay': False})
+    [unknown-target] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')]
+    [unknown-target] links: [('demo_card_001:A1', 'demo_card_001:A1X')] | held: ['demo_card_001:A1X', 'receipt-A1X'] | A1Y: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    independent approval of demo_card_001:A1Y: ('ok', None)
+    [unknown-target] finalize December without acknowledgement: ('ok', 1)
+    [unknown-target] approved in both periods: True
+    [known-target] A1Y sequence 4 (older) delivered late with supersedes=A1: ('ok', {'changed': False, 'generation': 3, 'replay': False})
+    [known-target] events: []
+    [known-target] links: [] | held: [] | A1Y: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    independent approval of demo_card_001:A1Y: ('ok', None)
+    [known-target] finalize December without acknowledgement: ('ok', 1)
+    [known-target] approved in both periods: True
+--- E03: WEAK
+
+=== E04 [RD-02] the claimant is withdrawn by the feed (tombstone) while its claim is unresolved, then re-sent plain; target arrives last
+    [re-sent=True] links=[('demo_card_001:A1', 'demo_card_001:A1X')] held=['demo_card_001:A1X', 'receipt-A1X'] A1Y={'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    independent approval of demo_card_001:A1Y: ('ok', None)
+    [re-sent=True] approved in both periods: True
+    [re-sent=False] links=[('demo_card_001:A1', 'demo_card_001:A1X')] held=['demo_card_001:A1X', 'receipt-A1X'] A1Y=None
+    [re-sent=False] approved in both periods: False
+--- E04: WEAK
+
+=== E05 [RD-01] the late claim on an unchanged row is declared on the RECEIPT-free path twice with a different target in between (A1X, A1W, A1X)
+    claim on A1X -> changed=False, unresolved events=0
+    claim on A1W -> changed=False, unresolved events=0
+    claim on A1X -> changed=False, unresolved events=0
+    after A1W (the superseded target) arrives: links=[]
+    after A1X arrives: links=[('demo_card_001:A1', 'demo_card_001:A1X')] held=['demo_card_001:A1X', 'receipt-A1X']
+    independent approval of demo_card_001:A1Y: ('refused', 409, 'Unresolved controls block approval')
+    approved in both periods: False
+--- E05: WEAK
+
+=== E03c [RD-01] control for E03: the same two messages delivered in provider order (sequence 4 with the claim, then sequence 5)
+    [unknown-target] links: [('demo_card_001:A1', 'demo_card_001:A1X')] | held: ['demo_card_001:A1X', 'receipt-A1X'] | A1Y: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    independent approval of demo_card_001:A1Y: ('ok', None)
+    [unknown-target] approved in both periods or not held: True
+    [known-target] links: [('demo_card_001:A1', 'demo_card_001:A1Y')] | held: ['demo_card_001:A1Y', 'receipt-A1Y'] | A1Y: None
+    [known-target] approved in both periods or not held: False
+--- E03c: WEAK
+
+=== E06 [RD-02] an identity already linked to an open December row later declares a claim on an unknown row that turns out to replace locked A1
+    [claim-before-target] claim intake {'changed': False, 'generation': 4, 'replay': False} | links=[('demo_card_001:B9', 'demo_card_001:A1Y'), ('demo_card_001:A1', 'demo_card_001:A1X')] | held=['demo_card_001:A1X', 'receipt-A1X'] | A1Y={'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | unresolved events=0
+    settlement_verified on demo_card_001:A1Y: ('ok', 1)
+    independent approval of demo_card_001:A1Y: ('ok', None)
+    [claim-before-target] finalize December without acknowledgement: ('ok', 1)
+    [claim-before-target] A1 approved in November and A1Y approved in December: True
+    [target-before-claim] claim intake {'changed': True, 'generation': 6, 'replay': False} | links=[('demo_card_001:B9', 'demo_card_001:A1Y'), ('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')] | held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] | A1Y=None | unresolved events=0
+    [target-before-claim] A1 approved in November and A1Y approved in December: False
+    outcome depends on arrival order: True
+--- E06: WEAK
+
+SUMMARY
+  Y01   RD-01    WEAK
+  Y02   RD-01    WEAK
+  Y03   RD-02    WEAK
+  Y04   RD-02    WEAK
+  Y05   RD-02    WEAK
+  Y06   RD-01    WEAK
+  E01   RD-01    OK
+  E02   RD-01    OK
+  E03   RD-01    WEAK
+  E04   RD-02    WEAK
+  E05   RD-01    WEAK
+  E03c  RD-01    WEAK
+  E06   RD-02    WEAK
+  totals: {'OK': 2, 'NOTE': 0, 'WEAK': 11, 'ERROR': 0}

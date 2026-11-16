@@ -1,0 +1,15 @@
+01-rc-probes exit=0 secs=28 :: python3 exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py .
+02-order-search exit=0 secs=103 :: python3 exports/FABLE_RC_ACCEPTANCE/fable_rc_order_search.py .
+03-rb-probes exit=0 secs=25 :: python3 exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py .
+04-ra-probes exit=0 secs=14 :: python3 exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py .
+05-make-test exit=0 secs=745 :: make test
+06-make-check exit=0 secs=2 :: make check
+07-batch2-gate exit=0 secs=100 :: make batch2-gate
+08-reverification-gate exit=0 secs=51 :: make reverification-gate
+09-acceptance-gate exit=0 secs=49 :: make acceptance-gate
+10-rb-gate exit=0 secs=29 :: make rb-gate
+11-rc-gate exit=0 secs=25 :: make rc-gate
+12-rd-gate exit=0 secs=121 :: make rd-gate
+13-register-json exit=0 secs=0 :: python3 scripts/check_product_requirements.py --json
+14-rb-register-faults exit=0 secs=42 :: python3 exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py .
+DONE

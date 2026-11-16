@@ -1,0 +1,8 @@
+Python 3.9.6
+3.51.0 2025-06-12 13:14:41 f0ca7bba1c5e232e5d279fad6338121ab55af0c8c68c84cdfb18ba5114dcaapl (64-bit)
+GNU Make 3.81
+ProductName:		macOS
+ProductVersion:		26.5.2
+BuildVersion:		25F84
+x86_64
+loopback bind 127.0.0.1: ok (no extra permission needed)
