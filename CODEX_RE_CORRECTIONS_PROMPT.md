@@ -124,7 +124,7 @@ Apply PRV-14 in the same change, with these amendments to the ticket file's word
 
 ## What to return
 
-Build a new bundle under a new label. Never overwrite an earlier archive, sidecar or manifest. Every archive listed in `docs/corrections_rd/archive-integrity.json` must keep its hash, and so must your RD/PRV bundle (`0d188fa6…7ea9`) and the new review response (`97f062e5…8b27`). No existing commit may be rewritten. The working project is on branch `review/fable-rc-acceptance`; its head is the commit that adds this prompt and the review, on top of the five earlier commits ending at `5a12ab0`. Stay on it, and add no commit unless I ask.
+Build a new bundle under a new label. Never overwrite an earlier archive, sidecar or manifest. Every archive listed in `docs/corrections_rd/archive-integrity.json` must keep its hash, and so must your RD/PRV bundle (`0d188fa6…7ea9`) and the new review response (`97f062e5…8b27`). No existing commit may be rewritten. The working project is on branch `review/fable-rc-acceptance`. Record its head and commit count before you start and leave both unchanged; the history includes the commit that adds this prompt and the review, and the commit that records your RD/PRV register and decision-log edits. Stay on the branch, and add no commit unless I ask.
 
 Include:
 
