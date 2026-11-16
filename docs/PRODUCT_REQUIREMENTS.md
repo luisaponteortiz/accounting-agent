@@ -61,13 +61,11 @@ These summarize, and do not relax, [Fable's readiness gates §9](../review/FABLE
 
 ## Current evidence and corrective priority
 
-**RA acceptance: not accepted; G0 technical criteria not met; Batch 3 closed.** Fable reproduced the prior 154 tests and 29 PASS / 10 FIXED / 21 DEFERRED-OK reviewer cases, and accepted all five additional statement setups (A03/A05/A17/X09/older RT18), the earlier seven adaptations and strengthened RT14b. Five RA corrections were accepted; RA-01 failed, and RA-03/04 have remaining routes. The original full-script incompatibilities remain disclosed in the historical evidence, not relabeled PASS.
+**RB-01 not accepted; G0 technical criteria not met; Batch 3 closed.** Fable accepted RB-02, RB-03 and RB-04 at the immutable V2 checkpoint (SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d), but N01b, N01c and N01d failed with RC-01, RC-02 and RC-03. AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 remain Verification failed. AAOS-KNO-04, AAOS-CTL-01, AAOS-BNK-02 and AAOS-CTL-09 are Independently verified only for Fable's named synthetic controls and the scope limits UC-10/UC-11. [Independent conclusions](INDEPENDENT_VERIFICATION_RESULTS.json) mechanically preserve those seven report-backed verdicts.
 
-The returned independent review identifies RB-01 (late/later-resolved supersession links bypass a locked ancestor), RB-02 (re-pointed document replacement), RB-03 (equivalent rules under a new scope/key lose authors) and RB-04 (prior-statement restatement not disclosed to the relying period). Baseline reproduction was 8 OK / 5 WEAK / 1 NOTE. The RB response implements these in order with new regressions and executes the unchanged 14-probe script; current developer results are in docs/corrections_rb/. Records affected by a failed independent criterion remain Verification failed until Fable re-verifies them, even when developer probes pass.
+The authorized RC/PRV developer correction pass reproduced 13 OK / 3 WEAK / 2 NOTE before source edits. The corrected unchanged 18-probe script reports 16 OK / 2 NOTE (N02c and N04e only), exit 0, in the developer run. New arrival-order, withdrawal disclosure, reopen/relock, changed-chain acceptance and idempotence regressions pass. [Current report](corrections_rc/RC_CORRECTIONS_REPORT.md) records the complete command evidence and retained gates. The complete developer suite passed 192 tests, all required gates passed, reviewer cases remain 29 PASS / 10 FIXED / 21 DEFERRED-OK, and the unchanged fault script reports 37 agree / 0 gaps. All 174 earlier methods remain. Developer passes do not replace failed independent verdicts or grant human G0, G1–G4, Batch 3 or live authority.
 
-Current developer completion: **174 tests passed** (all original 154 methods retained plus 20 new), all retained gates and make rb-gate passed, the latest unchanged probes report **14 OK**, and reviewer cases remain **29 PASS / 10 FIXED / 21 DEFERRED-OK**. See [RB response](corrections_rb/RB_CORRECTIONS_REPORT.md) and [current results](corrections_rb/execution-results.json). The complete suite required temporary loopback access for its HTTP server; the earlier sandbox permission failure is recorded separately. These results do not raise any failed independent state or open G0/Batch 3.
-
-The register is accepted subject to PR-01–PR-03 status corrections; those failures are now explicit. PR-04/17 introduce separate states and a repository check. Shared additions and scope questions needing product/client authority remain Proposed or reserved below; documenting them is not authorization to build them. No new module, connector, actual client facts, paid service, posting, payment, sending, deployment or Batch 3 work is enabled. Python/SQLite/static UI are retained. All submitted archives, freeze sidecars and original independent inputs remain immutable; only current working source/docs change under the user's corrective assignment.
+The historical RA/RB reports, all earlier adaptations and original failed-command logs remain unchanged. PR-11's owner/accounting-lead confirmation in D-016 and synchronized D-017 wording is preserved in AAOS-BB-01/02. Other proposed/shared product decisions remain Proposed and unimplemented; conditional instantiation references do not ratify them. No new module, connector, actual client records, paid service, posting, payment, sending, deployment or deferred capability is enabled.
 
 ## Product scope and governance
 
@@ -93,11 +91,11 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Priority:** Must
 - **Product decision:** Approved
 - **Implementation state:** Developer-tested
-- **Scope note:** The permanent register and executable structural/field-count checks are implemented; this is documentation governance, not operational accounting acceptance.
+- **Scope note:** The permanent register and executable checks enforce actual evidence, report-backed independent verdicts, adjacent conditional dependencies, disposition consistency and client boundaries; this is documentation governance, not operational accounting acceptance.
 - **Evidence:** [tests/test_product_requirements.py](../tests/test_product_requirements.py); [register checker](../scripts/check_product_requirements.py), PR-04/PR-17.
 - **Needed for:** G0 controls
-- **Dependencies:** AAOS-GOV-01.
-- **Acceptance criteria:** All ten requested product areas and all T-01–T-27 tickets have a trace; agents must consult/update the register; decisions and progress name the current gate; rejected requirements retain an explanation. Run the repository checker after edits; reject duplicate IDs, missing fields, unknown/cyclic dependencies, invalid states/evidence and missing ticket crosswalks. Only independent review can establish verification; a failed independent probe downgrades affected records in the same change.
+- **Dependencies:** AAOS-GOV-01 for later full-cycle execution only
+- **Acceptance criteria:** All ten requested product areas and all T-01–T-27 tickets have a trace; agents must consult/update the register; decisions and progress name the current gate; rejected requirements retain an explanation. Run the repository checker after edits; reject duplicate IDs, missing fields, unknown/cyclic dependencies, invalid states/evidence and missing ticket crosswalks. Only independent review can establish verification; a failed independent probe downgrades affected records in the same change. Require real test/probe references and matching report/hash-backed independent results; reject unconditional tested dependencies on Deferred/Not started records, unconditional Approved-to-Proposed dependencies, stray dependency punctuation and scope-table/prefix conflicts. Read client-specific terms from the client section; scan every shared field except Trace and all shared application/web files.
 - **Target stage:** Current; ongoing maintenance in each relevant change.
 - **Trace:** U; AGENTS.md; DECISIONS.md; PROGRESS.md.
 
@@ -108,8 +106,8 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Priority:** Must
 - **Product decision:** Approved
 - **Implementation state:** Verification failed
-- **Scope note:** Last independent verification failed (RB-01 to RB-04). The RB response supplies developer fixes/regressions; independent re-verification is pending. Earlier accepted subpaths remain documented, not proof that this requirement is complete.
-- **Evidence:** [independent review](../exports/FABLE_RA_ACCEPTANCE/FABLE_RA_ACCEPTANCE_REPORT.md), RB-01 to RB-04; [tests/test_review_corrections_rb.py](../tests/test_review_corrections_rb.py); [unchanged independent probes](../exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py).
+- **Scope note:** Independent Fable RB review failed RB-01: RC-01, RC-02 and RC-03 (N01b, N01c, N01d). Developer corrections and regression passes are supplied in corrections_rc/; this state remains Verification failed pending independent re-verification of this new checkpoint and those exact arrival-order criteria.
+- **Evidence:** [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; RC-01, RC-02, RC-03: N01b, N01c, N01d WEAK in the independent run; [tests/test_review_corrections_rc.py](../tests/test_review_corrections_rc.py) and corrections_rc/ are developer evidence only.
 - **Needed for:** G0 controls
 - **Dependencies:** AAOS-GOV-02; AAOS-CTL-10.
 - **Acceptance criteria:** Existing original methods/regressions and exact assertions remain; known repaired defects must pass; unavailable capabilities remain explicitly deferred; original/adapted probe differences and nonzero original commands remain disclosed; no bundle overwrite or automatic G1/Batch 3 transition.
@@ -129,7 +127,7 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Scope note:** Tested for the local runner and registered card/journal/readiness workflows; full module coverage deferred.
 - **Evidence:** [tests/test_platform.py](../tests/test_platform.py); [recorded developer evidence](acceptance_ra/execution-results.json). Scope is limited to the tests, not full-cycle or operating readiness.
 - **Needed for:** G0 controls
-- **Dependencies:** AAOS-GOV-01.
+- **Dependencies:** AAOS-GOV-01 for later full-cycle execution only
 - **Acceptance criteria:** Handlers use declared scoped inputs and committed dependency outputs; handler/model proposals cannot directly approve, query arbitrary client data or perform external effects; unimplemented modules return unavailable.
 - **Target stage:** Current foundation; extend only in assigned capability tickets.
 - **Trace:** ARCH; FABLE T-06/T-15; D-002/D-003.
@@ -174,7 +172,7 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Scope note:** Approved option; actual Bird Bowl host and support arrangement unselected.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** Second client
-- **Dependencies:** AAOS-ARC-01; AAOS-ARC-02; AAOS-ONB-01 for later client onboarding; AAOS-CTL-12; AAOS-CTL-13
+- **Dependencies:** AAOS-ARC-01; AAOS-ARC-02; AAOS-ONB-01 if ratified for later client onboarding; AAOS-CTL-12; AAOS-CTL-13
 - **Acceptance criteria:** Accounting can operate without an SS backlink; no SS executive/CRM/other-client data or shared credentials are preloaded; any later backlink names its purpose, exact data scope and authority.
 - **Target stage:** Future / unassigned; separate hosting authorization and G2/G4 controls.
 - **Trace:** U; PILOT deployment boundary; LEGACY §6E. AT-58 in the original acceptance specifications (reference, not a claim of implementation).
@@ -356,9 +354,9 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Business purpose:** Convert validated knowledge into controlled reusable execution without allowing a preparer/model to activate its own advice.
 - **Priority:** Must
 - **Product decision:** Approved
-- **Implementation state:** Verification failed
-- **Scope note:** Last independent verification failed (RB-03). The RB response supplies developer fixes/regressions; independent re-verification is pending. Earlier accepted subpaths remain documented, not proof that this requirement is complete.
-- **Evidence:** [independent review](../exports/FABLE_RA_ACCEPTANCE/FABLE_RA_ACCEPTANCE_REPORT.md), RB-03; [tests/test_review_corrections_rb.py](../tests/test_review_corrections_rb.py); [unchanged independent probes](../exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py).
+- **Implementation state:** Independently verified
+- **Scope note:** Independent Fable RB review verified the synthetic local preparation controls exercised by the named probes at the V2 checkpoint; no client policy, connected operation, reconciliation completion, close or operating readiness is verified.
+- **Evidence:** [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; R02a, R02b, N03a, N03b, N03c; retained A10, RN04, RN05, RN05b.
 - **Needed for:** G1 approved samples
 - **Dependencies:** AAOS-KNO-03; AAOS-CTL-01; AAOS-CTL-04.
 - **Acceptance criteria:** Unapproved rules cannot code approvable work; aliases/normalization/collisions are visible before approval; withdrawn mappings stop applying in their effective scope; prior relevant authors/approvers remain contributors even after cosmetic or unlinked re-proposal; item-date and workflow relevance select the applicable versions. Relevant equivalent-rule authorship survives general-to-item scope changes and new rule keys; unrelated descriptions, categories, item scopes, policy values and clients do not bar an independent reviewer.
@@ -578,11 +576,11 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Business purpose:** Detect omissions and substitutions that internally generated totals cannot reveal.
 - **Priority:** Must
 - **Product decision:** Approved
-- **Implementation state:** Verification failed
-- **Scope note:** Last independent verification failed (RB-02/RB-04). The RB response supplies developer fixes/regressions; independent re-verification is pending. Earlier accepted subpaths remain documented, not proof that this requirement is complete.
-- **Evidence:** [independent review](../exports/FABLE_RA_ACCEPTANCE/FABLE_RA_ACCEPTANCE_REPORT.md), RB-02/RB-04; [tests/test_review_corrections_rb.py](../tests/test_review_corrections_rb.py); [unchanged independent probes](../exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py).
+- **Implementation state:** Independently verified
+- **Scope note:** Independent Fable RB review verified the synthetic local preparation controls exercised by the named probes at the V2 checkpoint; no client policy, connected operation, reconciliation completion, close or operating readiness is verified. UC-11: a restated prior statement with zero card activity has no item-bound acceptance route; the next period stays unverified.
+- **Evidence:** [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; R04a, R04b, R04c, N02b, N04a, N04b, N04c, N04d.
 - **Needed for:** G1 approved samples
-- **Dependencies:** AAOS-BNK-03; AAOS-CTL-08; AAOS-CTL-09. ; AAOS-CTL-04
+- **Dependencies:** AAOS-BNK-03; AAOS-CTL-08; AAOS-CTL-09; AAOS-CTL-04
 - **Acceptance criteria:** Check opening/activity/closing arithmetic and identity/population ties; disclose missing line identity, continuity or provenance checks; do not manufacture a statement from the population; corrected/replaced statements remain held until valid acceptance. A revision of the lookback statement is disclosed to every period relying on it, with continuity unverified until its own-period revision acceptances are active. Re-pointing the old key to another cycle cannot bypass replacement disclosure/acceptance.
 - **Target stage:** Current / G0; provider/account authority and real statement validation at G1/G2.
 - **Trace:** T-13; RV-13; RA-04; EVIDENCE.
@@ -594,11 +592,11 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Priority:** Must
 - **Product decision:** Approved
 - **Implementation state:** Verification failed
-- **Scope note:** Last independent verification failed (RB-01). The RB response supplies developer fixes/regressions; independent re-verification is pending. Earlier accepted subpaths remain documented, not proof that this requirement is complete.
-- **Evidence:** [independent review](../exports/FABLE_RA_ACCEPTANCE/FABLE_RA_ACCEPTANCE_REPORT.md), RB-01; [tests/test_review_corrections_rb.py](../tests/test_review_corrections_rb.py); [unchanged independent probes](../exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py).
+- **Scope note:** Independent Fable RB review failed RB-01: RC-01, RC-02 and RC-03 (N01b, N01c, N01d). Developer corrections and regression passes are supplied in corrections_rc/; this state remains Verification failed pending independent re-verification of this new checkpoint and those exact arrival-order criteria.
+- **Evidence:** [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; RC-01, RC-02, RC-03: N01b, N01c, N01d WEAK in the independent run; [tests/test_review_corrections_rc.py](../tests/test_review_corrections_rc.py) and corrections_rc/ are developer evidence only.
 - **Needed for:** G0 controls
 - **Dependencies:** AAOS-CTL-04; AAOS-CTL-05; AAOS-CTL-10.
-- **Acceptance criteria:** Older/conflicting events do not overwrite newer heads; supersession chains cannot release a locked-origin charge into a second approved period; cycles refuse atomically; authorized reopen admits only the terminal replacement and retires predecessors/support with traceable history; removing a superseder does not silently restore an ancestor without an approved feed policy. These controls must hold regardless of the order in which a source and its supersession link arrive, including a link declared on a source already admitted to another period and an unresolved link resolved later; no same-period source-move rows are created.
+- **Acceptance criteria:** Older/conflicting events do not overwrite newer heads; supersession chains cannot release a locked-origin charge into a second approved period; cycles refuse atomically; authorized reopen admits only the terminal replacement and retires predecessors/support with traceable history; removing a superseder does not silently restore an ancestor without an approved feed policy. These controls must hold regardless of the order in which a source and its supersession link arrive, including a link declared on a source already admitted to another period and an unresolved link resolved later; no same-period source-move rows are created. This includes an ancestor withdrawn after the lock, a link declared on a source whose replacement is already admitted, and an unresolved claim whose target arrives without the claimant being re-sent. Any prior transition acceptance lapses when the resolved chain changes; reopening admits only the terminal source with a fresh transition hold.
 - **Target stage:** Current / G0; actual pending/removal/restoration semantics verified at G2.
 - **Trace:** T-12; C-01; RV-01/RV-02/RV-03/RV-04; RA-01; U4/UC-4.
 
@@ -765,7 +763,7 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Scope note:** No live ledger connector, external company identity or per-client migration/book-of-record readiness is confirmed; provider capabilities and authority must be verified for each workspace.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G2 hosted reads
-- **Dependencies:** AAOS-KNO-03; AAOS-CTL-02; AAOS-CTL-12; AAOS-INT-06 for later writes only.; AAOS-INT-07
+- **Dependencies:** AAOS-KNO-03; AAOS-CTL-02; AAOS-CTL-12; AAOS-INT-06 for later writes only; AAOS-INT-07 if ratified
 - **Acceptance criteria:** Confirm ledger edition/conversion and realm; verify each operation against current official documentation/entitlements in an isolated environment; unsupported pending-feed/reconciled-status operations remain unavailable/manual; supported reads never imply write authority or a private-endpoint workaround.
 - **Target stage:** Future / unassigned; G2 named reads, G3 each specified write.
 - **Trace:** U; PILOT first test/intake; LEGACY accounting integration constraints; FABLE question 15.
@@ -780,7 +778,7 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Scope note:** No adapter or live access implemented; per-client capabilities/entitlements and scope/cost authorization remain unverified. Named vendors are instances of the proposed shared connector contract.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G2 hosted reads
-- **Dependencies:** AAOS-AP-01 for accounting preparation; AAOS-CTL-12; AAOS-KNO-03; AAOS-INT-06 for later writes only.; AAOS-INT-07
+- **Dependencies:** AAOS-AP-01 for accounting preparation; AAOS-CTL-12; AAOS-KNO-03; AAOS-INT-06 for later writes only; AAOS-INT-07 if ratified
 - **Acceptance criteria:** Verify named read/attachment/status operations and provider-to-ledger identities; identify the one accounting/posting route; preserve vendor/bank changes and audit provenance; any write/payment requires its distinct authority and capability, never assumed from read access.
 - **Target stage:** Future / unassigned; G2 reads and separately authorized later operations.
 - **Trace:** U; LEGACY accounting systems connection packet; ARCH AP contract.
@@ -795,7 +793,7 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Scope note:** No adapter or live access implemented; per-client capabilities/entitlements and scope/cost authorization remain unverified. Named vendors are instances of the proposed shared connector contract.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G2 hosted reads
-- **Dependencies:** AAOS-ARC-02; AAOS-CTL-12; AAOS-CTL-08; AAOS-COM-02 for any later sending only.; AAOS-INT-07
+- **Dependencies:** AAOS-ARC-02; AAOS-CTL-12; AAOS-CTL-08; AAOS-COM-02 for any later sending only; AAOS-INT-07 if ratified
 - **Acceptance criteria:** Named mailbox/folder/document permissions and retention govern reads; replayed attachments remain identifiable; instructions in email cannot change authority or destinations; reading a thread never grants sending permission.
 - **Target stage:** Future / unassigned; G2 named reads, separate communication permissions for any sending.
 - **Trace:** U; LEGACY trusted-tool/data-protection controls; ARCH evidence contracts.
@@ -810,7 +808,7 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Scope note:** No adapter or live access implemented; per-client capabilities/entitlements and scope/cost authorization remain unverified. Named vendors are instances of the proposed shared connector contract.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G2 hosted reads
-- **Dependencies:** AAOS-KNO-06; AAOS-CTL-08; AAOS-CTL-09; AAOS-CTL-12; AAOS-CTL-13.; AAOS-INT-07
+- **Dependencies:** AAOS-KNO-06; AAOS-CTL-08; AAOS-CTL-09; AAOS-CTL-12; AAOS-CTL-13; AAOS-INT-07 if ratified
 - **Acceptance criteria:** Scope folders/files per client and environment; detect revisions/removals/access loss without rewriting earlier evidence; copied/moved documents retain provenance; repository access does not approve accounting treatment; document writes/deletions need separate permission.
 - **Target stage:** Future / unassigned; G2 authorized retrieval before reliance.
 - **Trace:** U; PILOT portable knowledge; LEGACY evidence/storage/retention.
@@ -825,7 +823,7 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Scope note:** No adapter or live access implemented; per-client capabilities/entitlements and scope/cost authorization remain unverified. Named vendors are instances of the proposed shared connector contract.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G2 hosted reads
-- **Dependencies:** AAOS-BNK-02; AAOS-BNK-03; AAOS-CTL-12; AAOS-INT-06 for later writes only.; AAOS-INT-07
+- **Dependencies:** AAOS-BNK-02; AAOS-BNK-03; AAOS-CTL-12; AAOS-INT-06 for later writes only; AAOS-INT-07 if ratified
 - **Acceptance criteria:** Verify complete checking versus card-only coverage and account types for each client; compare permitted direct, aggregator, application-native and export routes without presuming provider selection. Designate one posting route per transaction, document pending/removal/sign semantics and approved clearing treatment. Portal use needs permitted access and validated controls; no authentication/provider restriction bypass.
 - **Target stage:** Future / unassigned; G1 authorized local exports, G2 separately authorized reads/portals.
 - **Trace:** U; PILOT unresolved transaction-intake choice; LEGACY connection packet; FABLE questions 2/4/15.
@@ -869,9 +867,9 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Business purpose:** Prevent self-review or laundering authorship through reruns, cosmetic configuration changes or replacement evidence.
 - **Priority:** Must
 - **Product decision:** Approved
-- **Implementation state:** Verification failed
-- **Scope note:** Last independent verification failed (RB-03). The RB response supplies developer fixes/regressions; independent re-verification is pending. Earlier accepted subpaths remain documented, not proof that this requirement is complete.
-- **Evidence:** [independent review](../exports/FABLE_RA_ACCEPTANCE/FABLE_RA_ACCEPTANCE_REPORT.md), RB-03; [tests/test_review_corrections_rb.py](../tests/test_review_corrections_rb.py); [unchanged independent probes](../exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py).
+- **Implementation state:** Independently verified
+- **Scope note:** Independent Fable RB review verified the synthetic local preparation controls exercised by the named probes at the V2 checkpoint; no client policy, connected operation, reconciliation completion, close or operating readiness is verified.
+- **Evidence:** [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; R02a, R02b, N03a, N03b, N04a.
 - **Needed for:** G1 approved samples
 - **Dependencies:** AAOS-ARC-02; AAOS-CTL-06; AAOS-CTL-03 for real authority only
 - **Acceptance criteria:** Include relevant enqueuer, worker, mandate issuer, historical evidence suppliers, rule/profile authors/approvers and disposition actors; identity names do not imply kind; cosmetic/unlinked equivalent rules retain relevant authors; revised-evidence acceptance excludes old/current suppliers and remains separate from final review; unrelated contributors do not create false barriers. Equivalent approved semantic rules retain relevant authors across renamed keys and general-to-item coverage changes; prior-statement acceptance actors are contributors when their acceptance is consumed for continuity.
@@ -915,11 +913,11 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Priority:** Must
 - **Product decision:** Approved
 - **Implementation state:** Verification failed
-- **Scope note:** Last independent verification failed (RB-01). The RB response supplies developer fixes/regressions; independent re-verification is pending. Earlier accepted subpaths remain documented, not proof that this requirement is complete.
-- **Evidence:** [independent review](../exports/FABLE_RA_ACCEPTANCE/FABLE_RA_ACCEPTANCE_REPORT.md), RB-01; [tests/test_review_corrections_rb.py](../tests/test_review_corrections_rb.py); [unchanged independent probes](../exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py).
+- **Scope note:** Independent Fable RB review failed RB-01: RC-01, RC-02 and RC-03 (N01b, N01c, N01d). Developer corrections and regression passes are supplied in corrections_rc/; this state remains Verification failed pending independent re-verification of this new checkpoint and those exact arrival-order criteria.
+- **Evidence:** [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; RC-01, RC-02, RC-03: N01b, N01c, N01d WEAK in the independent run; [tests/test_review_corrections_rc.py](../tests/test_review_corrections_rc.py) and corrections_rc/ are developer evidence only.
 - **Needed for:** G1 approved samples
 - **Dependencies:** AAOS-ARC-02; AAOS-CTL-03 before G1 real authority only
-- **Acceptance criteria:** Every review transition, including revoke/resolution, refuses a locked period; lock preserves approved/finalized evidence; late/unassigned/moved sources quarantine; independent audited reopen precedes admission; a replacement chain never leaves the same expense approved in two periods; destination revisions after a valid release use the nearest admitted owner. The prohibition holds regardless of source/link arrival order, including a link declared after destination admission/approval and an unresolved link resolved later; affected destination approval ceases governing and an approved-source event names it.
+- **Acceptance criteria:** Every review transition, including revoke/resolution, refuses a locked period; lock preserves approved/finalized evidence; late/unassigned/moved sources quarantine; independent audited reopen precedes admission; a replacement chain never leaves the same expense approved in two periods; destination revisions after a valid release use the nearest admitted owner. The prohibition holds regardless of source/link arrival order, including a link declared after destination admission/approval and an unresolved link resolved later; affected destination approval ceases governing and an approved-source event names it. This includes an ancestor withdrawn after the lock, a link declared on a source whose replacement is already admitted, and an unresolved claim whose target arrives without the claimant being re-sent. Any prior transition acceptance lapses when the resolved chain changes; reopening admits only the terminal source with a fresh transition hold.
 - **Target stage:** Current / G0; actual cutoff/cycle and reopen policy at G1 before client use.
 - **Trace:** T-05; C-01/C-02; RV-01/RV-04; RA-01 and relock regression; FABLE questions 4/9.
 
@@ -989,9 +987,9 @@ The register is accepted subject to PR-01–PR-03 status corrections; those fail
 - **Business purpose:** Prevent corrected documents from making previously unsupported work silently approvable.
 - **Priority:** Must
 - **Product decision:** Approved
-- **Implementation state:** Verification failed
-- **Scope note:** Last independent verification failed (RB-02/RB-04). The RB response supplies developer fixes/regressions; independent re-verification is pending. Earlier accepted subpaths remain documented, not proof that this requirement is complete.
-- **Evidence:** [independent review](../exports/FABLE_RA_ACCEPTANCE/FABLE_RA_ACCEPTANCE_REPORT.md), RB-02/RB-04; [tests/test_review_corrections_rb.py](../tests/test_review_corrections_rb.py); [unchanged independent probes](../exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py).
+- **Implementation state:** Independently verified
+- **Scope note:** Independent Fable RB review verified the synthetic local preparation controls exercised by the named probes at the V2 checkpoint; no client policy, connected operation, reconciliation completion, close or operating readiness is verified. UC-10: a contradicting receipt supplied after the one relied on, then moved away or withdrawn, leaves no disclosure; that document-policy question is outside the verified RB-02 scope (N02c NOTE). RC transition-chain acceptance binding is developer-tested only under the still-failed AAOS-BNK-03/AAOS-CTL-04 scope, outside this independent conclusion.
+- **Evidence:** [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; R03a, R03b, R04a, R04b, R04c, N02a, N02b, N04a, N04b, N04c, N04d; N02c NOTE.
 - **Needed for:** G1 approved samples
 - **Dependencies:** AAOS-CTL-01; AAOS-CTL-08; AAOS-BNK-03.
 - **Acceptance criteria:** Withdrawing/replacing a receipt or re-supplying a matching statement still creates visible holds; acceptance excludes all old/current suppliers, is item/evidence-bound and lapses on later changes; a new still-active extra receipt remains a multiple-document issue; accepted revisions still require separate final review; predecessor evidence accepted at submission can actually activate on re-preparation. Detect replacement by any route, including an old document key moved to another item or cycle; disclose prior-period lookback restatement and keep its dependent continuity unverified until active own-period acceptance covers every relying item. Revocation or changed evidence re-blocks it.
@@ -1094,6 +1092,10 @@ These client-neutral proposals preserve the reusable onboarding/offboarding scop
 
 ## Bird Bowl onboarding and validation
 
+- **Client-specific terms:** Bird Bowl; Theresa; Jeff; Luis; Expensify; Desktop
+
+These names and client-only system choices are drawn from the client records below. Shared named QBO integration scope remains in AAOS-INT-01. The checker reads this list for register and shared-code boundaries.
+
 
 ### AAOS-BB-01 — November knowledge capture
 
@@ -1105,7 +1107,7 @@ These client-neutral proposals preserve the reusable onboarding/offboarding scop
 - **Scope note:** Approved pilot plan; real capture/processing is not evidenced as completed. The product owner and accounting lead confirmed in writing on 16 November 2026 that procedure documentation outside the application may proceed before G1 (D-016).
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G1 approved samples
-- **Dependencies:** AAOS-KNO-03; AAOS-KNO-04; AAOS-KNO-05; AAOS-GOV-03. ; AAOS-ONB-01 (first client instance of the shared onboarding requirement)
+- **Dependencies:** AAOS-KNO-03; AAOS-KNO-04; AAOS-KNO-05; AAOS-GOV-03; AAOS-ONB-01 if ratified (first client instance of the shared onboarding requirement)
 - **Acceptance criteria:** Separate proven client logic, model suggestions, temporary choices and unresolved facts; each intervention names correction scope/evidence/rationale/version; accounting lead validates before reusable approval; real records only after G1 authorization. Distinguish external written procedure capture from application processing in the capture log. This clarification and its confirmation (D-016) grant no new source access, client-data upload, accounting-policy approval or real workflow execution; completion of capture is recorded only when evidenced.
 - **Target stage:** Confirmed by the product owner and accounting lead (D-016): before G1 the team may document the November 2026 accounting procedures outside the application, using only the client access it already has; no client records are loaded into this application. Loading or processing client records in the application requires human G0 acceptance and explicit G1 authorization. November 2026 is the confirmed capture period, not evidence that capture occurred.
 - **Trace:** PILOT November capture; LEGACY AT-60; U; PR-11; D-012; D-016.
@@ -1120,7 +1122,7 @@ These client-neutral proposals preserve the reusable onboarding/offboarding scop
 - **Scope note:** Approved plan; independent real-client validation not performed. December 2026 is designated as the held-out month by the product owner and accounting lead (D-016).
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G1 approved samples
-- **Dependencies:** AAOS-BB-01; AAOS-KNO-06; AAOS-OBS-04. ; AAOS-ONB-01 (first client instance of the shared onboarding requirement)
+- **Dependencies:** AAOS-BB-01; AAOS-KNO-06; AAOS-OBS-04; AAOS-ONB-01 if ratified (first client instance of the shared onboarding requirement)
 - **Acceptance criteria:** Include relevant missing evidence, duplicates, changed descriptions, splits, revisions and exceptions without supplying teaching answers; record disagreements and approved revisions; retain annual/unusual/untested coverage gaps with human routes; no synthetic success substitutes for this result. November cases are used to write and refine the procedures; December cases and their expected results are kept separate from the teaching examples so that an independent reviewer can test the procedures against them (D-016).
 - **Target stage:** G1 held-out application validation follows approved capture by a separate accounting period. December 2026 is the designated held-out month for independent validation (D-016); a different month needs a new recorded decision. Processing December records in the application still requires human G0 acceptance and explicit G1 authorization. G2/G4 require their separate decisions.
 - **Trace:** PILOT December validation; FABLE G1/G2; LEGACY AT-60/AT-61; PR-11; D-012; D-016.
@@ -1135,7 +1137,7 @@ These client-neutral proposals preserve the reusable onboarding/offboarding scop
 - **Scope note:** Approved goal; Theresa's actual role/authority and observed workflow are unverified.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G4 operating handoff
-- **Dependencies:** AAOS-BB-02; AAOS-KNO-06; AAOS-CTL-03; AAOS-BB-07. ; AAOS-ONB-01 (first client instance of the shared onboarding requirement)
+- **Dependencies:** AAOS-BB-02; AAOS-KNO-06; AAOS-CTL-03; AAOS-BB-07 if ratified; AAOS-ONB-01 if ratified (first client instance of the shared onboarding requirement)
 - **Acceptance criteria:** Theresa performs the assigned workflow from input to review using the guide, explains when/how to escalate and identifies unclear context; record actual assistance/time; a fixture named Theresa or an API test cannot count as her teach-back or approval.
 - **Target stage:** G1 discovery/validation; observed G4 operating handoff.
 - **Trace:** U; PILOT Theresa/readiness; LEGACY AT-61; FABLE G4/question 17.
@@ -1150,7 +1152,7 @@ These client-neutral proposals preserve the reusable onboarding/offboarding scop
 - **Scope note:** Approved discovery requirement; actual systems, totals, allocation/fee/tax treatment and procedures unknown.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G1 approved samples
-- **Dependencies:** AAOS-KNO-03; AAOS-BB-01; AAOS-BNK-05; AAOS-KNO-04. ; AAOS-ONB-01 (first client instance of the shared onboarding requirement) ; AAOS-GL-06 and AAOS-BNK-07 for any later authorized execution
+- **Dependencies:** AAOS-KNO-03; AAOS-BB-01; AAOS-BNK-05; AAOS-KNO-04; AAOS-ONB-01 if ratified (first client instance of the shared onboarding requirement) ; AAOS-GL-06 if ratified and AAOS-BNK-07 if ratified for any later authorized execution
 - **Acceptance criteria:** Identify sources, responsible people, reconciliation boundaries and one posting route; independently validate observed procedures and known reviewed examples; exceptions/timing/fees/refunds remain questions until supported; store any approved treatment only in the client workspace, with no invented Bird Bowl financial facts.
 - **Target stage:** G1 authorized knowledge capture; execution capabilities future / unassigned after prerequisites are validated.
 - **Trace:** U's explicit onboarding scope; PILOT procedure-capture method; ARCH banking/GL contracts. Existing pilot does not supply the actual sales/deposit procedure.
@@ -1165,7 +1167,7 @@ These client-neutral proposals preserve the reusable onboarding/offboarding scop
 - **Scope note:** Approved discovery requirement; providers, calculations, tax/tip rules, amounts and authority unknown.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G1 approved samples
-- **Dependencies:** AAOS-KNO-03; AAOS-KNO-04; AAOS-BB-01; AAOS-CTL-08. ; AAOS-ONB-01 (first client instance of the shared onboarding requirement) ; AAOS-GL-06 for any later authorized accounting preparation
+- **Dependencies:** AAOS-KNO-03; AAOS-KNO-04; AAOS-BB-01; AAOS-CTL-08; AAOS-ONB-01 if ratified (first client instance of the shared onboarding requirement) ; AAOS-GL-06 if ratified for any later authorized accounting preparation
 - **Acceptance criteria:** Accounting lead validates source completeness, reconciliation and approved examples; procedure names preparer/reviewer and manual responsibilities; missing legal/payroll/tip treatment remains a question for qualified validation; no payroll run, payment or filing capability is activated by knowledge capture.
 - **Target stage:** G1 authorized discovery; any accounting preparation module later assigned separately; payroll execution outside this task.
 - **Trace:** U; PILOT capture/validation controls; FABLE question 8 mentions meals/tips but provides no actual payroll policy.
@@ -1180,7 +1182,7 @@ These client-neutral proposals preserve the reusable onboarding/offboarding scop
 - **Scope note:** Approved goal; actual close/operating readiness not demonstrated.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G4 operating handoff
-- **Dependencies:** AAOS-BB-02; AAOS-BB-03; AAOS-CLS-03; AAOS-EXE-04; AAOS-OBS-01; AAOS-BB-07. ; AAOS-ONB-01 (first client instance of the shared onboarding requirement)
+- **Dependencies:** AAOS-BB-02; AAOS-BB-03; AAOS-CLS-03; AAOS-EXE-04; AAOS-OBS-01; AAOS-BB-07 if ratified; AAOS-ONB-01 if ratified (first client instance of the shared onboarding requirement)
 - **Acceptance criteria:** December close waits for necessary records, possibly January 2027; no automatic January 1 deployment; measure complete supported work, required/missed exceptions, independence of blocked tasks and all recurring human work; human release identifies exactly which validated workflows may operate.
 - **Target stage:** G1 close discovery; G4 demonstrated workflow scope after applicable capability gates.
 - **Trace:** U; PILOT readiness; LEGACY AT-61; FABLE questions 13/17/G4.
@@ -1195,7 +1197,7 @@ These client-neutral proposals preserve the reusable onboarding/offboarding scop
 - **Scope note:** Proposed operating arrangement; responsibilities/commercial terms have not been agreed.
 - **Evidence:** Not implemented; source specifications in Trace and target/dependency gates define future validation.
 - **Needed for:** G4 operating handoff
-- **Dependencies:** AAOS-KNO-03; AAOS-CTL-03; AAOS-CTL-12; AAOS-OBS-03. Deployment-option selection is part of this agreement, not a prerequisite to designing those options. ; AAOS-ONB-01 (first client instance of the shared onboarding requirement)
+- **Dependencies:** AAOS-KNO-03; AAOS-CTL-03; AAOS-CTL-12; AAOS-OBS-03. Deployment-option selection is part of this agreement, not a prerequisite to designing those options; AAOS-ONB-01 (first client instance of the shared onboarding requirement)
 - **Acceptance criteria:** Named parties agree accounting versus technical escalation, authority, platform/runtime/jobs/storage, backup/recovery, changes requiring accounting review, optional model payer and support/co-management terms; authorized company/entity and any asset reuse/licensing boundaries are recorded; no inherited credentials or cost commitments.
 - **Target stage:** Before any authorized hosting/G2 and operating handoff/G4; discussion can precede implementation.
 - **Trace:** PILOT proposed responsibilities/deployment; LEGACY company authority/funding/asset boundaries; FABLE question 16.
@@ -1210,7 +1212,7 @@ These client-neutral proposals preserve the reusable onboarding/offboarding scop
 - **Scope note:** All actual AP/AR/ledger/intake facts remain unknown. This is the first client instance of shared onboarding, not a shared-core condition.
 - **Evidence:** Not implemented. [product-register review](../exports/FABLE_PRODUCT_REQUIREMENTS/FABLE_PRODUCT_REQUIREMENTS_REVIEW.md); relevant original specifications and current authority remain prerequisites.
 - **Needed for:** G1 approved samples
-- **Dependencies:** AAOS-ONB-01; AAOS-KNO-03; AAOS-KNO-04
+- **Dependencies:** AAOS-ONB-01 if ratified; AAOS-KNO-03; AAOS-KNO-04
 - **Acceptance criteria:** Authorized client/accounting owners confirm whether AP/AR are relevant and supply approval/receiving/terms/reporting facts; confirm Desktop-to-QBO conversion and the actual book of record per period. Compare permitted direct bank, aggregator, native QBO and, only if purchased/authorized, Expensify as a bank-transaction candidate; verify complete checking versus card coverage and one posting route, source identity and any approved clearing treatment. No vendor, access, purchase, mapping or completed conversion is presumed.
 - **Target stage:** G1 written client facts; provider capabilities/access verified separately at G2. No connector/purchase/posting authorization.
 - **Trace:** PR-07; PILOT first test/unresolved intake; Fable questions 1–7/12/15; AAOS-INT-01/05 are named integration requirements.
@@ -1378,7 +1380,7 @@ Rejected means outside this accounting product by existing scope decisions. Rese
 - **Priority:** Must
 - **Product decision:** Rejected
 - **Implementation state:** Not started
-- **Scope note:** Rejected scope, not a missing accounting capability.
+- **Scope note:** Rejected scope. Rejected scope, not a missing accounting capability.
 - **Evidence:** Not implemented. [product-register review](../exports/FABLE_PRODUCT_REQUIREMENTS/FABLE_PRODUCT_REQUIREMENTS_REVIEW.md); relevant original specifications and current authority remain prerequisites.
 - **Needed for:** Product decision
 - **Dependencies:** None.
@@ -1393,7 +1395,7 @@ Rejected means outside this accounting product by existing scope decisions. Rese
 - **Priority:** Must
 - **Product decision:** Rejected
 - **Implementation state:** Not started
-- **Scope note:** Rejected non-accounting agent scope.
+- **Scope note:** Rejected scope. Rejected non-accounting agent scope.
 - **Evidence:** Not implemented. [product-register review](../exports/FABLE_PRODUCT_REQUIREMENTS/FABLE_PRODUCT_REQUIREMENTS_REVIEW.md); relevant original specifications and current authority remain prerequisites.
 - **Needed for:** Product decision
 - **Dependencies:** None.
@@ -1408,7 +1410,7 @@ Rejected means outside this accounting product by existing scope decisions. Rese
 - **Priority:** Must
 - **Product decision:** Proposed
 - **Implementation state:** Deferred
-- **Scope note:** Reserved execution boundary; long-term product inclusion remains Proposed and no capability exists.
+- **Scope note:** Reserved action. Reserved execution boundary; long-term product inclusion remains Proposed and no capability exists.
 - **Evidence:** Not implemented. [product-register review](../exports/FABLE_PRODUCT_REQUIREMENTS/FABLE_PRODUCT_REQUIREMENTS_REVIEW.md); relevant original specifications and current authority remain prerequisites.
 - **Needed for:** Product decision
 - **Dependencies:** AAOS-GL-06; AAOS-CTL-03; AAOS-INT-06
@@ -1423,7 +1425,7 @@ Rejected means outside this accounting product by existing scope decisions. Rese
 - **Priority:** Should
 - **Product decision:** Proposed
 - **Implementation state:** Deferred
-- **Scope note:** Reserved and unimplemented; whether it belongs in future product scope remains Proposed.
+- **Scope note:** Reserved action. Reserved and unimplemented; whether it belongs in future product scope remains Proposed.
 - **Evidence:** Not implemented. [product-register review](../exports/FABLE_PRODUCT_REQUIREMENTS/FABLE_PRODUCT_REQUIREMENTS_REVIEW.md); relevant original specifications and current authority remain prerequisites.
 - **Needed for:** Product decision
 - **Dependencies:** AAOS-KNO-01; AAOS-CTL-03; AAOS-CTL-08
@@ -1438,7 +1440,7 @@ Rejected means outside this accounting product by existing scope decisions. Rese
 - **Priority:** Must
 - **Product decision:** Approved
 - **Implementation state:** Deferred
-- **Scope note:** Approved reserved-action control; payment execution itself remains Deferred and unimplemented.
+- **Scope note:** Reserved action. Approved reserved-action control; payment execution itself remains Deferred and unimplemented.
 - **Evidence:** Not implemented. [product-register review](../exports/FABLE_PRODUCT_REQUIREMENTS/FABLE_PRODUCT_REQUIREMENTS_REVIEW.md); relevant original specifications and current authority remain prerequisites.
 - **Needed for:** Product decision
 - **Dependencies:** AAOS-AP-02; AAOS-CTL-03; AAOS-INT-06
@@ -1463,7 +1465,7 @@ This is a requirements crosswalk, not new ticket sequencing. The original JSON r
 | T-09 | AAOS-KNO-04, AAOS-CTL-01 | Tested synthetic rule/profile lifecycle; RA-02 accepted for original scope; RB-03 fails new scope/key coverage until re-verification. |
 | T-10 | AAOS-EXE-03 | Tested synthetic period/freshness/policy authority; RA-05 independently accepted within its tested scope; broader real operation remains gated. |
 | T-11 | AAOS-KNO-03 | Tested required facts and explicit demo-only waivers. |
-| T-12 | AAOS-BNK-03, AAOS-CTL-04 | Verification failed at R01b/R01c (RB-01); developer correction adds late-link/resolved-link coverage; independent re-verification/G0 remain open. |
+| T-12 | AAOS-BNK-03, AAOS-CTL-04 | Verification failed at R01b/R01c (RB-01); developer correction adds late-link/resolved-link coverage; independent re-verification/G0 remain open. RC-01/RC-02/RC-03 remain independently failed (N01b/N01c/N01d); developer repair in corrections_rc/ awaits independent verification. |
 | T-13 | AAOS-BNK-02 | Tested fictional statement/population controls; non-calendar cycles deferred. |
 | T-14 | AAOS-BRF-03, AAOS-CTL-08, AAOS-CTL-09, AAOS-CTL-05 | Tested scoped exceptions/dispositions; RA-06/07/08 accepted; RB-02/RB-04 replacement/continuity routes await independent re-verification. |
 | T-15 | AAOS-GL-01 | Tested synthetic shared proposed entries; actual ledger execution absent. |
@@ -1480,19 +1482,19 @@ This is a requirements crosswalk, not new ticket sequencing. The original JSON r
 | T-26 | AAOS-GL-05 | Deferred general currency/minor units. |
 | T-27 | AAOS-CTL-02, AAOS-ARC-02 | Deferred authenticated identity/bounded access; not production-ready today. |
 
-Existing order is **T-01–T-08**, then **T-09, T-11, T-12, T-10, T-13, T-14, T-15, T-16, T-17, T-18, T-19**. The earlier RA order was **RA-01, RA-03, RA-04, RA-02, RA-06, RA-05, RA-07, RA-08**. Current correction order is **RB-01, RB-02, RB-03, RB-04**, plus required PR documentation/validation corrections, then independent re-verification. Batch 3's existing **T-20–T-27** order/dependencies remain on record but are not authorized to start. No new proposed requirements above are inserted into a batch.
+Existing order is **T-01–T-08**, then **T-09, T-11, T-12, T-10, T-13, T-14, T-15, T-16, T-17, T-18, T-19**. The earlier RA order was **RA-01, RA-03, RA-04, RA-02, RA-06, RA-05, RA-07, RA-08**. The prior RB correction order was **RB-01, RB-02, RB-03, RB-04**. Current authorized order is **RC-01, RC-02, RC-03**, then **PRV-01–PRV-10**, followed by independent re-verification. Batch 3's existing **T-20–T-27** order/dependencies remain on record but are not authorized to start. No new proposed requirements above are inserted into a batch.
 
 | Review layer | Required control trace and acceptance state |
 | --- | --- |
 | C-01–C-06 | AAOS-CTL-01/04/05/06, AAOS-BNK-03. Later reviews reopened the locked-origin control; RA-01 failed at late-link arrival paths (RB-01); the response now requires independent re-verification. Preserve every original method and new failure-path regression. |
 | RV-01–RV-17 | AAOS-CTL-01/05/06/08/09/10, AAOS-KNO-04, AAOS-BNK-02/03, AAOS-EXE-03, AAOS-CLS-01/02, AAOS-GOV-03. Fable accepted 14; RV-01/10/12 had new routes requiring RA-01/02/03/04. Seven earlier adaptations and strengthened RT14b accepted; do not claim all 17 were independently accepted. |
-| RA-01 | AAOS-BNK-03, AAOS-CTL-04: full-chain locked-origin quarantine/reopen/root history. |
+| RA-01 | AAOS-BNK-03, AAOS-CTL-04: full-chain locked-origin quarantine/reopen/root history. RC-01/RC-02/RC-03 remain independently failed (N01b/N01c/N01d); developer repair in corrections_rc/ awaits independent verification. |
 | RA-03, RA-04 | AAOS-CTL-09, AAOS-BNK-02: replacement receipt keys and revised/replaced statements held/disclosed/independently accepted. |
 | RA-02 | AAOS-KNO-04, AAOS-CTL-01: relevant approved semantic rule authors survive absent optional links. |
 | RA-06, RA-05 | AAOS-CTL-08/09, AAOS-EXE-03: the same predecessor references activate dispositions; relevant policy windows do not depend on current source arrival. |
 | RA-07, RA-08 | AAOS-CTL-08/05: related supporting documents only; a duplicate exclusion must retain a live survivor. |
 | RA completion | Five RA corrections accepted; RB-01–RB-04 require correction and independent re-verification. Developer tests alone do not restore acceptance. Preserve `make test`, `make check`, `make batch2-gate`, `make reverification-gate`, `make acceptance-gate`, original review bytes and disclosed setup differences. Only U4 is a permitted NOTE in the maintained RA gate. |
-| RB-01 | AAOS-BNK-03, AAOS-CTL-04: live locked ancestors override prior destination admission; late links/resolved links quarantine; approved destination history is retained and leaves governing population. |
+| RB-01 | AAOS-BNK-03, AAOS-CTL-04: live locked ancestors override prior destination admission; late links/resolved links quarantine; approved destination history is retained and leaves governing population. RC-01/RC-02/RC-03 remain independently failed (N01b/N01c/N01d); developer repair in corrections_rc/ awaits independent verification. |
 | RB-02 | AAOS-CTL-09, AAOS-BNK-02: replaced support includes re-pointed old keys, not only withdrawals; old/current suppliers remain independent of acceptance. |
 | RB-03 | AAOS-KNO-04, AAOS-CTL-01: semantic rule history follows coverage across general/item scope and new keys; unrelated values/descriptions/scopes do not bar review. |
 | RB-04 | AAOS-BNK-02, AAOS-CTL-09: disclose prior-statement revisions; continuity depends on active own-period acceptance for all relying items; revocation invalidates dependents. |
@@ -1535,7 +1537,7 @@ The following decisions genuinely remain open. They do not block maintaining the
 | Provider-specific read/report/attachment/portal/write capabilities, bank/intake vendor, one posting route and source-removal/restoration semantics. | Verify current official provider documentation and account entitlements before a named G2/G3 authorization; AAOS-INT-01–06, AAOS-BNK-03/05. No unsupported bank-feed UI operation is presumed available. |
 | Actual cadence/timezone, evidence freshness/no-evidence exceptions, escalation/review SLA, management permissions, cost ceilings/concurrency, materiality thresholds and review-time estimation basis. | Product/client/accounting owners before real recurring work or paid use; AAOS-EXE-02/03/04, AAOS-BRF-01/02/03, AAOS-OBS-01/02/03. Earlier numeric engineering proposals are not automatically ratified accounting-client limits. |
 | Whether and under what distinct policy an agent may send requests/collections, to whom, with which review/standing limits. | Product/client authority after a separately assigned capability/control design; AAOS-COM-01/02. Current permission remains no sending. |
-| Whether Fable accepts the RB response; whether the accounting owner accepts G0. All five additional statement setups were accepted. | Independent reviewer then human gate owner, current priority; AAOS-GOV-03. Until recorded, Batch 3 and later readiness gates remain closed. |
+| Whether Fable accepts this RC/PRV response; whether the accounting owner accepts G0. RB-02–04 and all five additional statement setups were accepted at their named checkpoints. | Independent reviewer then human gate owner, current priority; AAOS-GOV-03. Until recorded, Batch 3 and later readiness gates remain closed. |
 
 ## Register change record
 
@@ -1547,3 +1549,5 @@ The following decisions genuinely remain open. They do not block maintaining the
 
 | 2026-11-16 | Applied PR-01–PR-17: independent-failure states, split decision/implementation fields, scope/evidence/needed-for metadata, shared proposed lifecycle/connectors/operating-source requirements, explicit reserved scope, client-specific fact relocation, dependency/trace/parameter corrections and executable checks. Original 76 IDs retained; 12 new IDs documented without feature implementation or Batch 3 authority. | Returned independent reviews; user correction assignment; D-010–D-012; docs/corrections_rb/. |
 | 2026-11-16 | Recorded the PR-11 confirmation in AAOS-BB-01 and AAOS-BB-02: procedure documentation outside the application may proceed before G1 with existing client access; client records enter the application only after human G0 acceptance and explicit G1 authorization; December 2026 is the designated held-out validation month, with December cases and expected results kept separate from November teaching examples. Scope note, acceptance criteria, target stage and trace of those two records only; no product decision, implementation state, gate or other record changed. | User's written confirmation as product owner and accounting lead; D-016; D-017 (edited by Fable at the user's instruction as a limited exception to the V2 working-file freeze). |
+
+| 2026-11-16 | RC/PRV authorized correction pass: PRV-01 records seven independent conclusions; PRV-02/03/04/05/06/07/08/10 enforce evidence, state, boundaries and dependencies; PRV-09 supplies complete inventory. D-016/D-017 wording retained. No new product decision or operating gate. | User correction assignment; immutable RB/PR reports; D-018–D-020; docs/corrections_rc/. |
