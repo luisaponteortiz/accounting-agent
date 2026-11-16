@@ -1,0 +1,49 @@
+== test methods ==
+V2 methods 174 | RC methods 192 | V2 methods missing in RC: []
+V2 methods whose body changed: []
+new methods 18
+    ('test_product_requirements.py', 'ProductRequirements', 'test_PRV02_nonexistent_test_ticket_and_arbitrary_token_are_rejected')
+    ('test_product_requirements.py', 'ProductRequirements', 'test_PRV03_failed_verdict_cannot_be_promoted')
+    ('test_product_requirements.py', 'ProductRequirements', 'test_PRV03_self_asserted_independent_verification_is_rejected')
+    ('test_product_requirements.py', 'ProductRequirements', 'test_PRV04_shared_web_and_python_are_checked_but_fixtures_are_exempt')
+    ('test_product_requirements.py', 'ProductRequirements', 'test_PRV05_approved_cannot_depend_unconditionally_on_proposed')
+    ('test_product_requirements.py', 'ProductRequirements', 'test_PRV06_unstarted_or_deferred_dependency_needs_local_condition')
+    ('test_product_requirements.py', 'ProductRequirements', 'test_PRV07_scope_disposition_must_match_table')
+    ('test_product_requirements.py', 'ProductRequirements', 'test_PRV08_stray_dependency_punctuation_is_rejected')
+    ('test_product_requirements.py', 'ProductRequirements', 'test_PRV10_every_shared_field_except_trace_uses_client_section_terms')
+    ('test_rc_review_gate.py', 'RCReviewGate', 'test_all_18_unmodified_probes_meet_exact_contract')
+    ('test_rc_review_gate.py', 'RCReviewGate', 'test_gate_refuses_nonzero_missing_duplicate_or_changed_verdicts')
+    ('test_rc_review_gate.py', 'RCReviewGate', 'test_supplied_inputs_and_prior_archives_are_byte_identical')
+    ('test_review_corrections_rc.py', 'ReviewCorrectionsRC', 'test_RC01_withdrawal_then_fresh_or_late_claim_and_relock')
+    ('test_review_corrections_rc.py', 'ReviewCorrectionsRC', 'test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal')
+    ('test_review_corrections_rc.py', 'ReviewCorrectionsRC', 'test_RC02_unchanged_chain_adds_no_bindings_moves_or_accounting_events')
+    ('test_review_corrections_rc.py', 'ReviewCorrectionsRC', 'test_RC03_open_target_clears_unresolved_without_quarantine')
+    ('test_review_corrections_rc.py', 'ReviewCorrectionsRC', 'test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced')
+    ('test_review_corrections_rc.py', 'ReviewCorrectionsRC', 'test_RC03_pending_cycle_is_not_linked')
+test file differs from V2: test_product_requirements.py
+test files only in RC: ['test_rc_review_gate.py', 'test_review_corrections_rc.py']
+skip / expectedFailure markers in tests: [('test_reviewer_probes.py', 48, 'def test_expired_partial_slot_is_recorded_as_skipped(self):'), ('test_reviewer_probes.py', 52, "self.assertTrue(all(o['status']=='skipped_no_catch_up' for o in self.os.state(actor())['occurrences']))"), ('test_reviewer_probes.py', 54, 'def test_concurrent_ticks_and_skipped_occurrences(self):'), ('test_reviewer_probes.py', 61, "self.assertEqual([o['status'] for o in occ],['skipped_no_catch_up','skipped_no_catch_up','completed'])")]
+lines removed from tests/test_product_requirements.py against V2: 1
+     -from scripts.check_product_requirements import validate_register
+
+== change inventory (PRV-09) ==
+baseline : "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip"
+baseline_sha256 : "00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d"
+scope : "Every deliverable payload file against the V2 correction bundle, including exports/ and START_HERE.md."
+coverage_rules: [
+ "All differing payload files are individually listed except the two self-artifacts named below, which are covered by REVIEW_MANIFEST.json.",
+ "REVIEW_MANIFEST.json hashes every payload file except itself; its own SHA-256 is in the adjacent PACKAGE_CHECK JSON.",
+ "The final archive and its adjacent checksum, external manifest and PACKAGE_CHECK JSON are the output envelope, excluded from the payload to prevent recursion. The checksum sidecar hashes the archive.",
+ "Git metadata, caches, virtual environments, .DS_Store and runtime databases/data are excluded; no delivered source/evidence file is excluded by that rule."
+]
+self_artifacts_covered_by_manifest: ['docs/corrections_rc/changed-files.json', 'docs/corrections_rc/source-and-tests.patch']
+output_envelope: ["exports/FABLE_RC_AND_PRV_CORRECTIONS_PACKAGE_CHECK.json", "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.REVIEW_MANIFEST.json", "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip", "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip.sha256"]
+original_tests: {"tests/__init__.py": {"baseline_methods": 0, "retained_methods": [], "new_methods": [], "byte_identical": true}, "tests/test_acceptance_corrections.py": {"baseline_methods": 13, "retained_methods": ["AcceptanceCorrections.test_RA01_entire_chain_and_receipts_remain_blocked_until_reopen", "AcceptanceCorrections.test_RA01_supersession_cycle_is_refused_without_mutation", "AcceptanceCorrections.test_RA02_unlinked_identical_receipt_policy_retains_author", "AcceptanceCorrections.test_RA02_unlinked_rule_identity_preserves_semantic_authors_without_unrelated_scope", "AcceptanceCorrections.test_RA03_add
+files entries: 306 | sample: [{"file": "AGENTS.md", "status": "modified", "baseline_sha256": "64e3f44b570cfed82dc4c5dad40a7d73cfdc0a3e1ca6612c8111afbda5380f73", "initial_working_sha256": "6031efbffcd6f044a3efe9795eeb0c4d917c3071552ded386d4cec1bf602e6cc", "sha256": "025830e9ab69bcd25ff22223146dff7a071c661379ba39121318d13022ccbd4c", "pre_existing_difference": true, "changed_in_this_pass": true}, {"file": "CODEX_RC_CORRECTIONS_PROMPT.md", "status": "added", "baseline_sha256": null, "initial_working_sha256": "0de52eb5bc1fe09600b32c9a359302576322791f1a739ee0bf39da3a78e33ec6", "sha256": "0de52eb5bc1fe09600b32c9a359302576322791f
+differing files against V2: 309 | listed: 306 | differing but not listed, not self-artifact, not the manifest: 0
+listed but identical to V2 or absent from the bundle: []
+listed hashes that disagree with the bundle file: [('AGENTS.md', {'file': 'AGENTS.md', 'status': 'modified', 'baseline_sha256': '64e3f44b570cfed82dc4c5dad40a7d73cfdc0a3e1ca6612c8111afbda5380f73', 'initial_working_sha256': '6031efbffcd6f044a3efe9795eeb0c4d917c3071552ded386d4cec1bf602e6cc', 'sha256': '025830e9ab69bcd25ff22223146dff7a071c661379ba39121318d13022ccbd4c', 'pre_existing_difference': True, 'changed_in_this_pass': True}), ('DECISIONS.md', {'file': 'DECISIONS.md', 'status': 'modified', 'baseline_sha256': 'f9b1d97d2c249245df27d37e3df2067a2128ad6a3746a53f5732d5793e860979', 'initial_working_sha256': 'd30e14453ad01c251947b0d8a4b6397c6c582ef1593d826cd23cafb68513924b', 'sha256': 'c8f64874c7251f22bbdf262f9f5d042caa0bd3314d0ec3301aee148616e795d4', 'pre_existing_difference': True, 'changed_in_this_pass': True}), ('FABLE_ACCOUNTING_HANDOFF.md', {'file': 'FABLE_ACCOUNTING_HANDOFF.md', 'status': 'modified', 'baseline_sha256': '7f8fb08a4b810184f28bec9571490a0f6a656fdf35252eb6c594e776c93856ef', 'initial_working_sha256': '7f8fb08a4b810184f28bec9571490a0f6a656fdf35252eb6c594e776c93856ef', 'sha256': 'aeb961b634f6de60f2428a68ad4eb86715218a23cb6281b715d8f3a727acbffc', 'pre_existing_difference': False, 'changed_in_this_pass': True}), ('Makefile', {'file': 'Makefile', 'status': 'modified', 'baseline_sha256': '9a0889625788acce67638de72a74f3a45ad06e137dff7fafa8dcfad28bdb0e89', 'initial_working_sha256': '9a0889625788acce67638de72a74f3a45ad06e137dff7fafa8dcfad28bdb0e89', 'sha256': 'c1d0764477db8ba43e851c925f92edca3f93214abecb0ea4201a7f97af6df3c9', 'pre_existing_difference': False, 'changed_in_this_pass': True}), ('PROGRESS.md', {'file': 'PROGRESS.md', 'status': 'modified', 'baseline_sha256': '21503394490084dae286e9b61b8d770d2732216fff67a6569e96213bf6a3f57b', 'initial_working_sha256': '058731ee9a8ab5572c71dea55c95bc9ffecedd137c0426a273e55893aef674eb', 'sha256': '007f45e0e134cd60e6811b55c6caefe3907586bd5e5d7133cc7c124f88f2ee42', 'pre_existing_difference': True, 'changed_in_this_pass': True})]
+entry keys: ['baseline_sha256', 'changed_in_this_pass', 'file', 'initial_working_sha256', 'pre_existing_difference', 'sha256', 'status']
+
+== files the eleven commands changed in the run copy ==
+0

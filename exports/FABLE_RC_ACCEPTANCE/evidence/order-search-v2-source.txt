@@ -1,0 +1,127 @@
+X+Yp+Yc+Z    X Yp Yc Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z    X Yp Z Yc        DOUBLE dec_approved=['A1Z'] held=['A1X', 'A1Y'] blockers={'A1Z': []}
+X+Yp+Yc+Z    X Yc Yp Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z    X Yc Z Yp        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z    X Z Yp Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+Z    X Z Yc Yp        single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+Z    Yp X Yc Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z    Yp X Z Yc        DOUBLE dec_approved=['A1Z'] held=['A1X', 'A1Y'] blockers={'A1Z': []}
+X+Yp+Yc+Z    Yp Yc X Z        DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yp+Yc+Z    Yp Yc Z X        DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yp+Yc+Z    Yp Z X Yc        DOUBLE dec_approved=['A1Z'] held=['A1X', 'A1Y'] blockers={'A1Z': []}
+X+Yp+Yc+Z    Yp Z Yc X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['MISSING_RECEIPT', 'SOURCE_ALREADY_HAS_ENTRY', 'SOURCE_TRANSITION_UNRESOLVED'], 'A1Z': ['SOURCE_ALREADY_HAS_ENTRY']}
+X+Yp+Yc+Z    Yc X Yp Z        DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yp+Yc+Z    Yc X Z Yp        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_ALREADY_HAS_ENTRY'], 'A1Z': ['SOURCE_ALREADY_HAS_ENTRY']}
+X+Yp+Yc+Z    Yc Yp X Z        DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yp+Yc+Z    Yc Yp Z X        DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yp+Yc+Z    Yc Z X Yp        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_ALREADY_HAS_ENTRY'], 'A1Z': ['SOURCE_ALREADY_HAS_ENTRY']}
+X+Yp+Yc+Z    Yc Z Yp X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_ALREADY_HAS_ENTRY'], 'A1Z': ['SOURCE_ALREADY_HAS_ENTRY']}
+X+Yp+Yc+Z    Z X Yp Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+Z    Z X Yc Yp        single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+Z    Z Yp X Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+Z    Z Yp Yc X        single dec_approved=[] held=['A1X'] blockers={'A1Y': [], 'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+Z    Z Yc X Yp        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED'], 'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+Z    Z Yc Yp X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED'], 'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     X Yc Z V         single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Z+V     X Yc V Z         single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Z+V     X Z Yc V         single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     X Z V Yc         single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     X V Yc Z         single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Z+V     X V Z Yc         single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     Yc X Z V         DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Z+V     Yc X V Z         DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Z+V     Yc Z X V         DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Z+V     Yc Z V X         DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Z+V     Yc V X Z         DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Z+V     Yc V Z X         DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Z+V     Z X Yc V         single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     Z X V Yc         single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     Z Yc X V         single dec_approved=[] held=['A1X'] blockers={'A1Y': ['MISSING_RECEIPT', 'SOURCE_TRANSITION_UNRESOLVED'], 'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     Z Yc V X         single dec_approved=[] held=['A1X'] blockers={'A1Y': ['MISSING_RECEIPT', 'SOURCE_TRANSITION_UNRESOLVED'], 'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     Z V X Yc         single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     Z V Yc X         single dec_approved=[] held=['A1X'] blockers={'A1Y': ['MISSING_RECEIPT', 'SOURCE_TRANSITION_UNRESOLVED'], 'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     V X Yc Z         single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Z+V     V X Z Yc         single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     V Yc X Z         DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Z+V     V Yc Z X         DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Z+V     V Z X Yc         single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Z+V     V Z Yc X         single dec_approved=[] held=['A1X'] blockers={'A1Y': ['MISSING_RECEIPT', 'SOURCE_TRANSITION_UNRESOLVED'], 'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+V    X Yp Yc V        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    X Yp V Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    X Yc Yp V        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    X Yc V Yp        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    X V Yp Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    X V Yc Yp        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    Yp X Yc V        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    Yp X V Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    Yp Yc X V        DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+V    Yp Yc V X        DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+V    Yp V X Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    Yp V Yc X        DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+V    Yc X Yp V        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+V    Yc X V Yp        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+V    Yc Yp X V        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+V    Yc Yp V X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+V    Yc V X Yp        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+V    Yc V Yp X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+V    V X Yp Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    V X Yc Yp        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    V Yp X Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+V    V Yp Yc X        DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+V    V Yc X Yp        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+V    V Yc Yp X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Yr+Z    X Yc Yr Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yr+Z    X Yc Z Yr        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yr+Z    X Yr Yc Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yr+Z    X Yr Z Yc        DOUBLE dec_approved=['A1Z'] held=['A1X', 'A1Y'] blockers={'A1Z': []}
+X+Yc+Yr+Z    X Z Yc Yr        single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Yr+Z    X Z Yr Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Yr+Z    Yc X Yr Z        DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Yr+Z    Yc X Z Yr        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_ALREADY_HAS_ENTRY'], 'A1Z': ['SOURCE_ALREADY_HAS_ENTRY']}
+X+Yc+Yr+Z    Yc Yr X Z        DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Yr+Z    Yc Yr Z X        DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Yr+Z    Yc Z X Yr        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_ALREADY_HAS_ENTRY'], 'A1Z': ['SOURCE_ALREADY_HAS_ENTRY']}
+X+Yc+Yr+Z    Yc Z Yr X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_ALREADY_HAS_ENTRY'], 'A1Z': ['SOURCE_ALREADY_HAS_ENTRY']}
+X+Yc+Yr+Z    Yr X Yc Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yr+Z    Yr X Z Yc        DOUBLE dec_approved=['A1Z'] held=['A1X', 'A1Y'] blockers={'A1Z': []}
+X+Yc+Yr+Z    Yr Yc X Z        DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Yr+Z    Yr Yc Z X        DOUBLE dec_approved=['A1Z'] held=['A1X'] blockers={'A1Z': []}
+X+Yc+Yr+Z    Yr Z X Yc        DOUBLE dec_approved=['A1Z'] held=['A1X', 'A1Y'] blockers={'A1Z': []}
+X+Yc+Yr+Z    Yr Z Yc X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['MISSING_RECEIPT', 'SOURCE_ALREADY_HAS_ENTRY', 'SOURCE_TRANSITION_UNRESOLVED'], 'A1Z': ['SOURCE_ALREADY_HAS_ENTRY']}
+X+Yc+Yr+Z    Z X Yc Yr        single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Yr+Z    Z X Yr Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Yr+Z    Z Yc X Yr        single dec_approved=[] held=['A1X'] blockers={'A1Y': [], 'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Yr+Z    Z Yc Yr X        single dec_approved=[] held=['A1X'] blockers={'A1Y': [], 'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Yr+Z    Z Yr X Yc        single dec_approved=[] held=['A1X', 'A1Y'] blockers={'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yc+Yr+Z    Z Yr Yc X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['RECEIPT_AMOUNT_POLICY_UNSET', 'SOURCE_TRANSITION_UNRESOLVED'], 'A1Z': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+Yr   X Yp Yc Yr       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   X Yp Yr Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   X Yc Yp Yr       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   X Yc Yr Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   X Yr Yp Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   X Yr Yc Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   Yp X Yc Yr       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   Yp X Yr Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   Yp Yc X Yr       DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+Yr   Yp Yc Yr X       DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+Yr   Yp Yr X Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   Yp Yr Yc X       single dec_approved=[] held=['A1X'] blockers={'A1Y': ['RECEIPT_AMOUNT_POLICY_UNSET', 'SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+Yr   Yc X Yp Yr       DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+Yr   Yc X Yr Yp       DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+Yr   Yc Yp X Yr       DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+Yr   Yc Yp Yr X       DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+Yr   Yc Yr X Yp       DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+Yr   Yc Yr Yp X       DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+Yr   Yr X Yp Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   Yr X Yc Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   Yr Yp X Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yp+Yc+Yr   Yr Yp Yc X       DOUBLE dec_approved=['A1Y'] held=['A1X'] blockers={'A1Y': []}
+X+Yp+Yc+Yr   Yr Yc X Yp       single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED']}
+X+Yp+Yc+Yr   Yr Yc Yp X       single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_TRANSITION_UNRESOLVED']}
+
+SUMMARY runs=120 double=37 finalized_silently=37
+  X+Yp+Yc+Z      double in 8 of 24 orders
+  X+Yc+Z+V       double in 8 of 24 orders
+  X+Yp+Yc+V      double in 4 of 24 orders
+  X+Yc+Yr+Z      double in 8 of 24 orders
+  X+Yp+Yc+Yr     double in 9 of 24 orders

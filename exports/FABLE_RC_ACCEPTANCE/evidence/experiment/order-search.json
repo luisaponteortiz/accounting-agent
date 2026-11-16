@@ -1,0 +1,2938 @@
+{
+ "runs": 120,
+ "double": 0,
+ "results": [
+  {
+   "order": [
+    "X",
+    "Yp",
+    "Yc",
+    "Z"
+   ],
+   "log": [
+    "X",
+    "Yp",
+    "Yc",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Yp",
+    "Z",
+    "Yc"
+   ],
+   "log": [
+    "X",
+    "Yp",
+    "Z",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Yc",
+    "Yp",
+    "Z"
+   ],
+   "log": [
+    "X",
+    "Yc",
+    "Yp",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Yc",
+    "Z",
+    "Yp"
+   ],
+   "log": [
+    "X",
+    "Yc",
+    "Z",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Z",
+    "Yp",
+    "Yc"
+   ],
+   "log": [
+    "X",
+    "Z",
+    "Yp",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Z",
+    "Yc",
+    "Yp"
+   ],
+   "log": [
+    "X",
+    "Z",
+    "Yc",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yp",
+    "X",
+    "Yc",
+    "Z"
+   ],
+   "log": [
+    "Yp",
+    "X",
+    "Yc",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yp",
+    "X",
+    "Z",
+    "Yc"
+   ],
+   "log": [
+    "Yp",
+    "X",
+    "Z",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yp",
+    "Yc",
+    "X",
+    "Z"
+   ],
+   "log": [
+    "Yp",
+    "Yc",
+    "X",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yp",
+    "Yc",
+    "Z",
+    "X"
+   ],
+   "log": [
+    "Yp",
+    "Yc",
+    "Z",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yp",
+    "Z",
+    "X",
+    "Yc"
+   ],
+   "log": [
+    "Yp",
+    "Z",
+    "X",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yp",
+    "Z",
+    "Yc",
+    "X"
+   ],
+   "log": [
+    "Yp",
+    "Z",
+    "Yc",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "X",
+    "Yp",
+    "Z"
+   ],
+   "log": [
+    "Yc",
+    "X",
+    "Yp",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "X",
+    "Z",
+    "Yp"
+   ],
+   "log": [
+    "Yc",
+    "X",
+    "Z",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "Yp",
+    "X",
+    "Z"
+   ],
+   "log": [
+    "Yc",
+    "Yp",
+    "X",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "Yp",
+    "Z",
+    "X"
+   ],
+   "log": [
+    "Yc",
+    "Yp",
+    "Z",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "Z",
+    "X",
+    "Yp"
+   ],
+   "log": [
+    "Yc",
+    "Z",
+    "X",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "Z",
+    "Yp",
+    "X"
+   ],
+   "log": [
+    "Yc",
+    "Z",
+    "Yp",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "X",
+    "Yp",
+    "Yc"
+   ],
+   "log": [
+    "Z",
+    "X",
+    "Yp",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "X",
+    "Yc",
+    "Yp"
+   ],
+   "log": [
+    "Z",
+    "X",
+    "Yc",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "Yp",
+    "X",
+    "Yc"
+   ],
+   "log": [
+    "Z",
+    "Yp",
+    "X",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "Yp",
+    "Yc",
+    "X"
+   ],
+   "log": [
+    "Z",
+    "Yp",
+    "Yc",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "Yc",
+    "X",
+    "Yp"
+   ],
+   "log": [
+    "Z",
+    "Yc",
+    "X",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "Yc",
+    "Yp",
+    "X"
+   ],
+   "log": [
+    "Z",
+    "Yc",
+    "Yp",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Yc",
+    "Z",
+    "V"
+   ],
+   "log": [
+    "X",
+    "Yc",
+    "Z",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "X",
+    "Yc",
+    "V",
+    "Z"
+   ],
+   "log": [
+    "X",
+    "Yc",
+    "V",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "X",
+    "Z",
+    "Yc",
+    "V"
+   ],
+   "log": [
+    "X",
+    "Z",
+    "Yc",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "X",
+    "Z",
+    "V",
+    "Yc"
+   ],
+   "log": [
+    "X",
+    "Z",
+    "V",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "X",
+    "V",
+    "Yc",
+    "Z"
+   ],
+   "log": [
+    "X",
+    "V",
+    "Yc",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "X",
+    "V",
+    "Z",
+    "Yc"
+   ],
+   "log": [
+    "X",
+    "V",
+    "Z",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "X",
+    "Z",
+    "V"
+   ],
+   "log": [
+    "Yc",
+    "X",
+    "Z",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "X",
+    "V",
+    "Z"
+   ],
+   "log": [
+    "Yc",
+    "X",
+    "V",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "Z",
+    "X",
+    "V"
+   ],
+   "log": [
+    "Yc",
+    "Z",
+    "X",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "Z",
+    "V",
+    "X"
+   ],
+   "log": [
+    "Yc",
+    "Z",
+    "V",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "V",
+    "X",
+    "Z"
+   ],
+   "log": [
+    "Yc",
+    "V",
+    "X",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "V",
+    "Z",
+    "X"
+   ],
+   "log": [
+    "Yc",
+    "V",
+    "Z",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Z",
+    "X",
+    "Yc",
+    "V"
+   ],
+   "log": [
+    "Z",
+    "X",
+    "Yc",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Z",
+    "X",
+    "V",
+    "Yc"
+   ],
+   "log": [
+    "Z",
+    "X",
+    "V",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Z",
+    "Yc",
+    "X",
+    "V"
+   ],
+   "log": [
+    "Z",
+    "Yc",
+    "X",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Z",
+    "Yc",
+    "V",
+    "X"
+   ],
+   "log": [
+    "Z",
+    "Yc",
+    "V",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Z",
+    "V",
+    "X",
+    "Yc"
+   ],
+   "log": [
+    "Z",
+    "V",
+    "X",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "Z",
+    "V",
+    "Yc",
+    "X"
+   ],
+   "log": [
+    "Z",
+    "V",
+    "Yc",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "V",
+    "X",
+    "Yc",
+    "Z"
+   ],
+   "log": [
+    "V",
+    "X",
+    "Yc",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "V",
+    "X",
+    "Z",
+    "Yc"
+   ],
+   "log": [
+    "V",
+    "X",
+    "Z",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "V",
+    "Yc",
+    "X",
+    "Z"
+   ],
+   "log": [
+    "V",
+    "Yc",
+    "X",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "V",
+    "Yc",
+    "Z",
+    "X"
+   ],
+   "log": [
+    "V",
+    "Yc",
+    "Z",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "V",
+    "Z",
+    "X",
+    "Yc"
+   ],
+   "log": [
+    "V",
+    "Z",
+    "X",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "V",
+    "Z",
+    "Yc",
+    "X"
+   ],
+   "log": [
+    "V",
+    "Z",
+    "Yc",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Z+V"
+  },
+  {
+   "order": [
+    "X",
+    "Yp",
+    "Yc",
+    "V"
+   ],
+   "log": [
+    "X",
+    "Yp",
+    "Yc",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "X",
+    "Yp",
+    "V",
+    "Yc"
+   ],
+   "log": [
+    "X",
+    "Yp",
+    "V",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "X",
+    "Yc",
+    "Yp",
+    "V"
+   ],
+   "log": [
+    "X",
+    "Yc",
+    "Yp",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "X",
+    "Yc",
+    "V",
+    "Yp"
+   ],
+   "log": [
+    "X",
+    "Yc",
+    "V",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "X",
+    "V",
+    "Yp",
+    "Yc"
+   ],
+   "log": [
+    "X",
+    "V",
+    "Yp",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "X",
+    "V",
+    "Yc",
+    "Yp"
+   ],
+   "log": [
+    "X",
+    "V",
+    "Yc",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yp",
+    "X",
+    "Yc",
+    "V"
+   ],
+   "log": [
+    "Yp",
+    "X",
+    "Yc",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yp",
+    "X",
+    "V",
+    "Yc"
+   ],
+   "log": [
+    "Yp",
+    "X",
+    "V",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yp",
+    "Yc",
+    "X",
+    "V"
+   ],
+   "log": [
+    "Yp",
+    "Yc",
+    "X",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yp",
+    "Yc",
+    "V",
+    "X"
+   ],
+   "log": [
+    "Yp",
+    "Yc",
+    "V",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yp",
+    "V",
+    "X",
+    "Yc"
+   ],
+   "log": [
+    "Yp",
+    "V",
+    "X",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yp",
+    "V",
+    "Yc",
+    "X"
+   ],
+   "log": [
+    "Yp",
+    "V",
+    "Yc",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "X",
+    "Yp",
+    "V"
+   ],
+   "log": [
+    "Yc",
+    "X",
+    "Yp",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "X",
+    "V",
+    "Yp"
+   ],
+   "log": [
+    "Yc",
+    "X",
+    "V",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "Yp",
+    "X",
+    "V"
+   ],
+   "log": [
+    "Yc",
+    "Yp",
+    "X",
+    "V"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "Yp",
+    "V",
+    "X"
+   ],
+   "log": [
+    "Yc",
+    "Yp",
+    "V",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "V",
+    "X",
+    "Yp"
+   ],
+   "log": [
+    "Yc",
+    "V",
+    "X",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "Yc",
+    "V",
+    "Yp",
+    "X"
+   ],
+   "log": [
+    "Yc",
+    "V",
+    "Yp",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "V",
+    "X",
+    "Yp",
+    "Yc"
+   ],
+   "log": [
+    "V",
+    "X",
+    "Yp",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "V",
+    "X",
+    "Yc",
+    "Yp"
+   ],
+   "log": [
+    "V",
+    "X",
+    "Yc",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "V",
+    "Yp",
+    "X",
+    "Yc"
+   ],
+   "log": [
+    "V",
+    "Yp",
+    "X",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "V",
+    "Yp",
+    "Yc",
+    "X"
+   ],
+   "log": [
+    "V",
+    "Yp",
+    "Yc",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "V",
+    "Yc",
+    "X",
+    "Yp"
+   ],
+   "log": [
+    "V",
+    "Yc",
+    "X",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "V",
+    "Yc",
+    "Yp",
+    "X"
+   ],
+   "log": [
+    "V",
+    "Yc",
+    "Yp",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+V"
+  },
+  {
+   "order": [
+    "X",
+    "Yc",
+    "Yr",
+    "Z"
+   ],
+   "log": [
+    "X",
+    "Yc",
+    "Yr",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Yc",
+    "Z",
+    "Yr"
+   ],
+   "log": [
+    "X",
+    "Yc",
+    "Z",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Yr",
+    "Yc",
+    "Z"
+   ],
+   "log": [
+    "X",
+    "Yr",
+    "Yc",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Yr",
+    "Z",
+    "Yc"
+   ],
+   "log": [
+    "X",
+    "Yr",
+    "Z",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Z",
+    "Yc",
+    "Yr"
+   ],
+   "log": [
+    "X",
+    "Z",
+    "Yc",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Z",
+    "Yr",
+    "Yc"
+   ],
+   "log": [
+    "X",
+    "Z",
+    "Yr",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "X",
+    "Yr",
+    "Z"
+   ],
+   "log": [
+    "Yc",
+    "X",
+    "Yr",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "X",
+    "Z",
+    "Yr"
+   ],
+   "log": [
+    "Yc",
+    "X",
+    "Z",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "Yr",
+    "X",
+    "Z"
+   ],
+   "log": [
+    "Yc",
+    "Yr",
+    "X",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "Yr",
+    "Z",
+    "X"
+   ],
+   "log": [
+    "Yc",
+    "Yr",
+    "Z",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "Z",
+    "X",
+    "Yr"
+   ],
+   "log": [
+    "Yc",
+    "Z",
+    "X",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yc",
+    "Z",
+    "Yr",
+    "X"
+   ],
+   "log": [
+    "Yc",
+    "Z",
+    "Yr",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yr",
+    "X",
+    "Yc",
+    "Z"
+   ],
+   "log": [
+    "Yr",
+    "X",
+    "Yc",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yr",
+    "X",
+    "Z",
+    "Yc"
+   ],
+   "log": [
+    "Yr",
+    "X",
+    "Z",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yr",
+    "Yc",
+    "X",
+    "Z"
+   ],
+   "log": [
+    "Yr",
+    "Yc",
+    "X",
+    "Z"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yr",
+    "Yc",
+    "Z",
+    "X"
+   ],
+   "log": [
+    "Yr",
+    "Yc",
+    "Z",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yr",
+    "Z",
+    "X",
+    "Yc"
+   ],
+   "log": [
+    "Yr",
+    "Z",
+    "X",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Yr",
+    "Z",
+    "Yc",
+    "X"
+   ],
+   "log": [
+    "Yr",
+    "Z",
+    "Yc",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "X",
+    "Yc",
+    "Yr"
+   ],
+   "log": [
+    "Z",
+    "X",
+    "Yc",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "X",
+    "Yr",
+    "Yc"
+   ],
+   "log": [
+    "Z",
+    "X",
+    "Yr",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "Yc",
+    "X",
+    "Yr"
+   ],
+   "log": [
+    "Z",
+    "Yc",
+    "X",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "Yc",
+    "Yr",
+    "X"
+   ],
+   "log": [
+    "Z",
+    "Yc",
+    "Yr",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "Yr",
+    "X",
+    "Yc"
+   ],
+   "log": [
+    "Z",
+    "Yr",
+    "X",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "Z",
+    "Yr",
+    "Yc",
+    "X"
+   ],
+   "log": [
+    "Z",
+    "Yr",
+    "Yc",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Z"
+   ],
+   "december_blockers": {},
+   "family": "X+Yc+Yr+Z"
+  },
+  {
+   "order": [
+    "X",
+    "Yp",
+    "Yc",
+    "Yr"
+   ],
+   "log": [
+    "X",
+    "Yp",
+    "Yc",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "X",
+    "Yp",
+    "Yr",
+    "Yc"
+   ],
+   "log": [
+    "X",
+    "Yp",
+    "Yr",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "X",
+    "Yc",
+    "Yp",
+    "Yr"
+   ],
+   "log": [
+    "X",
+    "Yc",
+    "Yp",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "X",
+    "Yc",
+    "Yr",
+    "Yp"
+   ],
+   "log": [
+    "X",
+    "Yc",
+    "Yr",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "X",
+    "Yr",
+    "Yp",
+    "Yc"
+   ],
+   "log": [
+    "X",
+    "Yr",
+    "Yp",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "X",
+    "Yr",
+    "Yc",
+    "Yp"
+   ],
+   "log": [
+    "X",
+    "Yr",
+    "Yc",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yp",
+    "X",
+    "Yc",
+    "Yr"
+   ],
+   "log": [
+    "Yp",
+    "X",
+    "Yc",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yp",
+    "X",
+    "Yr",
+    "Yc"
+   ],
+   "log": [
+    "Yp",
+    "X",
+    "Yr",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yp",
+    "Yc",
+    "X",
+    "Yr"
+   ],
+   "log": [
+    "Yp",
+    "Yc",
+    "X",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yp",
+    "Yc",
+    "Yr",
+    "X"
+   ],
+   "log": [
+    "Yp",
+    "Yc",
+    "Yr",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yp",
+    "Yr",
+    "X",
+    "Yc"
+   ],
+   "log": [
+    "Yp",
+    "Yr",
+    "X",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yp",
+    "Yr",
+    "Yc",
+    "X"
+   ],
+   "log": [
+    "Yp",
+    "Yr",
+    "Yc",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yc",
+    "X",
+    "Yp",
+    "Yr"
+   ],
+   "log": [
+    "Yc",
+    "X",
+    "Yp",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yc",
+    "X",
+    "Yr",
+    "Yp"
+   ],
+   "log": [
+    "Yc",
+    "X",
+    "Yr",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yc",
+    "Yp",
+    "X",
+    "Yr"
+   ],
+   "log": [
+    "Yc",
+    "Yp",
+    "X",
+    "Yr"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yc",
+    "Yp",
+    "Yr",
+    "X"
+   ],
+   "log": [
+    "Yc",
+    "Yp",
+    "Yr",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yc",
+    "Yr",
+    "X",
+    "Yp"
+   ],
+   "log": [
+    "Yc",
+    "Yr",
+    "X",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yc",
+    "Yr",
+    "Yp",
+    "X"
+   ],
+   "log": [
+    "Yc",
+    "Yr",
+    "Yp",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yr",
+    "X",
+    "Yp",
+    "Yc"
+   ],
+   "log": [
+    "Yr",
+    "X",
+    "Yp",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yr",
+    "X",
+    "Yc",
+    "Yp"
+   ],
+   "log": [
+    "Yr",
+    "X",
+    "Yc",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yr",
+    "Yp",
+    "X",
+    "Yc"
+   ],
+   "log": [
+    "Yr",
+    "Yp",
+    "X",
+    "Yc"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yr",
+    "Yp",
+    "Yc",
+    "X"
+   ],
+   "log": [
+    "Yr",
+    "Yp",
+    "Yc",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yr",
+    "Yc",
+    "X",
+    "Yp"
+   ],
+   "log": [
+    "Yr",
+    "Yc",
+    "X",
+    "Yp"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  },
+  {
+   "order": [
+    "Yr",
+    "Yc",
+    "Yp",
+    "X"
+   ],
+   "log": [
+    "Yr",
+    "Yc",
+    "Yp",
+    "X"
+   ],
+   "november_A1_approved": true,
+   "december_approved": [],
+   "double": false,
+   "december_finalized_without_acknowledgement": false,
+   "held_under_november": [
+    "A1X",
+    "A1Y"
+   ],
+   "december_blockers": {},
+   "family": "X+Yp+Yc+Yr"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+01-fable-rb-probes|exit=0|seconds=25|cmd=python3 exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py .
+02-fable-ra-probes|exit=0|seconds=15|cmd=python3 exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py .
+03-make-test|exit=0|seconds=472|cmd=make test
+04-make-check|exit=0|seconds=1|cmd=make check
+05-make-batch2-gate|exit=0|seconds=89|cmd=make batch2-gate
+06-make-reverification-gate|exit=0|seconds=51|cmd=make reverification-gate
+07-make-acceptance-gate|exit=0|seconds=47|cmd=make acceptance-gate
+08-make-rb-gate|exit=0|seconds=29|cmd=make rb-gate
+09-make-rc-gate|exit=0|seconds=25|cmd=make rc-gate
+10-check-product-requirements-json|exit=0|seconds=1|cmd=python3 scripts/check_product_requirements.py --json
+11-register-faults|exit=0|seconds=38|cmd=python3 exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py .
+DONE

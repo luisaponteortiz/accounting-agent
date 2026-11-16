@@ -1,0 +1,21 @@
+response a files 58 top-level ['FABLE_PR_REVERIFICATION', 'FABLE_RB_ACCEPTANCE']
+  not found in working project: [] | differing from working project: []
+response b files 62 top-level ['FABLE_PR_REVERIFICATION', 'FABLE_RB_ACCEPTANCE', 'RESPONSE_MANIFEST.json', 'project_files']
+  not found in working project: ['RESPONSE_MANIFEST.json', 'project_files/CODEX_RC_CORRECTIONS_PROMPT.md', 'project_files/DECISIONS.md', 'project_files/docs/PRODUCT_REQUIREMENTS.md'] | differing from working project: []
+exports/FABLE_RB_ACCEPTANCE working files 56 bundle files 56 | identical sets and hashes: True
+exports/FABLE_PR_REVERIFICATION working files 2 bundle files 2 | identical sets and hashes: True
+FABLE_ACCOUNTING_REVIEW_BUNDLE.zip                                       1d54c0a7730a sidecar=none developer-list=True input-checksums=True
+FABLE_BATCH_1_REVIEW_BUNDLE.zip                                          31c00b562a95 sidecar=none developer-list=True input-checksums=True
+FABLE_CORRECTIONS_AND_BATCH_2_REVIEW_BUNDLE.zip                          312232b6a235 sidecar=match developer-list=True input-checksums=True
+FABLE_CORRECTIVE_C01_C06_REVIEW_BUNDLE.zip                               a7ded447b239 sidecar=none developer-list=True input-checksums=True
+FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip                      b154db10b8ce sidecar=match developer-list=True input-checksums=True
+FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_RESPONSE.zip                    d38e0e27b30e sidecar=match developer-list=True input-checksums=True
+FABLE_RA_CORRECTIONS_REVIEW_BUNDLE.zip                                   dec028b06a74 sidecar=match developer-list=True input-checksums=True
+FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip                  2b47c3f47d5a sidecar=match developer-list=True input-checksums=True
+FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip               00a13d9309cc sidecar=match developer-list=True input-checksums=True
+FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE.zip             0562869ad210 sidecar=match developer-list=True input-checksums=True
+FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE_V2.zip          d4c5795dfce0 sidecar=match developer-list=True input-checksums=True
+FABLE_REVERIFICATION_CORRECTIONS_REVIEW_BUNDLE.zip                       247c1cfd31a2 sidecar=match developer-list=True input-checksums=True
+FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip hash appears in my earlier integrity record: False
+FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_RESPONSE.zip hash appears in my earlier integrity record: False
+FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip hash appears in my earlier integrity record: False

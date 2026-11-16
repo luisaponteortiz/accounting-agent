@@ -1,0 +1,49 @@
+--- bundle/accounting_agent/source_control.py	2026-11-16 02:20:32
++++ experiment/accounting_agent/source_control.py	2026-11-16 10:34:42
+@@ -29,6 +29,7 @@
+         oldmeta=db.execute('SELECT * FROM source_metadata WHERE snapshot_id=?',(old['id'],)).fetchone() if old else None
+         force=bool(old and int(removed)!=old['removed']) or bool(oldmeta and (oldmeta['order_type']!=order_type or oldmeta['as_of']!=order_value) and as_of is not None)
+         if predecessor and not db.execute('SELECT 1 FROM source_links l JOIN snapshots n ON n.id=l.new_snapshot_id WHERE l.scope=? AND n.kind=? AND n.source_key=? AND l.old_snapshot_id=?',(actor.scope,kind,key,predecessor['snapshot_id'])).fetchone():force=True
++        if supersedes and not predecessor and old and (self.pending_claim(db,actor.scope,kind,key) or {}).get('target_key')!=old_key:force=True
+         sid,is_new=self.store.snapshot(db,actor.scope,kind,key,value,actor.id,force_version=force)
+         if not is_new:
+             b=db.execute('SELECT * FROM source_periods WHERE snapshot_id=? ORDER BY id DESC LIMIT 1',(sid,)).fetchone()
+@@ -109,13 +110,22 @@
+             result[statement['source_key']]={'period_id':period['period_id'],'statement_snapshot_id':statement['id'],'accepted':bool(items) and items<=covered,'relying_item_keys':sorted(items),'accepted_item_keys':sorted(covered),'acceptances':[{'id':d['id'],'actor':d['actor'],'item_key':d['item_key']} for d in decisions]}
+         return result
+ 
++    def pending_claim(self,db,scope,kind,key):
++        """Latest recorded claim of this source identity, or None once the identity has a link."""
++        head=db.execute('SELECT snapshot_id FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(scope,kind,key)).fetchone()
++        if not head or self.supersession_link(db,scope,head['snapshot_id']):return None
++        for event in db.execute("SELECT payload FROM accounting_events WHERE scope=? AND code='SOURCE_SUPERSESSION_UNRESOLVED' AND item_key=? ORDER BY id DESC",(scope,key)):
++            claim=json.loads(event['payload'])
++            if db.execute('SELECT 1 FROM snapshots WHERE scope=? AND id=? AND kind=? AND source_key=?',(scope,claim['snapshot_id'],kind,key)).fetchone():return claim
++        return None
++
+     def resolve_pending_supersessions(self,db,actor):
+         """Resolve event-backed claims without editing their historical evidence."""
+-        events=db.execute("SELECT payload FROM accounting_events WHERE scope=? AND code='SOURCE_SUPERSESSION_UNRESOLVED' ORDER BY id",(actor.scope,)).fetchall()
+-        for event in events:
+-            claim=json.loads(event['payload'])
+-            claimant=db.execute('SELECT s.* FROM source_heads h JOIN snapshots s ON s.id=h.snapshot_id WHERE h.scope=? AND h.snapshot_id=?',(actor.scope,claim['snapshot_id'])).fetchone()
+-            if not claimant or self.supersession_link(db,actor.scope,claimant['id']):continue
++        events=db.execute("SELECT DISTINCT s.kind,s.source_key FROM accounting_events e JOIN snapshots s ON s.scope=e.scope AND s.id=json_extract(e.payload,'$.snapshot_id') WHERE e.scope=? AND e.code='SOURCE_SUPERSESSION_UNRESOLVED' ORDER BY s.kind,s.source_key",(actor.scope,)).fetchall()
++        for identity in events:
++            claim=self.pending_claim(db,actor.scope,identity['kind'],identity['source_key'])
++            if not claim:continue
++            claimant=db.execute('SELECT s.* FROM source_heads h JOIN snapshots s ON s.id=h.snapshot_id WHERE h.scope=? AND h.kind=? AND h.source_key=?',(actor.scope,identity['kind'],identity['source_key'])).fetchone()
+             target=db.execute('SELECT snapshot_id FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(actor.scope,claimant['kind'],claim['target_key'])).fetchone()
+             if not target or any(ref['source_key']==claimant['source_key'] for ref in self.supersession_refs(db,actor.scope,target['snapshot_id'])):continue
+             db.execute("INSERT INTO source_links(scope,old_snapshot_id,new_snapshot_id,reason,created) VALUES(?,?,?,'superseded',?)",(actor.scope,target['snapshot_id'],claimant['id'],utcnow()))
+--- bundle/accounting_agent/service.py	2026-11-16 02:20:32
++++ experiment/accounting_agent/service.py	2026-11-16 10:34:42
+@@ -259,7 +259,7 @@
+         unresolved_transitions={}
+         for event in db.execute("SELECT item_key,payload FROM accounting_events WHERE scope=? AND code='SOURCE_SUPERSESSION_UNRESOLVED' ORDER BY id",(actor.scope,)):
+             value=json.loads(event['payload'])
+-            if any(src['id']==value['snapshot_id'] for src in sources) and not self.supersession_link(db,actor.scope,value['snapshot_id']):unresolved_transitions[event['item_key']]=value
++            if any(src['source_key']==event['item_key'] and (self.pending_claim(db,actor.scope,src['kind'],src['source_key']) or {}).get('snapshot_id')==value['snapshot_id'] for src in sources):unresolved_transitions[event['item_key']]=value
+         claims=[];owners={};heads={};stale_origins={}
+         for src in sources:
+             identity=self.source_identity(db,actor.scope,src['id']);heads[identity]=src

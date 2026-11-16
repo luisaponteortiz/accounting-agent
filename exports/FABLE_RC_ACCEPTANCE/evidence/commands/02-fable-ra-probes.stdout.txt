@@ -1,0 +1,173 @@
+Fable RA acceptance probes | project root: run | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[R01a] (RA-01/RA-06) a four-link chain with mixed receipt order stays quarantined under lock; reopen admits only the last link; whole-evidence disposition takes effect; no double approval; relock and restart are stable
+    exceptions under lock: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Z', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Z', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    December governing items under lock: ['demo_card_001:D1'] | blocked moves: 6 | moves with approval evidence: 3
+    after a revision of the quarantined middle link, December governing: ['demo_card_001:D1']
+    after reopen -> November governing: ['demo_card_001:A2'] | December governing: ['demo_card_001:A1Z', 'demo_card_001:D1'] | A1Z: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']}
+    history kept (versions per link): {'A1': 1, 'A1X': 2, 'A1Y': 1, 'A1Z': 1} | intermediates ever admitted to December: []
+    evidence list of A1Z includes predecessor snapshots: ['demo_card_001:A1', 'demo_card_001:A1X', 'demo_card_001:A1Y']
+    same disposition also citing the row of an unrelated November item (A2): ('refused', 400, 'Current scoped evidence references required')
+    settlement_verified citing the whole evidence list: ('ok', 1)
+    after the disposition: {'id': 20, 'eligible': True, 'status': 'pending', 'blockers': []}
+    the dispositioner then approves A1Z: ('refused', 403, 'Independent human review required')
+    independent approval of December A1Z: ('ok', None)
+    approved in December: ok | governing November A1: None
+    relock November: ('ok', None)
+    after relock and a later revision of A1Z -> December A1Z: {'id': 26, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW']} | exceptions: []
+    state identical after restart: True | audit chain: True
+    held=True released=True ra06=True single=True relock=True
+    -> OK
+
+[R01b] (RA-01) a charge already admitted to December that later declares it supersedes an approved charge in locked November is not approvable in both periods
+    B1 arrives in December with no supersession claim: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    B1 is re-sent declaring it supersedes A1 (approved, November locked) -> December B1: None
+    exceptions: [('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')] | moves: [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 0)]
+    events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1'), ('ITEM_LEFT_POPULATION', '2026-12', 'demo_card_001:B1')]
+    -> OK
+
+[R01c] (RA-01) a link that arrives before the link it replaces (unresolved), and is later resolved, is not released while the root is locked
+    A1Y (supersedes A1X, not yet received): {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    A1X then arrives (supersedes locked A1) -> A1Y: None | exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    A1Y re-sent so that its link resolves -> A1Y: None | exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    -> OK
+
+[R01d] (RA-01) two- and three-source supersession cycles are refused and leave nothing behind
+    A1 re-sent superseding C2 (two-step cycle through C2 -> A1): ('refused', 400, 'Supersession cycle is not permitted')
+    A1 re-sent superseding C3 (three-step cycle): ('refused', 400, 'Supersession cycle is not permitted')
+    a source superseding itself: ('refused', 400, 'Supersession requires a different source identity')
+    evidence rows unchanged after the refusals (atomic): True
+    -> OK
+
+[R03a] (RA-03) same-key and new-key receipt replacement are held and disclosed; both suppliers are refused; a non-supplier accepts; final review is separate; a further change lapses the acceptance
+    [withdraw-with-replacement] after replacement: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [withdraw-with-replacement] revisions: [('replaced', 'receipt-A1', 1, 'rv-preparer', 'receipt-A1-new', 'rv-preparer-2', ['amount', 'content']), ('replaced', 'receipt-A1', 2, 'rv-preparer-2', 'receipt-A1-new', 'rv-preparer-2', ['amount', 'content'])]
+    supplier of the withdrawn receipt accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    supplier of the replacement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    granted non-supplier accepts: ('ok', 1)
+    [withdraw-with-replacement] after acceptance: {'id': 12, 'eligible': True, 'status': 'pending', 'blockers': []} | revisions still disclosed: True
+    the acceptor gives the final review: ('refused', 403, 'Independent human review required')
+    supplier of the withdrawn receipt gives the final review: ('refused', 403, 'Independent human review required')
+    independent final review: ('ok', None)
+    [withdraw-with-replacement] after a further change to the replacement: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [replacement-before-withdrawal] both receipts active: ['RECEIPT_AMOUNT_POLICY_UNSET', 'RECEIPT_MULTIPLE_POLICY_UNSET'] | revisions: []
+    [replacement-before-withdrawal] after replacement: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [replacement-before-withdrawal] revisions: [('replaced', 'receipt-A1', 1, 'rv-preparer', 'receipt-A1-new', 'rv-preparer-2', ['amount', 'content'])]
+    supplier of the withdrawn receipt accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    supplier of the replacement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    granted non-supplier accepts: ('ok', 1)
+    [replacement-before-withdrawal] after acceptance: {'id': 17, 'eligible': True, 'status': 'pending', 'blockers': []} | revisions still disclosed: True
+    the acceptor gives the final review: ('refused', 403, 'Independent human review required')
+    supplier of the withdrawn receipt gives the final review: ('refused', 403, 'Independent human review required')
+    independent final review: ('ok', None)
+    [replacement-before-withdrawal] after a further change to the replacement: {'id': 22, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    additional still-active receipt: ['RECEIPT_MULTIPLE_POLICY_UNSET'] | revisions: []
+    -> OK
+
+[R03b] (RA-03) replacing a receipt by re-pointing the old key at another transaction id and supplying a new key is still held and disclosed
+    old key re-pointed away, new key supplied at 40.00 -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    receipts relied on: [('receipt-A1-new', 1)] | revisions disclosed: [('replaced', 'receipt-A1', 1, 'rv-preparer', 'receipt-A1-new', 'rv-preparer', ['amount', 'content'])] | exceptions: []
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[R04a] (RA-04) a statement corrected to tie (same key, or withdrawn and replaced under a new key) is held on every relying item and disclosed on the workpaper; suppliers of any version are refused; acceptance is item-bound, lapses on new evidence and confers no final review
+    [same-key] A1: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} | A2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [same-key] item revisions: [('revised', 'stmt-2026-11', 1, 'rv-preparer', 'stmt-2026-11', 'rv-preparer-2', ['closing_balance', 'totals'])]
+    [same-key] workpaper statement_revisions: [('revised', 'stmt-2026-11', 'rv-preparer', 'rv-preparer-2', ['closing_balance', 'totals'])]
+    independent approval without acceptance: ('refused', 409, 'Unresolved controls block approval')
+    supplier of the first statement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    supplier of the corrected statement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    acceptance that omits the revised statement from its evidence: ('refused', 400, 'Cite all revised supporting documents')
+    granted non-supplier accepts for A1 only: ('ok', 1)
+    [same-key] after acceptance for A1 -> A1: {'id': 12, 'eligible': True, 'status': 'pending', 'blockers': []} | A2: {'id': 13, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    the acceptor gives the final review of A1: ('refused', 403, 'Independent human review required')
+    independent final review of A1: ('ok', None)
+    [same-key] after a further change to the statement -> A1: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [new-key] A1: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} | A2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [new-key] item revisions: [('replaced', 'stmt-2026-11', 1, 'rv-preparer', 'stmt-2026-11-replacement', 'rv-preparer-2', ['closing_balance', 'statement_id', 'totals']), ('replaced', 'stmt-2026-11', 2, 'rv-preparer-2', 'stmt-2026-11-replacement', 'rv-preparer-2', ['closing_balance', 'statement_id', 'totals'])]
+    [new-key] workpaper statement_revisions: [('replaced', 'stmt-2026-11', 'rv-preparer', 'rv-preparer-2', ['closing_balance', 'statement_id', 'totals']), ('replaced', 'stmt-2026-11', 'rv-preparer-2', 'rv-preparer-2', ['closing_balance', 'statement_id', 'totals'])]
+    independent approval without acceptance: ('refused', 409, 'Unresolved controls block approval')
+    supplier of the first statement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    supplier of the corrected statement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    acceptance that omits the revised statement from its evidence: ('refused', 400, 'Cite all revised supporting documents')
+    granted non-supplier accepts for A1 only: ('ok', 1)
+    [new-key] after acceptance for A1 -> A1: {'id': 12, 'eligible': True, 'status': 'pending', 'blockers': []} | A2: {'id': 13, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    the acceptor gives the final review of A1: ('refused', 403, 'Independent human review required')
+    independent final review of A1: ('ok', None)
+    [new-key] after a further change to the statement -> A1: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    -> OK
+
+[R04b] (RA-04) a statement replaced by re-pointing the old key at another cycle and supplying a new key for the period is still held and disclosed
+    old statement key re-pointed to another cycle; a new key supplied that ties -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    item revisions: [('replaced', 'stmt-2026-11', 1, 'rv-preparer', 'stmt-2026-11-b', 'rv-preparer', ['closing_balance', 'statement_id', 'totals'])] | workpaper statement_revisions: [{'changed_fields': ['closing_balance', 'statement_id', 'totals'], 'current': {'hash': '08676b3fa0d9dcaef7808c99d06bb58a273072c84e817d9f0e9faa9642a96c91', 'snapshot_id': 10, 'source_key': 'stmt-2026-11-b', 'supplier': 'rv-preparer', 'version': 1}, 'earlier': {'hash': '368e60584241b425c7b16c9205c92f50500c22a232148ebe3d36df1907a045cb', 'snapshot_id': 7, 'source_key': 'stmt-2026-11', 'supplier': 'rv-preparer', 'version': 1}, 'kind': 'replaced', 'source_key': 'stmt-2026-11-b', 'source_kind': 'statement', 'supplier': 'rv-preparer'}] | workpaper blockers: [] | exceptions: [('stmt-2026-11', None, 'UNASSIGNED_ACCOUNTING_PERIOD')]
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[R04c] (RA-04) observation: a prior-period statement revised while its period is still open, so that the next opening balance agrees, is disclosed to the next period
+    December opens at 120.00, November closed at 100.00: ['STATEMENT_OPENING_BALANCE_BREAK']
+    preparer restates November (opening 20.00, closing 120.00) -> December D1: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW']} | November A1: {'id': 6, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    December workpaper continuity: prior_statement_revision_unaccepted | statement_revisions: [] | D1 revisions: []
+    -> OK
+
+[R02a] (RA-02) unlinked re-proposals keep the earlier author barred (vendor mapping and receipt policy); cosmetic and non-cosmetic values, other categories and aliases behave as specified; an independent reviewer can approve
+    unlinked cosmetic vendor re-proposal: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    independent reviewer approves (positive control): ('ok', None)
+    unlinked identical receipt policy: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    unlinked receipt policy with a different earlier value: its author approves (should be allowed): ('ok', None)
+    earlier version had a different category: its author approves (should be allowed): ('ok', None)
+    earlier version did not cover this description: its author approves (should be allowed): ('ok', None)
+    later version adds an alias, same category for this description: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    -> OK
+
+[R02b] (RA-02) the earlier author stays barred when the identical mapping is re-proposed for the single item, or under a new rule key
+    contributors (item-scoped re-proposal): ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    identical mapping re-proposed with item scope for this charge: author of the general rule approves: ('refused', 403, 'Independent human review required')
+    contributors (new rule key, earlier rule ended the day before): ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    identical mapping re-proposed under a new rule key: author of the earlier rule approves: ('refused', 403, 'Independent human review required')
+    -> OK
+
+[R05] (RA-05) a relevant rule approved after the mandate suspends it; an irrelevant close rule and a rule outside the period do not; a held occurrence does not dispatch twice
+    relevant vendor rule approved after the mandate -> (('needs_reconfirmation', False, 'Bound policy changed; independent reconfirmation required'), [])
+    close rule and a rule effective next year approved after the mandate -> (('active', True, None), [(1, 'prepared_with_exceptions')])
+    second tick in the same occurrence -> (('active', True, None), [(1, 'prepared_with_exceptions')])
+    -> OK
+
+[R07] (RA-07) own or unrelated transaction rows and unrelated receipts are not supporting evidence; the item receipt or its account statement is
+    own row only: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    own row and the row of another item: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    own row and the receipt of another item: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    own row and its own receipt: ('ok', 1)
+    own row and the account statement: ('ok', 1)
+    -> OK
+
+[R08] (RA-08) two- and three-charge exclusion cycles are refused before and after re-preparation; one live entry remains; revocation and withdrawal of the survivor restore the excluded charge
+    D2 duplicate_of D1: ('ok', 1)
+    D1 source_replay of D2, before re-preparation: ('refused', 400, 'Duplicate target is already excluded; retain a live survivor')
+    D1 duplicate_of D2, after re-preparation: ('refused', 409, 'No governing exception for this source')
+    D1: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []} [('DEMO_CARD_LIABILITY', '0.00', '90.00'), ('DEMO_OFFICE_SUPPLIES', '90.00', '0.00')] | D2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['DUPLICATE_EXCLUDED']} None
+    D1 duplicate_of D2: ('ok', 1)
+    D2 duplicate_of D3: ('ok', 2)
+    D3 duplicate_of D1 (closes the cycle): ('refused', 400, 'Duplicate target is already excluded; retain a live survivor')
+    charges that still have a proposed entry: ['D3'] | {'D1': ['DUPLICATE_EXCLUDED'], 'D2': ['DUPLICATE_EXCLUDED'], 'D3': ['POSSIBLE_DUPLICATE']}
+    after revocation -> D1: {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['POSSIBLE_DUPLICATE']} | D2: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['POSSIBLE_DUPLICATE']}
+    -> OK
+
+====================================================================================================
+R01a  RA-01/RA-06  OK     a four-link chain with mixed receipt order stays quarantined under lock; reopen admits only the last link; whole-evidence disposition takes effect; no double approval; relock and restart are stable
+R01b  RA-01        OK     a charge already admitted to December that later declares it supersedes an approved charge in locked November is not approvable in both periods
+R01c  RA-01        OK     a link that arrives before the link it replaces (unresolved), and is later resolved, is not released while the root is locked
+R01d  RA-01        OK     two- and three-source supersession cycles are refused and leave nothing behind
+R03a  RA-03        OK     same-key and new-key receipt replacement are held and disclosed; both suppliers are refused; a non-supplier accepts; final review is separate; a further change lapses the acceptance
+R03b  RA-03        OK     replacing a receipt by re-pointing the old key at another transaction id and supplying a new key is still held and disclosed
+R04a  RA-04        OK     a statement corrected to tie (same key, or withdrawn and replaced under a new key) is held on every relying item and disclosed on the workpaper; suppliers of any version are refused; acceptance is item-bound, lapses on new evidence and confers no final review
+R04b  RA-04        OK     a statement replaced by re-pointing the old key at another cycle and supplying a new key for the period is still held and disclosed
+R04c  RA-04        OK     observation: a prior-period statement revised while its period is still open, so that the next opening balance agrees, is disclosed to the next period
+R02a  RA-02        OK     unlinked re-proposals keep the earlier author barred (vendor mapping and receipt policy); cosmetic and non-cosmetic values, other categories and aliases behave as specified; an independent reviewer can approve
+R02b  RA-02        OK     the earlier author stays barred when the identical mapping is re-proposed for the single item, or under a new rule key
+R05   RA-05        OK     a relevant rule approved after the mandate suspends it; an irrelevant close rule and a rule outside the period do not; a held occurrence does not dispatch twice
+R07   RA-07        OK     own or unrelated transaction rows and unrelated receipts are not supporting evidence; the item receipt or its account statement is
+R08   RA-08        OK     two- and three-charge exclusion cycles are refused before and after re-preparation; one live entry remains; revocation and withdrawal of the survivor restore the excluded charge
+
+Verdict counts: {'OK': 14}
+RA acceptance gate: PASS

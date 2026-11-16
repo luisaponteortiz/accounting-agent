@@ -1,0 +1,9 @@
+order-search|exit=0|cmd=python3 /private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-16-f801fe/e811f474-fc4a-4942-8b58-c5747feb685b/scratchpad/rc/tools/fable_rc_order_search.py . --json /private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-16-f801fe/e811f474-fc4a-4942-8b58-c5747feb685b/scratchpad/rc/evidence/experiment/order-search.json
+fable-rb-probes|exit=0|cmd=python3 exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py .
+fable-ra-probes|exit=0|cmd=python3 exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py .
+make-test|exit=0|cmd=make test
+make-acceptance-gate|exit=0|cmd=make acceptance-gate
+make-reverification-gate|exit=0|cmd=make reverification-gate
+make-batch2-gate|exit=0|cmd=make batch2-gate
+make-rc-gate|exit=0|cmd=make rc-gate
+DONE

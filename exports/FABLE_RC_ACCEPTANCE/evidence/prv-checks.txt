@@ -1,0 +1,107 @@
+records 88
+records with a missing or repeated field: []
+Product decision {'Approved': 77, 'Proposed': 9, 'Rejected': 2}
+Implementation state {'Deferred': 36, 'Developer-tested': 20, 'Independently verified': 4, 'Not started': 25, 'Verification failed': 3}
+Priority {'Could': 1, 'Must': 79, 'Should': 8}
+Needed for {'G0 controls': 16, 'G1 approved samples': 19, 'G2 hosted reads': 11, 'G3 specified writes': 1, 'G4 operating handoff': 11, 'Platform maturity': 20, 'Product decision': 5, 'Second client': 5}
+
+== PRV-01 ==
+AAOS-BNK-03 | state: Verification failed | RC-01..03 in scope note: True | in evidence: True
+   scope note: Independent Fable RB review failed RB-01: RC-01, RC-02 and RC-03 (N01b, N01c, N01d). Developer corrections and regression passes are supplied in corrections_rc/; this state remains Verification failed pending independent re-verification of this new checkpoint and those exact arrival-order criteria.
+   evidence  : [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; RC-01, RC-02, RC-03: N01b, N01c, N01d WEAK in the independent run; [tests/test_review_corrections_rc.py](../tests/test_review_corrections_rc.py) and corrections_rc/ are developer evidence only.
+   criteria  : Older/conflicting events do not overwrite newer heads; supersession chains cannot release a locked-origin charge into a second approved period; cycles refuse atomically; authorized reopen admits only the terminal replacement and retires predecessors/support with traceable history; removing a superseder does not silently restore an ancestor without an approved feed policy. These controls must hold regardless of the order in which a source and its supersession link arrive, including a link declared on a source already admitted to another period and an unresolved link resolved later; no same-period source-move rows are created. This includes an ancestor withdrawn after the lock, a link declared on a source whose replacement is already admitted, and an unresolved claim whose target arrives without the claimant being re-sent. Any prior transition acceptance lapses when the resolved chain chan
+AAOS-CTL-04 | state: Verification failed | RC-01..03 in scope note: True | in evidence: True
+   scope note: Independent Fable RB review failed RB-01: RC-01, RC-02 and RC-03 (N01b, N01c, N01d). Developer corrections and regression passes are supplied in corrections_rc/; this state remains Verification failed pending independent re-verification of this new checkpoint and those exact arrival-order criteria.
+   evidence  : [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; RC-01, RC-02, RC-03: N01b, N01c, N01d WEAK in the independent run; [tests/test_review_corrections_rc.py](../tests/test_review_corrections_rc.py) and corrections_rc/ are developer evidence only.
+   criteria  : Every review transition, including revoke/resolution, refuses a locked period; lock preserves approved/finalized evidence; late/unassigned/moved sources quarantine; independent audited reopen precedes admission; a replacement chain never leaves the same expense approved in two periods; destination revisions after a valid release use the nearest admitted owner. The prohibition holds regardless of source/link arrival order, including a link declared after destination admission/approval and an unresolved link resolved later; affected destination approval ceases governing and an approved-source event names it. This includes an ancestor withdrawn after the lock, a link declared on a source whose replacement is already admitted, and an unresolved claim whose target arrives without the claimant being re-sent. Any prior transition acceptance lapses when the resolved chain changes; reopening admi
+AAOS-GOV-03 | state: Verification failed | RC-01..03 in scope note: True | in evidence: True
+   scope note: Independent Fable RB review failed RB-01: RC-01, RC-02 and RC-03 (N01b, N01c, N01d). Developer corrections and regression passes are supplied in corrections_rc/; this state remains Verification failed pending independent re-verification of this new checkpoint and those exact arrival-order criteria.
+   evidence  : [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; RC-01, RC-02, RC-03: N01b, N01c, N01d WEAK in the independent run; [tests/test_review_corrections_rc.py](../tests/test_review_corrections_rc.py) and corrections_rc/ are developer evidence only.
+   criteria  : Existing original methods/regressions and exact assertions remain; known repaired defects must pass; unavailable capabilities remain explicitly deferred; original/adapted probe differences and nonzero original commands remain disclosed; no bundle overwrite or automatic G1/Batch 3 transition.
+AAOS-KNO-04 | state: Independently verified | report cited: True | bundle hash cited: True | UC-10 in scope: False | UC-11 in scope: False
+   scope note: Independent Fable RB review verified the synthetic local preparation controls exercised by the named probes at the V2 checkpoint; no client policy, connected operation, reconciliation completion, close or operating readiness is verified.
+   evidence  : [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; R02a, R02b, N03a, N03b, N03c; retained A10, RN04, RN05, RN05b.
+AAOS-CTL-01 | state: Independently verified | report cited: True | bundle hash cited: True | UC-10 in scope: False | UC-11 in scope: False
+   scope note: Independent Fable RB review verified the synthetic local preparation controls exercised by the named probes at the V2 checkpoint; no client policy, connected operation, reconciliation completion, close or operating readiness is verified.
+   evidence  : [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; R02a, R02b, N03a, N03b, N04a.
+AAOS-BNK-02 | state: Independently verified | report cited: True | bundle hash cited: True | UC-10 in scope: False | UC-11 in scope: True
+   scope note: Independent Fable RB review verified the synthetic local preparation controls exercised by the named probes at the V2 checkpoint; no client policy, connected operation, reconciliation completion, close or operating readiness is verified. UC-11: a restated prior statement with zero card activity has no item-bound acceptance route; the next period stays unverified.
+   evidence  : [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; R04a, R04b, R04c, N02b, N04a, N04b, N04c, N04d.
+AAOS-CTL-09 | state: Independently verified | report cited: True | bundle hash cited: True | UC-10 in scope: True | UC-11 in scope: False
+   scope note: Independent Fable RB review verified the synthetic local preparation controls exercised by the named probes at the V2 checkpoint; no client policy, connected operation, reconciliation completion, close or operating readiness is verified. UC-10: a contradicting receipt supplied after the one relied on, then moved away or withdrawn, leaves no disclosure; that document-policy question is outside the verified RB-02 scope (N02c NOTE). RC transition-chain acceptance binding is developer-tested only un
+   evidence  : [independent review](../exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d; R03a, R03b, R04a, R04b, R04c, N02a, N02b, N04a, N04b, N04c, N04d; N02c NOTE.
+AAOS-KNO-04 probes named in evidence: {'R02a': True, 'R02b': True, 'N03a': True, 'N03b': True, 'N03c': True}
+AAOS-CTL-01 probes named in evidence: {'R02a': True, 'R02b': True, 'N03a': True, 'N03b': True, 'N04a': True}
+AAOS-BNK-02 probes named in evidence: {'R04a': True, 'R04b': True, 'R04c': True, 'N02b': True, 'N04a': True}
+AAOS-CTL-09 probes named in evidence: {'R03a': True, 'R03b': True, 'R04a': True, 'R04b': True, 'R04c': True, 'N02a': True, 'N02b': True}
+Current evidence section found: True | names RC-01..03: True
+    **RB-01 not accepted; G0 technical criteria not met; Batch 3 closed.** Fable accepted RB-02, RB-03 and RB-04 at the immutable V2 checkpoint (SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d), but N01b, N01c and N01d failed with RC-01, RC-02 and RC-03. AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 remain Verification failed. AAOS-KNO-04, AAOS-CTL-01, AAOS-BNK-02 and AAOS-CTL-09 are Independently verified only for Fable's named synthetic controls and the scope limits UC-10/UC-11. [Independent conclusions](INDEPENDENT_VERIFICATION_RESULTS.json) mechanically preserve those seven report-backed verdicts.
+
+The authorized RC/PRV developer correction pass reproduced 13 OK / 3 WEAK / 2 NOTE before source edits. The corrected unchanged 18-probe script reports 16 OK / 2 NOTE (N02c and N04e only), exit 0, in the developer run. New arrival-order, withdrawal disclosure, reopen/relock, changed-chain acceptance and idempotence regressions pass. [Current report](corrections_rc/RC_CORRECTIONS_REPORT.md) records the complete command evidence and retained gates. The complete developer suite passed 192 tests, all required gates passed, reviewer cases remain 29 PASS / 10 FIXED / 21 DEFERRED-OK, and the unchanged fault script reports 37 agree / 0 gaps. All 174 earlier methods remain. Developer passes do not replace failed independent verdicts or grant human G0, G1–G4, Batch 3 or live authority.
+
+The historical RA/RB reports, all earlier adaptations and original failed-command logs
+crosswalk T-12 : ['| T-12 | AAOS-BNK-03, AAOS-CTL-04 | Verification failed at R01b/R01c (RB-01); developer correction adds late-link/resolved-link coverage; independent re-verification/G0 remain open. RC-01/RC-02/RC-03 remain independently failed (N01b/N01c/N01d); developer repair in corrections_rc/ awaits independent verification. |']
+crosswalk RA-01 : ['| RA-01 | AAOS-BNK-03, AAOS-CTL-04: full-chain locked-origin quarantine/reopen/root history. RC-01/RC-02/RC-03 remain independently failed (N01b/N01c/N01d); developer repair in corrections_rc/ awaits independent verification. |']
+crosswalk RB-01 : ['| RB-01 | AAOS-BNK-03, AAOS-CTL-04: live locked ancestors override prior destination admission; late links/resolved links quarantine; approved destination history is retained and leaves governing population. RC-01/RC-02/RC-03 remain independently failed (N01b/N01c/N01d); developer repair in corrections_rc/ awaits independent verification. |']
+
+== PRV-05 / PRV-06 / PRV-08 dependencies ==
+  AAOS-GOV-02 (Developer-tested) -> AAOS-GOV-01 (Not started) | tail='for later full-cycle execution only' | conditional=True
+  AAOS-ARC-01 (Developer-tested) -> AAOS-GOV-01 (Not started) | tail='for later full-cycle execution only' | conditional=True
+  Approved AAOS-ARC-04 -> Proposed AAOS-ONB-01 | tail='if ratified for later client onboarding' | conditional=True
+  AAOS-EXE-03 (Developer-tested) -> AAOS-CTL-03 (Deferred) | tail='for real authority only' | conditional=True
+  AAOS-EXE-07 (Developer-tested) -> AAOS-CTL-12 (Deferred) | tail='for real data/credentials only' | conditional=True
+  Approved AAOS-INT-01 -> Proposed AAOS-INT-07 | tail='if ratified' | conditional=True
+  Approved AAOS-INT-02 -> Proposed AAOS-INT-07 | tail='if ratified' | conditional=True
+  Approved AAOS-INT-03 -> Proposed AAOS-INT-07 | tail='if ratified' | conditional=True
+  Approved AAOS-INT-04 -> Proposed AAOS-INT-07 | tail='if ratified' | conditional=True
+  Approved AAOS-INT-05 -> Proposed AAOS-INT-07 | tail='if ratified' | conditional=True
+  AAOS-CTL-01 (Independently verified) -> AAOS-CTL-03 (Deferred) | tail='for real authority only' | conditional=True
+  AAOS-CTL-04 (Verification failed) -> AAOS-CTL-03 (Deferred) | tail='before G1 real authority only' | conditional=True
+  Approved AAOS-BB-01 -> Proposed AAOS-ONB-01 | tail='if ratified (first client instance of the shared onboarding ' | conditional=True
+  Approved AAOS-BB-02 -> Proposed AAOS-ONB-01 | tail='if ratified (first client instance of the shared onboarding ' | conditional=True
+  Approved AAOS-BB-03 -> Proposed AAOS-BB-07 | tail='if ratified' | conditional=True
+  Approved AAOS-BB-03 -> Proposed AAOS-ONB-01 | tail='if ratified (first client instance of the shared onboarding ' | conditional=True
+  Approved AAOS-BB-04 -> Proposed AAOS-ONB-01 | tail='if ratified (first client instance of the shared onboarding ' | conditional=True
+  Approved AAOS-BB-04 -> Proposed AAOS-GL-06 | tail='if ratified and' | conditional=True
+  Approved AAOS-BB-04 -> Proposed AAOS-BNK-07 | tail='if ratified for any later authorized execution' | conditional=True
+  Approved AAOS-BB-05 -> Proposed AAOS-ONB-01 | tail='if ratified (first client instance of the shared onboarding ' | conditional=True
+  Approved AAOS-BB-05 -> Proposed AAOS-GL-06 | tail='if ratified for any later authorized accounting preparation' | conditional=True
+  Approved AAOS-BB-06 -> Proposed AAOS-BB-07 | tail='if ratified' | conditional=True
+  Approved AAOS-BB-06 -> Proposed AAOS-ONB-01 | tail='if ratified (first client instance of the shared onboarding ' | conditional=True
+  Approved AAOS-BB-08 -> Proposed AAOS-ONB-01 | tail='if ratified' | conditional=True
+Approved -> Proposed without condition: []
+tested/failed -> Deferred/Not started without condition: []
+Dependencies fields with ". ;" or ".;": []
+six unratified shared requirements: {'AAOS-ONB-01': 'Proposed', 'AAOS-ONB-02': 'Proposed', 'AAOS-INT-07': 'Proposed', 'AAOS-GL-06': 'Proposed', 'AAOS-BNK-07': 'Proposed', 'AAOS-RPT-03': 'Proposed'}
+Proposed: ['AAOS-BB-07', 'AAOS-BNK-07', 'AAOS-EXC-03', 'AAOS-EXC-04', 'AAOS-GL-06', 'AAOS-INT-07', 'AAOS-ONB-01', 'AAOS-ONB-02', 'AAOS-RPT-03']
+GOV-01 state: Not started | GOV-02 deps: AAOS-GOV-01 for later full-cycle execution only | ARC-01 deps: AAOS-GOV-01 for later full-cycle execution only
+instantiation references missing (BB-01..08 -> ONB-01, INT-01..05 -> INT-07): []
+BB-04 cites GL-06: True | BB-05 cites BNK-07: False
+unknown refs: [] | self refs: []
+cycle: None
+
+== PRV-07 ==
+AAOS-EXC-01 | decision: Rejected | table: ['Rejected'] | scope note starts: Rejected scope. Rejected scope, not a mi
+AAOS-EXC-02 | decision: Rejected | table: ['Rejected'] | scope note starts: Rejected scope. Rejected non-accounting 
+AAOS-EXC-03 | decision: Proposed | table: ['Reserved'] | scope note starts: Reserved action. Reserved execution boun
+AAOS-EXC-04 | decision: Proposed | table: ['Reserved'] | scope note starts: Reserved action. Reserved and unimplemen
+AAOS-EXC-05 | decision: Approved | table: ['Reserved'] | scope note starts: Reserved action. Approved reserved-actio
+
+== PRV-10 / PRV-04 client boundary ==
+Client-specific terms lines: ['Bird Bowl; Theresa; Jeff; Luis; Expensify; Desktop']
+client words found in shared records outside Trace: [('AAOS-GOV-01', 'Business purpose', 'Bird Bowl'), ('AAOS-GOV-01', 'Acceptance criteria', 'Bird Bowl'), ('AAOS-ARC-04', 'Description', 'Bird Bowl'), ('AAOS-ARC-04', 'Scope note', 'Bird Bowl'), ('AAOS-KNO-01', 'Acceptance criteria', 'Bird Bowl'), ('AAOS-INT-01', 'title', 'QuickBooks')]
+words of my own list that are NOT in the register terms list: ['bird_bowl', 'birdbowl', 'Toast', 'QuickBooks', 'Restaurant365', 'R365', 'Ramp', 'Brex', 'Gusto', 'SS accounting']
+client words in shared accounting_agent files (outside config, fixtures, demo.py): 0
+
+== PR-11 owner wording (D-016/D-017) ==
+AAOS-BB-01 | title same: True | fields that differ from the pre-pass register: ['Dependencies']
+    pre : AAOS-KNO-03; AAOS-KNO-04; AAOS-KNO-05; AAOS-GOV-03. ; AAOS-ONB-01 (first client instance of the shared onboarding requirement)
+    now : AAOS-KNO-03; AAOS-KNO-04; AAOS-KNO-05; AAOS-GOV-03; AAOS-ONB-01 if ratified (first client instance of the shared onboarding requirement)
+AAOS-BB-02 | title same: True | fields that differ from the pre-pass register: ['Dependencies']
+    pre : AAOS-BB-01; AAOS-KNO-06; AAOS-OBS-04. ; AAOS-ONB-01 (first client instance of the shared onboarding requirement)
+    now : AAOS-BB-01; AAOS-KNO-06; AAOS-OBS-04; AAOS-ONB-01 if ratified (first client instance of the shared onboarding requirement)
+records changed against the pre-pass register: 28
+   ['AAOS-ARC-01', 'AAOS-ARC-04', 'AAOS-BB-01', 'AAOS-BB-02', 'AAOS-BB-03', 'AAOS-BB-04', 'AAOS-BB-05', 'AAOS-BB-06', 'AAOS-BB-07', 'AAOS-BB-08', 'AAOS-BNK-02', 'AAOS-BNK-03', 'AAOS-CTL-01', 'AAOS-CTL-04', 'AAOS-CTL-09', 'AAOS-EXC-01', 'AAOS-EXC-02', 'AAOS-EXC-03', 'AAOS-EXC-04', 'AAOS-EXC-05', 'AAOS-GOV-02', 'AAOS-GOV-03', 'AAOS-INT-01', 'AAOS-INT-02', 'AAOS-INT-03', 'AAOS-INT-04', 'AAOS-INT-05', 'AAOS-KNO-04']
+records added/removed: [] []
+implementation state changes: [('AAOS-KNO-04', 'Verification failed', 'Independently verified'), ('AAOS-BNK-02', 'Verification failed', 'Independently verified'), ('AAOS-CTL-01', 'Verification failed', 'Independently verified'), ('AAOS-CTL-09', 'Verification failed', 'Independently verified')]
+product decision changes: []

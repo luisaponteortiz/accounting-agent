@@ -1,0 +1,313 @@
+python3 review/run_fable_validation_cases.py . review/FABLE_VALIDATION_CASES.json --batch2-gate --json-report docs/batch2/final-validation.json
+PASS          FV-C01   
+PASS          FV-C02   
+PASS          FV-C03   
+PASS          FV-C04   
+PASS          FV-C05   
+PASS          FV-C06   
+PASS          FV-C07   
+PASS          FV-C08   
+PASS          FV-C09   
+PASS          FV-C10   
+PASS          FV-C11   
+PASS          FV-C12   
+PASS          FV-C13   
+PASS          FV-C14   
+FIXED         FV-C15   meets required outcome
+PASS          FV-C16   
+PASS          FV-C17   
+PASS          FV-C18   
+PASS          FV-C19   
+PASS          FV-J01   
+PASS          FV-J02   
+PASS          FV-J03   
+PASS          FV-J04   
+PASS          FV-J05   
+PASS          FV-J06   
+PASS          FV-J07   
+FIXED         FV-J08   meets required outcome
+FIXED         FV-J09   meets required outcome
+FIXED         FV-J10   meets required outcome
+PASS          FV-CL01  
+FIXED         FV-CL02  meets required outcome
+FIXED         FV-R01   meets required outcome
+PASS          FV-R02   
+FIXED         FV-R03   meets required outcome
+FIXED         FV-R04   meets required outcome
+FIXED         FV-RC01  meets required outcome
+FIXED         FV-RC02  meets required outcome
+PASS          FV-RC03  
+DEFERRED-OK   FV-AP01  refused (403)
+DEFERRED-OK   FV-AP02  refused (403)
+DEFERRED-OK   FV-AP03  refused (403)
+DEFERRED-OK   FV-AP04  refused (403)
+DEFERRED-OK   FV-AP05  refused (403)
+DEFERRED-OK   FV-AR01  refused (403)
+DEFERRED-OK   FV-AR02  refused (403)
+DEFERRED-OK   FV-AR03  refused (403)
+DEFERRED-OK   FV-AR04  refused (403)
+DEFERRED-OK   FV-BK01  refused (403)
+DEFERRED-OK   FV-BK02  refused (403)
+DEFERRED-OK   FV-BK03  refused (403)
+DEFERRED-OK   FV-BK04  refused (403)
+DEFERRED-OK   FV-BK05  refused (403)
+DEFERRED-OK   FV-CL03  refused (403)
+PASS          FV-CL04  
+DEFERRED-OK   FV-GL01  refused (403)
+DEFERRED-OK   FV-RP01  refused (403)
+DEFERRED-OK   FV-RP02  refused (403)
+DEFERRED-OK   FV-RP03  refused (403)
+DEFERRED-OK   FV-RP04  refused (403)
+DEFERRED-OK   FV-RP05  refused (403)
+
+Summary: DEFERRED-OK=21, FIXED=10, PASS=29
+Batch 2 gate: PASS
+python3 review/batch2_verification_probes.py .
+
+### P01 evidence+policy author approves through a colleague's run
+  human-a approving own evidence: refused 403 (Independent human review required)
+  VERDICT: OK
+
+### P02 human/service decided by kind, not by actor id
+  service reviewer: refused 403 (Human authority grant required: review) | human named worker-...: accepted
+  VERDICT: OK
+
+### P03 recurring occurrence survives evidence arriving before the worker runs
+  ticks [4] [5] | occurrences [('2026-11-15', 'completed')] | completed runs for occurrence [5] | current J-001 artifacts [24]
+  VERDICT: OK
+
+### P04 one unfit mandate does not stop the others
+  tick: accepted | occurrences [('journal_preparation', 'held', 'Workflow unavailable for this client'), ('card_preparation', 'dispatched', None)] | mandate status [(2, 'active'), (1, 'held')]
+  VERDICT: OK
+
+### P05 two recurring occurrences on identical inputs: one governing artifact
+  J-001 artifacts (id, runs, governing, status): [(16, [2, 4, 5], True, 'pending')]
+  VERDICT: OK
+
+### P06 CJK alias does not match a different CJK descriptor
+  vendor: None | eligible: False | blockers: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+  VERDICT: OK
+
+### P07 late older batch replaces newer source version (Batch 2: F-13)
+  current version: 2 | amount: 45.00
+  VERDICT: OK
+
+### P08 journal support / duplicate / no-effect (Batch 2: F-15)
+  eligible: [('J-001', False), ('J-003', False), ('J-004', False)]
+  VERDICT: OK
+
+### P09 locking the period preserves approvals and blocks new dispatch
+  status after lock: approve | enqueue in locked period: refused 409 (PERIOD_LOCKED)
+  VERDICT: OK
+
+### P10 opening December does not strand November
+  November TX-001 status: approve | December card items: ['no-transactions']
+  VERDICT: OK
+
+### P11 real file edits: transport change keeps approval, handler change stales it
+  status after editing each file: {'http.py': 'approve', '__main__.py': 'approve', 'demo.py': 'approve', 'service.py': 'approve', 'storage.py': 'approve', 'modules.py': 'stale', 'core.py': 'stale'}
+  VERDICT: OK
+
+### P12 close readiness ignores open exceptions (Batch 2: F-11)
+  blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'MISSING_CLOSE_EVIDENCE', 'OPEN_PREPARATION_EXCEPTIONS', 'UNREVIEWED_PREPARATION']
+  VERDICT: OK
+
+### P13 statement control passes on population substitution (Batch 2: F-12)
+  TX-001 eligible after swap: False
+  VERDICT: OK
+
+### P14 repeated and contradictory decisions on one artifact
+   [('REV approve', 'accepted'), ('REV approve again', 'refused 409 (Duplicate or invalid review transition)'), ('R2 reject', 'accepted'), ('REV approve again', 'refused 409 (Duplicate or invalid review transition)')] | status: disputed
+  VERDICT: OK
+
+### P15 receipt dated the day before posting (Batch 2: F-16)
+  blockers: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'RECEIPT_DATE_POLICY_UNSET']
+  VERDICT: OK
+
+### P16 unrelated card receipt leaves an approved journal intact
+  journal status in export: approve | card TX-001 (same workflow as the receipt): stale
+  VERDICT: OK
+
+### N01 decisions recorded in a locked period
+  under lock: {'approve pending TX-001': 'refused 409 (PERIOD_LOCKED)', 'revoke approved J-001': 'refused 409 (PERIOD_LOCKED)'} | J-001 now: approve | TX-001 now: pending
+  VERDICT: OK
+
+### N02 source re-dated out of a locked period is approvable in both periods
+  November TX-001: approve amount 42.50 date 2026-11-03
+  December TX-001: blockers None | approval no December item exists | date None
+  exceptions raised against November for the moved source: [('demo_card_001:TX-001', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-TX-001', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+  VERDICT: OK
+
+### N03 rejection displaced by an identical re-preparation under another actor
+  new artifact created: False | identical accounting data: True | approval of the copy: accepted
+  J-001 artifacts (id, governing, status, decisions): [(16, True, 'disputed', ['reject', 'approve'])]
+  VERDICT: OK
+
+### N04 evidence author regains review rights after a colleague's trivial revision
+  contributors on artifact: ['fixture-policy-controller', 'human-a', 'human-b', 'worker-demo'] | human-a approving own entry: refused 403 (Independent human review required)
+  VERDICT: OK
+
+### N05 policy author regains review rights after a colleague re-registers the profile
+  mapping rules authored by human-a; contributors: ['fixture-policy-controller', 'human-a', 'human-b', 'worker-demo'] | human-a approving item coded by own mapping: refused 403 (Independent human review required)
+  VERDICT: OK
+
+### N06 combining-mark scripts: different words collapse to the same alias
+  Thai            'กิน' vs 'กัน' -> 'กิน' vs 'กัน'  equal=False
+  Devanagari      'किताब' vs 'कुताब' -> 'किताब' vs 'कुताब'  equal=False
+  Hebrew pointed  'דָּבָר' vs 'דֶּבֶר' -> 'דָּבָר' vs 'דֶּבֶר'  equal=False
+  end to end: vendor None | category None | eligible False | blockers ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+  VERDICT: OK
+
+### N07 actor created without an explicit kind
+  an actor without a kind cannot be constructed: TypeError
+  VERDICT: OK
+
+### N08 evidence received before its period is opened
+  re-supply of identical evidence: {'changed': False, 'generation': 2, 'replay': False}
+  still quarantined after the period opened: ['demo_card_001:TX-008', 'receipt-TX-008']
+  J-001 blockers: [] | TX-001 blockers: []
+  VERDICT: OK
+
+### N09 receipt dated in the prior month for a first-of-month charge
+  TX-001 blockers: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'RECEIPT_DATE_POLICY_UNSET'] | receipt status: [] | evidence listed on artifact: ['demo_card_001:TX-001', 'receipt-TX-001', 'demo-card-control']
+  VERDICT: OK
+
+### N10 lock then reopen with no new evidence keeps approvals; lock preconditions
+  governing items unreviewed, blocked or stale at lock time: 12 | lock: accepted | card TX-001 while locked: stale | J-001 after lock+reopen: approve
+  VERDICT: OK
+
+### N11 recurring run across a period boundary; held occurrence recovers
+  before December exists: [('2026-11-29', 'completed', None), ('2026-11-30', 'skipped_no_catch_up', 'No event delivered for this slot'), ('2026-12-01', 'held', 'Accounting period for occurrence not configured')]
+  after opening December: [('2026-11-29', 'completed'), ('2026-11-30', 'skipped_no_catch_up'), ('2026-12-01', 'completed'), ('2026-12-02', 'completed')] | run periods: [('2026-11', 'prepared_with_exceptions'), ('2026-12', 'prepared_with_exceptions')] | ticks [4] [] [5, 6]
+  VERDICT: OK
+
+### N12 concurrent ticks, drains and contrary decisions
+  identical tick results: True | completed runs per occurrence: [1, 1] | max governing per item: 1
+  simultaneous approve/reject by two reviewers: ['accepted', 'accepted'] | status: disputed | audit chain intact: True
+  VERDICT: OK
+
+### N13 approval invalidation: evidence, policy and source changes inside one workflow
+   {'after card receipt': 'stale', 're-prepared': (True, 'pending'), 'after policy change': 'stale'} | decision on stale artifact: refused 409 (Preparation is stale, unfinished or not governing)
+  VERDICT: OK
+
+### N14 reviewer who supplied one document is barred from the whole workflow population
+  unrelated TX-001: accepted | own receipt TX-002: refused 403 (Independent human review required)
+  VERDICT: OK
+
+### N15 revoked approval and repeated dispute
+  after revoke: new approval refused 409 (Duplicate or invalid review transition) | unchanged artifact: True | independent recovery: accepted
+  after third-reviewer resolution, the overruled reviewer rejects again: refused 409 (Resolved judgment is final for this artifact; new preparation required) | status: approve
+  VERDICT: OK
+
+================ summary
+P01  OK        evidence+policy author approves through a colleague's run
+P02  OK        human/service decided by kind, not by actor id
+P03  OK        recurring occurrence survives evidence arriving before the worker runs
+P04  OK        one unfit mandate does not stop the others
+P05  OK        two recurring occurrences on identical inputs: one governing artifact
+P06  OK        CJK alias does not match a different CJK descriptor
+P07  OK        late older batch replaces newer source version (Batch 2: F-13)
+P08  OK        journal support / duplicate / no-effect (Batch 2: F-15)
+P09  OK        locking the period preserves approvals and blocks new dispatch
+P10  OK        opening December does not strand November
+P11  OK        real file edits: transport change keeps approval, handler change stales it
+P12  OK        close readiness ignores open exceptions (Batch 2: F-11)
+P13  OK        statement control passes on population substitution (Batch 2: F-12)
+P14  OK        repeated and contradictory decisions on one artifact
+P15  OK        receipt dated the day before posting (Batch 2: F-16)
+P16  OK        unrelated card receipt leaves an approved journal intact
+N01  OK        decisions recorded in a locked period
+N02  OK        source re-dated out of a locked period is approvable in both periods
+N03  OK        rejection displaced by an identical re-preparation under another actor
+N04  OK        evidence author regains review rights after a colleague's trivial revision
+N05  OK        policy author regains review rights after a colleague re-registers the profile
+N06  OK        combining-mark scripts: different words collapse to the same alias
+N07  OK        actor created without an explicit kind
+N08  OK        evidence received before its period is opened
+N09  OK        receipt dated in the prior month for a first-of-month charge
+N10  OK        lock then reopen with no new evidence keeps approvals; lock preconditions
+N11  OK        recurring run across a period boundary; held occurrence recovers
+N12  OK        concurrent ticks, drains and contrary decisions
+N13  OK        approval invalidation: evidence, policy and source changes inside one workflow
+N14  OK        reviewer who supplied one document is barred from the whole workflow population
+N15  OK        revoked approval and repeated dispute
+
+### N16 policy changed and reverted: does the earlier approval come back without review?
+  after change: stale | after revert by another registrant: stale
+  VERDICT: NOTE
+
+### N17 later policy change versus earlier periods (Batch 2: F-06 effective dating)
+  new December vendor rule added -> approved November item: open period approve | locked period approve | after reopen approve
+  VERDICT: OK
+
+### N18 punctuation that distinguishes merchants is discarded
+  'A+ CLEANERS'    'A CLEANERS'     equal=True
+  '#1 PIZZA'       '1 PIZZA'        equal=True
+  'C++ CONSULTING' 'C CONSULTING'   equal=True
+  'AT&T'           'AT T'           equal=True
+  VERDICT: NOTE
+
+================ supplementary
+N16  NOTE      policy changed and reverted: does the earlier approval come back without review?
+N17  OK        later policy change versus earlier periods (Batch 2: F-06 effective dating)
+N18  NOTE      punctuation that distinguishes merchants is discarded
+
+Corrective gate (C-01 to C-06), retained in Batch 2: PASS
+python3 scripts/synthetic_month.py
+{
+  "gate": "G0 software synthetic acceptance only",
+  "reviewed_items": [
+    "demo_card_001:TX-012",
+    "demo_card_001:TX-010",
+    "demo_card_001:TX-006",
+    "demo_card_001:TX-005",
+    "demo_card_001:TX-004",
+    "demo_card_001:TX-003",
+    "demo_card_001:TX-002",
+    "demo_card_001:TX-001",
+    "J-002",
+    "J-001"
+  ],
+  "carried_dispositioned_items": [
+    {
+      "item_key": "demo_card_001:TX-011",
+      "blockers": [
+        "CURRENCY_MISMATCH"
+      ]
+    },
+    {
+      "item_key": "demo_card_001:TX-009",
+      "blockers": [
+        "RECEIPT_AMOUNT_POLICY_UNSET"
+      ]
+    },
+    {
+      "item_key": "demo_card_001:TX-007",
+      "blockers": [
+        "PENDING_TRANSACTION"
+      ]
+    }
+  ],
+  "package_ids": [
+    1,
+    2
+  ],
+  "package_hashes": [
+    "636d6d44a7bab730ef7a9ab59d308a04fb2a11784f681b89f3294112f4ff3ab5",
+    "f7106d37da7ec738d980dd2c65498ff9791ff16dd7979635d28b59405bfb09a8"
+  ],
+  "period_status": "locked",
+  "proposed_entry_impact": {
+    "DEMO_CARD_LIABILITY": "-211.00",
+    "DEMO_CASH": "-300.00",
+    "DEMO_OFFICE_SUPPLIES": "311.00",
+    "DEMO_REPAIRS": "200.00"
+  },
+  "impact_balances": true,
+  "second_client_period": "2026-12",
+  "isolation": "PASS",
+  "audit_integrity": "PASS",
+  "records_changed_via": "service operations only",
+  "external_effects": "none",
+  "real_readiness": "NOT ESTABLISHED"
+}

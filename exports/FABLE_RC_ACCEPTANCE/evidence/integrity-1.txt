@@ -1,0 +1,21 @@
+== bundle zip ==
+sha256 9a85c78a40fd9b5f675b4d135274808056b34097ad907e38e962bf25b0762454
+zip testzip (first bad member or None): None
+zip members (files): 741 duplicates: 0
+unsafe member paths: []
+== manifest ==
+manifest entries 740 payload files on disk 741
+mismatch or missing: []
+on disk but not in manifest: ['REVIEW_MANIFEST.json']
+manifest sha256 2cd170c68e3acd2231fd429a6c7b4393bef1ca00922391ee9b85bbfceef54d77
+== git/caches in payload ==
+[]
+== named archives in working project ==
+working exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE.zip OK
+bundle exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE.zip OK
+working exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE_V2.zip OK
+bundle exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE_V2.zip OK
+working exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip OK
+bundle exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip OK
+== input-checksums.json ==
+top-level type dict ['exports/FABLE_BATCH_1_MANIFEST.json', 'exports/FABLE_REVERIFICATION_CORRECTIONS_PACKAGE_CHECK.txt', 'exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_MANIFEST.json', 'exports/synthetic-review-package.json', 'exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip', 'exports/FABLE_REVIEW_MANIFEST.json', 'exports/FABLE_CORRECTIONS_AND_BATCH_2_REVIEW_BUNDLE.zip.sha256', 'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_START_HERE.md', 'exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_PACKAGE_CHECK.json', 'exports/.gitkeep']

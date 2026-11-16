@@ -1,0 +1,492 @@
+python3 exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py . A04 A01 A02 A06 A07 A08 A09 A10 A11 A12 A13 A14 X01 X12k X12s X15 U1 U4 M1 M2
+Fable RV acceptance probes | project root: run | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[A04] (RV-04) a locked, finalized period is untouched by later intake; a genuinely changed receipt is still quarantined
+    after three December packets -> source exceptions: [] | events: [] | new binding rows for November receipts: 0
+    November statuses: ['approve', 'approve'] | package unchanged: True
+    after a genuinely revised November receipt -> source exceptions: [('receipt-A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD')] | events: [('APPROVED_SOURCE_REVISED', 'demo_card_001:A1'), ('POST_FINALIZATION_CHANGE', 'package:1')] | A1: approve
+    -> OK
+
+[A01] (RV-01) new-key supersession out of a locked period, by envelope or by data, is quarantined until reopen and never double-approved
+    [envelope] replay: True | exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [envelope] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')] | moves: [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 0)]
+    [envelope] while locked -> December A1X: None | November A1: approve | unrelated December D1 eligible: True
+    [envelope] after reopen -> November A1: None | removed from November: ['demo_card_001:A1'] | December A1X: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    [envelope] current governing artifacts for the charge: [('2026-12', 'demo_card_001:A1X', 'pending')] | A1 history kept: 1
+    [data] replay: True | exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [data] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')] | moves: [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 0)]
+    [data] while locked -> December A1X: None | November A1: approve | unrelated December D1 eligible: True
+    [data] after reopen -> November A1: None | removed from November: ['demo_card_001:A1'] | December A1X: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    [data] current governing artifacts for the charge: [('2026-12', 'demo_card_001:A1X', 'pending')] | A1 history kept: 1
+    supersedes an unknown key: {'id': 9, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    disposition on the unresolved transition: ('refused', 400, 'Unsupported disposition; this control cannot be overridden')
+    -> OK
+
+[A02] (RV-02) one origin, one owner: the conflict survives revision, re-citation and supersession of the cited source
+    journal cites the card source -> card: ['SOURCE_ALREADY_HAS_ENTRY'] | journal: ['SOURCE_ALREADY_HAS_ENTRY'] | uninvolved journal and card item eligible: True True
+    card source revised -> card: ['SOURCE_ALREADY_HAS_ENTRY'] | journal: ['ORIGIN_SOURCE_SUPERSEDED', 'SOURCE_ALREADY_HAS_ENTRY']
+    journal re-supplied against the current version -> card: ['SOURCE_ALREADY_HAS_ENTRY'] | journal: ['SOURCE_ALREADY_HAS_ENTRY']
+    card source superseded under a new key -> old item: None | new item: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_ALREADY_HAS_ENTRY', 'SOURCE_TRANSITION_REQUIRES_REVIEW'] | journal: ['ORIGIN_SOURCE_SUPERSEDED', 'SOURCE_ALREADY_HAS_ENTRY']
+    approvals attempted while in conflict: ['refused', 'refused'] | after the journal is withdrawn -> journal: None | card: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW']
+    -> OK
+
+[A06] (RV-06) untyped checklist entries are refused; labels do not satisfy reconciliation or tie-out lines
+    profile with an untyped checklist entry: ('refused', 400, 'Close checklist requirements must be typed objects')
+    close_checklist rule with an untyped entry: ('refused', 400, 'Close checklist requirements must be typed objects')
+    shipped checklist with label-only documents: [('document', 'trial_balance', True), ('document', 'card_statement', True), ('reconciliation', 'bank_reconciliation', False), ('tieout', 'ap_tieout', False), ('tieout', 'ar_tieout', False)]
+    blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'MISSING_CLOSE_EVIDENCE']
+    -> OK
+
+[A07] (RV-07) dispositions obey activity and account type; valid credit, settlement, transfer, fee and interest paths still work
+    before: {'PAY': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'], 'FEE': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'], 'INT': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'], 'CR': ['CREDIT_REQUIRES_REVIEW', 'NON_EXPENSE_REQUIRES_REVIEW'], 'UNK': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'], 'TRF': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']}
+    refused? payment as standalone credit               ('refused', 400, 'Payments require settlement or referral')
+    refused? payment vendor confirmed to expense        ('refused', 400, 'Payments require settlement or referral')
+    refused? payment coded to expense                   ('refused', 400, 'Payments require settlement or referral')
+    refused? payment coded as fee                       ('refused', 400, 'Payments require settlement or referral')
+    refused? settlement against the liability itself    ('refused', 400, 'Active cash/clearing account required')
+    refused? settlement against an expense account      ('refused', 400, 'Active cash/clearing account required')
+    refused? fee coded to cash                          ('refused', 400, 'Active account required')
+    refused? fee coded to the liability                 ('refused', 400, 'Active account required')
+    refused? fee as settlement                          ('refused', 400, 'Settlement requires a payment source')
+    refused? fee as interest                            ('refused', 400, 'Interest treatment requires positive interest activity')
+    refused? interest as fee                            ('refused', 400, 'Fee treatment requires positive fee activity')
+    refused? credit to cash                             ('refused', 400, 'Active account required')
+    refused? unknown activity coded as fee              ('refused', 400, 'Unknown activity requires referral')
+    refused? unknown activity as credit                 ('refused', 400, 'Unknown activity requires referral')
+    refused? transfer as settlement                     ('refused', 400, 'Settlement requires a payment source')
+    refused? transfer against the liability             ('refused', 400, 'Active cash/clearing account required')
+    refused? unknown activity coded to cash             ('refused', 400, 'Unknown activity requires referral')
+    refused? purchase coded to cash                     ('refused', 400, 'Active account required')
+    refused? purchase coded to the card liability       ('refused', 400, 'Active account required')
+    refused? purchase vendor confirmed to cash          ('refused', 400, 'Active account required')
+    accepted: {'payment settled': 'ok', 'credit as standalone credit': 'ok', 'transfer': 'ok', 'fee': 'ok', 'fee vendor': 'ok', 'fee category': 'ok', 'interest': 'ok', 'interest vendor': 'ok', 'interest category': 'ok', 'unknown referred': 'ok', 'purchase vendor confirmed': 'ok', 'purchase coded to expense': 'ok'}
+    PAY  eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '300.00', '0.00'), ('DEMO_CASH', '0.00', '300.00')]
+    FEE  eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '0.00', '12.00'), ('DEMO_OFFICE_SUPPLIES', '12.00', '0.00')]
+    INT  eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '0.00', '3.00'), ('DEMO_OFFICE_SUPPLIES', '3.00', '0.00')]
+    CR   eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '42.50', '0.00'), ('DEMO_OFFICE_SUPPLIES', '0.00', '42.50')]
+    UNK  eligible=False blockers=['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] entry=None
+    TRF  eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '0.00', '100.00'), ('DEMO_CASH', '100.00', '0.00')]
+    UV   eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '0.00', '8.00'), ('DEMO_OFFICE_SUPPLIES', '8.00', '0.00')]
+    independent approval of PAY, CR, TRF, FEE, INT, then the referred UNK: ['ok', 'ok', 'ok', 'ok', 'ok', 'refused']
+    -> OK
+
+[A08] (RV-08/RV-15) distinct purchases needs every candidate receipt, binds the exact candidate set, and lapses when a new candidate arrives
+    distinct purchases citing own row only: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    distinct purchases citing own row and own receipt, no candidate receipt: ('refused', 400, 'Distinct purchases requires supporting documents for the item and every candidate')
+    distinct purchases citing candidate receipt only: ('refused', 400, 'Distinct purchases requires supporting documents for the item and every candidate')
+    D1 after two supported decisions (no statement cited): {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []} | bound candidate set: ['demo_card_001:D2']
+    after a third identical charge -> D1: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'POSSIBLE_DUPLICATE']} | D2: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'POSSIBLE_DUPLICATE'] | D3: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'POSSIBLE_DUPLICATE']
+    -> OK
+
+[A09] (RV-09) excluding a duplicate frees the surviving charge with full lineage; revocation restores both holds and the earlier rejection
+    reject the held D1 artifact: ('ok', None)
+    D2 dispositioned as duplicate_of D1: ('ok', 1)
+    excluded D2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['DUPLICATE_EXCLUDED']} | entry: None
+    surviving D1: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []} | cites dispositions: [1] | contributors: ['rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-worker']
+    the person who excluded D2 approves D1: ('refused', 403, 'Independent human review required')
+    independent reviewer approves D1 (positive control): ('ok', None)
+    revoke the exclusion: ('ok', None)
+    after revocation -> D1: {'id': 2, 'eligible': False, 'status': 'reject', 'blockers': ['POSSIBLE_DUPLICATE']} | same artifact as the first, rejected one: True | current: True | D2: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['POSSIBLE_DUPLICATE']}
+    -> OK
+
+[A10] (RV-10) a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not
+    cosmetic re-proposal linked by supersedes: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    contributors without the supersedes link: ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    same cosmetic re-proposal with no supersedes link: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    version 1 had a different category: its author approves (should be allowed): ('ok', None)
+    identical receipt policy re-proposed by a colleague: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    -> OK
+
+[A11] (RV-11) freshness must be stated and well formed; explicit no-evidence authority is independently approved and audited
+    refused? empty                              ('refused', 400, 'Nonempty freshness predicate required')
+    refused? none with empty reason             ('refused', 400, 'Invalid explicit no-evidence reason')
+    refused? none with blank reason             ('refused', 400, 'Invalid explicit no-evidence reason')
+    refused? none mixed with a kind             ('refused', 400, 'No-evidence reason must be the sole freshness entry')
+    refused? kind the workflow does not read    ('refused', 400, 'Freshness kind is not read by these workflows')
+    refused? malformed cut-off                  ('refused', 400, 'Expected a timezone-aware ISO timestamp')
+    refused? not a mapping                      ('refused', 400, 'Explicit period_rule and freshness predicate required')
+    refused? a list                             ('refused', 400, 'Explicit period_rule and freshness predicate required')
+    issuer approves own no-evidence mandate: ('refused', 403, 'Mandate issuer cannot approve')
+    before approval -> runs: [] | approval audit records freshness: {'none': 'Fixed fictional evidence; demonstration authority only'} | after approval -> runs: [(1, 'awaiting_review')]
+    -> OK
+
+[A12] (RV-12) a revised receipt is disclosed and held; suppliers cannot accept it; acceptance lapses on a further change; referral never clears
+    refer the receipt mismatch externally: ('ok', 1)
+    after referral: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['RECEIPT_AMOUNT_POLICY_UNSET']}
+    receipt re-supplied by a colleague -> {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    disclosed revisions: [('receipt-A1', 1, 'rv-preparer', 2, 'rv-preparer-2', ['amount'])]
+    acceptance by supplier of version 1: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    acceptance by supplier of version 2: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    acceptance by reviewer without the disposition grant: ('refused', 403, 'Human authority grant required: disposition')
+    acceptance by acceptance that does not cite the revised receipt: ('refused', 400, 'Cite all revised supporting documents')
+    acceptance by a granted human who supplied neither version: ('ok', 2)
+    after acceptance: {'id': 17, 'eligible': True, 'status': 'pending', 'blockers': []} | revisions still disclosed: True
+    the accepter gives final review: ('refused', 403, 'Independent human review required')
+    independent final review: ('ok', None)
+    receipt changed again -> A1: {'id': 22, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} | events: [('APPROVED_SOURCE_REVISED', 'demo_card_001:A1')]
+    journal support revised -> before: True | after: ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+    -> OK
+
+[A13] (RV-13) statement assurance is disclosed; missing line ids need an approved exception; a missing or quarantined prior statement cannot pass
+    no line ids -> {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED']}
+    workpaper discloses: {'line_identity': 'not_supplied', 'opening_continuity': 'no_prior_statement', 'statement_provenance': {'independent_verification': 'not_performed', 'provenance': 'manually_keyed', 'snapshot_id': 7, 'supplier': 'rv-preparer'}}
+    exception proposed only: ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED'] | approved: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []} | item still says line identity: not_supplied
+    October configured but no October statement on file: ['STATEMENT_PRIOR_PERIOD_MISSING']
+    late October revision quarantined: [('stmt-2026-10', 'LATE_ACTIVITY_IN_LOCKED_PERIOD')] | November opening 400.00 against the frozen 500.00: ['STATEMENT_OPENING_BALANCE_BREAK']
+    November opening 500.00 (positive control): {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} verified
+    -> OK
+
+[A14] (RV-14/RV-15) the rule record shows normalised aliases, collisions, status and effective end; own-row evidence is refused
+    proposed rule as the approver sees it: {'status': 'proposed', 'normalized_aliases': ['acme paper demo'], 'alias_collisions': [1], 'effective_end': '9999-12-31', 'approved_by': None} | Acme rule ids: [1]
+    confirm_vendor citing only the item's own row: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    confirm_vendor citing only another item's transaction row: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    -> OK
+
+[X01] (RV-01) a second supersession step does not release a charge that is still quarantined behind a locked origin
+    source exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    December A1Y (supersedes A1X, which supersedes locked A1): None | November A1: approve
+    heads now marked removed: ['demo_card_001:A1X', 'receipt-A1X'] | moves recorded: [('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1)]
+    -> OK
+
+[X12k] (RV-12) replacing a receipt under a new key is treated like revising it
+    receipt 39.99 against a 40.00 charge: ['RECEIPT_AMOUNT_POLICY_UNSET']
+    old receipt withdrawn, a new receipt key supplied at 40.00 -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    receipts relied on: [('receipt-A1-replacement', 1)] | revisions disclosed: [{'changed_fields': ['amount', 'content'], 'current': {'hash': 'b5dbd212d26eec3b1ce6b50dd25898850348fb78a4230bbeafa6bf4c49817f5f', 'snapshot_id': 10, 'source_key': 'receipt-A1-replacement', 'supplier': 'rv-preparer', 'version': 1}, 'earlier': {'hash': '5ae9fa6e335b78763c9506b47c3fae48f4ad226fcbb62a2d3075cab34c287ced', 'snapshot_id': 4, 'source_key': 'receipt-A1', 'supplier': 'rv-preparer', 'version': 1}, 'kind': 'replaced', 'source_key': 'receipt-A1-replacement', 'source_kind': 'receipt', 'supplier': 'rv-preparer'}, {'changed_fields': ['amount', 'content'], 'current': {'hash': 'b5dbd212d26eec3b1ce6b50dd25898850348fb78a4230bbeafa6bf4c49817f5f', 'snapshot_id': 10, 'source_key': 'receipt-A1-replacement', 'supplier': 'rv-preparer', 'version': 1}, 'earlier': {'hash': '5ae9fa6e335b78763c9506b47c3fae48f4ad226fcbb62a2d3075cab34c287ced', 'snapshot_id': 9, 'source_key': 'receipt-A1', 'supplier': 'rv-preparer', 'version': 2}, 'kind': 'replaced', 'source_key': 'receipt-A1-replacement', 'source_kind': 'receipt', 'supplier': 'rv-preparer'}]
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[X12s] (RV-12/RV-13) a statement re-supplied to agree with the population is disclosed as revised evidence
+    statement says purchases 90.00, population is 100.00: ['STATEMENT_CONTROL_MISMATCH']
+    preparer re-supplies the statement at 100.00 -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    statement version relied on: [('stmt-2026-11', 2)] | revisions disclosed on the item: [{'changed_fields': ['closing_balance', 'totals'], 'current': {'hash': '4efb075949c21456a83717c461fbb1e2b6dd9c7646ca66b78e0b44bbb76c9f7e', 'snapshot_id': 9, 'source_key': 'stmt-2026-11', 'supplier': 'rv-preparer', 'version': 2}, 'earlier': {'hash': '368e60584241b425c7b16c9205c92f50500c22a232148ebe3d36df1907a045cb', 'snapshot_id': 7, 'source_key': 'stmt-2026-11', 'supplier': 'rv-preparer', 'version': 1}, 'kind': 'revised', 'source_key': 'stmt-2026-11', 'source_kind': 'statement', 'supplier': 'rv-preparer'}] | workpaper fields: ['account_id', 'evidence', 'execution', 'external_reconciliation', 'line_identity', 'opening_continuity', 'prior_statement_acceptance', 'prior_statement_revisions', 'statement_provenance', 'statement_revisions', 'unreconciled_population']
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[X15] (RV-15) the supplier of a candidate receipt cited in a distinct-purchases decision cannot review the item it supports
+    D1 contributors: ['rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-reviewer-3', 'rv-worker']
+    supplier of the D2 receipt, which the D1 decision relies on, approves D1: ('refused', 403, 'Independent human review required')
+    uninvolved reviewer approves D1 (positive control): ('ok', None)
+    -> OK
+
+[U1] (UC-1) a mandate is not suspended merely because new evidence falls after a rule date that was already approved
+    no policy changed after approval; evidence dated 25 November arrived -> mandate: ('active', 1, None) | runs: [(1, 'prepared_with_exceptions')]
+    -> OK
+
+[U4] (UC-4) when a superseding source is itself removed, the charge it replaced does not vanish unseen
+    A1 superseded by A1N, then A1N voided -> governing items: ['demo_card_001:A2'] | removed items: ['demo_card_001:A1', 'demo_card_001:A1N']
+    remaining item A2 (statement still lists A1): ['STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']
+    -> NOTE
+
+[M1] (G0) teaching month, referral route: TX-009 keeps its 79.99 receipt and stays held; second client isolated
+    [refer] TX-009 as delivered: ['RECEIPT_AMOUNT_POLICY_UNSET'] | receipt amount 79.99
+    [refer] approved 10: ['J-001', 'J-002', 'TX-001', 'TX-002', 'TX-003', 'TX-004', 'TX-005', 'TX-006', 'TX-010', 'TX-012']
+    [refer] carried: [('TX-007', ['PENDING_TRANSACTION'], True), ('TX-009', ['RECEIPT_AMOUNT_POLICY_UNSET'], True), ('TX-011', ['CURRENCY_MISMATCH'], True)]
+    [refer] entry impact of approved items: {'DEMO_CARD_LIABILITY': '-211.00', 'DEMO_CASH': '-300.00', 'DEMO_OFFICE_SUPPLIES': '311.00', 'DEMO_REPAIRS': '200.00'} | nets to zero: True
+    [refer] finalize without acknowledgement: refused | packages: ['ok', 'ok'] | lock: ok | reviewer and finalizer outside every lineage: True
+    [refer] package carries ['TX-007', 'TX-009', 'TX-011'] | quarantined named ['demo_card_001:TX-008', 'receipt-TX-008'] | package authority: preparation_only_not_external_close
+    TX-009 receipt versions on file: 1 | amount: 79.99
+    second client reviewer decides a first-client artifact: ('refused', 404, 'Artifact not found in client scope')
+    first client reviewer decides a second-client artifact: ('refused', 404, 'Artifact not found in client scope')
+    second client preparer sends a first-client packet: ('refused', 403, 'Synthetic source scope mismatch')
+    first client finalizer finalizes for the second client: ('refused', 403, 'Human authority grant required: finalize')
+    second client December journal approved: ok | first client records unchanged and both audit chains verify: True
+    -> OK
+
+[M2] (G0) teaching month, acceptance route: the corrected TX-009 receipt is held, disclosed, accepted by a non-supplier, then reviewed
+    [accept] TX-009 as delivered: ['RECEIPT_AMOUNT_POLICY_UNSET'] | receipt amount 79.99
+    [accept] corrected receipt held and disclosed: version 1 by rv-preparer -> version 2 by rv-preparer-2
+    [accept] approved 11: ['J-001', 'J-002', 'TX-001', 'TX-002', 'TX-003', 'TX-004', 'TX-005', 'TX-006', 'TX-009', 'TX-010', 'TX-012']
+    [accept] carried: [('TX-007', ['PENDING_TRANSACTION'], True), ('TX-011', ['CURRENCY_MISMATCH'], True)]
+    [accept] entry impact of approved items: {'DEMO_CARD_LIABILITY': '-291.00', 'DEMO_CASH': '-300.00', 'DEMO_OFFICE_SUPPLIES': '391.00', 'DEMO_REPAIRS': '200.00'} | nets to zero: True
+    [accept] finalize without acknowledgement: refused | packages: ['ok', 'ok'] | lock: ok | reviewer and finalizer outside every lineage: True
+    [accept] package carries ['TX-007', 'TX-011'] | quarantined named ['demo_card_001:TX-008', 'receipt-TX-008'] | package authority: preparation_only_not_external_close
+    TX-009 approved artifact discloses revisions: [(1, 2, ['amount'])] | accepter in lineage: True | status: approve
+    -> OK
+
+====================================================================================================
+A04   RV-04        OK     a locked, finalized period is untouched by later intake; a genuinely changed receipt is still quarantined
+A01   RV-01        OK     new-key supersession out of a locked period, by envelope or by data, is quarantined until reopen and never double-approved
+A02   RV-02        OK     one origin, one owner: the conflict survives revision, re-citation and supersession of the cited source
+A06   RV-06        OK     untyped checklist entries are refused; labels do not satisfy reconciliation or tie-out lines
+A07   RV-07        OK     dispositions obey activity and account type; valid credit, settlement, transfer, fee and interest paths still work
+A08   RV-08/RV-15  OK     distinct purchases needs every candidate receipt, binds the exact candidate set, and lapses when a new candidate arrives
+A09   RV-09        OK     excluding a duplicate frees the surviving charge with full lineage; revocation restores both holds and the earlier rejection
+A10   RV-10        OK     a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not
+A11   RV-11        OK     freshness must be stated and well formed; explicit no-evidence authority is independently approved and audited
+A12   RV-12        OK     a revised receipt is disclosed and held; suppliers cannot accept it; acceptance lapses on a further change; referral never clears
+A13   RV-13        OK     statement assurance is disclosed; missing line ids need an approved exception; a missing or quarantined prior statement cannot pass
+A14   RV-14/RV-15  OK     the rule record shows normalised aliases, collisions, status and effective end; own-row evidence is refused
+X01   RV-01        OK     a second supersession step does not release a charge that is still quarantined behind a locked origin
+X12k  RV-12        OK     replacing a receipt under a new key is treated like revising it
+X12s  RV-12/RV-13  OK     a statement re-supplied to agree with the population is disclosed as revised evidence
+X15   RV-15        OK     the supplier of a candidate receipt cited in a distinct-purchases decision cannot review the item it supports
+U1    UC-1         OK     a mandate is not suspended merely because new evidence falls after a rule date that was already approved
+U4    UC-4         NOTE   when a superseding source is itself removed, the charge it replaced does not vanish unseen
+M1    G0           OK     teaching month, referral route: TX-009 keeps its 79.99 receipt and stays held; second client isolated
+M2    G0           OK     teaching month, acceptance route: the corrected TX-009 receipt is held, disclosed, accepted by a non-supplier, then reviewed
+
+Verdict counts: {'NOTE': 1, 'OK': 19}
+Acceptance gate: PASS
+python3 review/fable_rv_acceptance_probes.py .
+Fable RV acceptance probes | project root: run | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[A04] (RV-04) a locked, finalized period is untouched by later intake; a genuinely changed receipt is still quarantined
+    after three December packets -> source exceptions: [] | events: [] | new binding rows for November receipts: 0
+    November statuses: ['approve', 'approve'] | package unchanged: True
+    after a genuinely revised November receipt -> source exceptions: [('receipt-A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD')] | events: [('APPROVED_SOURCE_REVISED', 'demo_card_001:A1'), ('POST_FINALIZATION_CHANGE', 'package:1')] | A1: approve
+    -> OK
+
+[A03] (RV-03) removed and voided sources leave no governing item; exceptions are superseded; the package records the removal
+    before: {'P1': ['MISSING_RECEIPT', 'PENDING_TRANSACTION'], 'V1': ['MISSING_RECEIPT', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']}
+    finalize while P1 and V1 are held, no acknowledgement: ('refused', 409, 'Unreviewed/carried exceptions require acknowledgement')
+    governing P1/V1: None None | removed items: [('demo_card_001:P1', True), ('demo_card_001:V1', True)]
+    their exceptions: [('demo_card_001:P1', 'MISSING_RECEIPT', 'superseded'), ('demo_card_001:P1', 'PENDING_TRANSACTION', 'superseded'), ('demo_card_001:V1', 'MISSING_RECEIPT', 'superseded'), ('demo_card_001:V1', 'UNKNOWN_CATEGORY', 'superseded'), ('demo_card_001:V1', 'UNKNOWN_VENDOR', 'superseded')] | snapshot versions kept in history: 4
+    finalize after the removals, no acknowledgement needed: ('ok', 1)
+    package removed_items: ['demo_card_001:P1', 'demo_card_001:V1'] | items: ['demo_card_001:A1', 'demo_card_001:A2']
+    -> OK
+
+[A01] (RV-01) new-key supersession out of a locked period, by envelope or by data, is quarantined until reopen and never double-approved
+    [envelope] replay: True | exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [envelope] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')] | moves: [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 0)]
+    [envelope] while locked -> December A1X: None | November A1: approve | unrelated December D1 eligible: True
+    [envelope] after reopen -> November A1: None | removed from November: ['demo_card_001:A1'] | December A1X: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    [envelope] current governing artifacts for the charge: [('2026-12', 'demo_card_001:A1X', 'pending')] | A1 history kept: 1
+    [data] replay: True | exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [data] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')] | moves: [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 0)]
+    [data] while locked -> December A1X: None | November A1: approve | unrelated December D1 eligible: True
+    [data] after reopen -> November A1: None | removed from November: ['demo_card_001:A1'] | December A1X: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    [data] current governing artifacts for the charge: [('2026-12', 'demo_card_001:A1X', 'pending')] | A1 history kept: 1
+    supersedes an unknown key: {'id': 9, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    disposition on the unresolved transition: ('refused', 400, 'Unsupported disposition; this control cannot be overridden')
+    -> OK
+
+[A02] (RV-02) one origin, one owner: the conflict survives revision, re-citation and supersession of the cited source
+    journal cites the card source -> card: ['SOURCE_ALREADY_HAS_ENTRY'] | journal: ['SOURCE_ALREADY_HAS_ENTRY'] | uninvolved journal and card item eligible: True True
+    card source revised -> card: ['SOURCE_ALREADY_HAS_ENTRY'] | journal: ['ORIGIN_SOURCE_SUPERSEDED', 'SOURCE_ALREADY_HAS_ENTRY']
+    journal re-supplied against the current version -> card: ['SOURCE_ALREADY_HAS_ENTRY'] | journal: ['SOURCE_ALREADY_HAS_ENTRY']
+    card source superseded under a new key -> old item: None | new item: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_ALREADY_HAS_ENTRY', 'SOURCE_TRANSITION_REQUIRES_REVIEW'] | journal: ['ORIGIN_SOURCE_SUPERSEDED', 'SOURCE_ALREADY_HAS_ENTRY']
+    approvals attempted while in conflict: ['refused', 'refused'] | after the journal is withdrawn -> journal: None | card: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW']
+    -> OK
+
+[A05] (RV-05) a withdrawn mapping retires only on independent approval, from the effective date; history and reintroduction work
+    withdrawal only proposed -> November and December Metro eligible: (True, True) | Metro rule effective end: ['9999-12-31']
+    proposer approves own withdrawal: ('refused', 403, 'Profile proposer cannot approve')
+    approved, effective 1 December -> November M1: {'id': 3, 'eligible': True, 'status': 'pending', 'blockers': []} {'id': 'demo_metro', 'name': 'Metro Repair Demo'} | December M2: ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    retirements (rule, effective_to, approver): [(2, '2026-11-30', 'rv-policy-approver')] | rule record effective end: ['2026-11-30']
+    reintroduced from 15 December -> M2 (5 Dec): ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] | M3 (20 Dec): {'id': 21, 'eligible': True, 'status': 'pending', 'blockers': []} {'id': 'demo_metro', 'name': 'Metro Repair Demo'}
+    -> OK
+
+[A06] (RV-06) untyped checklist entries are refused; labels do not satisfy reconciliation or tie-out lines
+    profile with an untyped checklist entry: ('refused', 400, 'Close checklist requirements must be typed objects')
+    close_checklist rule with an untyped entry: ('refused', 400, 'Close checklist requirements must be typed objects')
+    shipped checklist with label-only documents: [('document', 'trial_balance', True), ('document', 'card_statement', True), ('reconciliation', 'bank_reconciliation', False), ('tieout', 'ap_tieout', False), ('tieout', 'ar_tieout', False)]
+    blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'MISSING_CLOSE_EVIDENCE']
+    -> OK
+
+[A07] (RV-07) dispositions obey activity and account type; valid credit, settlement, transfer, fee and interest paths still work
+    before: {'PAY': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'], 'FEE': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'], 'INT': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'], 'CR': ['CREDIT_REQUIRES_REVIEW', 'NON_EXPENSE_REQUIRES_REVIEW'], 'UNK': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'], 'TRF': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']}
+    refused? payment as standalone credit               ('refused', 400, 'Payments require settlement or referral')
+    refused? payment vendor confirmed to expense        ('refused', 400, 'Payments require settlement or referral')
+    refused? payment coded to expense                   ('refused', 400, 'Payments require settlement or referral')
+    refused? payment coded as fee                       ('refused', 400, 'Payments require settlement or referral')
+    refused? settlement against the liability itself    ('refused', 400, 'Active cash/clearing account required')
+    refused? settlement against an expense account      ('refused', 400, 'Active cash/clearing account required')
+    refused? fee coded to cash                          ('refused', 400, 'Active account required')
+    refused? fee coded to the liability                 ('refused', 400, 'Active account required')
+    refused? fee as settlement                          ('refused', 400, 'Settlement requires a payment source')
+    refused? fee as interest                            ('refused', 400, 'Interest treatment requires positive interest activity')
+    refused? interest as fee                            ('refused', 400, 'Fee treatment requires positive fee activity')
+    refused? credit to cash                             ('refused', 400, 'Active account required')
+    refused? unknown activity coded as fee              ('refused', 400, 'Unknown activity requires referral')
+    refused? unknown activity as credit                 ('refused', 400, 'Unknown activity requires referral')
+    refused? transfer as settlement                     ('refused', 400, 'Settlement requires a payment source')
+    refused? transfer against the liability             ('refused', 400, 'Active cash/clearing account required')
+    refused? unknown activity coded to cash             ('refused', 400, 'Unknown activity requires referral')
+    refused? purchase coded to cash                     ('refused', 400, 'Active account required')
+    refused? purchase coded to the card liability       ('refused', 400, 'Active account required')
+    refused? purchase vendor confirmed to cash          ('refused', 400, 'Active account required')
+    accepted: {'payment settled': 'ok', 'credit as standalone credit': 'ok', 'transfer': 'ok', 'fee': 'ok', 'fee vendor': 'ok', 'fee category': 'ok', 'interest': 'ok', 'interest vendor': 'ok', 'interest category': 'ok', 'unknown referred': 'ok', 'purchase vendor confirmed': 'ok', 'purchase coded to expense': 'ok'}
+    PAY  eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '300.00', '0.00'), ('DEMO_CASH', '0.00', '300.00')]
+    FEE  eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '0.00', '12.00'), ('DEMO_OFFICE_SUPPLIES', '12.00', '0.00')]
+    INT  eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '0.00', '3.00'), ('DEMO_OFFICE_SUPPLIES', '3.00', '0.00')]
+    CR   eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '42.50', '0.00'), ('DEMO_OFFICE_SUPPLIES', '0.00', '42.50')]
+    UNK  eligible=False blockers=['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] entry=None
+    TRF  eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '0.00', '100.00'), ('DEMO_CASH', '100.00', '0.00')]
+    UV   eligible=True  blockers=[] entry=[('DEMO_CARD_LIABILITY', '0.00', '8.00'), ('DEMO_OFFICE_SUPPLIES', '8.00', '0.00')]
+    independent approval of PAY, CR, TRF, FEE, INT, then the referred UNK: ['ok', 'ok', 'ok', 'ok', 'ok', 'refused']
+    -> OK
+
+[A08] (RV-08/RV-15) distinct purchases needs every candidate receipt, binds the exact candidate set, and lapses when a new candidate arrives
+    distinct purchases citing own row only: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    distinct purchases citing own row and own receipt, no candidate receipt: ('refused', 400, 'Distinct purchases requires supporting documents for the item and every candidate')
+    distinct purchases citing candidate receipt only: ('refused', 400, 'Distinct purchases requires supporting documents for the item and every candidate')
+    D1 after two supported decisions (no statement cited): {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []} | bound candidate set: ['demo_card_001:D2']
+    after a third identical charge -> D1: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'POSSIBLE_DUPLICATE']} | D2: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'POSSIBLE_DUPLICATE'] | D3: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'POSSIBLE_DUPLICATE']
+    -> OK
+
+[A09] (RV-09) excluding a duplicate frees the surviving charge with full lineage; revocation restores both holds and the earlier rejection
+    reject the held D1 artifact: ('ok', None)
+    D2 dispositioned as duplicate_of D1: ('ok', 1)
+    excluded D2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['DUPLICATE_EXCLUDED']} | entry: None
+    surviving D1: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []} | cites dispositions: [1] | contributors: ['rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-worker']
+    the person who excluded D2 approves D1: ('refused', 403, 'Independent human review required')
+    independent reviewer approves D1 (positive control): ('ok', None)
+    revoke the exclusion: ('ok', None)
+    after revocation -> D1: {'id': 2, 'eligible': False, 'status': 'reject', 'blockers': ['POSSIBLE_DUPLICATE']} | same artifact as the first, rejected one: True | current: True | D2: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['POSSIBLE_DUPLICATE']}
+    -> OK
+
+[A10] (RV-10) a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not
+    cosmetic re-proposal linked by supersedes: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    contributors without the supersedes link: ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    same cosmetic re-proposal with no supersedes link: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    version 1 had a different category: its author approves (should be allowed): ('ok', None)
+    identical receipt policy re-proposed by a colleague: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    -> OK
+
+[A11] (RV-11) freshness must be stated and well formed; explicit no-evidence authority is independently approved and audited
+    refused? empty                              ('refused', 400, 'Nonempty freshness predicate required')
+    refused? none with empty reason             ('refused', 400, 'Invalid explicit no-evidence reason')
+    refused? none with blank reason             ('refused', 400, 'Invalid explicit no-evidence reason')
+    refused? none mixed with a kind             ('refused', 400, 'No-evidence reason must be the sole freshness entry')
+    refused? kind the workflow does not read    ('refused', 400, 'Freshness kind is not read by these workflows')
+    refused? malformed cut-off                  ('refused', 400, 'Expected a timezone-aware ISO timestamp')
+    refused? not a mapping                      ('refused', 400, 'Explicit period_rule and freshness predicate required')
+    refused? a list                             ('refused', 400, 'Explicit period_rule and freshness predicate required')
+    issuer approves own no-evidence mandate: ('refused', 403, 'Mandate issuer cannot approve')
+    before approval -> runs: [] | approval audit records freshness: {'none': 'Fixed fictional evidence; demonstration authority only'} | after approval -> runs: [(1, 'awaiting_review')]
+    -> OK
+
+[A12] (RV-12) a revised receipt is disclosed and held; suppliers cannot accept it; acceptance lapses on a further change; referral never clears
+    refer the receipt mismatch externally: ('ok', 1)
+    after referral: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['RECEIPT_AMOUNT_POLICY_UNSET']}
+    receipt re-supplied by a colleague -> {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    disclosed revisions: [('receipt-A1', 1, 'rv-preparer', 2, 'rv-preparer-2', ['amount'])]
+    acceptance by supplier of version 1: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    acceptance by supplier of version 2: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    acceptance by reviewer without the disposition grant: ('refused', 403, 'Human authority grant required: disposition')
+    acceptance by acceptance that does not cite the revised receipt: ('refused', 400, 'Cite all revised supporting documents')
+    acceptance by a granted human who supplied neither version: ('ok', 2)
+    after acceptance: {'id': 17, 'eligible': True, 'status': 'pending', 'blockers': []} | revisions still disclosed: True
+    the accepter gives final review: ('refused', 403, 'Independent human review required')
+    independent final review: ('ok', None)
+    receipt changed again -> A1: {'id': 22, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} | events: [('APPROVED_SOURCE_REVISED', 'demo_card_001:A1')]
+    journal support revised -> before: True | after: ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+    -> OK
+
+[A13] (RV-13) statement assurance is disclosed; missing line ids need an approved exception; a missing or quarantined prior statement cannot pass
+    no line ids -> {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED']}
+    workpaper discloses: {'line_identity': 'not_supplied', 'opening_continuity': 'no_prior_statement', 'statement_provenance': {'independent_verification': 'not_performed', 'provenance': 'manually_keyed', 'snapshot_id': 7, 'supplier': 'rv-preparer'}}
+    exception proposed only: ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED'] | approved: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []} | item still says line identity: not_supplied
+    October configured but no October statement on file: ['STATEMENT_PRIOR_PERIOD_MISSING']
+    late October revision quarantined: [('stmt-2026-10', 'LATE_ACTIVITY_IN_LOCKED_PERIOD')] | November opening 400.00 against the frozen 500.00: ['STATEMENT_OPENING_BALANCE_BREAK']
+    November opening 500.00 (positive control): {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} verified
+    -> OK
+
+[A14] (RV-14/RV-15) the rule record shows normalised aliases, collisions, status and effective end; own-row evidence is refused
+    proposed rule as the approver sees it: {'status': 'proposed', 'normalized_aliases': ['acme paper demo'], 'alias_collisions': [1], 'effective_end': '9999-12-31', 'approved_by': None} | Acme rule ids: [1]
+    confirm_vendor citing only the item's own row: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    confirm_vendor citing only another item's transaction row: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    -> OK
+
+[A17] (RV-17) a second package names the one it replaces; one package governs; the first stays byte-identical; acknowledgement cannot clear stale work
+    finalize again while every item is stale, with acknowledgement: ('refused', 409, 'Stale/disputed items cannot be finalized')
+    packages (id, governing, supersedes in record, supersedes in frozen payload): [(1, False, None, None), (2, True, 1, 1)] | first package bytes unchanged: True
+    -> OK
+
+[X01] (RV-01) a second supersession step does not release a charge that is still quarantined behind a locked origin
+    source exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    December A1Y (supersedes A1X, which supersedes locked A1): None | November A1: approve
+    heads now marked removed: ['demo_card_001:A1X', 'receipt-A1X'] | moves recorded: [('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1)]
+    -> OK
+
+[X09] (RV-08/RV-09) an exclusion does not outlive the charge it pointed to, and two charges cannot both be excluded unseen
+    D2 was excluded as a duplicate of D1; D1 is then voided -> D2: {'id': 16, 'eligible': True, 'status': 'pending', 'blockers': []} | entry: [('DEMO_CARD_LIABILITY', '0.00', '90.00'), ('DEMO_OFFICE_SUPPLIES', '90.00', '0.00')]
+    each charge excluded as a duplicate of the other (ok, refused) -> D1: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []} | D2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['DUPLICATE_EXCLUDED']}
+    finalize without acknowledgement: ('refused', 409, 'Unreviewed/carried exceptions require acknowledgement')
+    -> OK
+
+[X12k] (RV-12) replacing a receipt under a new key is treated like revising it
+    receipt 39.99 against a 40.00 charge: ['RECEIPT_AMOUNT_POLICY_UNSET']
+    old receipt withdrawn, a new receipt key supplied at 40.00 -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    receipts relied on: [('receipt-A1-replacement', 1)] | revisions disclosed: [{'changed_fields': ['amount', 'content'], 'current': {'hash': 'b5dbd212d26eec3b1ce6b50dd25898850348fb78a4230bbeafa6bf4c49817f5f', 'snapshot_id': 10, 'source_key': 'receipt-A1-replacement', 'supplier': 'rv-preparer', 'version': 1}, 'earlier': {'hash': '5ae9fa6e335b78763c9506b47c3fae48f4ad226fcbb62a2d3075cab34c287ced', 'snapshot_id': 4, 'source_key': 'receipt-A1', 'supplier': 'rv-preparer', 'version': 1}, 'kind': 'replaced', 'source_key': 'receipt-A1-replacement', 'source_kind': 'receipt', 'supplier': 'rv-preparer'}, {'changed_fields': ['amount', 'content'], 'current': {'hash': 'b5dbd212d26eec3b1ce6b50dd25898850348fb78a4230bbeafa6bf4c49817f5f', 'snapshot_id': 10, 'source_key': 'receipt-A1-replacement', 'supplier': 'rv-preparer', 'version': 1}, 'earlier': {'hash': '5ae9fa6e335b78763c9506b47c3fae48f4ad226fcbb62a2d3075cab34c287ced', 'snapshot_id': 9, 'source_key': 'receipt-A1', 'supplier': 'rv-preparer', 'version': 2}, 'kind': 'replaced', 'source_key': 'receipt-A1-replacement', 'source_kind': 'receipt', 'supplier': 'rv-preparer'}]
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[X12s] (RV-12/RV-13) a statement re-supplied to agree with the population is disclosed as revised evidence
+    statement says purchases 90.00, population is 100.00: ['STATEMENT_CONTROL_MISMATCH']
+    preparer re-supplies the statement at 100.00 -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    statement version relied on: [('stmt-2026-11', 2)] | revisions disclosed on the item: [{'changed_fields': ['closing_balance', 'totals'], 'current': {'hash': '4efb075949c21456a83717c461fbb1e2b6dd9c7646ca66b78e0b44bbb76c9f7e', 'snapshot_id': 9, 'source_key': 'stmt-2026-11', 'supplier': 'rv-preparer', 'version': 2}, 'earlier': {'hash': '368e60584241b425c7b16c9205c92f50500c22a232148ebe3d36df1907a045cb', 'snapshot_id': 7, 'source_key': 'stmt-2026-11', 'supplier': 'rv-preparer', 'version': 1}, 'kind': 'revised', 'source_key': 'stmt-2026-11', 'source_kind': 'statement', 'supplier': 'rv-preparer'}] | workpaper fields: ['account_id', 'evidence', 'execution', 'external_reconciliation', 'line_identity', 'opening_continuity', 'prior_statement_acceptance', 'prior_statement_revisions', 'statement_provenance', 'statement_revisions', 'unreconciled_population']
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[X15] (RV-15) the supplier of a candidate receipt cited in a distinct-purchases decision cannot review the item it supports
+    D1 contributors: ['rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-reviewer-3', 'rv-worker']
+    supplier of the D2 receipt, which the D1 decision relies on, approves D1: ('refused', 403, 'Independent human review required')
+    uninvolved reviewer approves D1 (positive control): ('ok', None)
+    -> OK
+
+[U1] (UC-1) a mandate is not suspended merely because new evidence falls after a rule date that was already approved
+    no policy changed after approval; evidence dated 25 November arrived -> mandate: ('active', 1, None) | runs: [(1, 'prepared_with_exceptions')]
+    -> OK
+
+[U4] (UC-4) when a superseding source is itself removed, the charge it replaced does not vanish unseen
+    A1 superseded by A1N, then A1N voided -> governing items: ['demo_card_001:A2'] | removed items: ['demo_card_001:A1', 'demo_card_001:A1N']
+    remaining item A2 (statement still lists A1): ['STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']
+    -> NOTE
+
+[M1] (G0) teaching month, referral route: TX-009 keeps its 79.99 receipt and stays held; second client isolated
+    [refer] TX-009 as delivered: ['RECEIPT_AMOUNT_POLICY_UNSET'] | receipt amount 79.99
+    [refer] approved 10: ['J-001', 'J-002', 'TX-001', 'TX-002', 'TX-003', 'TX-004', 'TX-005', 'TX-006', 'TX-010', 'TX-012']
+    [refer] carried: [('TX-007', ['PENDING_TRANSACTION'], True), ('TX-009', ['RECEIPT_AMOUNT_POLICY_UNSET'], True), ('TX-011', ['CURRENCY_MISMATCH'], True)]
+    [refer] entry impact of approved items: {'DEMO_CARD_LIABILITY': '-211.00', 'DEMO_CASH': '-300.00', 'DEMO_OFFICE_SUPPLIES': '311.00', 'DEMO_REPAIRS': '200.00'} | nets to zero: True
+    [refer] finalize without acknowledgement: refused | packages: ['ok', 'ok'] | lock: ok | reviewer and finalizer outside every lineage: True
+    [refer] package carries ['TX-007', 'TX-009', 'TX-011'] | quarantined named ['demo_card_001:TX-008', 'receipt-TX-008'] | package authority: preparation_only_not_external_close
+    TX-009 receipt versions on file: 1 | amount: 79.99
+    second client reviewer decides a first-client artifact: ('refused', 404, 'Artifact not found in client scope')
+    first client reviewer decides a second-client artifact: ('refused', 404, 'Artifact not found in client scope')
+    second client preparer sends a first-client packet: ('refused', 403, 'Synthetic source scope mismatch')
+    first client finalizer finalizes for the second client: ('refused', 403, 'Human authority grant required: finalize')
+    second client December journal approved: ok | first client records unchanged and both audit chains verify: True
+    -> OK
+
+[M2] (G0) teaching month, acceptance route: the corrected TX-009 receipt is held, disclosed, accepted by a non-supplier, then reviewed
+    [accept] TX-009 as delivered: ['RECEIPT_AMOUNT_POLICY_UNSET'] | receipt amount 79.99
+    [accept] corrected receipt held and disclosed: version 1 by rv-preparer -> version 2 by rv-preparer-2
+    [accept] approved 11: ['J-001', 'J-002', 'TX-001', 'TX-002', 'TX-003', 'TX-004', 'TX-005', 'TX-006', 'TX-009', 'TX-010', 'TX-012']
+    [accept] carried: [('TX-007', ['PENDING_TRANSACTION'], True), ('TX-011', ['CURRENCY_MISMATCH'], True)]
+    [accept] entry impact of approved items: {'DEMO_CARD_LIABILITY': '-291.00', 'DEMO_CASH': '-300.00', 'DEMO_OFFICE_SUPPLIES': '391.00', 'DEMO_REPAIRS': '200.00'} | nets to zero: True
+    [accept] finalize without acknowledgement: refused | packages: ['ok', 'ok'] | lock: ok | reviewer and finalizer outside every lineage: True
+    [accept] package carries ['TX-007', 'TX-011'] | quarantined named ['demo_card_001:TX-008', 'receipt-TX-008'] | package authority: preparation_only_not_external_close
+    TX-009 approved artifact discloses revisions: [(1, 2, ['amount'])] | accepter in lineage: True | status: approve
+    -> OK
+
+====================================================================================================
+A04   RV-04        OK     a locked, finalized period is untouched by later intake; a genuinely changed receipt is still quarantined
+A03   RV-03        OK     removed and voided sources leave no governing item; exceptions are superseded; the package records the removal
+A01   RV-01        OK     new-key supersession out of a locked period, by envelope or by data, is quarantined until reopen and never double-approved
+A02   RV-02        OK     one origin, one owner: the conflict survives revision, re-citation and supersession of the cited source
+A05   RV-05        OK     a withdrawn mapping retires only on independent approval, from the effective date; history and reintroduction work
+A06   RV-06        OK     untyped checklist entries are refused; labels do not satisfy reconciliation or tie-out lines
+A07   RV-07        OK     dispositions obey activity and account type; valid credit, settlement, transfer, fee and interest paths still work
+A08   RV-08/RV-15  OK     distinct purchases needs every candidate receipt, binds the exact candidate set, and lapses when a new candidate arrives
+A09   RV-09        OK     excluding a duplicate frees the surviving charge with full lineage; revocation restores both holds and the earlier rejection
+A10   RV-10        OK     a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not
+A11   RV-11        OK     freshness must be stated and well formed; explicit no-evidence authority is independently approved and audited
+A12   RV-12        OK     a revised receipt is disclosed and held; suppliers cannot accept it; acceptance lapses on a further change; referral never clears
+A13   RV-13        OK     statement assurance is disclosed; missing line ids need an approved exception; a missing or quarantined prior statement cannot pass
+A14   RV-14/RV-15  OK     the rule record shows normalised aliases, collisions, status and effective end; own-row evidence is refused
+A17   RV-17        OK     a second package names the one it replaces; one package governs; the first stays byte-identical; acknowledgement cannot clear stale work
+X01   RV-01        OK     a second supersession step does not release a charge that is still quarantined behind a locked origin
+X09   RV-08/RV-09  OK     an exclusion does not outlive the charge it pointed to, and two charges cannot both be excluded unseen
+X12k  RV-12        OK     replacing a receipt under a new key is treated like revising it
+X12s  RV-12/RV-13  OK     a statement re-supplied to agree with the population is disclosed as revised evidence
+X15   RV-15        OK     the supplier of a candidate receipt cited in a distinct-purchases decision cannot review the item it supports
+U1    UC-1         OK     a mandate is not suspended merely because new evidence falls after a rule date that was already approved
+U4    UC-4         NOTE   when a superseding source is itself removed, the charge it replaced does not vanish unseen
+M1    G0           OK     teaching month, referral route: TX-009 keeps its 79.99 receipt and stays held; second client isolated
+M2    G0           OK     teaching month, acceptance route: the corrected TX-009 receipt is held, disclosed, accepted by a non-supplier, then reviewed
+
+Verdict counts: {'NOTE': 1, 'OK': 23}
+Acceptance gate: PASS

@@ -1,0 +1,56 @@
+G01 current register                                                                             want=ACCEPTED got=ACCEPTED ok  
+G02 tested record whose only evidence is an existing test file                                   want=ACCEPTED got=ACCEPTED ok  
+G03 tested record whose only evidence is a declared probe id (R01a)                              want=ACCEPTED got=ACCEPTED ok  
+G04 only evidence is a correction ticket (RC-01)                                                 want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: named test/probe evidence required (existing file or declared probe id)
+G05 only evidence is a probe-like token that no script declares (N99z)                           want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: named test/probe evidence required (existing file or declared probe id)
+G06 only evidence is a real file that is not a test (scripts/check.py)                           want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: named test/probe evidence required (existing file or declared probe id)
+G07 declared probe id glued inside another word (xR01ay)                                         want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: named test/probe evidence required (existing file or declared probe id)
+G08 failed record promoted to Independently verified with a real report, hash and probe          want=REJECTED got=REJECTED ok  ValueError: AAOS-BNK-03: independent Verification failed cannot be promoted by developer evidence
+G09 failed record promoted to Implemented                                                        want=REJECTED got=REJECTED ok  ValueError: AAOS-GOV-03: independent Verification failed cannot be promoted by developer evidence
+G10 failed record hidden as Not started                                                          want=REJECTED got=REJECTED ok  ValueError: AAOS-EXE-02: unconditional deferred/not-started dependency AAOS-CTL-04
+G11 another record self-asserted with the real RB report and the real V2 hash, no result entry   want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: independent review result entry required
+G12 verified record whose evidence drops the checkpoint hash                                     want=REJECTED got=REJECTED ok  ValueError: AAOS-KNO-04: independent review and checkpoint evidence required
+G13 results file names a report that does not exist                                              want=REJECTED got=REJECTED ok  ValueError: Independent report missing or outside project: AAOS-KNO-04
+G14 results file carries a report hash that differs from the report                              want=REJECTED got=REJECTED ok  ValueError: Independent report hash differs: AAOS-KNO-04
+G15 results file names a report outside the project                                              want=REJECTED got=REJECTED ok  ValueError: Independent report missing or outside project: AAOS-KNO-04
+G16 results file entry removed for a failed record, record then promoted                         want=REJECTED got=ACCEPTED GAP 
+G17 developer edits the results file as well: failed BNK-03 rewritten as verified in both places want=REJECTED got=ACCEPTED GAP 
+G18 developer adds a results entry for a record the cited report never assessed (ARC-02)         want=REJECTED got=ACCEPTED GAP 
+G19 Approved record with a bare Proposed dependency (INT-01 -> INT-07)                           want=REJECTED got=REJECTED ok  ValueError: AAOS-INT-01: unconditional Proposed dependency AAOS-INT-07
+G20 condition written before the id (if ratified AAOS-INT-07)                                    want=REJECTED got=REJECTED ok  ValueError: AAOS-INT-01: unconditional Proposed dependency AAOS-INT-07
+G21 condition belongs to the next id in the clause (AAOS-INT-07, AAOS-KNO-03 if ratified)        want=REJECTED got=REJECTED ok  ValueError: AAOS-INT-01: unconditional Proposed dependency AAOS-INT-07
+G22 a Proposed record made Approved by the developer keeps the check quiet (ONB-01)              want=ACCEPTED got=ACCEPTED ok  
+G23 tested record with a bare Not started dependency (GOV-02 -> GOV-01)                          want=REJECTED got=REJECTED ok  ValueError: AAOS-GOV-02: unconditional deferred/not-started dependency AAOS-GOV-01
+G24 the word only after the id is not a condition (AAOS-GOV-01 only)                             want=REJECTED got=REJECTED ok  ValueError: AAOS-GOV-02: unconditional deferred/not-started dependency AAOS-GOV-01
+G25 verified record with a bare Deferred dependency (CTL-01 -> CTL-03)                           want=REJECTED got=REJECTED ok  ValueError: AAOS-CTL-01: unconditional deferred/not-started dependency AAOS-CTL-03
+G26 EXC-03 scope note prefix changed to Rejected scope.                                          want=REJECTED got=REJECTED ok  ValueError: AAOS-EXC-03: scope table disposition differs from scope note
+G27 EXC-01 scope note without the fixed prefix                                                   want=REJECTED got=REJECTED ok  ValueError: AAOS-EXC-01: fixed scope disposition prefix required
+G28 EXC-01 decision changed to Approved while the note says Rejected scope                       want=REJECTED got=REJECTED ok  ValueError: AAOS-EXC-01: product decision conflicts with scope disposition
+G29 EXC-01 table row changed to Reserved                                                         want=REJECTED got=REJECTED ok  ValueError: AAOS-EXC-01: scope table disposition differs from scope note
+G30 EXC-04 table row removed                                                                     want=REJECTED got=REJECTED ok  ValueError: AAOS-EXC-04: scope table disposition differs from scope note
+G31 ". ;" in a Dependencies field                                                                want=REJECTED got=REJECTED ok  ValueError: AAOS-BNK-02: stray dependency punctuation
+G32 ".;" in a Dependencies field                                                                 want=REJECTED got=REJECTED ok  ValueError: AAOS-BNK-02: stray dependency punctuation
+G33 first-client person (Jeff) in a shared Business purpose                                      want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-01: client-specific fact in shared Business purpose
+G34 first-client vendor in a shared Scope note                                                   want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-01: client-specific fact in shared Scope note
+G35 first-client name written BirdBowl in a shared Needed-for-adjacent field (Target stage)      want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-01: client-specific fact in shared Target stage
+G36 first-client name written bird_bowl in a shared Evidence field                               want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-01: client-specific fact in shared Evidence
+G37 first-client name in a shared record title                                                   want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-01: client-specific fact in shared title
+G38 first-client person in a shared Trace field (Trace is exempt)                                want=ACCEPTED got=ACCEPTED ok  
+G39 first-client name in an allowed boundary record (GOV-01 Scope note)                          want=ACCEPTED got=ACCEPTED ok  
+G40 a term newly added to the client section is accepted in the client section                   want=ACCEPTED got=ACCEPTED ok  
+G41 ... and is then rejected in a shared record (list is read, not hard-coded)                   want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-01: client-specific fact in shared Description
+G42 a term added to the client list that no client record uses                                   want=REJECTED got=REJECTED ok  ValueError: Client-specific term missing from client records
+G43 the client-specific terms line removed                                                       want=REJECTED got=REJECTED ok  ValueError: Client section requires one client-specific terms list
+G44 the client name removed from the terms list while client records still use it                want=REJECTED got=ACCEPTED GAP 
+cases 44 | agree 40 | gaps 4
+make check | unchanged disposable copy                                              want=PASS got=PASS
+make check | client name appended to accounting_agent/web/index.html                want=FAIL got=FAIL ok  | make: *** [check] Error 1
+make check | client name appended to accounting_agent/web/style.css                 want=FAIL got=FAIL ok  | make: *** [check] Error 1
+make check | client person (Theresa) appended to accounting_agent/web/app.js        want=FAIL got=FAIL ok  | make: *** [check] Error 1
+make check | client vendor (Expensify) appended to accounting_agent/modules.py      want=FAIL got=FAIL ok  | make: *** [check] Error 1
+make check | client name in a new nested file accounting_agent/web/sub/x.js         want=FAIL got=FAIL ok  | make: *** [check] Error 1
+make check | client name in a new file accounting_agent/config/x.json (exempt)      want=PASS got=PASS ok  | PASS: shared application/web files contain no client-specific names/choices from the client section; demo/config/fixtures remain i
+make check | client name in a new file accounting_agent/fixtures/x.json (exempt)    want=PASS got=PASS ok  | PASS: shared application/web files contain no client-specific names/choices from the client section; demo/config/fixtures remain i
+make check | client name appended to accounting_agent/demo.py (exempt)              want=PASS got=PASS ok  | PASS: shared application/web files contain no client-specific names/choices from the client section; demo/config/fixtures remain i
+make check | neutral text appended to accounting_agent/web/app.js                   want=PASS got=PASS ok  | PASS: shared application/web files contain no client-specific names/choices from the client section; demo/config/fixtures remain i
+make check gaps 0
