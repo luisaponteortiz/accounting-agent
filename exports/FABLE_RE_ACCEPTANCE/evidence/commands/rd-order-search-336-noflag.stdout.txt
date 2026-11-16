@@ -1,0 +1,344 @@
+X+Yp+Yc+Yr+Z X Yp Yc Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yp Yc Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yp Yr Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yp Yr Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yp Z Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yp Z Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Yp Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Yp Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Yr Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Yr Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Z Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Z Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Yp Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Yp Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Yc Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Yc Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Z Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Z Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yp Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yp Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yc Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yc Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yr Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yr Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Yc Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Yc Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Yr Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Yr Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Z Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Z Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc X Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc X Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc Yr X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc Yr Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc Z X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc Z Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr X Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr X Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr Yc X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr Yc Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr Z X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr Z Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z X Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z X Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z Yc X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z Yc Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z Yr X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z Yr Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Yp Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Yp Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Yr Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Yr Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Z Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Z Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp X Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp X Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp Yr X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp Yr Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp Z X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp Z Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr X Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr X Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr Yp X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr Yp Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr Z X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr Z Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z X Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z X Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z Yp X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z Yp Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z Yr X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z Yr Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Yp Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Yp Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Yc Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Yc Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Z Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Z Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp X Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp X Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp Yc X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp Yc Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp Z X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp Z Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc X Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc X Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc Yp X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc Yp Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc Z X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc Z Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z X Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z X Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z Yp X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z Yp Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z Yc X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z Yc Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yp Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yp Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yc Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yc Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yr Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yr Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp X Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp X Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp Yc X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp Yc Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp Yr X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp Yr Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc X Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc X Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc Yp X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc Yp Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc Yr X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc Yr Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr X Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr X Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr Yp X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr Yp Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr Yc X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr Yc Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp Yc Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp Yc V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp Z Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp Z V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp V Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp V Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc Yp Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc Yp V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc Z Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc Z V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc V Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc V Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z Yp Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z Yp V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z Yc Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z Yc V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z V Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z V Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Yp Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Yp Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Yc Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Yc Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Z Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Z Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X Yc Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X Yc V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X Z Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X Z V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X V Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X V Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc X Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc X V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc Z X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc Z V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc V X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc V Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z X Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z X V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z Yc X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z Yc V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z V X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z V Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V X Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V X Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V Yc X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V Yc Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V Z X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V Z Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X Yp Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X Yp V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X Z Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X Z V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X V Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X V Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp X Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp X V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp Z X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp Z V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp V X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp V Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z X Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z X V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z Yp X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z Yp V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z V X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z V Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V X Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V X Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V Yp X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V Yp Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V Z X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V Z Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X Yp Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X Yp V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X Yc Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X Yc V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X V Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X V Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp X Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp X V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp Yc X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp Yc V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp V X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp V Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc X Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc X V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc Yp X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc Yp V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc V X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc V Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V X Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V X Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V Yp X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V Yp Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V Yc X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V Yc Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Yp Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Yp Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Yc Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Yc Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Z Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Z Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp X Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp X Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp Yc X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp Yc Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp Z X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp Z Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc X Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc X Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc Yp X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc Yp Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc Z X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc Z Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z X Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z X Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z Yp X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z Yp Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z Yc X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z Yc Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+B+Yb+Yc    X B Yb Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    X B Yc Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    X Yb B Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    X Yb Yc B        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    X Yc B Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    X Yc Yb B        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    B X Yb Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    B X Yc Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    B Yb X Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    B Yb Yc X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    B Yc X Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    B Yc Yb X        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yb X B Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yb X Yc B        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yb B X Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yb B Yc X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yb Yc X B        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yb Yc B X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yc X B Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yc X Yb B        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yc B X Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yc B Yb X        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yc Yb X B        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yc Yb B X        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Y5+Y4c+Z   X Y5 Y4c Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   X Y5 Z Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   X Y4c Y5 Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   X Y4c Z Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   X Z Y5 Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   X Z Y4c Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 X Y4c Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 X Z Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 Y4c X Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 Y4c Z X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 Z X Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 Z Y4c X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c X Y5 Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c X Z Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c Y5 X Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c Y5 Z X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c Z X Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c Z Y5 X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z X Y5 Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z X Y4c Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z Y5 X Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z Y5 Y4c X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z Y4c X Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z Y4c Y5 X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Yp   X Yc Yt Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   X Yc Yp Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   X Yt Yc Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   X Yt Yp Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   X Yp Yc Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   X Yp Yt Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yc X Yt Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yc X Yp Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yc Yt X Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yc Yt Yp X       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yc Yp X Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yc Yp Yt X       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yt X Yc Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yt X Yp Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yt Yc X Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yt Yc Yp X       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yt Yp X Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yt Yp Yc X       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yp X Yc Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yp X Yt Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yp Yc X Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yp Yc Yt X       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yp Yt X Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yp Yt Yc X       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Z    X Yc Yt Z        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    X Yc Z Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    X Yt Yc Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    X Yt Z Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    X Z Yc Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    X Z Yt Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc X Yt Z        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc X Z Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc Yt X Z        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc Yt Z X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc Z X Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc Z Yt X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt X Yc Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt X Z Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt Yc X Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt Yc Z X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt Z X Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt Z Yc X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z X Yc Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z X Yt Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z Yc X Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z Yc Yt X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z Yt X Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z Yt Yc X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+
+SUMMARY runs=336 double=0 finalized_silently=0
+  X+Yp+Yc+Yr+Z   double in 0 of 120 orders
+  X+Yp+Yc+Z+V    double in 0 of 120 orders
+  X+B+Yb+Yc      double in 0 of 24 orders
+  X+Y5+Y4c+Z     double in 0 of 24 orders
+  X+Yc+Yt+Yp     double in 0 of 24 orders
+  X+Yc+Yt+Z      double in 0 of 24 orders

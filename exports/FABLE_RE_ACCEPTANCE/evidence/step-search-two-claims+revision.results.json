@@ -1,0 +1,8817 @@
+{
+ "runs": 120,
+ "double": 0,
+ "released": 0,
+ "results": [
+  {
+   "order": [
+    "P",
+    "B",
+    "QcB",
+    "QcP",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "B",
+    "QcB",
+    "Qr",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "B",
+    "QcP",
+    "QcB",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "B",
+    "QcP",
+    "Qr",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "B",
+    "Qr",
+    "QcB",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "B",
+    "Qr",
+    "QcP",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcB",
+    "B",
+    "QcP",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcB",
+    "B",
+    "Qr",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcB",
+    "QcP",
+    "B",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcB",
+    "QcP",
+    "Qr",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcB",
+    "Qr",
+    "B",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcB",
+    "Qr",
+    "QcP",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcP",
+    "B",
+    "QcB",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcP",
+    "B",
+    "Qr",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcP",
+    "QcB",
+    "B",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcP",
+    "QcB",
+    "Qr",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcP",
+    "Qr",
+    "B",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "QcP",
+    "Qr",
+    "QcB",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "Qr",
+    "B",
+    "QcB",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "Qr",
+    "B",
+    "QcP",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "Qr",
+    "QcB",
+    "B",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "Qr",
+    "QcB",
+    "QcP",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "Qr",
+    "QcP",
+    "B",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "P",
+    "Qr",
+    "QcP",
+    "QcB",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "P",
+    "QcB",
+    "QcP",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "P",
+    "QcB",
+    "Qr",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "P",
+    "QcP",
+    "QcB",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "P",
+    "QcP",
+    "Qr",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "P",
+    "Qr",
+    "QcB",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "P",
+    "Qr",
+    "QcP",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcB",
+    "P",
+    "QcP",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcB",
+    "P",
+    "Qr",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcB",
+    "QcP",
+    "P",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcB",
+    "QcP",
+    "Qr",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcB",
+    "Qr",
+    "P",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcB",
+    "Qr",
+    "QcP",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcP",
+    "P",
+    "QcB",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcP",
+    "P",
+    "Qr",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcP",
+    "QcB",
+    "P",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcP",
+    "QcB",
+    "Qr",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcP",
+    "Qr",
+    "P",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "QcP",
+    "Qr",
+    "QcB",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "Qr",
+    "P",
+    "QcB",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "Qr",
+    "P",
+    "QcP",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "Qr",
+    "QcB",
+    "P",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "Qr",
+    "QcB",
+    "QcP",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "Qr",
+    "QcP",
+    "P",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "B",
+    "Qr",
+    "QcP",
+    "QcB",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "P",
+    "B",
+    "QcP",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "P",
+    "B",
+    "Qr",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "P",
+    "QcP",
+    "B",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "P",
+    "QcP",
+    "Qr",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "P",
+    "Qr",
+    "B",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "P",
+    "Qr",
+    "QcP",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "B",
+    "P",
+    "QcP",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "B",
+    "P",
+    "Qr",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "B",
+    "QcP",
+    "P",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "B",
+    "QcP",
+    "Qr",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "B",
+    "Qr",
+    "P",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "B",
+    "Qr",
+    "QcP",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "QcP",
+    "P",
+    "B",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "QcP",
+    "P",
+    "Qr",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "QcP",
+    "B",
+    "P",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "QcP",
+    "B",
+    "Qr",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "QcP",
+    "Qr",
+    "P",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "QcP",
+    "Qr",
+    "B",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "Qr",
+    "P",
+    "B",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "Qr",
+    "P",
+    "QcP",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "Qr",
+    "B",
+    "P",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "Qr",
+    "B",
+    "QcP",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "Qr",
+    "QcP",
+    "P",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcB",
+    "Qr",
+    "QcP",
+    "B",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "P",
+    "B",
+    "QcB",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "P",
+    "B",
+    "Qr",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "P",
+    "QcB",
+    "B",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "P",
+    "QcB",
+    "Qr",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "P",
+    "Qr",
+    "B",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "P",
+    "Qr",
+    "QcB",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "B",
+    "P",
+    "QcB",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "B",
+    "P",
+    "Qr",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "B",
+    "QcB",
+    "P",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "B",
+    "QcB",
+    "Qr",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "B",
+    "Qr",
+    "P",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "B",
+    "Qr",
+    "QcB",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "QcB",
+    "P",
+    "B",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "QcB",
+    "P",
+    "Qr",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "QcB",
+    "B",
+    "P",
+    "Qr"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "QcB",
+    "B",
+    "Qr",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "QcB",
+    "Qr",
+    "P",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "QcB",
+    "Qr",
+    "B",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "Qr",
+    "P",
+    "B",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "Qr",
+    "P",
+    "QcB",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "Qr",
+    "B",
+    "P",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "Qr",
+    "B",
+    "QcB",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "Qr",
+    "QcB",
+    "P",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "QcP",
+    "Qr",
+    "QcB",
+    "B",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "P",
+    "B",
+    "QcB",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "P",
+    "B",
+    "QcP",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "P",
+    "QcB",
+    "B",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "P",
+    "QcB",
+    "QcP",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "P",
+    "QcP",
+    "B",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "P",
+    "QcP",
+    "QcB",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "B",
+    "P",
+    "QcB",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "B",
+    "P",
+    "QcP",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "B",
+    "QcB",
+    "P",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "B",
+    "QcB",
+    "QcP",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "B",
+    "QcP",
+    "P",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "B",
+    "QcP",
+    "QcB",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcB",
+    "P",
+    "B",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcB",
+    "P",
+    "QcP",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcB",
+    "B",
+    "P",
+    "QcP"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcB",
+    "B",
+    "QcP",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcB",
+    "QcP",
+    "P",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcB",
+    "QcP",
+    "B",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B"
+     ]
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": [
+    "SOURCE_CLAIM_CONFLICT"
+   ],
+   "final_held": [
+    "demo_card_001:P",
+    "receipt-P"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcP",
+    "P",
+    "B",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcP",
+    "P",
+    "QcB",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcP",
+    "B",
+    "P",
+    "QcB"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcP",
+    "B",
+    "QcB",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcP",
+    "QcB",
+    "P",
+    "B"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  },
+  {
+   "order": [
+    "Qr",
+    "QcP",
+    "QcB",
+    "B",
+    "P"
+   ],
+   "double_at_steps": [],
+   "approved_before_target_known_at_steps": [],
+   "released_at_steps": [],
+   "trail": [
+    {
+     "step": "Qr",
+     "intake": "ok",
+     "december_approved": [
+      "Q"
+     ],
+     "held": [],
+     "declared": []
+    },
+    {
+     "step": "QcP",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "P"
+     ]
+    },
+    {
+     "step": "QcB",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "B",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [],
+     "declared": [
+      "B",
+      "P"
+     ]
+    },
+    {
+     "step": "P",
+     "intake": "ok",
+     "december_approved": [],
+     "held": [
+      "demo_card_001:Q",
+      "receipt-Q"
+     ],
+     "declared": [
+      "B",
+      "P"
+     ]
+    }
+   ],
+   "final_Q_blockers": null,
+   "final_held": [
+    "demo_card_001:P",
+    "demo_card_001:Q",
+    "receipt-P",
+    "receipt-Q"
+   ],
+   "audit_ok": true,
+   "family": "two-claims+revision"
+  }
+ ]
+}

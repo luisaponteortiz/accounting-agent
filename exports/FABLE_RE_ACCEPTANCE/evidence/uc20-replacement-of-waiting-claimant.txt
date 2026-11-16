@@ -1,0 +1,14 @@
+Q claims unknown P; Z replaces Q. Z before any disposition: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | Q: None
+    settlement_verified on Z: ('ok', 1)
+    independent approval of Z: ('ok', None)
+after settlement_verified + independent review: Z {'id': 11, 'eligible': True, 'status': 'approve', 'blockers': []}
+finalize December: ('ok', 1)
+P (replacing locked A1) arrives -> Z approved now: False | held: ['demo_card_001:P', 'demo_card_001:Z', 'receipt-P', 'receipt-Z']
+
+--- same script on the RD checkpoint source ---
+Q claims unknown P; Z replaces Q. Z before any disposition: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | Q: None
+    settlement_verified on Z: ('ok', 1)
+    independent approval of Z: ('ok', None)
+after settlement_verified + independent review: Z {'id': 11, 'eligible': True, 'status': 'approve', 'blockers': []}
+finalize December: ('ok', 1)
+P (replacing locked A1) arrives -> Z approved now: False | held: ['demo_card_001:P', 'demo_card_001:Z', 'receipt-P', 'receipt-Z']

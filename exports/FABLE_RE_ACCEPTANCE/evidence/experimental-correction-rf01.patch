@@ -1,0 +1,10 @@
+--- a/accounting_agent/feed_contract.py	2026-11-16 15:33:42
++++ b/accounting_agent/feed_contract.py	2026-11-16 16:12:27
+@@ -82,6 +82,7 @@
+             retained=db.execute('SELECT s.id FROM snapshots s JOIN source_metadata m ON m.snapshot_id=s.id WHERE s.scope=? AND s.kind=? AND s.source_key=? AND s.hash=? AND m.order_type=? AND m.as_of=? AND m.tombstone=? ORDER BY s.id DESC LIMIT 1',(actor.scope,kind,key,digest(value),order_type,order_value,int(removed))).fetchone()
+             if retained:
+                 changed=self.record_card_claim(db,actor,key,target,old['id'],retained['id']) if target else False
++                if changed and not state:self.apply_first_card_claim(db,actor,key,old['id'],target,predecessor,packet)
+                 return old['id'],changed
+         force=bool(old and (not same_order or not same_row or target and not state))
+         sid,is_new=self.store.snapshot(db,actor.scope,kind,key,value,actor.id,force_version=force)

@@ -1,0 +1,1 @@
+{"label":"rd-probes-12","cwd":"/tmp/fre/run1","argv":"python3 exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py . Y01 Y02 Y03 Y04 Y06 E01 E02 E03 E03c E04 E05 E06","started_utc":"2026-11-16T20:54:54Z","elapsed_seconds":17,"exit_code":0}

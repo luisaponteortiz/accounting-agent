@@ -1,0 +1,121 @@
+{
+  "title": "Corrective tickets from Fable's independent verification of RE-01 to RE-03 and PRV-14/PRV-15",
+  "date": "2026-11-16",
+  "reviewed_bundle": "exports/FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "reviewed_bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
+  "authority": "D-026 (owner feed contract) with D-029 (owner clarification: preserve frozen approval; block new version)",
+  "scope_of_every_conclusion": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close, readiness, human G0, G1-G4 or Batch 3 authority.",
+  "tickets": [
+    {
+      "id": "RF-01",
+      "priority": "P1",
+      "contract_clause": "2 (and, as a consequence, 4 and the contract's promise)",
+      "ticket_reopened": "RE-01",
+      "title": "A claim on an older message that repeats an already retained message is recorded but never applied",
+      "source": "accounting_agent/feed_contract.py, card_source_revision, the branch `if old and not accepted:` / `if retained:` (lines 81-85). It calls record_card_claim and returns; the sibling branch four lines below (a NEW retained message, lines 90-94) also calls apply_first_card_claim when the row had no claim. resolve_pending_supersessions only visits identities that have a SOURCE_SUPERSESSION_UNRESOLVED event, so nothing applies the claim later.",
+      "trigger": "The provider's older message for a row is on file as retained evidence without a claim, and the same message (same row data, same order value) is delivered again carrying the top-level `supersedes` field. The field is outside the row data, so the message matches the retained snapshot.",
+      "minimal_reproduction": [
+        "approved_locked_november(): A1 approved in November, November locked, December open",
+        "intake P = replaces A1 (2026-12-02) with its receipt -> P held under November",
+        "intake Q (2026-12-03, as_of 7) with its receipt",
+        "intake Q as_of 6, same data, no claim -> retained, changed False",
+        "intake Q as_of 6, same data, supersedes = P -> changed True; SOURCE_CLAIM_DECLARED recorded; no link, no SOURCE_SUPERSESSION_UNRESOLVED event",
+        "intake Z = replaces Q (2026-12-05) with its receipt and a tying December statement; prepare December",
+        "settlement_verified on Z; an independent reviewer approves Z; finalize December without acknowledgement"
+      ],
+      "actual": "Z is approved in open December and December finalizes without acknowledgement, while A1 is approved in locked November. links = [A1->P, Q->Z]; held under November = P and its receipt only. The same end state is reached when Z was approved before the claim arrived: its approval keeps governing. Without Z the state is safe but stuck: Q sits in December with SOURCE_TRANSITION_UNRESOLVED although its target is on file, it never links, and a target selection is refused ('Declared contested source target required').",
+      "expected": "Clause 2: 'If the row has no claim yet, the claim applies as if it had arrived in order.' The link P->Q is made (or the claim waits as unresolved and links when P arrives), Q, Z and their receipts are held under locked November, and any earlier December approval of Q or Z stops governing at once.",
+      "evidence": {
+        "probes": "fable_re_acceptance_probes.py C2d (4 variants) and C2f (2 variants + control): WEAK",
+        "search": "fable_re_step_search.py, family older-resent-with-claim (P, Q7, Q6, Q6cP, Z): see evidence/step-search-older-resent-with-claim.stdout.txt",
+        "control": "The same late claim carried inside the row data (supersedes_source_id) is a different message and is applied: Q and Z are held (C2f control). The first delivery of an older claim message is applied (C2a, 16 variants; supplied E03; supplied family X+Y5+Y4c+Z)."
+      },
+      "worked_reference": "evidence/experimental-correction-rf01.patch: one added line in the `if retained:` branch, `if changed and not state:self.apply_first_card_claim(db,actor,key,old['id'],target,predecessor,packet)`. A reference only, tested on a disposable copy; results under evidence/experiment/.",
+      "acceptance": [
+        "C2d and C2f report OK, unmodified",
+        "fable_re_step_search.py reports 480 runs, 0 double, 0 released, exit 0, unmodified",
+        "the 12 supplied RD probes, the adapted Y05, the 336-order search and every retained gate still pass",
+        "own unit tests: known and unknown target, eligible and approved row, with and without a live descendant, the older message delivered without the claim first"
+      ],
+      "also_consider": "An invariant check that no card identity has a declared first claim whose target is on file and no link. resolve_pending_supersessions reads SOURCE_SUPERSESSION_UNRESOLVED events only, while card_claim_state also reads SOURCE_CLAIM_DECLARED; the two lists of 'who has a pending claim' can differ."
+    },
+    {
+      "id": "RF-02",
+      "priority": "P3",
+      "contract_clause": "9 (review independence of the person who dispositions)",
+      "ticket_reopened": "none; neighbouring case of RE-03",
+      "title": "The person whose selection created the governing link can approve the row after another person records a confirming selection",
+      "source": "accounting_agent/feed_contract.py, card_target_selections: only the latest target selection of an identity is returned (`state['disposition_id']==row['id']`), so an earlier selector drops out of the contributors.",
+      "minimal_reproduction": [
+        "Q (December) first claims B, then B2; both open rows on file",
+        "DR (disposition + review) selects B2: link B2->Q is created by that decision; DR is a contributor",
+        "DR2 (disposition + review) records a second selection of B2 (accepted; nothing moves)",
+        "settlement_verified, prepare; DR2 is refused as reviewer; DR approves Q: accepted"
+      ],
+      "actual": "DR approves the artifact that depends on the link DR's own decision created.",
+      "expected": "Every person whose recorded selection stands behind the governing link remains a contributor of the row and of its live descendants.",
+      "why_p3": "It needs a second person with disposition authority, nothing is approved twice, both records are kept, and it mirrors the existing rule that the latest disposition per item and code is the active one. The owner may prefer to accept it as policy; if so, say so in DECISIONS.md.",
+      "evidence": {
+        "probes": "fable_re_acceptance_probes.py C9h: NOTE"
+      },
+      "acceptance": [
+        "C9h reports OK, or the owner records the behaviour as accepted policy"
+      ]
+    },
+    {
+      "id": "RF-03",
+      "priority": "P3",
+      "contract_clause": "none; completion criterion 'make test passes'",
+      "title": "make test is timing-marginal: the unchanged HTTP class setup deadline expires in two of three full runs",
+      "source": "tests/test_http.py (unchanged, may not be edited by the developer): five-second deadline for the background worker in setUpClass. The cost is in building the preparation context, which now also computes card claim conflicts and target selections (accounting_agent/service.py context; accounting_agent/feed_contract.py card_claim_conflicts, card_target_selections).",
+      "actual": "Three unmodified full runs on clean copies: exit 2 (216 OK, setup error, 11 HTTP methods not run), exit 2 (same, machine otherwise idle), exit 0 (227 OK). Diagnostic copy with only the deadline widened: 227 OK, setup needed 4.84 s. Outside the suite the setup needs about 3.8-5.2 s on the RD source and 4.5-6.5 s on this source.",
+      "expected": "make test passes on every run with a clear margin.",
+      "evidence": {
+        "commands": [
+          "evidence/commands/make-test.*",
+          "evidence/commands/make-test-rerun-alone.*",
+          "evidence/commands/make-test-third-run.*",
+          "evidence/commands/diagnostic-make-test-widened-http-deadline.*"
+        ],
+        "timing": "evidence/http-setup-timing.txt",
+        "isolated": "evidence/http-isolated-*.txt, evidence/feed-plus-http-*.txt (all pass)"
+      },
+      "acceptance": [
+        "Five consecutive unmodified `make test` runs pass 227 on this machine, or the owner authorizes a wider deadline in tests/test_http.py and says so in DECISIONS.md",
+        "the setup time inside the full suite is reported"
+      ],
+      "note": "In one of ten timings on this source, under load, the worker stopped and the setup never finished. Not reproduced and not attributed; accounting_agent/http.py is unchanged from the RD checkpoint."
+    }
+  ],
+  "observations_for_the_owner": [
+    {
+      "id": "UC-17",
+      "probe": "C9c",
+      "observation": "When a person selects the second target, the first target that the automatic first claim had already retired stays retired. It has no December artifact; it is listed under removed_items. Whether it should be restored is the same kind of question as U4 and is outside D-026."
+    },
+    {
+      "id": "UC-18",
+      "probe": "C9g",
+      "observation": "An exact replay of a claim batch (same batch id, same bytes) by another person leaves no delivery record of that person (clause 5: an exact replay adds nothing), so that person is not treated as a supplier and may record the target selection. A re-send in a new envelope is recorded and is refused (C9a)."
+    },
+    {
+      "id": "UC-20",
+      "probe": "fable_re_step_search.py (approved_before_target_known) and evidence/uc20-replacement-of-waiting-claimant.txt",
+      "observation": "While a claimant's target has not arrived, the claimant is blocked as unresolved (clause 4), but a live row that replaces the claimant carries only the ordinary transition blocker. After settlement_verified it can be approved and December can be finalized. When the target arrives the approval stops governing at once and the replacement is held. Identical on the RD checkpoint, so not a regression and not a breach of the contract's promise; the owner may want clause 4 to cover the replacement as well."
+    },
+    {
+      "id": "H22-H24",
+      "probe": "fable_rd_register_faults.py (unchanged), 34 of 37 agree",
+      "observation": "The three disagreeing cases expect the RC review to be the latest authority. With the RD review pinned as the third authority they are obsolete, not gaps: fable_re_register_faults.py J14 to J23 show that the latest authority wins per record and that an older file cannot override it."
+    }
+  ],
+  "unchanged_open_items": [
+    "U4",
+    "UC-14",
+    "X08",
+    "N02c",
+    "N04e",
+    "UC-9 (reading only; journals excluded)"
+  ],
+  "not_authorized_by_this_review": "Implementation, Batch 3, any Proposed record, live connections, readiness or operating authority."
+}

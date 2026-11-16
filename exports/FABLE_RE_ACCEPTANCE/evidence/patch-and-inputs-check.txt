@@ -1,0 +1,13 @@
+RD archive + source-and-tests.patch vs delivered source: files compared 81 | differences [] | extra []
+protected inputs listed 719 | differing in bundle [] | differing in working project []
+protected inputs also present in RD archive 603 | differing from RD archive []
+D-026 contract text (2758 chars) appears verbatim in DECISIONS.md: True | occurrences 1
+DECISIONS.md: RD-archive text is an unchanged prefix: True
+working DECISIONS.md == bundle: True
+accounting_agent/storage.py unchanged vs RD archive: True
+tests/schema_v1.sql unchanged vs RD archive: True
+working project runtime/tests/scripts/review differ from bundle: []
+git branch: review/fable-rc-acceptance | HEAD: 542688b57ece08ea55082d68b713ccf6433fd8ce | commits: 8
+git-history-before == git-history-final: True | names HEAD 542688b57ece08ea55082d68b713ccf6433fd8ce: True
+tracked files modified in working tree: M DECISIONS.md
+ M docs/PRODUCT_REQUIREMENTS.md

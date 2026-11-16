@@ -1,0 +1,34 @@
+baseline test methods 205 | current test methods 227
+missing from current: []
+baseline methods whose body changed: [('test_review_corrections_rd.py', 'ReviewCorrectionsRD', 'test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced')]
+added methods by file: {'test_feed_contract.py': 16, 'test_product_requirements.py': 2, 'test_re_review_gate.py': 4}
+changed earlier test file: test_product_requirements.py | pure append: True
+changed earlier test file: test_review_corrections_rd.py | pure append: False
+skip/expectedFailure mentions in tests: [('test_reviewer_probes.py', 48, 'def test_expired_partial_slot_is_recorded_as_skipped(self):'), ('test_reviewer_probes.py', 52, "self.assertTrue(all(o['status']=='skipped_no_catch_up' for o in self.os.state(actor())['occurrences']))"), ('test_reviewer_probes.py', 54, 'def test_concurrent_ticks_and_skipped_occurrences(self):'), ('test_reviewer_probes.py', 61, "self.assertEqual([o['status'] for o in occ],['skipped_no_catch_up','skipped_no_catch_up','completed'])")]
+Y05 adaptation: differing hunks 4
+   replace orig lines 280 - 280 | adapted lines 280 - 280 | inside Y05 (orig lines 277-348): True
+     -     # (a) most recent target
+     +     # (a) D-026: the first pending claim stays active; a second target is contested.
+   replace orig lines 283 - 284 | adapted lines 283 - 288 | inside Y05 (orig lines 277-348): True
+     -     os_.intake(PREP2, packet('retarget', [sup('A1Y', '2026-12-03', '40.00', 'A1W')]))
+     -     good &= check('(a) re-declaring a different unknown target records a second claim', len(unresolved_events(os_, K('A1Y'))) == 2)
+     +     before = lifecycle(os_)
+     +     result = os_.intake(PREP2, packet('retarget', [sup('A1Y', '2026-12-03', '40.00', 'A1W')]))
+     +     after = lifecycle(os_)
+     +     conflicts = [e for e in os_.export(PREP)['accounting_events'] if e['code'] == 'SOURCE_CLAIM_CONFLICT_RECORDED' and e['item_key'] == K('A1Y')]
+     +     good &= check('(a) the second target is recorded once and changes the control state', result['changed'] and len(conflicts) == 1)
+     +     good &= check('(a) the second claim changes no binding, move or link', all(before[t] == after[t] for t in ('bindings', 'moves', 'links')))
+   replace orig lines 286 - 286 | adapted lines 290 - 290 | inside Y05 (orig lines 277-348): True
+     -     good &= check('(a) the earlier target arriving creates no link', links(os_) == [])
+     +     good &= check('(a) the first claim still links when its target arrives', (K('A1X'), K('A1Y')) in links(os_))
+   replace orig lines 288 - 289 | adapted lines 292 - 293 | inside Y05 (orig lines 277-348): True
+     -     print('    (a) links=%s held=%s' % (links(os_), sorted(held_under(os_))))
+     -     good &= check('(a) the latest target is linked and A1Y is held under November', (K('A1W'), K('A1Y')) in links(os_) and K('A1Y') in held_under(os_))
+     +     y = gov(os_, K('A1Y'), '2026-12')
+     +     good &= check('(a) the contested target is not applied and the row stays blocked in December', (K('A1W'), K('A1Y')) not in links(os_) and y is not None and 'SOURCE_CLAIM_CONFLICT' in y['blockers'] and not y['eligible'] and K('
+FABLE_RD_ACCEPTANCE files in working project 95 | differing or missing in bundle: []
+archive-integrity keys: <class 'list'>
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-16-d17c07/526413ee-6205-4440-a38c-eee1406d47ac/scratchpad/tools/preservation.py", line 67, in <module>
+    p=root/name if (root/name).is_file() else root/'exports'/name
+TypeError: unsupported operand type(s) for /: 'PosixPath' and 'NoneType'
