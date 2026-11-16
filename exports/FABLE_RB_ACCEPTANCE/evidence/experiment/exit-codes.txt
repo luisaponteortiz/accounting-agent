@@ -1,0 +1,6 @@
+exp-new-probes|exit=0|seconds=28|cmd=python3 <tmp>/out/fable_rb_acceptance_probes.py .
+exp-make-rb-gate|exit=0|seconds=29|cmd=make rb-gate
+exp-make-acceptance-gate|exit=0|seconds=50|cmd=make acceptance-gate
+exp-make-reverification-gate|exit=0|seconds=51|cmd=make reverification-gate
+exp-make-batch2-gate|exit=0|seconds=93|cmd=make batch2-gate
+exp-make-test|exit=0|seconds=469|cmd=make test

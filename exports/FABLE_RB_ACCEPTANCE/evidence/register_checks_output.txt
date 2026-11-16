@@ -1,0 +1,51 @@
+records 88 | unique ids 88
+records without exactly the 12 fields once each: []
+Product decision {'Approved': 77, 'Proposed': 9, 'Rejected': 2}
+Implementation state {'Not started': 25, 'Developer-tested': 20, 'Verification failed': 7, 'Deferred': 36}
+Needed for {'G0 controls': 16, 'Second client': 5, 'G2 hosted reads': 11, 'G4 operating handoff': 11, 'G1 approved samples': 19, 'Platform maturity': 20, 'G3 specified writes': 1, 'Product decision': 5}
+Priority {'Must': 79, 'Should': 8, 'Could': 1}
+Verification failed: ['AAOS-GOV-03', 'AAOS-KNO-04', 'AAOS-BNK-02', 'AAOS-BNK-03', 'AAOS-CTL-01', 'AAOS-CTL-04', 'AAOS-CTL-09']
+Proposed: ['AAOS-GL-06', 'AAOS-BNK-07', 'AAOS-RPT-03', 'AAOS-INT-07', 'AAOS-ONB-01', 'AAOS-ONB-02', 'AAOS-BB-07', 'AAOS-EXC-03', 'AAOS-EXC-04']
+Rejected: ['AAOS-EXC-01', 'AAOS-EXC-02']
+INT-01..05 states: ['Deferred', 'Deferred', 'Deferred', 'Deferred', 'Deferred']
+original ids 76 | retained 76 | new ['AAOS-BB-08', 'AAOS-BNK-07', 'AAOS-EXC-01', 'AAOS-EXC-02', 'AAOS-EXC-03', 'AAOS-EXC-04', 'AAOS-EXC-05', 'AAOS-GL-06', 'AAOS-INT-07', 'AAOS-ONB-01', 'AAOS-ONB-02', 'AAOS-RPT-03']
+titles changed for original ids: []
+records in a tested or failed state, each citing at least one existing test file: 27
+--- tested or failed records with a Deferred or Not started dependency
+AAOS-GOV-02  Developer-tested     -> AAOS-GOV-01  Not started  | clause: AAOS-GOV-01.
+AAOS-ARC-01  Developer-tested     -> AAOS-GOV-01  Not started  | clause: AAOS-GOV-01.
+AAOS-EXE-03  Developer-tested     -> AAOS-CTL-03  Deferred     | clause: AAOS-CTL-03 for real authority only
+AAOS-EXE-07  Developer-tested     -> AAOS-CTL-12  Deferred     | clause: AAOS-CTL-12 for real data/credentials only
+AAOS-CTL-01  Verification failed  -> AAOS-CTL-03  Deferred     | clause: AAOS-CTL-03 for real authority only
+AAOS-CTL-04  Verification failed  -> AAOS-CTL-03  Deferred     | clause: AAOS-CTL-03 before G1 real authority only
+--- Approved records that depend on Proposed records
+AAOS-ARC-04 -> ['AAOS-ONB-01']
+AAOS-INT-01 -> ['AAOS-INT-07']
+AAOS-INT-02 -> ['AAOS-INT-07']
+AAOS-INT-03 -> ['AAOS-INT-07']
+AAOS-INT-04 -> ['AAOS-INT-07']
+AAOS-INT-05 -> ['AAOS-INT-07']
+AAOS-BB-01 -> ['AAOS-ONB-01']
+AAOS-BB-02 -> ['AAOS-ONB-01']
+AAOS-BB-03 -> ['AAOS-BB-07', 'AAOS-ONB-01']
+AAOS-BB-04 -> ['AAOS-ONB-01', 'AAOS-GL-06', 'AAOS-BNK-07']
+AAOS-BB-05 -> ['AAOS-ONB-01', 'AAOS-GL-06']
+AAOS-BB-06 -> ['AAOS-BB-07', 'AAOS-ONB-01']
+AAOS-BB-08 -> ['AAOS-ONB-01']
+dependency fields with stray punctuation: 13 ['AAOS-BNK-02', 'AAOS-INT-01', 'AAOS-INT-02', 'AAOS-INT-03', 'AAOS-INT-04', 'AAOS-INT-05', 'AAOS-BB-01', 'AAOS-BB-02', 'AAOS-BB-03', 'AAOS-BB-04', 'AAOS-BB-05', 'AAOS-BB-06', 'AAOS-BB-07']
+crosswalk tickets 27 | unique 27 | refs all exist: True
+unknown deps: [] | self deps: []
+cycles: []
+EXE-02 deps: ['AAOS-EXE-01', 'AAOS-CTL-04'] | EXE-03 deps: ['AAOS-EXE-01', 'AAOS-EXE-02', 'AAOS-BNK-03', 'AAOS-KNO-04', 'AAOS-CTL-01', 'AAOS-CTL-04', 'AAOS-CTL-03'] | BNK-02 deps: ['AAOS-BNK-03', 'AAOS-CTL-08', 'AAOS-CTL-09', 'AAOS-CTL-04']
+AT-24 in Trace of ['AAOS-BNK-04', 'AAOS-BNK-05']
+AT-25 in Trace of ['AAOS-BNK-04', 'AAOS-BNK-05']
+AT-29 in Trace of ['AAOS-INT-06']
+AT-40 in Trace of ['AAOS-INT-06']
+AT-58 in Trace of ['AAOS-ARC-02', 'AAOS-ARC-04']
+AT-59 in Trace of ['AAOS-EXE-07']
+--- first-client words in shared records (any field)
+AAOS-GOV-01 Business purpose ...nd execution capacity reusable for clients beyond Bird Bowl....
+AAOS-GOV-01 Acceptance criteria ...s and truthful capability status; no card-only or Bird Bowl-only dependency prevents another client...
+AAOS-ARC-04 Description ...Allow a Bird Bowl or other client deployment from the sam...
+AAOS-ARC-04 Scope note ...Approved option; actual Bird Bowl host and support arrangement unselected...
+AAOS-KNO-01 Acceptance criteria ...reshold or tax conclusion is silently assigned to Bird Bowl or a new client. The accounting lead ap...

@@ -1,0 +1,10 @@
+make-check|exit=0|seconds=1|cmd=make check
+check-product-requirements-json|exit=0|seconds=0|cmd=python3 scripts/check_product_requirements.py --json
+ra-probes-direct|exit=0|seconds=17|cmd=python3 exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py .
+make-rb-gate|exit=0|seconds=35|cmd=make rb-gate
+make-batch2-gate|exit=0|seconds=97|cmd=make batch2-gate
+make-reverification-gate|exit=0|seconds=53|cmd=make reverification-gate
+make-acceptance-gate|exit=0|seconds=50|cmd=make acceptance-gate
+original-full-acceptance|exit=1|seconds=26|cmd=python3 exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py .
+original-full-reverification|exit=1|seconds=22|cmd=python3 exports/FABLE_REVERIFICATION/fable_reverification_probes.py .
+make-test|exit=0|seconds=457|cmd=make test

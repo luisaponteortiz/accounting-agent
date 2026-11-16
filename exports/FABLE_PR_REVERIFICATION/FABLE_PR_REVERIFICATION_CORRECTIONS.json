@@ -1,0 +1,148 @@
+{
+ "title": "Fable re-verification of PR-01 to PR-17 against docs/PRODUCT_REQUIREMENTS.md (88 records) in bundle FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE",
+ "authored": "2026-11-16",
+ "bundle_sha256": "00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d",
+ "reviewed_register_sha256": "4b62c91bbee3cdfa2d3cdad899e238c1e201250cdfecf6cbe16fef7bac3b1f49",
+ "notice": "Review output only. Authorises no implementation, connection, posting, payment, sending, deployment or policy activation, and opens no gate. A product decision recorded in the register is not implementation authority, client-policy approval or operating readiness. The original findings in exports/FABLE_PRODUCT_REQUIREMENTS/ are unchanged.",
+ "verdict": "All 17 findings are answered. 16 are corrected as specified. PR-11 is documented but still needs the owner's explicit confirmation. Ten smaller gaps remain (PRV-01 to PRV-10): one must be done with the next code change because the register must reflect this review (PRV-01, P2); the rest are P3. Six product decisions remain with the owner.",
+ "verification_conclusions_for_the_seven_failed_records": {
+  "source_checkpoint": "Bundle FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip, SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d, source files as listed in its REVIEW_MANIFEST.json",
+  "scope_of_every_conclusion": "Synthetic local preparation controls exercised by the named probes and the retained gates. Not client policy, connected operation, reconciliation completion, close or operating readiness.",
+  "records": [
+   {"id": "AAOS-KNO-04", "conclusion": "May be recorded Independently verified", "criterion_that_failed": "author retention across scope and key (RB-03)", "evidence": "probes R02a, R02b, N03a, N03b, N03c; retained probes A10, RN04, RN05, RN05b"},
+   {"id": "AAOS-CTL-01", "conclusion": "May be recorded Independently verified", "criterion_that_failed": "equivalent-rule authors (RB-03); also checked: acceptance actors of a prior-statement revision are contributors (RB-04)", "evidence": "probes R02a, R02b, N03a, N03b, N04a"},
+   {"id": "AAOS-BNK-02", "conclusion": "May be recorded Independently verified", "criterion_that_failed": "re-pointed statement key (RB-02) and lookback restatement (RB-04)", "evidence": "probes R04a, R04b, R04c, N02b, N04a to N04d; open observation UC-11 (statement with no activity)"},
+   {"id": "AAOS-CTL-09", "conclusion": "May be recorded Independently verified, with the limit of UC-10 written into the scope note", "criterion_that_failed": "replacement by re-pointing (RB-02) and lookback restatement (RB-04)", "evidence": "probes R03a, R03b, R04a, R04b, R04c, N02a, N02b, N04a to N04d; N02c is a NOTE"},
+   {"id": "AAOS-BNK-03", "conclusion": "Remains Verification failed", "criterion_that_failed": "one charge approved in two periods regardless of arrival order", "evidence": "probes N01b, N01c, N01d WEAK (RC-01, RC-02, RC-03); R01a to R01d now OK"},
+   {"id": "AAOS-CTL-04", "conclusion": "Remains Verification failed", "criterion_that_failed": "a replacement chain never leaves the same expense approved in two periods", "evidence": "as AAOS-BNK-03"},
+   {"id": "AAOS-GOV-03", "conclusion": "Remains Verification failed", "criterion_that_failed": "known repaired defects must pass", "evidence": "RB-01 is not accepted"}
+  ]
+ },
+ "finding_verdicts": [
+  {"id": "PR-01", "verdict": "Corrected", "checked": "AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 carry Verification failed; both criteria contain the arrival-order clause; the Current evidence section states that RA was not accepted and names RB-01 to RB-04; crosswalk rows T-12, C-01 to C-06 and RA-01 agree.", "remaining": "The records stay failed after this review and must now cite RC-01 to RC-03 (PRV-01)."},
+  {"id": "PR-02", "verdict": "Corrected", "checked": "AAOS-CTL-09 and AAOS-BNK-02 carry Verification failed; both criteria name the re-pointing route and the lookback statement.", "remaining": "My RB-02 and RB-04 results allow both to be raised (see verification conclusions)."},
+  {"id": "PR-03", "verdict": "Corrected", "checked": "AAOS-KNO-04 and AAOS-CTL-01 keep the broad wording and carry Verification failed; probe R02b reports OK in my run.", "remaining": "May be raised (see verification conclusions)."},
+  {"id": "PR-04", "verdict": "Corrected, with gaps in the check", "checked": "Every one of the 88 records has exactly one Product decision and one Implementation state from the defined lists, a Scope note and an Evidence field. AAOS-INT-01 to INT-05 all carry Deferred. All 27 records in a tested or failed state cite at least one test file that exists. Counts are reproduced by scripts/check_product_requirements.py --json and by my own parser: 77 Approved, 9 Proposed, 2 Rejected; 36 Deferred, 25 Not started, 20 Developer-tested, 7 Verification failed.", "remaining": "The evidence rule is satisfied by a test path that does not exist, by a bare ticket id or by any token beginning with R and a digit (PRV-02). Nothing stops a failed record being promoted, and Independently verified is satisfied by the words 'independent review' and any 64 hexadecimal characters (PRV-03)."},
+  {"id": "PR-05", "verdict": "Corrected; ordering decision remains with the owner", "checked": "Every record has a Needed for value from eight defined values; the register states that the field is a candidate classification and not implementation authority. Priority is now 79 Must, 8 Should, 1 Could.", "remaining": "The owner still decides the order of unassigned work."},
+  {"id": "PR-06", "verdict": "Corrected as Proposed records; ratification remains with the owner", "checked": "AAOS-ONB-01 exists and names no client in its criteria. AAOS-ONB-02 states export format (JSON/CSV, original documents, hash manifest, index), retention, deletion authority and revocation of credentials, grants and mandates. AAOS-BB-01 to BB-08 each cite AAOS-ONB-01. Nothing is implemented.", "remaining": "Approved first-client records list a Proposed shared record as a dependency (PRV-05)."},
+  {"id": "PR-07", "verdict": "Corrected", "checked": "My own scan of every field of every shared record finds the first client named only in AAOS-GOV-01, AAOS-ARC-04 and AAOS-KNO-01, the three product-boundary records the finding allowed. AAOS-AR-01, AAOS-AP-01, AAOS-INT-01, AAOS-INT-05 and AAOS-KNO-06 are client-neutral. The moved facts are in AAOS-BB-08. The checker rejects the three words in three fields of shared records.", "remaining": "The checker does not look at Description or at first-client person names (PRV-10, optional)."},
+  {"id": "PR-08", "verdict": "Corrected as a Proposed record; ratification remains with the owner", "checked": "AAOS-INT-07 has no vendor name in its criteria and asks for two fictional adapters of one kind behind the unchanged contract. AAOS-INT-01 to INT-05 each cite it. No adapter exists.", "remaining": "Approved integration records list the Proposed contract as a dependency (PRV-05). The two fictional adapters are a criterion, not yet written."},
+  {"id": "PR-09", "verdict": "Corrected as Proposed records; decisions remain with the owner", "checked": "AAOS-GL-06, AAOS-BNK-07 and AAOS-RPT-03 each have a stable ID and a recorded Proposed decision. AAOS-BB-04 and AAOS-BB-05 cite them. AAOS-RPT-01 no longer contains the consolidation requirement.", "remaining": "None beyond the decisions."},
+  {"id": "PR-10", "verdict": "Corrected; confirmation of each exclusion remains with the owner", "checked": "AAOS-EXC-01 to EXC-05 exist; the scope table gives each an ID, Rejected or Reserved, a reason and a decision reference.", "remaining": "'Reserved' exists only in the table. The records carry Proposed (EXC-03, EXC-04) or Approved (EXC-05) and the checker does not compare the two (PRV-07)."},
+  {"id": "PR-11", "verdict": "Documented; owner confirmation still required", "checked": "AAOS-BB-01 distinguishes procedure documentation outside the application (may precede G1, no client records loaded) from processing client samples in the application (needs human G0 acceptance and G1 authorization). AAOS-BB-02 says validation follows capture by a separate accounting period. DECISIONS.md D-012 records the position.", "remaining": "The finding asked the product owner and the accounting lead to decide. D-012 was written by the developer in the correction pass and the register itself says actual timing needs owner confirmation. Until the owner confirms it in writing, treat D-012 as a proposal. This is the one time-critical item: November is half over."},
+  {"id": "PR-12", "verdict": "Corrected, with one residual", "checked": "AAOS-EXE-03 depends on AAOS-EXE-02 and AAOS-BNK-03; AAOS-EXE-02 no longer depends on AAOS-EXE-03; AAOS-BNK-02 depends on AAOS-CTL-04; the four dependencies on Deferred records carry a condition. The graph has no unknown reference, self-reference or cycle (my own traversal).", "remaining": "AAOS-GOV-02 and AAOS-ARC-01 (Developer-tested) depend without condition on AAOS-GOV-01 (Not started); the checker tests Deferred only, and treats the word 'only' anywhere in a clause as a condition (PRV-06). Thirteen Dependencies fields contain stray punctuation (PRV-08)."},
+  {"id": "PR-13", "verdict": "Corrected", "checked": "AAOS-CLS-03 lists the seven package elements and the five states and says none implies another. AAOS-CLS-02 lists the seven elements and limits what its tests prove. AAOS-KNO-06 names the workflow inventory. AT-24 and AT-25 (BNK-04, BNK-05), AT-29 and AT-40 (INT-06), AT-58 (ARC-02, ARC-04) and AT-59 (EXE-07) appear in Trace fields.", "remaining": "None."},
+  {"id": "PR-14", "verdict": "Corrected", "checked": "Each of the eight criteria now names a test, an artifact or a recorded parameter with an owner and a gate: ARC-03 (concurrent-client test before G2), EXE-05 (heartbeat, lease, retry limit and alert deadline before G2), KNO-01 (knowledge-classification artifact before G1), GL-03 (materiality predicates before enabling a treatment), CTL-12 (threat-test matrix before G2), CTL-13 (retention, RPO and RTO before G2, timed restore drill), BRF-03 (urgency predicates before G4), OBS-01 (scorecard before G1, review before G4).", "remaining": "The values themselves are owner decisions and are correctly not invented."},
+  {"id": "PR-15", "verdict": "Corrected in the service; one residual in the shared web page", "checked": "state() for a second client contains no first-client name (delivered test, reproduced in make test). make check fails when the name is added to accounting_agent/service.py or as an identifier to core.py, and passes when it is added to demo.py.", "remaining": "accounting_agent/web/index.html line 12, served to every client, still reads 'Bird Bowl — fictional sandbox'. The make check guard covers *.py only (PRV-04)."},
+  {"id": "PR-16", "verdict": "Corrected", "checked": "AAOS-KNO-03 names the card_accounts and one-currency limits and says they are removed only with a later assigned banking capability.", "remaining": "None. Deferred enhancement, correctly not built."},
+  {"id": "PR-17", "verdict": "Corrected, with the check gaps noted under PR-04", "checked": "make check runs the register checker and exits non-zero on a duplicate ID, a missing field, an unknown dependency, a cycle and a backlog ticket missing from the crosswalk (my own runs on temporary copies). AGENTS.md has one paragraph headed 'Current authorization — 16 November 2026' and states the five rules: evidence for states above Implemented, independent-only verification with downgrade in the same change, the register check, client facts in the client's own section or files, conflicts recorded and not resolved toward the weaker control. History is in DECISIONS.md and REVIEW_FREEZE.md.", "remaining": "PRV-02, PRV-03."}
+ ],
+ "priority_counts": {"P1": 0, "P2": 1, "P3": 9},
+ "current_gaps": [
+  {
+   "id": "PRV-01", "priority": "P2", "classification": "documentation_defect",
+   "title": "The register must record this review: three records stay failed for new reasons, four may be raised",
+   "affected_requirements": ["AAOS-BNK-03", "AAOS-CTL-04", "AAOS-GOV-03", "AAOS-KNO-04", "AAOS-CTL-01", "AAOS-BNK-02", "AAOS-CTL-09", "AAOS-GOV-02"],
+   "evidence": "FABLE_RB_ACCEPTANCE_REPORT.md: RB-01 not accepted (RC-01, RC-02, RC-03); RB-02, RB-03 and RB-04 accepted. The criteria of AAOS-BNK-03 and AAOS-CTL-04 name a link declared on an already admitted source and an unresolved link resolved later, but not the three orders that still fail.",
+   "proposed_correction": "In the same change as the RC corrections: (1) keep AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 at Verification failed and cite RC-01 to RC-03 in Scope note and Evidence; (2) extend both criteria with 'including an ancestor withdrawn after the lock, a link declared on a source whose replacement is already admitted, and an unresolved claim whose target arrives without the claimant being re-sent'; (3) record AAOS-KNO-04, AAOS-CTL-01, AAOS-BNK-02 and AAOS-CTL-09 as Independently verified, naming this report, the bundle SHA-256 and the probes, with UC-10 written into the AAOS-CTL-09 scope note and UC-11 into AAOS-BNK-02; (4) update the Current evidence section and the crosswalk rows T-12, RA-01 and RB-01.",
+   "dependencies": ["RC-01, RC-02, RC-03 in FABLE_RB_CORRECTIONS.json"],
+   "acceptance_criteria": ["The three records name RC-01 to RC-03 and stay failed until probes N01b, N01c and N01d report OK in an independent run.", "The four raised records name FABLE_RB_ACCEPTANCE_REPORT.md, the SHA-256 00a13d93... and their probes.", "The Current evidence section states that RB was not accepted and names RC-01 to RC-03."]
+  },
+  {
+   "id": "PRV-02", "priority": "P3", "classification": "confirmed_code_defect",
+   "title": "The evidence rule of the register check accepts evidence that names nothing real",
+   "affected_requirements": ["AAOS-GOV-02"],
+   "evidence": "scripts/check_product_requirements.py line 58: the pattern accepts any text containing tests/test_<word>.py, any token starting with R and a digit or with RB, or any PR-<number>. Fault cases F21 (a test file that does not exist), F22 ('See PR-04') and F23 ('R2D2 says so') are accepted (evidence/register_fault_tests_output.txt). AAOS-GOV-02 itself is Developer-tested partly on 'PR-04/PR-17'.",
+   "proposed_correction": "Require at least one tests/test_*.py path that exists under the project root, or a probe id that appears in one of the probe scripts under exports/ or review/. Do not count ticket ids as evidence.",
+   "dependencies": [],
+   "acceptance_criteria": ["Fault cases F21, F22 and F23 are rejected.", "The current register still passes."]
+  },
+  {
+   "id": "PRV-03", "priority": "P3", "classification": "confirmed_code_defect",
+   "title": "Nothing mechanical stops a failed record being promoted or verification being self-asserted",
+   "affected_requirements": ["AAOS-GOV-02", "AAOS-GOV-03"],
+   "evidence": "Fault case F26: AAOS-BNK-03 changed from Verification failed to Developer-tested is accepted. Fault case F25: any record set to Independently verified with the words 'independent review', 64 hexadecimal characters and a test path is accepted. AGENTS.md states both rules; the check enforces neither.",
+   "proposed_correction": "Keep a small machine-readable file written only from independent reports (record id, state, report path, bundle SHA-256). The check fails when a record listed there as failed carries a higher state, and when a record carries Independently verified without an entry whose report file exists.",
+   "dependencies": ["PRV-01 supplies the first entries"],
+   "acceptance_criteria": ["Fault cases F25 and F26 are rejected.", "The file lists the seven records with the conclusions of this review."]
+  },
+  {
+   "id": "PRV-04", "priority": "P3", "classification": "confirmed_code_defect",
+   "title": "The shared web page still names the first client for every client",
+   "affected_requirements": ["AAOS-GOV-01", "AAOS-ARC-01", "AAOS-ARC-02"],
+   "evidence": "accounting_agent/web/index.html line 12: '<strong>Bird Bowl — fictional sandbox</strong>'. The page is static and served for any scope. scripts/check.py lines 40-42 scan accounting_agent/*.py only; adding the name to accounting_agent/web/app.js passes make check. Residual of PR-15, whose ticket named only service.py. No accounting effect.",
+   "proposed_correction": "Use client-neutral text or fill the name from the state the page already loads. Extend the make check guard to accounting_agent/web/.",
+   "dependencies": [],
+   "acceptance_criteria": ["No file under accounting_agent/ outside config, fixtures and demo.py contains the first client's name.", "make check fails when the name is added to a file under accounting_agent/web/."]
+  },
+  {
+   "id": "PRV-05", "priority": "P3", "classification": "documentation_defect",
+   "title": "Approved records list Proposed records as dependencies",
+   "affected_requirements": ["AAOS-ARC-04", "AAOS-INT-01", "AAOS-INT-02", "AAOS-INT-03", "AAOS-INT-04", "AAOS-INT-05", "AAOS-BB-01", "AAOS-BB-02", "AAOS-BB-03", "AAOS-BB-04", "AAOS-BB-05", "AAOS-BB-06", "AAOS-BB-08"],
+   "evidence": "evidence/register_checks_output.txt: 13 Approved records depend on AAOS-ONB-01, AAOS-INT-07, AAOS-GL-06, AAOS-BNK-07 or AAOS-BB-07, all Proposed. 'Is the first instance of' is recorded as 'depends on', so approved first-client work formally waits on a proposal that the owner may reject.",
+   "proposed_correction": "Record instantiation in Trace or in a separate 'Instantiates' line, or mark each such dependency 'if ratified'. Add a check that an Approved record does not depend without condition on a Proposed one.",
+   "dependencies": ["Owner decisions on PR-06, PR-08, PR-09 remove the question if the records are approved"],
+   "acceptance_criteria": ["No Approved record depends without condition on a Proposed record.", "Each AAOS-BB and named-integration record still cites the shared record it instantiates."]
+  },
+  {
+   "id": "PRV-06", "priority": "P3", "classification": "documentation_defect",
+   "title": "Tested records depend without condition on a record that is Not started; the dependency check is narrow",
+   "affected_requirements": ["AAOS-GOV-01", "AAOS-GOV-02", "AAOS-ARC-01"],
+   "evidence": "AAOS-GOV-02 and AAOS-ARC-01 are Developer-tested and depend on AAOS-GOV-01, which is Not started. The check (scripts/check_product_requirements.py line 64) looks at Deferred dependencies only (fault case F33b accepted) and counts the word 'only' anywhere in the clause as a condition (F33c accepted).",
+   "proposed_correction": "Either give AAOS-GOV-01 a state that matches its own scope note (the six-area design exists; full-cycle execution does not) or mark the two dependencies conditional. Apply the check to Not started as well and require the condition phrase to follow the record id.",
+   "dependencies": [],
+   "acceptance_criteria": ["No record in a tested state depends without condition on a Deferred or Not started record.", "Fault cases F33b and F33c are rejected."]
+  },
+  {
+   "id": "PRV-07", "priority": "P3", "classification": "documentation_defect",
+   "title": "The Reserved disposition exists only in a table that nothing checks",
+   "affected_requirements": ["AAOS-EXC-03", "AAOS-EXC-04", "AAOS-EXC-05"],
+   "evidence": "The scope table says Reserved for three records whose Product decision is Proposed or Approved. Changing the table row of AAOS-EXC-05 to Rejected is accepted by the check (fault case F35).",
+   "proposed_correction": "State the disposition in a fixed phrase at the start of each Scope note ('Reserved action.' or 'Rejected scope.') and have the check compare it with the table.",
+   "dependencies": [],
+   "acceptance_criteria": ["Fault case F35 is rejected."]
+  },
+  {
+   "id": "PRV-08", "priority": "P3", "classification": "documentation_defect",
+   "title": "Stray punctuation in thirteen Dependencies fields",
+   "affected_requirements": ["AAOS-BNK-02", "AAOS-INT-01", "AAOS-INT-02", "AAOS-INT-03", "AAOS-INT-04", "AAOS-INT-05", "AAOS-BB-01", "AAOS-BB-02", "AAOS-BB-03", "AAOS-BB-04", "AAOS-BB-05", "AAOS-BB-06", "AAOS-BB-07"],
+   "evidence": "For example AAOS-BNK-02: 'AAOS-BNK-03; AAOS-CTL-08; AAOS-CTL-09. ; AAOS-CTL-04'. The references parse, so the graph is correct.",
+   "proposed_correction": "Rewrite as one semicolon-separated list.",
+   "dependencies": [],
+   "acceptance_criteria": ["No Dependencies field contains '. ;' or '.;'."]
+  },
+  {
+   "id": "PRV-09", "priority": "P3", "classification": "documentation_defect",
+   "title": "The change inventory does not cover the exports folder or START_HERE.md",
+   "affected_requirements": ["AAOS-GOV-03"],
+   "evidence": "evidence/inventory_checks_output.txt: against the frozen combined baseline, 19 files in the bundle are neither listed in docs/corrections_rb/changed-files.json nor excluded by it: START_HERE.md and 18 archives, sidecars and earlier review-response files under exports/. The inventory's own scope list omits exports/. All 10 source, test and script changes are listed and every listed hash agrees; nothing under fixtures, config, review/ or the reference package changed.",
+   "proposed_correction": "State in the inventory that exports/ and START_HERE.md are covered by REVIEW_MANIFEST.json only, or list them.",
+   "dependencies": [],
+   "acceptance_criteria": ["Every file that differs from the baseline is listed, excluded by name, or covered by a stated rule."]
+  },
+  {
+   "id": "PRV-10", "priority": "P3", "classification": "future_enhancement",
+   "title": "Optional hardening of the client-boundary check",
+   "affected_requirements": ["AAOS-GOV-02"],
+   "evidence": "Fault cases F30 (a first-client person named in a shared criterion) and F31 (the first client named in a shared Description) are accepted. Neither is required by the PR-07 criterion.",
+   "proposed_correction": "Read the list of client-specific words from the client section's own records and apply it to every field of shared records except Trace.",
+   "dependencies": [],
+   "acceptance_criteria": ["Fault cases F30 and F31 are rejected."]
+  }
+ ],
+ "minor_notes": [
+  "AAOS-BB-08 is a new record carrying Product decision Approved. Its content was moved from approved records, so this is consistent, but the owner should confirm it with the other new records.",
+  "The register file is unchanged between the first correction bundle and V2 (SHA-256 4b62c91b...), as the packaging addendum states.",
+  "Morning Briefing delivery is now stated in AAOS-BRF-01: in-application by default, cutoff and timezone from the client profile, outbound delivery under AAOS-COM-02."
+ ],
+ "decisions_requiring_product_or_client_authority": [
+  "PR-11 (time-critical): confirm in writing whether November procedure capture may proceed as documentation outside the application before G1, and name the held-out validation month.",
+  "PR-05: the order of unassigned requirements after G0.",
+  "PR-06: ratify, change or reject AAOS-ONB-01 and AAOS-ONB-02.",
+  "PR-08: ratify, change or reject AAOS-INT-07.",
+  "PR-09: decide AAOS-GL-06, AAOS-BNK-07 and AAOS-RPT-03.",
+  "PR-10: confirm each exclusion and reservation, including whether payroll and tax work stay outside the product in the long term (AAOS-EXC-03, AAOS-EXC-04).",
+  "PR-14: the parameter values named in the eight criteria, each before its stated gate.",
+  "The nine open decisions already listed in the register remain open; none was answered by this review."
+ ]
+}

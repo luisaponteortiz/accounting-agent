@@ -1,0 +1,74 @@
+--- <tmp>/rb/accounting_agent/source_control.py	2026-11-16 00:08:50
++++ accounting_agent/source_control.py	2026-11-16 01:14:51
+@@ -109,6 +109,24 @@
+             result[statement['source_key']]={'period_id':period['period_id'],'statement_snapshot_id':statement['id'],'accepted':bool(items) and items<=covered,'relying_item_keys':sorted(items),'accepted_item_keys':sorted(covered),'acceptances':[{'id':d['id'],'actor':d['actor'],'item_key':d['item_key']} for d in decisions]}
+         return result
+ 
++    def resolve_pending_supersessions(self,db,actor):
++        for event in db.execute("SELECT item_key,payload FROM accounting_events WHERE scope=? AND code='SOURCE_SUPERSESSION_UNRESOLVED' ORDER BY id",(actor.scope,)).fetchall():
++            value=json.loads(event['payload'])
++            claimant=db.execute('SELECT * FROM snapshots WHERE scope=? AND id=?',(actor.scope,value['snapshot_id'])).fetchone()
++            if not claimant:continue
++            head=db.execute('SELECT snapshot_id FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(actor.scope,claimant['kind'],claimant['source_key'])).fetchone()
++            if not head or head['snapshot_id']!=claimant['id'] or self.supersession_link(db,actor.scope,claimant['id']):continue
++            target=db.execute('SELECT * FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(actor.scope,claimant['kind'],value['target_key'])).fetchone()
++            if not target or any(ref['source_key']==claimant['source_key'] for ref in self.supersession_refs(db,actor.scope,target['snapshot_id'])):continue
++            db.execute("INSERT INTO source_links(scope,old_snapshot_id,new_snapshot_id,reason,created) VALUES(?,?,?,'superseded',?)",(actor.scope,target['snapshot_id'],claimant['id'],utcnow()))
++            for ancestor_key in {ref['source_key'] for ref in self.supersession_refs(db,actor.scope,claimant['id'])}:
++                self.source_approval_events(db,actor,ancestor_key,claimant['id'],'APPROVED_SOURCE_SUPERSEDED')
++
++    def rebind_chained_sources(self,db,actor,requested_period):
++        chained=[(len(self.supersession_refs(db,actor.scope,s['id'])),s) for s in self.store.latest(db,actor.scope,'transaction')]
++        for depth,s in sorted(((d,s) for d,s in chained if d),key=lambda item:(item[0],item[1]['id'])):
++            self.bind_source(db,actor,s['id'],s['value'],requested_period)
++
+     def source_origin(self,db,scope,snapshot_id):
+         """Resolve admitted or quarantined origins across the entire identity chain."""
+         owners=[]
+@@ -125,6 +143,9 @@
+             if head and not head['removed']:
+                 if blocked:return dict(blocked,source_key=source['source_key'])
+                 if admitted and admitted['status']=='locked':return dict(admitted,source_key=source['source_key'])
++            elif head:
++                late=db.execute("SELECT b.period_id FROM source_heads h JOIN source_periods b ON b.snapshot_id=h.snapshot_id JOIN periods p ON p.scope=b.scope AND p.period_id=b.period_id WHERE h.scope=? AND h.kind=? AND h.source_key=? AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=h.snapshot_id) AND b.admitted=0 AND b.reason='LATE_ACTIVITY_IN_LOCKED_PERIOD' AND p.status='locked'",(scope,source['kind'],source['source_key'])).fetchone()
++                if late:return dict(late,source_key=source['source_key'])
+         for source,head,blocked,admitted in owners:
+             if blocked:return dict(blocked,source_key=source['source_key'])
+             if admitted:return dict(admitted,source_key=source['source_key'])
+--- <tmp>/rb/accounting_agent/service.py	2026-11-16 00:12:42
++++ accounting_agent/service.py	2026-11-16 01:14:51
+@@ -176,14 +176,14 @@
+                 db.execute("DELETE FROM frozen_runs WHERE scope=? AND period_id=?",(actor.scope,period_id))
+                 db.execute("UPDATE periods SET status='open' WHERE scope=? AND period_id=?",(actor.scope,period_id))
+                 # Re-evaluate quarantined moves only after the original lock is lifted.
+-                candidates=self.store.latest(db,actor.scope)
++                candidates=self.store.latest(db,actor.scope,include_removed=True)
+                 # Admit terminal replacements first; their ancestors never enter the
+                 # destination population, even transiently in the binding history.
+                 candidates.sort(key=lambda s:(s['kind']!='transaction',-len(self.supersession_refs(db,actor.scope,s['id'])),-s['id']))
+                 for s in candidates:
+                     if s['kind'] in ('profile','batch'):continue
+-                    if not db.execute('SELECT 1 FROM source_heads WHERE scope=? AND snapshot_id=? AND removed=0',(actor.scope,s['id'])).fetchone():continue
+                     b=db.execute("SELECT * FROM source_periods WHERE snapshot_id=? ORDER BY id DESC LIMIT 1",(s['id'],)).fetchone()
++                    if not db.execute('SELECT 1 FROM source_heads WHERE scope=? AND snapshot_id=? AND removed=0',(actor.scope,s['id'])).fetchone() and not (b and b['reason']=='LATE_ACTIVITY_IN_LOCKED_PERIOD'):continue
+                     if b and b['period_id']==period_id and not b['admitted']:
+                         move=db.execute("SELECT * FROM source_moves WHERE scope=? AND snapshot_id=? AND blocked=1 ORDER BY id DESC LIMIT 1",(actor.scope,s['id'])).fetchone()
+                         self.bind_source(db,actor,s['id'],s['value'],move['to_period_id'] if move else period_id)
+@@ -258,7 +258,7 @@
+         unresolved_transitions={}
+         for event in db.execute("SELECT item_key,payload FROM accounting_events WHERE scope=? AND code='SOURCE_SUPERSESSION_UNRESOLVED' ORDER BY id",(actor.scope,)):
+             value=json.loads(event['payload'])
+-            if any(src['id']==value['snapshot_id'] for src in sources):unresolved_transitions[event['item_key']]=value
++            if any(src['id']==value['snapshot_id'] for src in sources) and not self.supersession_link(db,actor.scope,value['snapshot_id']):unresolved_transitions[event['item_key']]=value
+         claims=[];owners={};heads={};stale_origins={}
+         for src in sources:
+             identity=self.source_identity(db,actor.scope,src['id']);heads[identity]=src
+@@ -378,6 +378,8 @@
+                 sid,is_new=self.source_revision(db,actor,source,packet)
+                 changed = changed or is_new
+             if changed:
++                self.resolve_pending_supersessions(db,actor)
++                self.rebind_chained_sources(db,actor,packet.get('period_id'))
+                 for receipt in self.store.latest(db,actor.scope,'receipt'):
+                     self.bind_source(db,actor,receipt['id'],receipt['value'],packet.get('period_id'))
+                 db.execute("UPDATE clients SET generation=generation+1 WHERE scope=?", (actor.scope,))

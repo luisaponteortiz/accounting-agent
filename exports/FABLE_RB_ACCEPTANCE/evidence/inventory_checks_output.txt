@@ -1,0 +1,15 @@
+baseline files 343 | current files 448 | added 105 | removed 0 | modified 17 | unchanged 326
+returned review files present and byte-identical: 39 | differing or absent: []
+removed relative to baseline: []
+in my diff, not in inventory and not excluded: ['START_HERE.md', 'exports/FABLE_ACCOUNTING_REVIEW_BUNDLE.zip', 'exports/FABLE_CORRECTIONS_AND_BATCH_2_REVIEW_BUNDLE.zip.sha256', 'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_MANIFEST.json', 'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_PACKAGE_CHECK.json', 'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.FROZEN.json', 'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip', 'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip.sha256', 'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_RESPONSE.zip', 'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_RESPONSE.zip.sha256', 'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_START_HERE.md', 'exports/FABLE_RA_CORRECTIONS_REVIEW_BUNDLE.zip', 'exports/FABLE_RA_CORRECTIONS_REVIEW_BUNDLE.zip.sha256', 'exports/FABLE_REVERIFICATION_CORRECTIONS_REVIEW_BUNDLE.zip.sha256', 'exports/FABLE_REVIEW_RESPONSE/FABLE_ARCHITECTURE_REVIEW.md', 'exports/FABLE_REVIEW_RESPONSE/FABLE_IMPLEMENTATION_BACKLOG.json', 'exports/FABLE_REVIEW_RESPONSE/FABLE_VALIDATION_CASES.json', 'exports/FABLE_REVIEW_RESPONSE/reviewer_probes.py', 'exports/FABLE_REVIEW_RESPONSE/run_fable_validation_cases.py']
+in inventory, not in my diff: []
+inventory hash disagreements: []
+source/test/script/review changes (mine): ['Makefile', 'accounting_agent/controls.py', 'accounting_agent/modules.py', 'accounting_agent/service.py', 'accounting_agent/source_control.py', 'scripts/check.py', 'scripts/check_product_requirements.py', 'tests/test_product_requirements.py', 'tests/test_ra_review_gate.py', 'tests/test_review_corrections_rb.py']
+source_or_test_changes (inventory): ['Makefile', 'accounting_agent/controls.py', 'accounting_agent/modules.py', 'accounting_agent/service.py', 'accounting_agent/source_control.py', 'scripts/check.py', 'scripts/check_product_requirements.py', 'tests/test_product_requirements.py', 'tests/test_ra_review_gate.py', 'tests/test_review_corrections_rb.py']
+fixtures/config/reference changed: []
+independent inputs changed (exports/FABLE_*): []
+test methods baseline 154 | current 174 | removed [] | new 20
+new methods by file: {'test_product_requirements.py': 11, 'test_ra_review_gate.py': 3, 'test_review_corrections_rb.py': 6}
+original test files 16 | byte-identical now 16 | differing []
+skip/expectedFailure decorators in current tests: {}
+skipTest/SkipTest/expectedFailure textual occurrences: 0

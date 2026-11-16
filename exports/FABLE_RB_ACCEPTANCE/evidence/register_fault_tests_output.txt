@@ -1,0 +1,49 @@
+F01 baseline register unchanged                                                                              want=ACCEPTED got=ACCEPTED ok  
+F02 duplicate ID (GOV-02 renamed GOV-01)                                                                     want=REJECTED got=REJECTED ok  ValueError: Duplicate requirement ID: AAOS-GOV-01
+F03 lost ID (record OBS-02 deleted, references kept)                                                         want=REJECTED got=REJECTED ok  ValueError: Previously established requirement IDs removed or renamed: AAOS-OBS-02
+F04 lost ID with every reference removed too                                                                 want=REJECTED got=REJECTED ok  ValueError: Previously established requirement IDs removed or renamed: AAOS-OBS-02
+F05 missing field (Needed for)                                                                               want=REJECTED got=REJECTED ok  ValueError: AAOS-GOV-01: missing or repeated field Needed for
+F06 repeated field (two Priority lines)                                                                      want=REJECTED got=REJECTED ok  ValueError: AAOS-GOV-01: missing or repeated field Priority
+F07 empty field value                                                                                        want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-01: missing or repeated field Trace
+F08 unknown dependency                                                                                       want=REJECTED got=REJECTED ok  ValueError: Unknown requirement dependency/reference: AAOS-NOPE-01
+F09 self dependency                                                                                          want=REJECTED got=REJECTED ok  ValueError: Dependency cycle: AAOS-GOV-03 -> AAOS-CTL-10 -> AAOS-ARC-02 -> AAOS-ARC-01 -> AAOS-ARC-01
+F10 two-record cycle (GOV-01 -> GOV-02 -> GOV-01)                                                            want=REJECTED got=REJECTED ok  ValueError: Dependency cycle: AAOS-GOV-01 -> AAOS-GOV-02 -> AAOS-GOV-01
+F11 three-record cycle (GOV-01 -> GOV-03 -> GOV-02 -> GOV-01)                                                want=REJECTED got=REJECTED ok  ValueError: Dependency cycle: AAOS-GOV-01 -> AAOS-GOV-03 -> AAOS-GOV-02 -> AAOS-GOV-01
+F12 backlog ticket row removed (T-12)                                                                        want=REJECTED got=REJECTED ok  ValueError: Backlog crosswalk missing or unknown tickets: ['T-12']
+F13 backlog ticket row duplicated (T-12)                                                                     want=REJECTED got=REJECTED ok  ValueError: Duplicate backlog crosswalk ticket
+F14 backlog ticket row with no requirement reference                                                         want=REJECTED got=REJECTED ok  ValueError: T-12: no requirement crosswalk references
+F15 unsupported state (Tested)                                                                               want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: invalid implementation state
+F16 mixed state                                                                                              want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: invalid implementation state
+F17 mixed product decision                                                                                   want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: invalid product decision
+F18 invalid Needed for                                                                                       want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: invalid needed-for value
+F19 invalid priority                                                                                         want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: invalid priority
+F20 Developer-tested with evidence "Claims only"                                                             want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: named test/probe evidence required
+F21 Developer-tested citing a test file that does not exist (no link)                                        want=REJECTED got=ACCEPTED GAP 
+F22 Developer-tested whose only evidence is a ticket id (PR-04)                                              want=REJECTED got=ACCEPTED GAP 
+F23 Developer-tested whose only evidence is an arbitrary R-token (R2D2)                                      want=REJECTED got=ACCEPTED GAP 
+F24 Independently verified without review or checkpoint                                                      want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-02: independent review and checkpoint evidence required
+F25 Independently verified, self-asserted: the words "independent review", any 64-hex string and a test path want=REJECTED got=ACCEPTED GAP 
+F26 a Verification failed record promoted to Developer-tested by the developer (BNK-03)                      want=REJECTED got=ACCEPTED GAP 
+F27 first-client name in a shared acceptance criterion                                                       want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-01: client-specific fact in shared Acceptance criteria
+F28 first-client name in a shared Target stage                                                               want=REJECTED got=REJECTED ok  ValueError: AAOS-ARC-01: client-specific fact in shared Target stage
+F29 first-client vendor (Expensify) in a shared criterion                                                    want=REJECTED got=REJECTED ok  ValueError: AAOS-INT-05: client-specific fact in shared Acceptance criteria
+F30 first-client person (Theresa) in a shared criterion                                                      want=REJECTED got=ACCEPTED GAP 
+F31 first-client name in a shared Description                                                                want=REJECTED got=ACCEPTED GAP 
+F32 tested record with an unconditional Deferred dependency (GL-02 -> CTL-13)                                want=REJECTED got=REJECTED ok  ValueError: AAOS-GL-02: unconditional deferred dependency AAOS-CTL-13
+F33 tested record with a conditional Deferred dependency                                                     want=ACCEPTED got=ACCEPTED ok  
+F33b tested record with an unconditional Not started dependency (GL-02 -> KNO-01)                            want=REJECTED got=ACCEPTED GAP 
+F33c the word only anywhere in the clause counts as a condition (GL-02 -> CTL-13)                            want=REJECTED got=ACCEPTED GAP 
+F34 broken evidence link                                                                                     want=REJECTED got=REJECTED ok  ValueError: Missing evidence/source link: ../tests/test_missing.py
+F35 scope table says Rejected while the record says Approved (EXC-05)                                        want=REJECTED got=ACCEPTED GAP 
+cases 37 | agree 27 | gaps 10
+make check | unchanged copy                                                 exit=0 | PASS: shared Python modules contain no pilot client name; demo/config/fixtures remain isolated.
+make check | duplicate ID                                                   exit=2 | make: *** [check] Error 1
+make check | missing field                                                  exit=2 | make: *** [check] Error 1
+make check | unknown dependency                                             exit=2 | make: *** [check] Error 1
+make check | dependency cycle                                               exit=2 | make: *** [check] Error 1
+make check | backlog ticket missing from the crosswalk                      exit=2 | make: *** [check] Error 1
+make check | client name literal added to accounting_agent/service.py       exit=2 | make: *** [check] Error 1
+make check | client name as identifier bird_bowl in accounting_agent/core.py exit=2 | make: *** [check] Error 1
+make check | client name added to accounting_agent/demo.py (exempt)         exit=0 | PASS: shared Python modules contain no pilot client name; demo/config/fixtures remain isolated.
+make check | client name added to accounting_agent/web/app.js               exit=0 | PASS: shared Python modules contain no pilot client name; demo/config/fixtures remain isolated.
+make check | first-client person name (Theresa) added to service.py         exit=0 | PASS: shared Python modules contain no pilot client name; demo/config/fixtures remain isolated.

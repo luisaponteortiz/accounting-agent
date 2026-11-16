@@ -1,0 +1,185 @@
+{
+ "title": "Fable corrective tickets after independent verification of RB-01 to RB-04 (bundle FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE, SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d)",
+ "authored": "2026-11-16",
+ "notice": "Review output only. Authorises no connection, posting, payment, model call, hosting, deployment or policy activation, and opens no readiness gate. All data fictional. No file of the delivered bundle was changed during this review; the corrections were tried only in a temporary copy, which is not a delivered fix.",
+ "companion_files": [
+  "FABLE_RB_ACCEPTANCE_REPORT.md",
+  "FABLE_RB_ACCEPTANCE_RESULTS.json",
+  "fable_rb_acceptance_probes.py",
+  "fable_rb_acceptance_output.txt",
+  "evidence/",
+  "../FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_REPORT.md",
+  "../FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_CORRECTIONS.json"
+ ],
+ "recommendation": "RB-02, RB-03 and RB-04 are accepted. RB-01 is not accepted: the two reproductions in the ticket (R01b, R01c) are closed, but three further arrival orders still leave one charge approved in two periods (RC-01, RC-02, RC-03, all P1). RC-02 is held in the frozen combined submission and is approved in this source. Fix RC-01 to RC-03 in one pass before G0 is recorded. Batch 3 stays closed.",
+ "priority_counts": {"P0": 0, "P1": 3, "P2": 0, "P3": 0},
+ "implementation_order": ["RC-01", "RC-02", "RC-03"],
+ "order_note": "RC-01 is independent. RC-02 adds the re-evaluation step that RC-03 relies on, so RC-03 follows RC-02. All three change the same two functions and should be delivered together.",
+ "completion_gate": [
+  "python3 fable_rb_acceptance_probes.py <project-root> exits 0: no WEAK and no ERROR. N02c and N04e may remain NOTE until their policy decisions are made.",
+  "python3 exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py . still reports 14 OK, unmodified.",
+  "make test, make check, make batch2-gate, make reverification-gate, make acceptance-gate and make rb-gate still pass; reviewer cases stay at 29 PASS, 10 FIXED, 21 DEFERRED-OK; only U4 remains a NOTE in the older acceptance gate.",
+  "fable_rb_acceptance_probes.py is added to make test and to a gate target unmodified. An API change that makes a probe unrunnable is returned with the adapted probe for review.",
+  "Each contract change is recorded in DECISIONS.md and AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 are updated in the same change (PRV-01)."
+ ],
+ "confirmed_defects": [
+  {
+   "id": "RC-01",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "regression": "No. The frozen combined submission (nested RA source, SHA-256 dec028b0...) gives the same result. The RB-01 correction text I wrote said to examine an ancestor only when 'its head is not removed'. The delivered code implements that condition as written, and this route passes through it. The gap is in my specified correction as much as in the code.",
+   "title": "A late supersession link is not honoured when the locked ancestor was withdrawn after the lock",
+   "affected_requirements": ["RB-01", "RA-01", "RV-01", "C-01", "T-12", "AAOS-BNK-03", "AAOS-CTL-04", "AAOS-GOV-03"],
+   "source": [
+    "accounting_agent/source_control.py source_origin lines 124-127: the ancestor loop looks only at ancestors whose head is not removed. A head removed by a withdrawal that arrived under the lock is skipped, although that withdrawal was itself quarantined (LATE_ACTIVITY_IN_LOCKED_PERIOD) and the charge is still approved in the locked population.",
+    "accounting_agent/source_control.py source_origin lines 128-130: the fallback then returns the source's own earlier December admission.",
+    "accounting_agent/service.py bind_source lines 219-227: the origin so resolved is the destination period, so nothing is moved or blocked.",
+    "accounting_agent/service.py change_period_status line 185: on reopen, removed heads are skipped, so a withdrawal quarantined under the lock is never admitted afterwards."
+   ],
+   "probe": "N01b (fable_rb_acceptance_probes.py); frozen comparison in evidence/baseline-frozen-ra-comparison.txt",
+   "minimal_reproduction": [
+    "Approve A1 (3 Nov, 40.00) and lock November; December is open.",
+    "Intake B1 dated 2 Dec, 40.00, with its receipt and a December statement, with no supersession claim. It is admitted to December and is eligible.",
+    "Intake A1 again with tombstone true and removal_reason 'voided'. November is locked, so the withdrawal is quarantined.",
+    "Re-send B1 with supersedes='demo_card_001:A1'. Run December card preparation.",
+    "Disposition SOURCE_TRANSITION_REQUIRES_REVIEW as settlement_verified citing the whole evidence list. Re-run. An independent reviewer approves B1. Finalize December without acknowledgement.",
+    "Control: the same three sources with the withdrawal first and B1 arriving with its claim are quarantined correctly."
+   ],
+   "expected": "B1 and its receipt are quarantined under November with SOURCE_MOVED_FROM_LOCKED_PERIOD and B1 leaves the December population, as happens when the claim arrives with B1.",
+   "actual": "B1 stays governing in December with only SOURCE_TRANSITION_REQUIRES_REVIEW, is dispositioned and approved. A1 remains approved in locked November. December finalizes without acknowledgement. state.source_exceptions is empty and no move row is recorded. The only trace is the pair of events APPROVED_SOURCE_REMOVED and APPROVED_SOURCE_SUPERSEDED on A1.",
+   "accounting_or_control_consequence": "The same expense and liability are approved in two periods, one locked. A provider that voids the original row, delivers the replacement and declares the link in a later delivery produces it without any unusual intent.",
+   "smallest_sufficient_correction": [
+    "In source_origin, in the ancestor loop, also treat an ancestor as held by the lock when its head is removed and the head snapshot's latest binding is not admitted, has reason LATE_ACTIVITY_IN_LOCKED_PERIOD and names a period that is still locked. Return that period as the blocking origin.",
+    "In change_period_status on reopen, also re-bind a removed head whose latest binding is LATE_ACTIVITY_IN_LOCKED_PERIOD in the reopened period, so that the withdrawal is admitted once the period is open. Without this, the first change would wrongly block a destination revision after a valid release and relock.",
+    "List a withdrawal quarantined under a lock in state.source_exceptions. Today the query hides every source whose head is removed (service.py state, source_exceptions), so the withdrawal of an approved locked charge is shown only as an event."
+   ],
+   "tried_in_a_temporary_copy": "Yes, together with RC-02 and RC-03. See 'experimental_validation'.",
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe N01b reports OK in both orders: after B1 declares that it supersedes the withdrawn A1, December has no governing artifact for B1, B1 and its receipt are listed under November with SOURCE_MOVED_FROM_LOCKED_PERIOD, and a blocked move row with had_approval exists for B1.",
+    "state.source_exceptions lists the quarantined withdrawal of A1 under November.",
+    "After reopening November and re-preparing both periods: November has no governing A1, December has exactly one governing item for the charge carrying SOURCE_TRANSITION_REQUIRES_REVIEW.",
+    "After a relock of November, a later revision of B1 stays in December (probes R01a and N01a relock steps unchanged)."
+   ],
+   "regression_tests": ["probe N01b", "probes N01a, R01a (relock)", "probes R01b, R01c, A01, X01", "new unit tests: withdrawal under lock then late link; the same after reopen and relock"],
+   "decision_requiring_client_authority": "Feed semantics for gate G2: whether a provider can void a row in a closed cycle and how that void is carried into the books."
+  },
+  {
+   "id": "RC-02",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "regression": "Yes, in outcome. In the frozen combined submission the same steps end with both December sources held (the re-sent middle source is revived beside its replacement and both carry SOURCE_ALREADY_HAS_ENTRY). In this source the middle source is correctly quarantined, which leaves its replacement clean and approvable. The frozen submission held it by a side effect, not by design.",
+   "title": "A late link declared on a middle source does not re-evaluate the replacement that is already admitted",
+   "affected_requirements": ["RB-01", "RA-01", "RV-01", "C-01", "T-12", "AAOS-BNK-03", "AAOS-CTL-04", "AAOS-GOV-03"],
+   "source": [
+    "accounting_agent/source_control.py source_revision line 53 and accounting_agent/service.py intake lines 380-382: after an intake, bind_source is called for the source taken in and for every receipt, but not for other live transactions whose supersession chain has just changed.",
+    "accounting_agent/service.py bind_source lines 219-227: the already admitted replacement is therefore never asked again whether a locked ancestor now stands behind it."
+   ],
+   "probe": "N01c, with the destination not yet approved and already approved; frozen comparison in evidence/baseline-frozen-ra-comparison.txt",
+   "minimal_reproduction": [
+    "Approve A1 (3 Nov, 40.00) and lock November; December is open.",
+    "Intake B1 dated 2 Dec, 40.00, with its receipt and a December statement that names C1, with no supersession claim.",
+    "Intake C1 dated 3 Dec, 40.00, with its receipt and supersedes='demo_card_001:B1'. C1 replaces B1 inside December. Variant: disposition and approve C1 now.",
+    "Re-send B1 with supersedes='demo_card_001:A1'. Run December card preparation.",
+    "Disposition SOURCE_TRANSITION_REQUIRES_REVIEW on C1 as settlement_verified, re-run, and an independent reviewer approves C1."
+   ],
+   "expected": "C1 and its receipt are quarantined under November together with B1, because C1 replaces B1 and B1 replaces the locked A1.",
+   "actual": "Only B1 is quarantined. C1 stays the governing December item. Where C1 had been approved, that approval is displaced and an independent reviewer approves the new version directly; where it had not, it is dispositioned and approved. A1 remains approved in locked November.",
+   "accounting_or_control_consequence": "The same expense and liability are approved in two periods, one locked. The December reviewer sees the chain C1 -> B1 -> A1 in the evidence list but no blocker that says the root is locked.",
+   "smallest_sufficient_correction": [
+    "After every intake that changed anything, re-bind every live transaction head that has a supersession chain, shortest chain first, before the existing receipt loop (service.py intake, lines 380-382). bind_source is idempotent for a source whose situation has not changed.",
+    "A replacement whose chain now contains an ancestor held by a lock is quarantined by the existing source_origin ancestor loop; its approval, if any, is reported by the existing approved-source event and ITEM_LEFT_POPULATION."
+   ],
+   "tried_in_a_temporary_copy": "Yes. See 'experimental_validation'.",
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe N01c reports OK for both variants: after B1 declares that it supersedes A1, December has no governing artifact for C1 or B1; C1, B1 and the receipt of C1 are listed under November with SOURCE_MOVED_FROM_LOCKED_PERIOD.",
+    "Where C1 had been approved, an accounting event names the approval and a blocked move row with had_approval exists for C1.",
+    "After reopening November and re-preparing both periods: November has no governing A1 and December has exactly one governing item, C1, carrying SOURCE_TRANSITION_REQUIRES_REVIEW; B1 was never governing beside it.",
+    "Probe N01f is unchanged: a late link to a charge in an open period is an ordinary supersession and creates no quarantine and no move row."
+   ],
+   "regression_tests": ["probe N01c", "probes N01a, N01e, N01f", "probes R01a to R01d", "new unit tests: late link on a middle source with the replacement eligible and with it approved"],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RC-03",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "regression": "No. The frozen combined submission gives the same result.",
+   "title": "An unresolved supersession claim is never linked when its target arrives, so a further replacement escapes the lock",
+   "affected_requirements": ["RB-01", "RA-01", "RV-01", "C-01", "T-12", "AAOS-BNK-03", "AAOS-CTL-04", "AAOS-GOV-03"],
+   "source": [
+    "accounting_agent/source_control.py source_revision lines 47-48: a claim whose target has not been received records only the event SOURCE_SUPERSESSION_UNRESOLVED. No link is created then, and none is created when the target later arrives (links are written only at lines 49-50, at the claimant's own intake).",
+    "accounting_agent/source_control.py supersession_refs lines 62-70: the chain of a later replacement therefore stops at the claimant.",
+    "accounting_agent/service.py context lines 259-261: the unresolved flag is shown only while the claimant's snapshot is in the period population; once the claimant is itself replaced, the flag disappears."
+   ],
+   "probe": "N01d; frozen comparison in evidence/baseline-frozen-ra-comparison.txt",
+   "minimal_reproduction": [
+    "Approve A1 (3 Nov, 40.00) and lock November; December is open.",
+    "Intake A1Y dated 3 Dec, 40.00, with its receipt, supersedes='demo_card_001:A1X' (not yet received), and a December statement that names A1Z. A1Y is admitted to December and held as unresolved.",
+    "Intake A1X dated 2 Dec with its receipt and supersedes='demo_card_001:A1'. It is quarantined under November.",
+    "Intake A1Z dated 4 Dec with its receipt and supersedes='demo_card_001:A1Y'. A1Y is not re-sent.",
+    "Run December. Disposition SOURCE_TRANSITION_REQUIRES_REVIEW on A1Z as settlement_verified, re-run, an independent reviewer approves A1Z. Finalize December without acknowledgement."
+   ],
+   "expected": "A1Y is linked to A1X as soon as A1X exists and is quarantined; A1Z, which replaces A1Y, is quarantined with it. This is what happens when A1Y is re-sent (probe R01c).",
+   "actual": "A1Z is admitted to December, its disclosed chain contains only A1Y, it is approved, and December finalizes without acknowledgement. A1 remains approved in locked November and A1X stays quarantined under November.",
+   "accounting_or_control_consequence": "The same expense and liability are approved in two periods, one locked. Whether the control holds depends on whether the provider happens to re-send a row.",
+   "smallest_sufficient_correction": [
+    "After every intake that changed anything, and before the re-evaluation step of RC-02, resolve recorded claims: for each SOURCE_SUPERSESSION_UNRESOLVED event whose claimant snapshot is still the head of its key (removed or not), which has no link yet, and whose target key now has a head, insert the link (unless it would close a cycle) and emit the same APPROVED_SOURCE_SUPERSEDED events as at line 51-52.",
+    "In context (service.py lines 259-261), stop reporting a claim as unresolved once its snapshot has a link.",
+    "The re-evaluation step of RC-02 then quarantines the claimant and every live source that replaces it."
+   ],
+   "tried_in_a_temporary_copy": "Yes. See 'experimental_validation'.",
+   "depends_on": ["RC-02"],
+   "acceptance_assertions": [
+    "Probe N01d reports OK: after A1X arrives, A1Y is listed under November; after A1Z arrives, December has no governing artifact for A1Z and A1Z is listed under November.",
+    "Probe N01e reports OK: a three-link chain delivered newest first leaves no chain member governing in December while November is locked; after reopen only A1Z is admitted and neither A1 nor A1X was ever admitted to December.",
+    "Probe R01c is unchanged, and a claim whose target is in an open period resolves to an ordinary supersession with no SOURCE_TRANSITION_UNRESOLVED blocker left behind.",
+    "Probe R01d is unchanged: a claim that would close a cycle is not linked."
+   ],
+   "regression_tests": ["probe N01d", "probe N01e", "probes R01c, R01d", "new unit tests: claimant replaced before and after its target arrives; target in an open period"],
+   "decision_requiring_client_authority": "Feed semantics for gate G2: whether a provider can deliver a replacement before the row it replaces."
+  }
+ ],
+ "experimental_validation": {
+  "what": "The three corrections above were applied together to a temporary copy of the bundle source (six edits in source_control.py and service.py: 24 lines added, 3 replaced). The delivered bundle was not changed and this is not a delivered fix.",
+  "patch": "evidence/experimental-correction.patch",
+  "results_in_the_temporary_copy": {"fable_rb_acceptance_probes.py": "exit 0: 16 OK, 2 NOTE (N02c, N04e), 0 WEAK", "make rb-gate": "exit 0, 14 OK", "make acceptance-gate": "exit 0", "make reverification-gate": "exit 0", "make batch2-gate": "exit 0", "make test": "exit 0, 174 methods OK", "raw_logs": "evidence/experiment/"},
+  "limits": "No new unit tests were written for the copy. The state.source_exceptions listing in RC-01 was not part of the experiment."
+ },
+ "unverified_or_open_concerns": [
+  {"id": "UC-4", "status": "unchanged, accepted NOTE", "note": "Probe U4 still reports NOTE in the older acceptance gate: when a superseding source is removed, the charge it replaced is not restored; both are visible. Feed-semantics question for gate G2."},
+  {"id": "UC-5", "status": "unchanged", "note": "Synthetic authority grants have no revocation and no rule that the administrator differs from the subject. Must be designed before gate G1."},
+  {"id": "UC-6", "status": "unchanged, by reading only, NOT_RUN", "note": "A duplicated payment row can only be settled or referred. Not executed in this review."},
+  {"id": "UC-7", "status": "partly closed", "note": "No source_moves row with the same origin and destination period is created any more (probes N01a, N01f and R01a). Receipt rows in a blocked chain still carry had_approval 0 although the charge they support was approved (N01a: receipt-B1). No control effect."},
+  {"id": "UC-8", "status": "unchanged, by reading only, NOT_RUN", "note": "RA-05 across a period boundary. Covered only by the delivered tests."},
+  {"id": "UC-9", "status": "unchanged, by reading only, NOT_RUN", "note": "RA-07 for journals. Covered only by the delivered tests."},
+  {"id": "UC-10", "status": "new, probe N02c, NOTE", "note": "A contradicting receipt supplied after the one now relied on (39.99 against a 40.00 charge and its 40.00 receipt), then re-pointed away from the charge: the item becomes eligible with no disclosure. The same is true if it is withdrawn. This is outside the RB-02 assertion, which concerns documents supplied before the one relied on, and the remaining receipt was never changed. Whether withdrawal of contradicting evidence must be disclosed to the reviewer is a document-policy decision."},
+  {"id": "UC-11", "status": "new, probe N04e, NOTE; disclosed by the developer", "note": "A restated prior-period statement whose period has no card transactions has no relying item, so no acceptance can be given and the next period stays unverified. It fails in the safe direction. A route for accepting a statement revision without an item is needed before a real zero-activity cycle."},
+  {"id": "UC-12", "status": "new, observed in N01b", "note": "The withdrawal of an approved charge that arrives under a lock is not listed in state.source_exceptions, because that listing hides sources whose head is removed. It is visible only as an APPROVED_SOURCE_REMOVED event. Included in the correction of RC-01."},
+  {"id": "UC-13", "status": "new, observed in N04c", "note": "When a statement is withdrawn and replaced, the workpaper lists the replacement twice, once against the original version and once against the withdrawal version of the old key. Cosmetic."}
+ ],
+ "verified_since_last_review": [
+  {"id": "RB-02", "status": "ACCEPTED", "evidence": "probes R03a, R03b, R04a, R04b (unmodified originals); N02a, N02b (new)"},
+  {"id": "RB-03", "status": "ACCEPTED", "evidence": "probes R02a, R02b (unmodified originals); N03a, N03b, N03c (new)"},
+  {"id": "RB-04", "status": "ACCEPTED", "evidence": "probe R04c (unmodified original); N04a, N04b, N04c, N04d (new); A13, RT13, RT13n in the retained gates"},
+  {"id": "RB-01", "status": "NOT ACCEPTED", "evidence": "R01a to R01d, N01a, N01e, N01f, N01g OK; N01b, N01c, N01d WEAK (RC-01, RC-02, RC-03)"},
+  {"id": "PR-15 (code)", "status": "ACCEPTED for the service notice and the make check guard; one residual in the shared web page (PRV-04 in the PR re-verification)", "evidence": "tests/test_review_corrections_rb.py PR15 method; evidence/register_fault_tests_output.txt"}
+ ],
+ "deferred_enhancements": [
+  {"id": "DE-1", "note": "Unchanged. Item envelopes carry the run-wide fingerprint and rule list."},
+  {"id": "DE-2", "note": "Unchanged. With multiple receipts allowed, each receipt is compared with the whole charge."},
+  {"id": "DE-3", "note": "Unchanged. Double-recording detection works within one period population. RC-01 to RC-03 are not this enhancement: they concern declared supersession links, which the engine already resolves."},
+  {"id": "DE-4", "note": "Unchanged. Statement cycles must equal the accounting period."},
+  {"id": "DE-5", "note": "Unchanged. Trial balance and card statement checklist lines are typed as document."}
+ ],
+ "decisions_requiring_client_authority": [
+  "Feed semantics (gate G2): whether a provider can void a row in a closed cycle, deliver a replacement before the row it replaces, or declare a link in a later delivery; and whether a removed replacement restores the original.",
+  "Document policy: date window, amount tolerance, multiple receipts, who may re-attach or withdraw a receipt, whether withdrawal of contradicting evidence must be disclosed (UC-10), and who may accept a corrected or replaced receipt.",
+  "Statement policy: which document is authoritative, who may supply or correct it, how cycles map to periods, how a correction to a closed cycle is carried forward, and how a revision of a statement with no activity is accepted (UC-11).",
+  "Whether the person who approves or writes policy may also review items prepared under it (currently barred).",
+  "Treatment of fees, interest, card payments and transfers, and the accounts each disposition may use.",
+  "The close checklist, the evidence each line requires, and who gives final sign-off.",
+  "Who may disposition, finalize and lock, and what evidence must be new before a recurring run."
+ ]
+}

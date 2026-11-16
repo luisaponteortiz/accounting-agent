@@ -1,0 +1,14 @@
+manifest entries 448 actual files (excl manifest) 448
+missing from disk []
+not in manifest []
+hash mismatches []
+unsafe zip names []
+exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip in bundle MATCH
+exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip in project MATCH
+exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_RESPONSE.zip in bundle MATCH
+exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_RESPONSE.zip in project MATCH
+exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip in bundle ABSENT
+exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip in project MATCH
+response zip files 39
+originals vs response zip: {'same': 39, 'diff': [], 'absent': []}
+input-checksums keys ['exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py', 'exports/FABLE_RA_ACCEPTANCE/evidence/make-acceptance-gate.stderr.txt', 'exports/FABLE_RA_ACCEPTANCE/evidence/run_gates.sh', 'exports/FABLE_RA_ACCEPTANCE/evidence/original-full-reverification.stdout.txt', 'exports/FABLE_RA_ACCEPTANCE/evidence/make-reverification-gate.stderr.txt', 'exports/FABLE_RA_ACCEPTANCE/evidence/exit-codes.txt', 'exports/FABLE_RA_ACCEPTANCE/evidence/original-full-acceptance.stderr.txt', 'exports/FABLE_RA_ACCEPTANCE/evidence/inventory_checks_output.txt', 'exports/FABLE_RA_ACCEPTANCE/evidence/make-test.stderr.txt', 'exports/FABLE_RA_ACCEPTANCE/evidence/versions.txt']

@@ -1,0 +1,80 @@
+N01a [RB-01] late link on a destination that is already approved: approval stops governing, events and blocked move recorded, root history kept; reopen admits only the replacement; relock, replay and restart are stable
+    B1 approved in December before any claim: ('ok', None)
+    after the claim -> December B1: {'id': 13, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | held under November: []
+    moves: [('demo_card_001:B1', '2026-12', '2026-12', 0, 1)]
+    events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')]
+    replay flagged: True | A1 versions kept: 1 | B1 artifacts kept (history): 2 | any still governing: True
+    finalize December while B1 is quarantined, no acknowledgement: ('refused', 409, 'Unreviewed/carried exceptions require acknowledgement')
+    after reopen -> November: ['demo_card_001:A2'] | December: ['demo_card_001:B1', 'demo_card_001:D1'] | B1: {'id': 13, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']}
+    settlement_verified on demo_card_001:B1: ('ok', 1)
+    independent approval of demo_card_001:B1: ('ok', None)
+    relock November: ('ok', None)
+    after relock and a destination revision -> B1: {'id': 27, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW']} | held: []
+    restart identical: True | audit chain: True | no same-period move rows: False
+    quarantined=False evidence=False released=True single=True relock=True
+    => WEAK
+
+N01b [RB-01] late link when the locked ancestor was withdrawn (tombstoned) after the lock: the replacement is not approvable in a second period
+    [fresh-link-after-tombstone] December B1: None
+    [fresh-link-after-tombstone] exceptions: [('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [fresh-link-after-tombstone] moves: [('demo_card_001:B1', '2026-11', '2026-12', 1, 1), ('receipt-B1', '2026-11', '2026-12', 1, 0)]
+    [fresh-link-after-tombstone] events: [('APPROVED_SOURCE_REMOVED', '2026-11', 'demo_card_001:A1'), ('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')]
+    [fresh-link-after-tombstone] November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December B1: None | approved in both periods: False
+    [late-link-after-tombstone] December B1: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']}
+    [late-link-after-tombstone] exceptions: []
+    [late-link-after-tombstone] moves: [('demo_card_001:B1', '2026-12', '2026-12', 0, 0)]
+    [late-link-after-tombstone] events: [('APPROVED_SOURCE_REMOVED', '2026-11', 'demo_card_001:A1'), ('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')]
+    settlement_verified on demo_card_001:B1: ('ok', 1)
+    independent approval of demo_card_001:B1: ('ok', None)
+    [late-link-after-tombstone] finalize December without acknowledgement: ('ok', 1)
+    [late-link-after-tombstone] November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December B1: {'id': 15, 'eligible': True, 'status': 'approve', 'blockers': []} | approved in both periods: True
+    => WEAK
+
+N01c [RB-01] late link declared on a middle source whose replacement is already admitted (and approved) in December: the replacement does not stay approved beside the locked root
+    [pre_approved=False] C1 replaces B1 inside December: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']}
+    [pre_approved=False] B1 then declares it supersedes A1 (locked) -> C1: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_ALREADY_HAS_ENTRY', 'SOURCE_TRANSITION_REQUIRES_REVIEW', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']} | December governing: ['demo_card_001:B1', 'demo_card_001:C1']
+    [pre_approved=False] exceptions: []
+    settlement_verified on demo_card_001:C1: ('ok', 1)
+    independent approval of demo_card_001:C1: ('refused', 409, 'Unresolved controls block approval')
+    settlement_verified on demo_card_001:B1: ('ok', 2)
+    independent approval of demo_card_001:B1: ('refused', 409, 'Unresolved controls block approval')
+    [pre_approved=False] November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December C1: {'id': 25, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_ALREADY_HAS_ENTRY', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']} | December B1: {'id': 26, 'eligible': False, 'status': 'pending', 'blockers': ['MISSING_RECEIPT', 'SOURCE_ALREADY_HAS_ENTRY', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']} | approved in both periods: False
+    settlement_verified on demo_card_001:C1: ('ok', 1)
+    independent approval of demo_card_001:C1: ('ok', None)
+    [pre_approved=True] C1 replaces B1 inside December: {'id': 15, 'eligible': True, 'status': 'approve', 'blockers': []}
+    [pre_approved=True] B1 then declares it supersedes A1 (locked) -> C1: {'id': 19, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_ALREADY_HAS_ENTRY', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']} | December governing: ['demo_card_001:B1', 'demo_card_001:C1']
+    [pre_approved=True] exceptions: []
+    independent approval of demo_card_001:C1: ('refused', 409, 'Unresolved controls block approval')
+    settlement_verified on demo_card_001:B1: ('ok', 2)
+    independent approval of demo_card_001:B1: ('refused', 409, 'Unresolved controls block approval')
+    [pre_approved=True] November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December C1: {'id': 24, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_ALREADY_HAS_ENTRY', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']} | December B1: {'id': 25, 'eligible': False, 'status': 'pending', 'blockers': ['MISSING_RECEIPT', 'SOURCE_ALREADY_HAS_ENTRY', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']} | approved in both periods: False
+    => OK
+
+N01d [RB-01] an unresolved link that is never re-sent: a further replacement of the unresolved source is not released while the root is locked
+    A1Y (supersedes A1X, not yet received): {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    A1X arrives (supersedes locked A1) -> held: ['demo_card_001:A1X', 'receipt-A1X'] | A1Y: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    A1Z arrives superseding A1Y (A1Y never re-sent) -> A1Z: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | December governing: ['demo_card_001:A1Z']
+    exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    A1Z disclosed chain: ['demo_card_001:A1Y']
+    settlement_verified on demo_card_001:A1Z: ('ok', 1)
+    independent approval of demo_card_001:A1Z: ('ok', None)
+    finalize December without acknowledgement: ('ok', 1)
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December A1Z: {'id': 15, 'eligible': True, 'status': 'approve', 'blockers': []} | approved in both periods: True
+    => WEAK
+
+N01g [RB-01/RV-01] a charge superseded while its period was open, the period then locked before it was re-prepared: the superseded charge does not stay approved beside its replacement
+    lock November without re-preparing it, no acknowledgement: ('refused', 409, 'Unsettled preparation requires explicit acknowledgement')
+    lock November without re-preparing it, with acknowledgement: ('ok', None)
+    settlement_verified on demo_card_001:B1: ('ok', 1)
+    independent approval of demo_card_001:B1: ('ok', None)
+    November A1: {'id': 2, 'eligible': True, 'status': 'stale', 'blockers': []} | December B1: {'id': 11, 'eligible': True, 'status': 'approve', 'blockers': []} | approved in both periods: False
+    November outcomes: n/a
+    => OK
+
+SUMMARY
+N01a   RB-01        WEAK
+N01b   RB-01        WEAK
+N01c   RB-01        OK
+N01d   RB-01        WEAK
+N01g   RB-01/RV-01  OK
+{"counts": {"OK": 2, "WEAK": 3, "NOTE": 0, "ERROR": 0}}
