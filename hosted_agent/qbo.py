@@ -109,11 +109,32 @@ def fault_text(raw):
 
 
 class Qbo:
-    def __init__(self, client_id, client_secret, redirect_uri, transport=http, clock=time.time):
+    def __init__(self, client_id, client_secret, redirect_uri, transport=http, clock=time.time, on_change=None):
         self.client_id, self.client_secret, self.redirect_uri = client_id, client_secret, redirect_uri
         self.transport, self.clock = transport, clock
         self.states = {}       # state -> (person name, expiry)
         self.connection = None  # one sandbox company at a time in this build
+        self.on_change = on_change   # told each time the connection or its tokens change, so the service can keep them
+
+    def _changed(self):
+        if self.on_change:
+            self.on_change(dict(self.connection) if self.connection else None)
+
+    def restore(self, saved):
+        """Take up a connection kept from before a restart. Nothing is sent: the next call refreshes the tokens if they are old."""
+        need = ("realm_id", "connected_by", "connected_at", "access_token", "refresh_token", "expires_at")
+        if not isinstance(saved, dict) or any(not saved.get(key) for key in need):
+            raise QboError("the kept QuickBooks connection is incomplete; connect again from the page")
+        self.connection = {key: saved[key] for key in need}
+
+    def _live(self):
+        c = self.connection
+        if not c:
+            raise QboError("no QuickBooks sandbox company is connected")
+        if self.clock() >= c["expires_at"]:
+            c.update(self._token(dict(grant_type="refresh_token", refresh_token=c["refresh_token"])))
+            self._changed()                # Intuit replaces the refresh token from time to time: keep the newest
+        return c
 
     # -- sign-in with Intuit ------------------------------------------------
     def authorize_url(self, person_name):
@@ -132,6 +153,7 @@ class Qbo:
             raise QboError("Intuit did not return a company; the connection was not approved")
         tokens = self._token(dict(grant_type="authorization_code", code=code, redirect_uri=self.redirect_uri))
         self.connection = dict(realm_id=str(realm_id), connected_by=person, connected_at=int(self.clock()), **tokens)
+        self._changed()
         return person
 
     def _token(self, form):
@@ -146,11 +168,7 @@ class Qbo:
 
     # -- reads ------------------------------------------------------------
     def _request(self, path, params=None):
-        c = self.connection
-        if not c:
-            raise QboError("no QuickBooks sandbox company is connected")
-        if self.clock() >= c["expires_at"]:
-            c.update(self._token(dict(grant_type="refresh_token", refresh_token=c["refresh_token"])))
+        c = self._live()
         query = urllib.parse.urlencode(dict(params or {}, minorversion=MINOR_VERSION))
         url = "%s/v3/company/%s/%s?%s" % (API, c["realm_id"], path, query)
         return self.transport("GET", url, {"Authorization": "Bearer " + c["access_token"], "Accept": "application/json"})
@@ -162,11 +180,7 @@ class Qbo:
         return json.loads(raw)
 
     def _post(self, path, payload):
-        c = self.connection
-        if not c:
-            raise QboError("no QuickBooks sandbox company is connected")
-        if self.clock() >= c["expires_at"]:
-            c.update(self._token(dict(grant_type="refresh_token", refresh_token=c["refresh_token"])))
+        c = self._live()
         url = "%s/v3/company/%s/%s?minorversion=%s" % (API, c["realm_id"], path, MINOR_VERSION)
         status, raw = self.transport("POST", url, {"Authorization": "Bearer " + c["access_token"], "Accept": "application/json",
                                                    "Content-Type": "application/json"}, json.dumps(payload).encode())

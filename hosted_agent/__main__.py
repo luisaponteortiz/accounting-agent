@@ -1,4 +1,4 @@
-"""python -m hosted_agent demo            fictional companies, in memory, with the review page
+"""python -m hosted_agent demo            fictional companies, with the review page (in memory unless AGENT_DB or --db names a file)
    python -m hosted_agent run --db FILE   one unattended pass over every client (the scheduled job)"""
 import argparse
 import json
@@ -23,8 +23,11 @@ def people_from_env():
             secrets.token_urlsafe(24): dict(name="Demo reviewer", role="reviewer")}, True
 
 
+DEMO_CLIENTS = ("cafe", "outfitters")
+
+
 def seed_demo(store):
-    for company, client_id in zip(demo_books.companies(), ("cafe", "outfitters")):
+    for company, client_id in zip(demo_books.companies(), DEMO_CLIENTS):
         if not store.one("SELECT 1 FROM clients WHERE client_id=?", (client_id,)):
             store.add_client(client_id, company["name"], company["realm_id"])
 
@@ -32,15 +35,20 @@ def seed_demo(store):
 def main():
     parser = argparse.ArgumentParser(prog="hosted_agent", description="Hosted accounting agent, development build")
     parser.add_argument("command", choices=("demo", "run"))
-    parser.add_argument("--db", default=":memory:")
+    parser.add_argument("--db", default=os.environ.get("AGENT_DB") or ":memory:")   # a file on a disk keeps everything across restarts
     parser.add_argument("--host", default=os.environ.get("HOST", "127.0.0.1"))
     parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8770")))
     args = parser.parse_args()
+    if args.db != ":memory:":
+        os.makedirs(os.path.dirname(os.path.abspath(args.db)), exist_ok=True)
     store, ledger, brain = Store(args.db), FakeLedger(demo_books.companies()), from_environment(os.environ)
+    if args.db != ":memory:":
+        os.chmod(args.db, 0o600)            # the file holds the kept QuickBooks connection: this service's user only
     print("Brain: %s" % brain.name, flush=True)
+    print("Records: %s" % ("kept in a file on disk" if args.db != ":memory:" else "in memory only, lost at restart"), flush=True)
     seed_demo(store)
-    for client in store.clients():
-        print(json.dumps(dict(client=client["client_id"], **run_client(store, ledger, brain, client["client_id"]))), flush=True)
+    for client_id in DEMO_CLIENTS:      # a kept sandbox company is not run here: its books are reached only once the page's server is up
+        print(json.dumps(dict(client=client_id, **run_client(store, ledger, brain, client_id))), flush=True)
     if getattr(brain, "calls", 0):
         print("Model calls: %s. Last error: %s" % (brain.calls, brain.last_error), flush=True)
     if args.command == "run":

@@ -40,6 +40,8 @@ CREATE TABLE IF NOT EXISTS audit(
  id INTEGER PRIMARY KEY AUTOINCREMENT, client_id TEXT NOT NULL, actor TEXT NOT NULL,
  event TEXT NOT NULL, payload TEXT NOT NULL, prev_hash TEXT NOT NULL, hash TEXT NOT NULL,
  created TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS connections(
+ name TEXT PRIMARY KEY, body TEXT NOT NULL, updated TEXT NOT NULL);
 """
 
 
@@ -76,6 +78,18 @@ class Store:
     def run(self, sql, args=()):
         with self.lock:
             return self.db.execute(sql, args).lastrowid
+
+    # -- connections: what the service needs to reach a company again after a restart.
+    # The body holds sign-in tokens. Nothing on the page or in the audit chain reads this table.
+    def save_connection(self, name, body):
+        self.run("INSERT OR REPLACE INTO connections(name, body, updated) VALUES (?,?,?)", (name, dumps(body), now()))
+
+    def connection(self, name):
+        found = self.one("SELECT body FROM connections WHERE name=?", (name,))
+        return json.loads(found["body"]) if found else None
+
+    def forget_connection(self, name):
+        self.run("DELETE FROM connections WHERE name=?", (name,))
 
     # -- audit: an append-only chain, one per database ---------------------
     def audit(self, client_id, actor, event, payload):

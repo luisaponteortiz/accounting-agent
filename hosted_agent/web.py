@@ -12,6 +12,8 @@ from .qbo_ledger import QboLedger
 from .runner import run_client
 
 PAGE = Path(__file__).parent / "page.html"
+SANDBOX = "qbo_sandbox"          # the one kept QuickBooks connection in this build
+qbo_module = qbo                 # ReviewServer takes an argument named qbo
 
 
 class ReviewServer(ThreadingHTTPServer):
@@ -21,6 +23,18 @@ class ReviewServer(ThreadingHTTPServer):
         """people: {token: {"name": ..., "role": "owner" | "reviewer"}}"""
         self.store, self.brain, self.people, self.qbo, self.labs = store, brain, people, qbo, labs
         self.ledger = Books(ledger) if qbo else ledger     # with QuickBooks keys, the sandbox company's books sit beside the fictional ones
+        if qbo:
+            # The connection is kept in the store, so a restart does not ask the owner to sign in to Intuit again.
+            qbo.on_change = lambda c: store.save_connection(SANDBOX, c) if c else store.forget_connection(SANDBOX)
+            kept = store.connection(SANDBOX)
+            if kept:
+                try:
+                    qbo.restore(kept)
+                    self.adopt_sandbox(kept["connected_by"])
+                    store.audit("-", "service", "qbo_sandbox_restored", {"realm_id": kept["realm_id"]})
+                except (qbo_module.QboError, LedgerError) as problem:      # an unusable kept connection never stops the service
+                    qbo.connection = None
+                    store.audit("-", "service", "qbo_sandbox_not_restored", {"reason": str(problem)[:200]})
         super().__init__(address, Handler)
 
     def adopt_sandbox(self, person_name):
