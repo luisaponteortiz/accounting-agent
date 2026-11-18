@@ -26,7 +26,7 @@ class ReviewServer(ThreadingHTTPServer):
     def adopt_sandbox(self, person_name):
         """The connected sandbox company becomes a client of its own, in prepare-only mode, with its own ledger."""
         realm = self.qbo.connection["realm_id"]
-        books = QboLedger(self.qbo)
+        books = QboLedger(self.qbo, add_payees=True)     # D-044: a person's approval of an item adds a payee the books lack
         self.ledger.add(realm, books)
         if not self.store.one("SELECT 1 FROM clients WHERE realm_id=?", (realm,)):
             self.store.add_client("qbo-" + realm, books.company(realm)["name"], realm, actor=person_name)
@@ -134,8 +134,9 @@ class Handler(BaseHTTPRequestHandler):
                 state = review.state(s.store, query["client"][0])
                 try:
                     state["accounts"] = [a["name"] for a in s.ledger.accounts(state["client"]["realm_id"])]
+                    state["payees"] = s.ledger.payees(state["client"]["realm_id"])
                 except LedgerError as problem:
-                    state["accounts"], state["books_error"] = [], str(problem)
+                    state["accounts"], state["payees"], state["books_error"] = [], None, str(problem)
                 return self.send(200, state)
         except review.Refused as no:
             return self.send(403, str(no).encode(), "text/plain")

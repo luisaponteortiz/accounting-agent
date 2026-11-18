@@ -115,6 +115,11 @@ class QboLedger:
         return [a.get("FullyQualifiedName") or a.get("Name") for a in self._all("Account") if a.get("AccountType") == "Bank" and a.get("Name") != self.clearing]
 
     @guarded
+    def payees(self, realm_id):
+        """The vendors and customers the books hold, or None when a missing one is not added: the page marks a payee that approving would add."""
+        return sorted(row.get("DisplayName") or "" for entity in ("Vendor", "Customer") for row in self._all(entity)) if self.add_payees else None
+
+    @guarded
     def pending_feed(self, realm_id):
         return [self._item(l) for l in self._lines()["lines"] if not l["cleared_by"]]
 

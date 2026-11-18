@@ -20,7 +20,7 @@ class Books:
     chooses the ledger; a company nobody registered goes to the fallback, which
     refuses what it does not hold."""
     METHODS = ("company", "accounts", "bank_accounts", "pending_feed", "history", "open_bills", "open_invoices", "read_back",
-               "categorize", "match", "transfer", "move")
+               "categorize", "match", "transfer", "move", "payees")
 
     def __init__(self, fallback):
         self.fallback, self.by_realm = fallback, {}
@@ -66,6 +66,10 @@ class FakeLedger:
 
     def bank_accounts(self, realm_id):
         return [a["name"] for a in self._c(realm_id)["accounts"] if a["type"] == "Bank"]
+
+    def payees(self, realm_id):
+        self._c(realm_id)
+        return None                       # these books take any payee name as text; there is no list to add to
 
     def pending_feed(self, realm_id):
         return [copy.deepcopy(l) for l in self._c(realm_id)["feed"] if l["status"] == "pending"]

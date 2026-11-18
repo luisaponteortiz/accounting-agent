@@ -266,7 +266,11 @@ class QboLedgerCase(unittest.TestCase):
         self.assertEqual((client["name"], client["realm_id"], client["mode"]), ("Sandbox Company_US_1", REALM, "prepare_only"))
         request = urllib.request.Request("http://127.0.0.1:%s/api/state?client=qbo-%s" % (server.server_port, REALM), headers={"Authorization": "Bearer owner-token"})
         with urllib.request.urlopen(request, timeout=5) as response:
-            self.assertIn("Utilities", json.loads(response.read())["accounts"])
+            state = json.loads(response.read())
+        self.assertIn("Utilities", state["accounts"])
+        self.assertEqual(state["payees"], ["Bayview Catering", "City Power and Light", "Northside Produce Co"])   # D-044: the page can mark a payee that approving would add
+        self.assertTrue(server.ledger.by_realm[REALM].add_payees)
+        self.assertEqual((self.books.payees(REALM), server.ledger.payees("9001")), (None, None))   # off by default; the fictional books have no payee list
         server.adopt_sandbox("Owner (test)")                             # connecting again does not add it twice
         self.assertEqual(len([c for c in self.store.clients() if c["realm_id"] == REALM]), 1)
 
