@@ -81,6 +81,11 @@ class WebCase(unittest.TestCase):
         self.assertEqual(self.call("/api/qbo/probe", token="owner-token")[0], 404)     # no keys on this server
         self.assertEqual(self.call("/api/qbo/probe", token="reviewer-token")[0], 403)
         self.assertEqual(self.call("/api/qbo/probe")[0], 401)
+        self.assertEqual(self.call("/api/labs/look", token="owner-token")[0], 404)     # not wired on this server
+        self.assertEqual(self.call("/api/labs/look", token="reviewer-token")[0], 403)
+        self.assertEqual(self.call("/api/labs/register", {}, "reviewer-token")[0], 403)
+        self.assertEqual(self.call("/api/labs/register", {}, "owner-token", page_header=False)[0], 403)
+        self.assertEqual(self.call("/api/labs/register", {})[0], 401)
         self.assertEqual(self.call("/qbo/callback?state=x&code=y&realmId=1")[0], 404)
 
     def test_a_refusal_is_reported_per_item(self):

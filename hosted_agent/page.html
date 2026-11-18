@@ -19,7 +19,7 @@ button{cursor:pointer}button.go{background:var(--accent);color:var(--bg);border-
 #msg{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:6px;display:none;max-width:90vw}
 </style></head><body>
 <header><strong>Accounting agent</strong><span class="dev">DEVELOPMENT BUILD: FICTIONAL COMPANIES</span><span class="muted" id="me"></span></header>
-<main><aside><div class="card"><h2>Clients</h2><div id="clients"></div><p class="muted">Names and counts only. Open a client to see its items.</p></div><div class="card"><h2>QuickBooks sandbox</h2><div id="qbo" class="muted">Checking…</div></div></aside>
+<main><aside><div class="card"><h2>Clients</h2><div id="clients"></div><p class="muted">Names and counts only. Open a client to see its items.</p></div><div class="card"><h2>QuickBooks sandbox</h2><div id="qbo" class="muted">Checking…</div></div><div class="card"><h2>Intuit's own connector</h2><div class="muted">The route that may reach the bank feed. No sign-in and no company in this build.<br><button id="labslook" style="margin-top:8px">Look at its public settings</button> <button id="labsreg" class="go" style="margin-top:8px">Ask Intuit to register this agent</button><div id="labsout"></div></div></div></aside>
 <section id="view"><div class="card">Choose a client.</div></section></main><div id="msg"></div>
 <script>
 const $=s=>document.querySelector(s),esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -71,5 +71,10 @@ async function qbo(){const q=await get('/api/qbo'),el=$('#qbo');
   const part=k=>r.results.filter(x=>x.kind===k);const open=part('bank_feed').filter(x=>x.readable).length;
   out.innerHTML='<b>Recorded in the books</b><br>'+part('recorded').map(row).join('<br>')+'<br><b>Unreviewed bank feed lines, by every name tried</b><br>'+part('bank_feed').map(row).join('<br>')+
    '<br><b>Result: '+(open?open+' bank feed name(s) answered. Look closer.':'none of the bank feed names is readable through this connection.')+'</b>'}}
+$('#labslook').onclick=async()=>{const out=$('#labsout');out.textContent='Looking…';const r=await get('/api/labs/look');
+ out.innerHTML=(r.steps||[]).map(x=>'<b>'+esc(x.step)+'</b><br>'+(x.ok?'':'<span class="bad">Failed: </span>')+esc(x.said)).join('<br>')||'<span class="bad">'+esc(r.error||'Not available.')+'</span>'};
+$('#labsreg').onclick=async e=>{const b=e.currentTarget,out=$('#labsout');if(!b.dataset.sure){b.dataset.sure=1;b.textContent='Press again to confirm';out.textContent='This asks Intuit to create a client record for this agent. No sign-in happens and no company is touched.';return}
+ delete b.dataset.sure;b.textContent='Ask Intuit to register this agent';out.textContent='Asking Intuit…';const r=await post('/api/labs/register',{});
+ out.innerHTML='<b>'+(r.accepted?'Accepted':'Not accepted')+'</b>'+(r.status?' (HTTP '+esc(r.status)+')':'')+'<br>'+esc(r.said||r.error||'')};
 roster();qbo();
 </script></body></html>

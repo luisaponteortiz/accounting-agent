@@ -6,7 +6,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
-from . import qbo, review
+from . import labs, qbo, review
 from .runner import run_client
 
 PAGE = Path(__file__).parent / "page.html"
@@ -15,9 +15,9 @@ PAGE = Path(__file__).parent / "page.html"
 class ReviewServer(ThreadingHTTPServer):
     daemon_threads = True
 
-    def __init__(self, address, store, ledger, brain, people, qbo=None):
+    def __init__(self, address, store, ledger, brain, people, qbo=None, labs=None):
         """people: {token: {"name": ..., "role": "owner" | "reviewer"}}"""
-        self.store, self.ledger, self.brain, self.people, self.qbo = store, ledger, brain, people, qbo
+        self.store, self.ledger, self.brain, self.people, self.qbo, self.labs = store, ledger, brain, people, qbo, labs
         super().__init__(address, Handler)
 
     def person(self, token):
@@ -101,6 +101,11 @@ class Handler(BaseHTTPRequestHandler):
                     return self.send(200, {"results": s.qbo.probe()})
                 except qbo.QboError as problem:
                     return self.send(200, {"error": str(problem)})
+            if url.path == "/api/labs/look":
+                review.allow(person, "mode")
+                if not s.labs:
+                    return self.send(404, {"error": "not available on this service"})
+                return self.send(200, {"steps": s.labs.look(), "registered": bool(s.labs.registered)})
             if url.path == "/":
                 return self.send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
             if url.path == "/api/roster":
@@ -159,6 +164,16 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/mode":
                 review.set_mode(s.store, person, body["client"], body["mode"], s.ledger)
                 return self.send(200, {"ok": True})
+            if path == "/api/labs/register":
+                review.allow(person, "mode")
+                if not s.labs:
+                    return self.send(404, {"error": "not available on this service"})
+                try:
+                    result = s.labs.register()
+                except labs.LabsError as problem:
+                    result = dict(accepted=False, status=None, said=str(problem))
+                s.store.audit("-", person["name"], "intuit_connector_registration_asked", {"accepted": result["accepted"], "status": result["status"]})
+                return self.send(200, result)
             if path == "/api/run":
                 review.allow(person, "mode")
                 return self.send(200, run_client(s.store, s.ledger, s.brain, body["client"]))
