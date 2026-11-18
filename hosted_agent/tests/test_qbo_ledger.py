@@ -167,6 +167,90 @@ class QboLedgerCase(unittest.TestCase):
         self.assertEqual((self.writes(before), self.books.read_back(REALM, "P23")["posted"]["account"]), ([("POST", "purchase")], "Supplies"))
         self.assertTrue([h for h in self.books.history(REALM) if h["id"] == "Purchase 23"])
 
+    def test_a_transfer_between_the_companys_own_accounts_is_paired_on_approval(self):
+        before = self.connect()
+        self.intuit.add_transfer_lines(out_date="2026-11-10", in_date="2026-11-11")
+        got = self.run_agent()
+        out, into = got["P24"], got["D34"]
+        self.assertEqual((out["item_class"], out["class_key"], out["action"], out["confidence"], out["evidence"]["other_side"]),
+                         ("own_transfer", "Checking <> Savings", dict(kind="transfer", other_account="Savings"), 0.97, "D34"))
+        self.assertEqual((into["item_class"], into["action"]), ("own_transfer", dict(kind="transfer", other_account="Checking")))
+        with self.assertRaises(LedgerError):
+            self.books.transfer(REALM, "P24", "Mastercard")                 # the other side is in Savings, not in the account named
+        self.assertEqual(self.writes(before), [])
+        self.assertEqual(review.decide(self.store, self.books, OWNER, out["id"], "approve"), "posted")
+        self.assertEqual(self.writes(before), [("POST", "purchase"), ("POST", "deposit")])
+        posting = self.store.one("SELECT * FROM postings WHERE proposal_id=?", (out["id"],))
+        self.assertEqual((posting["verified"], posting["ledger_ref"]), (1, "Purchase 24"))
+        self.assertFalse({"P24", "D34"} & {i["id"] for i in self.books.pending_feed(REALM)})      # one approval clears both lines
+        self.assertEqual((self.record("Purchase", "24")["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"]["value"], self.record("Deposit", "34")["DepositToAccountRef"]["name"]), ("90", "Savings"))
+        sent = len(self.intuit.calls)
+        self.assertEqual(review.decide(self.store, self.books, OWNER, into["id"], "approve"), "posted")   # the other side: already done, nothing more is written
+        self.assertEqual((self.writes(sent), self.store.one("SELECT verified, ledger_ref FROM postings WHERE proposal_id=?", (into["id"],))), ([], dict(verified=1, ledger_ref="Deposit 34")))
+
+    def test_the_other_side_of_a_paired_transfer_is_seen_as_done_on_the_next_run(self):
+        self.connect()
+        self.intuit.add_transfer_lines(out_date="2026-11-10", in_date="2026-11-11")
+        got = self.run_agent()
+        review.decide(self.store, self.books, OWNER, got["P24"]["id"], "approve")
+        before = len(self.intuit.calls)
+        self.assertEqual(run_client(self.store, self.books, BaselineBrain(), "sandbox")["observed"], 1)
+        self.assertEqual((self.store.proposal(got["D34"]["id"])["status"], self.writes(before)), ("observed_same", []))
+
+    def test_a_likely_transfer_without_the_word_goes_to_a_person_and_says_when_it_was_also_recorded_by_hand(self):
+        before = self.connect()
+        self.intuit.add_transfer_lines()                                   # 6 and 7 October: transfer T3 of 5 October was recorded by hand
+        self.record("Purchase", "24")["Line"][0]["Description"] = ""
+        self.record("Deposit", "34")["Line"][0]["Description"] = "MOBILE DEPOSIT"
+        self.record("Deposit", "34")["PrivateNote"] = ""
+        got = self.run_agent()
+        for key, other in (("P24", "Savings"), ("D34", "Checking")):
+            p = got[key]
+            self.assertEqual((p["item_class"], p["action"], p["confidence"], p["queue"]), ("own_transfer", dict(kind="transfer", other_account=other), 0.7, "exception"), key)
+            self.assertIn("low confidence", p["reasons"])
+            self.assertIn("recorded transfer T3", p["evidence"]["reasoning"])
+            self.assertIn("for a person to remove", p["evidence"]["reasoning"])
+        self.assertEqual(self.writes(before), [])                          # the recorded transfer is never deleted or changed by the agent
+        self.intuit.transfers[:] = [t for t in self.intuit.transfers if t["Id"] != "T3"]
+        self.store.run("DELETE FROM proposals")
+        again = self.run_agent()
+        self.assertIn("does not say transfer", again["P24"]["evidence"]["reasoning"])
+        self.assertEqual(again["P24"]["evidence"]["recorded_transfers"], [])
+
+    def test_a_clear_transfer_that_was_also_recorded_by_hand_goes_to_a_person(self):
+        self.connect()
+        self.intuit.add_transfer_lines()                                   # the bank text says transfer; T3 of 5 October is the same money recorded by hand
+        got = self.run_agent()
+        for key in ("P24", "D34"):
+            p = got[key]
+            self.assertEqual((p["item_class"], p["confidence"], p["queue"]), ("own_transfer", 0.7, "exception"), key)
+            self.assertIn("recorded transfer T3", p["evidence"]["reasoning"])
+
+    def test_a_pairing_that_quickbooks_did_not_keep_is_not_reported_as_done(self):
+        self.connect()
+        self.intuit.add_transfer_lines(out_date="2026-11-10", in_date="2026-11-11")
+        self.intuit.ignore_change = True                                   # QuickBooks says yes but the notes are not there
+        with self.assertRaises(LedgerError):
+            self.books.transfer(REALM, "P24", "Savings")
+        self.intuit.ignore_change = False
+        self.assertEqual(self.books.transfer(REALM, "P24", "Savings"), "Purchase 24")
+        with self.assertRaises(LedgerError):
+            self.books.transfer(REALM, "P24", "Mastercard")                 # paired with the Savings line, not with the account named
+        self.assertEqual(self.books.read_back(REALM, "D34")["posted"]["account"], "Checking")
+
+    def test_a_transfer_with_two_possible_other_sides_is_not_paired(self):
+        before = self.connect()
+        self.intuit.add_transfer_lines(out_date="2026-11-10", in_date="2026-11-11")
+        self.intuit.records["Deposit"].append({"Id": "35", "SyncToken": "0", "TxnDate": "2026-11-12", "TotalAmt": 500.0, "DepositToAccountRef": {"value": "36", "name": "Savings"},
+                                               "Line": [{"Amount": 500.0, "DepositLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]})
+        got = self.run_agent()
+        self.assertNotEqual(got["P24"]["item_class"], "own_transfer")       # two deposits could be the other side: no proposal of a transfer
+        for call in (lambda: self.books.transfer(REALM, "P24", "Savings"), lambda: self.books.transfer(REALM, "P24", "Checking"),
+                     lambda: self.books.transfer(REALM, "P24", "Mastercard"), lambda: self.books.transfer(REALM, "P99", "Savings"), lambda: self.books.transfer("999", "P24", "Savings")):
+            with self.assertRaises(LedgerError):
+                call()
+        self.assertEqual(self.writes(before), [])
+
     def test_a_memo_already_on_the_record_is_kept(self):
         self.connect()
         self.record("Purchase", "21")["PrivateNote"] = "Memo from the bank"
@@ -188,7 +272,7 @@ class QboLedgerCase(unittest.TestCase):
                    lambda: self.books.match(REALM, "P22", "bill", "B777"),
                    lambda: self.books.match(REALM, "P22", "invoice", "I201"),                            # money out cannot pay an invoice, even of the same amount
                    lambda: self.books.match(REALM, "D33", "bill", "B100"),
-                   lambda: self.books.transfer(REALM, "P21", "Savings"))
+                   lambda: self.books.transfer(REALM, "P21", "Savings"))                                 # no line in Savings is its other side
         for number, call in enumerate(refused):
             with self.assertRaises(LedgerError, msg=number):
                 call()

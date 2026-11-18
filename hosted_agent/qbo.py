@@ -13,6 +13,7 @@ back. It never deletes.
 """
 import base64
 import json
+import re
 from datetime import date
 import secrets
 import time
@@ -32,6 +33,19 @@ FEED_PATHS = ("banking/transactions", "bankfeeds", "olb/transactions")
 CLEARING = "Bank Feed Clearing"
 CARD_CLEARING = "Card Feed Clearing"      # D-045: a credit card account, because QuickBooks will not turn a card charge into a bank payment
 MATCH_DAYS = 21
+PAIR_DAYS = 3                 # the two bank lines of one transfer between the company's own accounts are at most this far apart
+PAIR_NOTE = "Own-account transfer, other side: %s %s"
+_PAIR = re.compile(r"\s*\|?\s*Own-account transfer, other side: (Purchase|Deposit|Transfer) (\w+)")
+
+
+def pair_of(note):
+    """The record a memo names as the other side of an own-account transfer, or None."""
+    found = _PAIR.search(note or "")
+    return (found.group(1), found.group(2)) if found else None
+
+
+def without_pair(note):
+    return _PAIR.sub("", note or "").strip() or None
 _deposit_to = lambda t: t.get("DepositToAccountRef")
 def _bill_payment_place(t):
     if "CheckPayment" in t:
@@ -187,11 +201,12 @@ class Qbo:
         raw = {entity: self.query("select * from %s maxresults 1000" % entity).get(entity, []) for entity, _, _ in RECORDED_PAYMENTS}
         lines, own = [], set()
 
-        def add(line_id, when, amount, direction, bank, **more):
+        def add(line_id, when, amount, direction, bank, record, held_in, memo, **more):
             kind = kinds.get(bank.get("value"))
             lines.append(dict(id=line_id, date=when, amount_cents=cents(amount), direction=direction, bank_account=bank.get("name"),
                               bank_account_id=bank.get("value"), bank_account_type=kind,
-                              movable=kind == "Bank" or (kind == "Credit Card" and bool(card)), **more))
+                              movable=kind == "Bank" or (kind == "Credit Card" and bool(card)),
+                              record_type=record[0], record_id=str(record[1]), clearing_id=held_in, pair=pair_of(memo), **more))
 
         def posted_by_rule(entity, t, detail, party):
             """The parts of one record that a rule booked against the clearing account, as one line."""
@@ -200,23 +215,30 @@ class Qbo:
                 return None
             own.add((entity, t.get("Id")))
             return dict(amount=sum(float(l.get("Amount") or 0) for l in parts), payee=(party(t, parts[0]) or {}).get("name"),
-                        note=next((l.get("Description") for l in parts if l.get("Description")), None) or t.get("PrivateNote"))
+                        held_in=parts[0][detail]["AccountRef"]["value"],
+                        note=next((l.get("Description") for l in parts if l.get("Description")), None) or without_pair(t.get("PrivateNote")))
 
+        between = []                                    # transfers a person recorded between two of the company's own accounts
         for t in self.query("select * from Transfer maxresults 1000").get("Transfer", []):
             source, target = t.get("FromAccountRef") or {}, t.get("ToAccountRef") or {}
-            if len(clearing_ids & {source.get("value"), target.get("value")}) != 1:
+            held = clearing_ids & {source.get("value"), target.get("value")}
+            if not held:
+                between.append(dict(id=t.get("Id"), date=t.get("TxnDate"), amount_cents=cents(t.get("Amount")), source=source, target=target))
+            if len(held) != 1:
                 continue
             direction = "out" if target.get("value") in clearing_ids else "in"     # as the bank account saw it
-            add(t["Id"], t.get("TxnDate"), t.get("Amount"), direction, source if direction == "out" else target,
-                note=t.get("PrivateNote"), payee=None, posted_as="transfer")
+            add(t["Id"], t.get("TxnDate"), t.get("Amount"), direction, source if direction == "out" else target, ("Transfer", t["Id"]), min(held), t.get("PrivateNote"),
+                note=without_pair(t.get("PrivateNote")), payee=None, posted_as="transfer")
         for t in raw["Purchase"]:
             got = posted_by_rule("Purchase", t, "AccountBasedExpenseLineDetail", lambda t, part: t.get("EntityRef"))
             if got:
-                add("P%s" % t.get("Id"), t.get("TxnDate"), got["amount"], "out", t.get("AccountRef") or {}, note=got["note"], payee=got["payee"], posted_as="expense")
+                add("P%s" % t.get("Id"), t.get("TxnDate"), got["amount"], "out", t.get("AccountRef") or {}, ("Purchase", t.get("Id")), got["held_in"], t.get("PrivateNote"),
+                    note=got["note"], payee=got["payee"], posted_as="expense")
         for t in raw["Deposit"]:
             got = posted_by_rule("Deposit", t, "DepositLineDetail", lambda t, part: part["DepositLineDetail"].get("Entity"))
             if got:
-                add("D%s" % t.get("Id"), t.get("TxnDate"), got["amount"], "in", t.get("DepositToAccountRef") or {}, note=got["note"], payee=got["payee"], posted_as="deposit")
+                add("D%s" % t.get("Id"), t.get("TxnDate"), got["amount"], "in", t.get("DepositToAccountRef") or {}, ("Deposit", t.get("Id")), got["held_in"], t.get("PrivateNote"),
+                    note=got["note"], payee=got["payee"], posted_as="deposit")
         recorded = [dict(type=entity, id=t.get("Id"), number=t.get("DocNumber"), date=t.get("TxnDate"), direction=direction,
                          amount_cents=cents(t.get("TotalAmt")), bank_account_id=(bank(t) or {}).get("value"),
                          payee=((t.get("EntityRef") or t.get("VendorRef") or t.get("CustomerRef") or {}).get("name")))
@@ -242,10 +264,27 @@ class Qbo:
         # A payment already sitting in the clearing account cancels one line, not every line of that amount.
         # A charge recorded on a card can only sit in a card account, so a card line is cancelled from the card clearing account.
         home = lambda l: (account["Id"], card["Id"]) if card and l["bank_account_type"] == "Credit Card" else (account["Id"],)
-        in_clearing = {l["id"]: near(l, home(l)) for l in lines}
+        # The two bank lines of one transfer between the company's own accounts cancel each other in the clearing account
+        # once an approved pairing has put each record's number in the other's memo.
+        by_record = {(l["record_type"], l["record_id"]): l for l in lines}
+        for line in lines:
+            other = by_record.get(line["pair"]) if line["pair"] else None
+            mutual = (other is not None and other is not line and other["pair"] == (line["record_type"], line["record_id"])
+                      and other["direction"] != line["direction"] and other["amount_cents"] == line["amount_cents"] and other["clearing_id"] == line["clearing_id"])
+            line["paired_with"] = other["id"] if mutual else None
+        in_clearing = {l["id"]: near(l, home(l)) for l in lines if not l["paired_with"]}
         cancels = one_each(in_clearing)
         for line in lines:
-            line["cleared_by"] = [c for c in in_clearing[line["id"]] if (c["type"], c["id"]) == cancels.get(line["id"])]
+            if line["paired_with"]:
+                other = by_record[line["pair"]]
+                line["cleared_by"] = [dict(type=other["record_type"], id=other["record_id"], number=None, date=other["date"], payee=None, pair=True, line_id=other["id"],
+                                           bank_account=other["bank_account"], days_apart=abs((day(other["date"]) - day(line["date"])).days))]
+            else:
+                line["cleared_by"] = [c for c in in_clearing[line["id"]] if (c["type"], c["id"]) == cancels.get(line["id"])]
+            side = "source" if line["direction"] == "out" else "target"
+            line["recorded_transfers"] = [dict(id=t["id"], date=t["date"], from_account=t["source"].get("name"), to_account=t["target"].get("name"))
+                                          for t in between if t["amount_cents"] == line["amount_cents"] and t[side].get("value") == line["bank_account_id"]
+                                          and t["date"] and line["date"] and abs((day(t["date"]) - day(line["date"])).days) <= MATCH_DAYS]
         open_lines = {l["id"]: near(l, (l["bank_account_id"],)) for l in lines if not l["cleared_by"]}
         best = one_each(open_lines)
         for line in lines:
@@ -294,6 +333,47 @@ class Qbo:
         if on_card:
             result.update(card_balance_before_cents=before["card"]["balance_cents"], card_balance_after_cents=(after.get("card") or {}).get("balance_cents"))
         return result
+
+    def pair_transfer(self, line_id, other_id, name=CLEARING):
+        """Mark two clearing lines as the two sides of one transfer between the company's own accounts, and read it back.
+
+        The rules already booked money out of one bank account and into another through the clearing account, so the
+        books are right as they stand; the only change is a note on each of the two records naming the other. Refused
+        unless the lines are open, of the same amount, in opposite directions, in two different bank accounts, held in
+        the same clearing account and at most PAIR_DAYS apart. Nothing is deleted.
+        """
+        before = self.clearing(name)
+        if not before.get("found"):
+            raise QboError("no account named %s in this company" % name)
+        found = {l["id"]: l for l in before["lines"]}
+        a, b = found.get(str(line_id)), found.get(str(other_id))
+        if not a or not b or a is b:
+            raise QboError("no two clearing lines %s and %s" % (line_id, other_id))
+        if not (a["paired_with"] == b["id"] and b["paired_with"] == a["id"]):
+            if a["cleared_by"] or b["cleared_by"]:
+                raise QboError("one of these lines is already cleared")
+            if a["direction"] == b["direction"] or a["amount_cents"] != b["amount_cents"]:
+                raise QboError("a transfer is the same amount going out of one account and into another")
+            if a["bank_account_id"] == b["bank_account_id"] or a["bank_account_type"] != "Bank" or b["bank_account_type"] != "Bank":
+                raise QboError("this build pairs transfers between two different bank accounts only")
+            if a["clearing_id"] != b["clearing_id"]:
+                raise QboError("the two lines sit in different clearing accounts, so they do not cancel")
+            if abs((date.fromisoformat(a["date"][:10]) - date.fromisoformat(b["date"][:10])).days) > PAIR_DAYS:
+                raise QboError("the two lines are more than %d days apart" % PAIR_DAYS)
+            for line, other in ((a, b), (b, a)):
+                kind, wanted = line["record_type"], (other["record_type"], other["record_id"])
+                record = self._get("%s/%s" % (kind.lower(), line["record_id"]))[kind]
+                named = pair_of(record.get("PrivateNote"))
+                if named == wanted:
+                    continue                                 # an earlier try got this far
+                if named:
+                    raise QboError("%s %s is already marked as one side of another transfer" % (kind, line["record_id"]))
+                mark = PAIR_NOTE % wanted
+                record["PrivateNote"] = "%s | %s" % (record["PrivateNote"], mark) if record.get("PrivateNote") else mark
+                self._post(kind.lower(), record)
+        after = {l["id"]: l for l in self.clearing(name)["lines"]}
+        paired = (after.get(a["id"]) or {}).get("paired_with") == b["id"] and (after.get(b["id"]) or {}).get("paired_with") == a["id"]
+        return dict(paired=paired, line=a["id"], other=b["id"], accounts=[a["bank_account"], b["bank_account"]], amount_cents=a["amount_cents"])
 
     def probe(self):
         """Ask the sandbox which kinds of record this connection can read. Reads only.

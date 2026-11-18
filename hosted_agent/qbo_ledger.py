@@ -12,7 +12,9 @@ match        an open bill or invoice of the same amount is paid from, or into,
 move         a payment that was already recorded in the bank account is moved
              to the clearing account (D-043); one recorded on a credit card
              is moved to the card clearing account (D-045)
-transfer     not built for QuickBooks yet
+transfer     the two bank lines of one transfer between the company's own
+             accounts already cancel in the clearing account; each record
+             gets a note naming the other, and nothing else changes
 
 Every call names the company and is refused unless it is the connected one.
 The connection underneath (qbo.py) can reach only Intuit's sandbox host.
@@ -20,7 +22,7 @@ The connection underneath (qbo.py) can reach only Intuit's sandbox host.
 from datetime import date
 
 from .ledger import LedgerError
-from .qbo import CARD_CLEARING, CLEARING, QboError
+from .qbo import CARD_CLEARING, CLEARING, PAIR_DAYS, QboError
 
 MONTHS = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 LINE_RECORDS = {"P": ("Purchase", "AccountBasedExpenseLineDetail"), "D": ("Deposit", "DepositLineDetail")}
@@ -56,7 +58,7 @@ class QboLedger:
         signed = -line["amount_cents"] if line["direction"] == "out" else line["amount_cents"]
         return dict(id=line["id"], date=line["date"], amount_cents=signed, description=line["note"] or "", bank_account=line["bank_account"],
                     status="pending", payee=line["payee"], posted_as=line["posted_as"], bank_account_type=line["bank_account_type"],
-                    movable=line["movable"], recorded=line["recorded"])
+                    movable=line["movable"], recorded=line["recorded"], recorded_transfers=line["recorded_transfers"])
 
     def _pending(self, feed_id):
         got = self._lines()
@@ -161,6 +163,10 @@ class QboLedger:
         line = next((l for l in self._lines()["lines"] if l["id"] == str(feed_id)), None)
         if line and not line["cleared_by"]:
             return dict(self._item(line), posted=None)
+        if line and line["cleared_by"][0].get("pair"):      # the other bank line of the same transfer cancels it
+            by, item = line["cleared_by"][0], self._item(line)
+            return dict(item, status="transferred", posted=dict(id="%s %s" % (line["record_type"], line["record_id"]), date=item["date"], amount_cents=item["amount_cents"],
+                        kind="transfer", account=by["bank_account"], vendor=None))
         if line:                                             # a payment in the clearing account cancels it
             by = line["cleared_by"][0]
             record = self.q._get("%s/%s" % (by["type"].lower(), by["id"]))[by["type"]]
@@ -238,4 +244,22 @@ class QboLedger:
 
     @guarded
     def transfer(self, realm_id, feed_id, other_account):
-        raise LedgerError("transfers between the company's own accounts are not built for QuickBooks yet; handle this one in the books")
+        got = self._lines()
+        line = next((l for l in got["lines"] if l["id"] == str(feed_id)), None)
+        if not line:
+            raise LedgerError("no clearing line %s" % feed_id)
+        ref = "%s %s" % (line["record_type"], line["record_id"])
+        if line["cleared_by"]:
+            by = line["cleared_by"][0]
+            if by.get("pair") and by["bank_account"] == other_account:
+                return ref                                   # approving the other side already paired the two
+            raise LedgerError("clearing line %s is already cleared" % feed_id)
+        apart = lambda l: abs((date.fromisoformat(l["date"][:10]) - date.fromisoformat(line["date"][:10])).days)
+        others = [l for l in got["lines"] if not l["cleared_by"] and l["direction"] != line["direction"] and l["amount_cents"] == line["amount_cents"]
+                  and l["bank_account"] == other_account and l["bank_account_id"] != line["bank_account_id"] and apart(l) <= PAIR_DAYS]
+        if len(others) != 1:
+            raise LedgerError("%d open lines in %s could be the other side of this transfer; it needs exactly one" % (len(others), other_account))
+        result = self.q.pair_transfer(feed_id, others[0]["id"], self.clearing)
+        if not result["paired"]:
+            raise LedgerError("QuickBooks accepted the change but the two lines did not read back as paired")
+        return ref

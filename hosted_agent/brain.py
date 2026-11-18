@@ -71,7 +71,23 @@ class BaselineBrain:
             return proposal("already_recorded", best["type"], dict(kind="move", txn_type=best["type"], txn_id=best["id"], label=label),
                             0.97 if sure else 0.7, candidates=recorded)
 
+        # The other bank line of the same transfer: the same amount the other way, in another of the company's bank accounts, within three days.
+        mirror = [l for l in ctx.feed if l["id"] != line["id"] and l["amount_cents"] == -cents and line["bank_account"] in ctx.banks
+                  and l["bank_account"] != line["bank_account"] and l["bank_account"] in ctx.banks
+                  and abs((date.fromisoformat(l["date"]) - date.fromisoformat(line["date"])).days) <= 3]
+
+        def likely_transfer():
+            """Only the amounts and dates say so: a person looks. A transfer already recorded by hand is said with it."""
+            pair = " <> ".join(sorted([line["bank_account"], mirror[0]["bank_account"]]))
+            by_hand = line.get("recorded_transfers") or []
+            note = ("the books also hold this as recorded transfer %s; with both bank lines in clearing that recorded transfer is a second copy for a person to remove in the books"
+                    % ", ".join(str(t["id"]) for t in by_hand)) if by_hand else "the same amount moved the other way in %s within three days; the bank text does not say transfer" % mirror[0]["bank_account"]
+            return proposal("own_transfer", pair, dict(kind="transfer", other_account=mirror[0]["bank_account"]), 0.7,
+                            other_side=mirror[0]["id"], reasoning=note, recorded_transfers=by_hand)
+
         if not text.strip():
+            if len(mirror) == 1:
+                return likely_transfer()
             return proposal("no_bank_text", "no bank text", None, 0.0, why="the bank gave no description for this line")
 
         if any(text.startswith(rail) for rail in PERSON_RAILS):
@@ -81,6 +97,8 @@ class BaselineBrain:
                  and l["bank_account"] != line["bank_account"] and l["bank_account"] in ctx.banks
                  and abs((date.fromisoformat(l["date"]) - date.fromisoformat(line["date"])).days) <= 3]
         if "TRANSFER" in text and len(other) == 1:
+            if line.get("recorded_transfers") and len(mirror) == 1:
+                return likely_transfer()                     # also recorded by hand: a person looks
             pair = " <> ".join(sorted([line["bank_account"], other[0]["bank_account"]]))
             return proposal("own_transfer", pair, dict(kind="transfer", other_account=other[0]["bank_account"]),
                             0.97, other_side=other[0]["id"])
@@ -110,4 +128,6 @@ class BaselineBrain:
                 return proposal("vendor_seen_few_times", "%s | %s" % (vendor, account), action, 0.7, **evidence)
             return proposal("vendor_mixed_accounts", vendor, action, 0.5, **evidence)
 
+        if len(mirror) == 1:
+            return likely_transfer()
         return proposal("unknown", vendor_key(text) or "unknown", None, 0.0, why="nothing in the books matches this line")
