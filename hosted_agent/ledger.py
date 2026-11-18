@@ -97,7 +97,7 @@ class FakeLedger:
         c["posted"].append(txn)
         return txn
 
-    def categorize(self, realm_id, feed_id, account, vendor, memo):
+    def categorize(self, realm_id, feed_id, account, vendor, memo, by_person=False):
         c, line = self._c(realm_id), self._line(realm_id, feed_id)
         if account not in [a["name"] for a in c["accounts"]]:
             raise LedgerError("no account named %s" % account)

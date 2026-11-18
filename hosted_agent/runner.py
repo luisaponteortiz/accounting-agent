@@ -38,7 +38,7 @@ def execute(store, ledger, proposal_id, action, how, actor):
     realm, feed_id = client["realm_id"], p["item"]["id"]
     try:
         if action["kind"] == "categorize":
-            ref = ledger.categorize(realm, feed_id, action["account"], action.get("vendor"), action.get("memo", ""))
+            ref = ledger.categorize(realm, feed_id, action["account"], action.get("vendor"), action.get("memo", ""), by_person=how != "standing")
         elif action["kind"] == "match":
             ref = ledger.match(realm, feed_id, action["txn_type"], action["txn_id"])
         elif action["kind"] == "transfer":

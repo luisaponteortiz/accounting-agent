@@ -40,8 +40,9 @@ def guarded(method):
 
 
 class QboLedger:
-    def __init__(self, qbo, clearing=CLEARING, today=date.today):
-        self.q, self.clearing, self.today = qbo, clearing, today
+    def __init__(self, qbo, clearing=CLEARING, today=date.today, add_payees=False):
+        """add_payees: when a person approves a payee the books do not have, add it. Off unless the owner decides so."""
+        self.q, self.clearing, self.today, self.add_payees = qbo, clearing, today, add_payees
 
     # -- helpers -----------------------------------------------------------
     def _lines(self):
@@ -74,12 +75,19 @@ class QboLedger:
             raise LedgerError("no account named %s" % name)
         return found[0]
 
-    def _party(self, name, entities):
+    def _party(self, name, entities, add=None):
+        """The payee as the books hold it. add: the kind to create when the books have none (a person approved it and the option is on)."""
+        name = " ".join(name.split())
         for entity in entities:
             for row in self._all(entity):
-                if (row.get("DisplayName") or "").strip().lower() == name.strip().lower():
+                if " ".join((row.get("DisplayName") or "").split()).lower() == name.lower():
                     return dict(value=row["Id"], name=row["DisplayName"], type=entity)
-        raise LedgerError("no %s named %s in this company; add it in QuickBooks or choose an existing one" % (" or ".join(e.lower() for e in entities), name))
+        if not add:
+            raise LedgerError("no %s named %s in this company; add it in QuickBooks or choose an existing one" % (" or ".join(e.lower() for e in entities), name))
+        if not name or ":" in name or len(name) > 100:
+            raise LedgerError("%r cannot be a payee name in QuickBooks" % name)
+        made = self.q._post(add.lower(), {"DisplayName": name})[add]
+        return dict(value=made["Id"], name=made["DisplayName"], type=add)
 
     def _record_of(self, feed_id):
         """The record behind a clearing line that a rule posted as an expense or a deposit."""
@@ -166,14 +174,15 @@ class QboLedger:
 
     # -- writes: change a record or add a payment, never delete --------------
     @guarded
-    def categorize(self, realm_id, feed_id, account, vendor, memo):
+    def categorize(self, realm_id, feed_id, account, vendor, memo, by_person=False):
         got, line = self._pending(feed_id)
         target = self._account(account)
         kind, detail, record = self._record_of(feed_id)
         parts = [l for l in record.get("Line", []) if ((l.get(detail) or {}).get("AccountRef") or {}).get("value") == got["id"]]
         if not parts:
             raise LedgerError("%s %s is no longer booked against %s" % (kind, record.get("Id"), self.clearing))
-        party = self._party(vendor, ("Vendor",) if kind == "Purchase" else ("Customer", "Vendor")) if vendor else None
+        add = ("Vendor" if kind == "Purchase" else "Customer") if self.add_payees and by_person else None   # never on a standing approval
+        party = self._party(vendor, ("Vendor",) if kind == "Purchase" else ("Customer", "Vendor"), add) if vendor else None
         for part in parts:
             part[detail]["AccountRef"] = dict(value=target["Id"], name=target.get("FullyQualifiedName") or target.get("Name"))
             if party and kind == "Deposit":

@@ -164,6 +164,55 @@ class QboLedgerCase(unittest.TestCase):
         self.assertIn("You and another user were working on the same thing.", str(told.exception))
         self.assertEqual(self.record("Purchase", "21")["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"]["value"], "90")
 
+    def test_a_payee_the_books_lack_is_added_only_when_the_option_is_on_and_a_person_approved_it(self):
+        before = self.connect()
+        got = self.run_agent()
+        change = dict(kind="categorize", account="Utilities", vendor="A1 Rental", memo="")
+        with self.assertRaises(LedgerError):                              # the option is off unless the owner turns it on
+            self.books.categorize(REALM, "P21", "Utilities", "A1 Rental", "", by_person=True)
+        self.books.add_payees = True
+        with self.assertRaises(LedgerError):                              # on, but nobody approved this item: a standing approval never adds a payee
+            self.books.categorize(REALM, "P21", "Utilities", "A1 Rental", "")
+        from hosted_agent.runner import execute
+        self.assertFalse(execute(self.store, self.books, got["P22"]["id"], change, "standing", "agent"))
+        self.assertIn("no vendor named A1 Rental", self.store.proposal(got["P22"]["id"])["reasons"][-1])
+        for bad in ("Rentals:A1", "x" * 101, "   "):                     # a name QuickBooks would not take, or no name at all
+            with self.assertRaises(LedgerError, msg=bad):
+                self.books._party(bad, ("Vendor",), "Vendor")
+        with self.assertRaises(LedgerError):
+            self.books.categorize(REALM, "P21", "No Such Account", "A1 Rental", "", by_person=True)   # a bad category stops it before a payee is added
+        self.assertEqual((self.writes(before), len(self.intuit.records["Vendor"])), ([], 2))
+        self.assertEqual(review.decide(self.store, self.books, OWNER, got["P21"]["id"], "change", change), "posted")
+        self.assertEqual(self.writes(before), [("POST", "vendor"), ("POST", "purchase")])
+        made = self.intuit.records["Vendor"][-1]
+        self.assertEqual((made["DisplayName"], set(made) - {"Id", "SyncToken"}), ("A1 Rental", {"DisplayName"}))   # the name and nothing else
+        self.assertEqual(self.record("Purchase", "21")["EntityRef"], {"value": made["Id"], "name": "A1 Rental", "type": "Vendor"})
+        self.assertEqual(self.store.one("SELECT verified FROM postings WHERE proposal_id=?", (got["P21"]["id"],))["verified"], 1)
+        self.books.categorize(REALM, "P22", "Utilities", "a1  RENTAL", "", by_person=True)       # the same payee again: found, not added twice
+        self.assertEqual((len(self.intuit.records["Vendor"]), self.record("Purchase", "22")["EntityRef"]["value"]), (3, made["Id"]))
+        self.assertFalse([c for c in self.intuit.calls if c[0] == "DELETE" or "operation=delete" in c[1]])
+
+    def test_money_in_from_an_unknown_payer_adds_a_customer_and_a_refused_posting_does_not_add_it_twice(self):
+        before = self.connect()
+        self.books.add_payees = True
+        self.books.categorize(REALM, "D33", "Supplies", "City Power and Light", "", by_person=True)   # a vendor refund: the vendor is in the books, nothing is added
+        self.assertEqual(self.writes(before), [("POST", "deposit")])
+        customers = len(self.intuit.records["Customer"])
+        real = self.intuit.__class__.__call__
+
+        def refuse_the_deposit(method, url, headers, body=None):
+            self.intuit.refuse_change = method == "POST" and url.split("?")[0].endswith("/deposit")
+            return real(self.intuit, method, url, headers, body)
+        self.q.transport = refuse_the_deposit
+        with self.assertRaises(LedgerError):                              # the customer is added, then QuickBooks refuses the deposit
+            self.books.categorize(REALM, "D30", "Supplies", "Walk-in Customer", "", by_person=True)
+        self.q.transport, self.intuit.refuse_change = self.intuit, False
+        self.assertEqual(len(self.intuit.records["Customer"]), customers + 1)
+        self.books.categorize(REALM, "D30", "Supplies", "Walk-in Customer", "", by_person=True)   # the second try finds the customer it added
+        self.assertEqual(len(self.intuit.records["Customer"]), customers + 1)
+        entity = self.record("Deposit", "30")["Line"][0]["DepositLineDetail"]["Entity"]
+        self.assertEqual((entity["name"], entity["type"], entity["value"]), ("Walk-in Customer", "CUSTOMER", self.intuit.records["Customer"][-1]["Id"]))
+
     def test_the_firm_rules_still_stop_a_posting(self):
         self.connect(mode="prepare_only")
         got = self.run_agent()
