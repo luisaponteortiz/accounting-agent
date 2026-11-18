@@ -347,7 +347,7 @@ class QboCase(unittest.TestCase):
                   "AccountRef": {"value": "41", "name": "Mastercard"}, "Line": [{"Amount": 34.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]}
         self.intuit.records["Purchase"].append(charge)
         sent = len(self.intuit.calls)
-        self.assertEqual(self.line(self.q.clearing(), "T4")["recorded"][0]["id"], "B9")   # a refund on the card is money coming back: not this charge again
+        self.assertEqual([c["id"] for c in self.line(self.q.clearing(), "T4")["recorded"]], ["B9"])   # a refund on the card is money coming back: not this charge again
         with self.assertRaises(qbo.QboError):
             self.q.move_to_clearing("T4", "Purchase", "77")
         self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[sent:]))

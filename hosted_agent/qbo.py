@@ -256,7 +256,7 @@ class Qbo:
             if got:
                 # a credit on a card (a refund, or a payment received) is a Purchase marked Credit: money in on the card
                 add("P%s" % t.get("Id"), t.get("TxnDate"), got["amount"], "in" if t.get("Credit") else "out", t.get("AccountRef") or {}, ("Purchase", t.get("Id")), got["held_in"], t.get("PrivateNote"),
-                    note=got["note"], payee=got["payee"], posted_as="expense")
+                    note=got["note"], payee=got["payee"], posted_as="card credit" if t.get("Credit") else "expense")
         for t in raw["Deposit"]:
             got = posted_by_rule("Deposit", t, "DepositLineDetail", lambda t, part: part["DepositLineDetail"].get("Entity"))
             if got:
