@@ -40,6 +40,7 @@ class LabsCase(unittest.TestCase):
         self.assertIn('scope="s1 s2"', steps[2]["said"])
         self.assertFalse(any(self.intuit.registration == c[1] for c in self.intuit.calls))     # looking never registers
         self.assertFalse(any("Authorization" in c[2] for c in self.intuit.calls))               # and never carries a sign-in
+        self.assertTrue(all(c[2]["User-Agent"] == labs.AGENT for c in self.intuit.calls))       # and says plainly what it is
 
     def test_registering_asks_for_one_public_client_with_our_callback(self):
         connector = self.make()

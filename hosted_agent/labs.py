@@ -22,6 +22,7 @@ MCP = "https://mcp-nttf.quickbooks.intuit.com/mcp"
 RESOURCE_SETTINGS = "https://mcp-nttf.quickbooks.intuit.com/.well-known/oauth-protected-resource"
 HOSTS = ("mcp-nttf.quickbooks.intuit.com", "oauth.platform.intuit.com", "accounts.intuit.com")
 CLIENT_NAME = "Accounting agent (development build)"
+AGENT = "AccountingAgentDev/0.1 (MCP client; development build)"   # says plainly what is calling; never imitates a browser or another client
 
 
 class LabsError(Exception):
@@ -51,7 +52,7 @@ class Labs:
     def _call(self, method, url, headers, body=None):
         if urllib.parse.urlsplit(url).hostname not in HOSTS or not url.startswith("https://"):
             raise LabsError("refused to contact %s: not one of Intuit's three hosts for this connector" % short(url, 80))
-        return self.transport(method, url, headers, body)
+        return self.transport(method, url, dict(headers, **{"User-Agent": AGENT}), body)
 
     def _json(self, url):
         status, _, raw = self._call("GET", url, {"Accept": "application/json"})
