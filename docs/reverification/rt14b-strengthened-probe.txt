@@ -1,0 +1,15 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RT14b] (T-14) a distinct-purchases disposition does not cover a duplicate candidate that arrives afterwards
+    initial distinct-purchases disposition D1: ('ok', 1)
+    initial distinct-purchases disposition D2: ('ok', 2)
+    D1 after disposition: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    after a third identical charge arrives -> D1: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['POSSIBLE_DUPLICATE']} | candidates listed on D1: ['demo_card_001:D2', 'demo_card_001:D3'] | D3: ['POSSIBLE_DUPLICATE']
+    -> OK
+
+====================================================================================================
+RT14b  T-14       OK     a distinct-purchases disposition does not cover a duplicate candidate that arrives afterwards
+
+Verdict counts: {'OK': 1}
+Re-verification gate: PASS

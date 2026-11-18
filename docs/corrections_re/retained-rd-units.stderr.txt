@@ -1,0 +1,16 @@
+test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD02_amount_revision_keeps_claim_with_or_without_repeat_and_restart (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD02_retired_claimant_resent_unchanged_without_claim (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RC01_withdrawal_then_fresh_or_late_claim_and_relock (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC02_unchanged_chain_adds_no_bindings_moves_or_accounting_events (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC03_open_target_clears_unresolved_without_quarantine (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC03_pending_cycle_is_not_linked (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 13.324s
+
+OK

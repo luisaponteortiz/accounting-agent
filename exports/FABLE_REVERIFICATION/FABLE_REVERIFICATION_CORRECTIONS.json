@@ -1,0 +1,757 @@
+{
+ "title": "Fable corrective tickets after re-verification of C-01 to C-06 and Batch 2 (Accounting Agent OS, bundle FABLE_CORRECTIONS_AND_BATCH_2)",
+ "authored": "2026-11-15",
+ "notice": "Review output only. Authorises no connection, posting, payment, model call, hosting, deployment or policy activation, and opens no readiness gate. All data fictional.",
+ "companion_files": [
+  "FABLE_REVERIFICATION_REPORT.md",
+  "FABLE_REVERIFICATION_RESULTS.json",
+  "fable_reverification_probes.py",
+  "fable_reverification_output.txt"
+ ],
+ "recommendation": "Do not start Batch 3 and do not record gate G0 yet. Implement RV-01 to RV-06 (P1) first, then RV-07 to RV-13 (P2), in the order given, and return the source for re-verification.",
+ "priority_counts": {
+  "P0": 0,
+  "P1": 6,
+  "P2": 7,
+  "P3": 4
+ },
+ "implementation_order": [
+  "RV-04",
+  "RV-03",
+  "RV-01",
+  "RV-02",
+  "RV-05",
+  "RV-06",
+  "RV-07",
+  "RV-08",
+  "RV-09",
+  "RV-10",
+  "RV-11",
+  "RV-12",
+  "RV-13",
+  "RV-14",
+  "RV-15",
+  "RV-16",
+  "RV-17"
+ ],
+ "order_note": "RV-04 first because it disturbs every multi-period test. RV-03 before RV-01 because the supersession fix relies on a defined state for items that leave a period. RV-08 before RV-09 because both change how duplicate candidates are bound.",
+ "completion_gate": [
+  "python3 fable_reverification_probes.py <project-root> exits 0: no WEAK and no ERROR verdict. NOTE verdicts RT09d, RT13n and RT14d become OK when RV-14, RV-13 and RV-15 are done.",
+  "make test, make check and make batch2-gate still pass; reviewer cases stay at 29 PASS, 10 FIXED, 21 DEFERRED-OK with no other status.",
+  "The original unmodified script still passes on the frozen corrective archive (scripts/verify_corrective_checkpoint.py).",
+  "fable_reverification_probes.py is run by make test, unmodified. If an API change makes a probe unrunnable, the change and the adapted probe are returned for review; expectations are not edited to pass.",
+  "Each contract change is recorded in DECISIONS.md."
+ ],
+ "confirmed_defects": [
+  {
+   "id": "RV-01",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "title": "A charge approved in a locked period can be approved again in another period through supersession under a new source key",
+   "affected_requirements": [
+    "C-01",
+    "T-12",
+    "T-18 (cross-period invariant)"
+   ],
+   "source": [
+    "accounting_agent/source_control.py source_revision lines 39-49 (supersedes handling; approved-source event only for the same key)",
+    "accounting_agent/service.py bind_source lines 193-224 (move detection looks only at earlier versions of the same kind and key)",
+    "accounting_agent/modules.py card_prepare line 164 (transition blocker only when supersedes_source_id is inside the data)"
+   ],
+   "probe": "RN02b, RT12d",
+   "minimal_reproduction": [
+    "Approve item A1 (3 Nov) and lock November; open December.",
+    "Intake a new transaction key A1X dated 2 Dec, same amount, with envelope field supersedes='demo_card_001:A1', its receipt and a December statement.",
+    "Run December card preparation and approve A1X with an independent reviewer."
+   ],
+   "expected": "The engine has been told A1X replaces A1. While November is locked, A1X is quarantined (SOURCE_MOVED_FROM_LOCKED_PERIOD) exactly as a re-dated A1 is, and an event is raised against the approval of A1.",
+   "actual": "A1X is admitted to December with no blocker and is approved. A1 stays approved in locked November. No accounting event and no source exception is recorded; the head of A1 is marked removed inside the locked period.",
+   "accounting_or_control_consequence": "The same expense and liability are proposed in two periods under two approvals. This is the outcome C-01 was written to prevent, reached through the supersession link instead of a re-dated version.",
+   "smallest_sufficient_correction": [
+    "In source_revision, when supersedes resolves to an existing head: look up the latest admitted binding of the superseded source. If it is in a locked period, bind the new source admitted=0 with reason SOURCE_MOVED_FROM_LOCKED_PERIOD, write a source_moves row (blocked=1) and do not change the superseded head until that period is reopened.",
+    "If the superseded source has an approving decision on any artifact, record accounting event APPROVED_SOURCE_SUPERSEDED for its period and item key.",
+    "Treat envelope-level supersedes the same as data.supersedes_source_id for the transition blocker: pass the resolved link to the handler (for example in ctx) so SOURCE_TRANSITION_REQUIRES_REVIEW is raised either way.",
+    "On reopen of the origin, re-evaluate as for a moved version: the superseded source leaves the origin population and its approval becomes stale."
+   ],
+   "depends_on": [
+    "RV-03"
+   ],
+   "acceptance_assertions": [
+    "Probe RN02b reports OK: December has no governing artifact for A1X while November is locked.",
+    "state.source_exceptions lists A1X with SOURCE_MOVED_FROM_LOCKED_PERIOD; export.source_move_history has a row from 2026-11 with blocked=1.",
+    "Probe RT12d: an event whose code starts with APPROVED_SOURCE is recorded for the superseded, approved A1.",
+    "With envelope-level supersedes in an open period, the new item carries SOURCE_TRANSITION_REQUIRES_REVIEW.",
+    "Probe RN02 and FV-C13 results are unchanged."
+   ],
+   "regression_tests": [
+    "probe RN02b",
+    "probe RT12d (supersession part)",
+    "new unit test: supersession into another period while origin locked, then reopen",
+    "FV-C13",
+    "existing lock/move/reopen invariant test"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-02",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "title": "Double-recording hold disappears when the cited source receives any later version",
+   "affected_requirements": [
+    "T-15 criterion 2 (a journal citing a source that already has a card-derived entry is held)"
+   ],
+   "source": [
+    "accounting_agent/service.py context lines 241-251 (ownership matched on snapshot id and hash of the current version only)",
+    "accounting_agent/service.py intake lines 334-338 (origin reference validated against any stored snapshot)"
+   ],
+   "probe": "RT15",
+   "minimal_reproduction": [
+    "Card item A1 (40.00) is prepared. Intake journal J1 for 40.00 with origin_sources citing the A1 snapshot, with bound support.",
+    "Both items carry SOURCE_ALREADY_HAS_ENTRY (correct).",
+    "Intake a new version of A1 that differs only in spacing of the description ('Acme  Paper  Demo'). Re-run both workflows.",
+    "Approve the card item and the journal with an independent reviewer."
+   ],
+   "expected": "Both items stay held until one of them is withdrawn or dispositioned; a superseded origin reference is itself flagged.",
+   "actual": "Neither item has a blocker after the revision; both are approved. The 40.00 expense is proposed twice.",
+   "accounting_or_control_consequence": "One source produces two approved proposed entries in one book. Any routine feed revision of a card row silently releases the hold.",
+   "smallest_sufficient_correction": [
+    "Resolve ownership by source identity, not by version: an origin reference claims (kind, source_key); compare it with the current head of that key in the period population.",
+    "When a journal's cited snapshot is no longer the head of its key, add blocker ORIGIN_SOURCE_SUPERSEDED to the journal so it must be re-supplied against the current version.",
+    "Keep the intake check that every origin reference resolves to a stored snapshot in scope."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT15 reports OK: after the cosmetic revision both items still carry SOURCE_ALREADY_HAS_ENTRY and the journal also carries ORIGIN_SOURCE_SUPERSEDED.",
+    "Re-supplying the journal against the current snapshot leaves SOURCE_ALREADY_HAS_ENTRY on both.",
+    "FV-J01 to FV-J10 unchanged."
+   ],
+   "regression_tests": [
+    "probe RT15",
+    "new unit test: claim survives source revision",
+    "existing origin-collision test"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-03",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "title": "An item whose source has left the period remains a stale governing item and blocks finalization permanently",
+   "affected_requirements": [
+    "T-12 criterion 2 (a tombstoned pending authorisation produces no artifact and no blockers)",
+    "T-18",
+    "T-19",
+    "C-01 (state after reopen)"
+   ],
+   "source": [
+    "accounting_agent/service.py governing_id lines 600-602 (latest completed run that ever produced the item key)",
+    "accounting_agent/packages.py period_outcomes lines 11-21 and finalize_package line 31",
+    "accounting_agent/exceptions.py record_exceptions lines 73-79 (only items in the current output are updated)"
+   ],
+   "probe": "RT12d, RN02",
+   "minimal_reproduction": [
+    "Intake A1, A2 (posted, with receipts), pending P1 and a tying statement, all with as_of=1. Run card preparation.",
+    "Intake P1 again with identical data, as_of=2, tombstone=true, removal_reason='feed_removed'. Re-run. Approve A1 and A2.",
+    "Finalize the card package with an acknowledgement."
+   ],
+   "expected": "P1 is no longer part of the period: no governing item, no open exception, and the package can be finalized with the removal recorded.",
+   "actual": "P1's old artifact is still reported as governing with status 'stale' and blockers MISSING_RECEIPT and PENDING_TRANSACTION. finalize_package returns 409 'Stale/disputed items cannot be finalized'. There is no service operation that clears it. The same residue is left in the origin period after a locked-period move is released (probe RN02).",
+   "accounting_or_control_consequence": "Any month in which the feed removes, voids or supersedes a row, or in which a row moves to another period, can never be finalized; close readiness reports an open exception for a row that no longer exists. The failure is in the safe direction but stops the workflow.",
+   "smallest_sufficient_correction": [
+    "Define the governing item set of a workflow and period as the item keys output by its latest completed run. An artifact for a key absent from that run is not governing.",
+    "In commit, when the last step of a run completes, mark exceptions of absent item keys 'superseded' with history, and record accounting event ITEM_LEFT_POPULATION with the removal, supersession or move reference.",
+    "period_outcomes and state then omit such items from items and list them under removed_items; finalize_package records removed_items in the package."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT12d reports OK for the finalization part: finalize succeeds after the tombstone and the package lists P1 under removed_items.",
+    "state shows no governing artifact for demo_card_001:P1; exceptions for it are superseded with history rows.",
+    "Probe RN02: after reopen, November has no governing artifact for the moved A1.",
+    "FV-C13 unchanged."
+   ],
+   "regression_tests": [
+    "probe RT12d",
+    "probe RN02",
+    "new unit tests: tombstone, supersession and move each followed by finalize",
+    "FV-C13"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-04",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "title": "Any later intake re-binds the receipts of a locked period, records them as late activity and raises a false change event against a finalized package",
+   "affected_requirements": [
+    "T-12",
+    "T-18 (post-finalization events)",
+    "C-01 (evidence follows its transaction)"
+   ],
+   "source": [
+    "accounting_agent/service.py intake lines 344-346 (every receipt head is re-bound after any changed intake)",
+    "accounting_agent/service.py bind_source line 221 (a binding into a locked period is always recorded as LATE_ACTIVITY_IN_LOCKED_PERIOD, even when the source and its period are unchanged)",
+    "accounting_agent/packages.py package_changes lines 47-53"
+   ],
+   "probe": "RT12b",
+   "minimal_reproduction": [
+    "Prepare, approve, finalize and lock November (two charges with receipts). Open December.",
+    "Intake December-only sources (one charge, its receipt, a December statement).",
+    "Read state.source_exceptions and state.accounting_events."
+   ],
+   "expected": "November is untouched: no new source exception and no event.",
+   "actual": "Both unchanged November receipts are listed with LATE_ACTIVITY_IN_LOCKED_PERIOD, and POST_FINALIZATION_CHANGE is recorded against the November package. Approvals and package bytes are intact.",
+   "accounting_or_control_consequence": "After the first intake of the following month, the quarantine list and the change-event trail of every locked period are wrong. A reviewer cannot tell a real late receipt or a real post-finalization change from this noise, and reopen decisions would be taken on false signals.",
+   "smallest_sufficient_correction": [
+    "In intake, re-bind a receipt only when the period selected for it differs from its latest admitted binding, or when it has no admitted binding.",
+    "In bind_source, when the latest binding of this same snapshot is already admitted in the selected period, write nothing.",
+    "package_changes for a locked period compares against the frozen membership, so that no event is raised when nothing in that period changed."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT12b reports OK: after December-only intake, source_exceptions is empty and accounting_events is empty.",
+    "Probe RN02 still lists exactly the moved transaction and its receipt, and no unrelated receipt.",
+    "Probe RT12c (receipt follows its charge in either arrival order) still reports OK.",
+    "A genuinely revised November receipt arriving after lock is still listed as LATE_ACTIVITY_IN_LOCKED_PERIOD."
+   ],
+   "regression_tests": [
+    "probe RT12b",
+    "probe RT12c",
+    "probe RN02",
+    "existing test_late_locked_evidence_preserves_approval_until_reopen"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-05",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "title": "A vendor mapping removed from the approved profile keeps producing clean, approvable matches",
+   "affected_requirements": [
+    "T-09 (supersession is a real control; handlers receive only approved rules in force)"
+   ],
+   "source": [
+    "accounting_agent/service.py onboard lines 107-111 (rules are proposed only for vendors present in the new profile)",
+    "accounting_agent/controls.py rules_at lines 102-106 and approve_profile_version lines 30-42"
+   ],
+   "probe": "RT09c",
+   "minimal_reproduction": [
+    "Approve the demo profile (vendors demo_acme and demo_metro). Register version v2 without demo_metro, effective 2026-11-01, and approve it.",
+    "Intake a 'METRO REPAIR DEMO' charge dated 4 Nov with receipt and statement; run card preparation."
+   ],
+   "expected": "Under v2 the Metro alias is unknown: the item is held with UNKNOWN_VENDOR.",
+   "actual": "The item is eligible with vendor demo_metro and category DEMO_REPAIRS, while state.profile.vendors shows only demo_acme.",
+   "accounting_or_control_consequence": "A mapping the client has withdrawn continues to code expenses with no blocker, and the approved profile shown to the reviewer does not contain it.",
+   "smallest_sufficient_correction": [
+    "On approve_profile_version, for every approved profile-derived rule whose key is absent from the new profile (vendor mappings; and any other profile-derived kind), record a retirement that ends it the day before the new profile takes effect. Because policy_rules is immutable, add an append-only rule_retirements(rule_id, effective_to, actor, profile_id) table and have rules_at honour it.",
+    "Retirement is part of the same independent approval and appears in the audit and export."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT09c reports OK: the Metro item carries UNKNOWN_VENDOR under v2.",
+    "An item dated before the effective date of v2 in an earlier period still matches the retired mapping (rule in force for that date).",
+    "Probes RT09a and RT09b unchanged; FV-C01 and FV-C15 unchanged."
+   ],
+   "regression_tests": [
+    "probe RT09c",
+    "new unit test: retirement respects effective dates",
+    "probe RT09b"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-06",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "title": "Under the shipped checklist a document label alone satisfies the bank reconciliation and AP/AR tie-out requirements",
+   "affected_requirements": [
+    "T-19 (typed requirements; a label cannot complete deferred reconciliation or tie-out work)",
+    "F-11"
+   ],
+   "source": [
+    "accounting_agent/modules.py close_readiness lines 283 and 293 (an untyped string is treated as a document requirement and is satisfied by any document of that type)",
+    "accounting_agent/config/bird_bowl.demo.json required_close_evidence (five untyped strings); the validation base profile in review/FABLE_VALIDATION_CASES.json",
+    "accounting_agent/controls.py validate_rule line 68 and service.py validate_profile lines 78-82 (untyped strings accepted)"
+   ],
+   "probe": "RT19a",
+   "minimal_reproduction": [
+    "With the shipped demo profile, intake five documents whose only content is a label: types trial_balance, card_statement, bank_reconciliation, ap_tieout, ar_tieout, period_id 2026-11.",
+    "Prepare and approve the card items, then run close_readiness."
+   ],
+   "expected": "bank_reconciliation, ap_tieout and ar_tieout stay unsatisfied until a verified workpaper from the (deferred) capability exists.",
+   "actual": "All five requirements report satisfied=true and MISSING_CLOSE_EVIDENCE is absent. The typed form of the same requirements is correctly unsatisfied (same probe). The artifact still carries FINAL_CLOSE_SIGNOFF_REQUIRED and EXTERNAL_STEPS_UNVERIFIED.",
+   "accounting_or_control_consequence": "The checklist shown to the controller says the bank reconciliation and both tie-outs are in place when nothing was reconciled. This is finding F-11 surviving in the delivered configuration; the typed control exists but the shipped profile does not use it.",
+   "smallest_sufficient_correction": [
+    "Refuse untyped checklist entries in validate_profile and validate_rule: every entry is an object with type workflow_outcome, reconciliation, tieout or document.",
+    "Convert the demo profile and the validation base profile to typed entries (bank_reconciliation as reconciliation; ap_tieout and ar_tieout as tieout; card_statement as workflow_outcome of card_preparation or as a document, stated explicitly; trial_balance as document until trial-balance intake exists).",
+    "Existing stored untyped rules are evaluated as unsatisfied with reason UNTYPED_REQUIREMENT."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT19a reports OK: with label-only documents, bank_reconciliation, ap_tieout and ar_tieout report satisfied=false and MISSING_CLOSE_EVIDENCE is present.",
+    "A profile or close_checklist rule containing a bare string is refused with 400.",
+    "FV-CL01, FV-CL02 and FV-CL04 keep their expected blockers."
+   ],
+   "regression_tests": [
+    "probe RT19a",
+    "FV-CL01",
+    "FV-CL02",
+    "FV-CL04",
+    "existing typed-close test"
+   ],
+   "decision_requiring_client_authority": "For a real client: the close checklist, and which named evidence each line requires (client question 13)."
+  },
+  {
+   "id": "RV-07",
+   "priority": "P2",
+   "classification": "confirmed_defect",
+   "title": "Disposition choices are not tied to the kind of activity or account: a card payment can be approved as a credit to an expense account",
+   "affected_requirements": [
+    "T-14 (closed vocabulary)",
+    "T-15 (signed settlement and credit effects)"
+   ],
+   "source": [
+    "accounting_agent/exceptions.py VOCABULARY lines 6-14 and disposition lines 39-50 (activity checked only for settlement and transfer; account type never checked)",
+    "accounting_agent/modules.py card_prepare lines 207-217 and 222-229"
+   ],
+   "probe": "RT14e",
+   "minimal_reproduction": [
+    "Intake a payment of -300.00 (activity payment) with receipt and a tying statement.",
+    "Disposition NON_EXPENSE_REQUIRES_REVIEW as standalone_credit, UNKNOWN_VENDOR as confirm_vendor and UNKNOWN_CATEGORY as code_category, each with account DEMO_OFFICE_SUPPLIES.",
+    "Re-run and approve with an independent reviewer."
+   ],
+   "expected": "A payment can only be dispositioned as settlement_of_card_liability (or referred); credits and coding choices require the matching activity and an account of the right type.",
+   "actual": "The item becomes eligible with entry Dr DEMO_CARD_LIABILITY 300.00 / Cr DEMO_OFFICE_SUPPLIES 300.00 and is approved.",
+   "accounting_or_control_consequence": "A liability settlement is recorded as a 300.00 reduction of expense. It takes two people making an explicit wrong choice, but the vocabulary is presented as closed and does not stop it.",
+   "smallest_sufficient_correction": [
+    "standalone_credit and refund_of require activity credit, or purchase with a negative amount.",
+    "Activity payment accepts only settlement_of_card_liability or refer_external; activity transfer only transfer or refer_external. Give fee, interest and unknown their own explicit choices (for example code_fee with an expense account; refer_external).",
+    "code_category, confirm_vendor, standalone_credit, refund_of and allocate require an active expense account; settlement and transfer require an active asset account that is not the card liability."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT14e reports OK: the standalone_credit disposition on a payment is refused.",
+    "A code_category disposition naming DEMO_CARD_LIABILITY or DEMO_CASH is refused.",
+    "Probe RT14a and the teaching-month probe RG0 are unchanged (TX-006 credit and TX-012 payment still resolve as before)."
+   ],
+   "regression_tests": [
+    "probe RT14e",
+    "probe RT14a",
+    "probe RG0",
+    "existing transfer-direction test"
+   ],
+   "decision_requiring_client_authority": "For a real client: how fees, interest and card payments are to be treated, and which accounts each disposition may use (client questions 3 and 4)."
+  },
+  {
+   "id": "RV-08",
+   "priority": "P2",
+   "classification": "confirmed_defect",
+   "title": "A distinct-purchases disposition stays in force when a new duplicate candidate arrives",
+   "affected_requirements": [
+    "T-14 (evidence-bound dispositions)"
+   ],
+   "source": [
+    "accounting_agent/exceptions.py active_dispositions lines 17-25 (bound to the item hash and cited evidence only)",
+    "accounting_agent/modules.py card_prepare lines 183-187 and 210"
+   ],
+   "probe": "RT14b",
+   "minimal_reproduction": [
+    "Two identical charges D1 and D2 with distinct receipts. Disposition each as distinct_purchases citing its own charge and receipt. Re-run: both eligible.",
+    "Intake a third identical charge D3 with its own receipt and an updated statement. Re-run."
+   ],
+   "expected": "D1 and D2 return to POSSIBLE_DUPLICATE because the decision did not consider D3.",
+   "actual": "D1 is eligible with no blocker; D3 is listed among its duplicate candidates. (If the disposition had cited the statement, it would have lapsed for an unrelated reason.)",
+   "accounting_or_control_consequence": "A human decision about two charges is silently extended to a third. The item is re-prepared and needs a new approval, so the reviewer can still see the candidate list, but the control that asked for a decision is gone.",
+   "smallest_sufficient_correction": [
+    "Store the sorted duplicate-candidate set (source key and hash) in the disposition payload at decision time, taken from the governing artifact.",
+    "active_dispositions treats a POSSIBLE_DUPLICATE disposition as inactive when the current candidate set differs."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT14b reports OK: after D3 arrives, D1 carries POSSIBLE_DUPLICATE and is not eligible.",
+    "Probe RT14a unchanged."
+   ],
+   "regression_tests": [
+    "probe RT14b",
+    "probe RT14a"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-09",
+   "priority": "P2",
+   "classification": "confirmed_defect",
+   "title": "After one charge is excluded as a duplicate, the surviving charge can only be cleared by a false distinct-purchases statement",
+   "affected_requirements": [
+    "T-14 (duplicate exclusion)"
+   ],
+   "source": [
+    "accounting_agent/modules.py card_prepare lines 183-187 (the excluded charge still counts as a candidate)"
+   ],
+   "probe": "RT14c",
+   "minimal_reproduction": [
+    "Two identical charges D1 and D2. Disposition D2 as duplicate_of D1. Re-run."
+   ],
+   "expected": "D2 is excluded with no entry (correct) and D1, the charge that remains, is no longer held as a possible duplicate of the row just excluded; it cites that disposition.",
+   "actual": "D2 is held with DUPLICATE_EXCLUDED and has no entry (correct). D1 still carries POSSIBLE_DUPLICATE, and the only vocabulary for it is distinct_purchases, duplicate_of or source_replay.",
+   "accounting_or_control_consequence": "The real charge can never be approved truthfully. In practice someone will record distinct_purchases, which is the opposite of what was decided.",
+   "smallest_sufficient_correction": [
+    "When computing duplicates for an item, leave out a candidate that carries an active duplicate_of or source_replay disposition naming this item, and add that disposition id to the item's disposition_ids so the result cites it and its author joins the item lineage."
+   ],
+   "depends_on": [
+    "RV-08"
+   ],
+   "acceptance_assertions": [
+    "Probe RT14c reports OK: D1 has no POSSIBLE_DUPLICATE blocker, cites the disposition, and the dispositioner cannot approve D1.",
+    "Revoking the disposition restores POSSIBLE_DUPLICATE on both."
+   ],
+   "regression_tests": [
+    "probe RT14c",
+    "probe RT14a"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-10",
+   "priority": "P2",
+   "classification": "confirmed_defect",
+   "title": "The author of a vendor mapping regains review rights when a colleague re-proposes the rule with a cosmetic change",
+   "affected_requirements": [
+    "C-04",
+    "T-09 addition (independence uses the proposer and approver of each applied rule)"
+   ],
+   "source": [
+    "accounting_agent/service.py commit lines 518-523 (lineage takes only the applied version of the rule)"
+   ],
+   "probe": "RN05b",
+   "minimal_reproduction": [
+    "Reviewer-to-be proposes mapping demo_acme version 1 (alias and category); a policy approver approves it.",
+    "A colleague proposes version 2 superseding it, changing only the display name; a second approver approves it.",
+    "Prepare an ACME charge and have the author of version 1 approve it."
+   ],
+   "expected": "Refused: the alias and category that coded the item were authored by this person.",
+   "actual": "Accepted. The contributor list holds only the proposer and approver of version 2. (The equivalent case for chart and entity fields in the profile is handled correctly: probe RN05.)",
+   "accounting_or_control_consequence": "The person who wrote the coding rule approves the items it codes. It needs a colleague and an approver to pass a cosmetic revision, which is why this is P2 and not P1.",
+   "smallest_sufficient_correction": [
+    "For an applied vendor_mapping or receipt_matching rule, include the proposer and approver of every earlier version in its supersession chain (same kind and key) unless that version's value fields used by the item (matched alias, category; matching parameters) differ from the applied version."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RN05b reports OK: the author of version 1 is refused with 403.",
+    "A reviewer who authored an earlier version with a different category is not barred.",
+    "Probes RN04, RN05 and RT09b unchanged."
+   ],
+   "regression_tests": [
+    "probe RN05b",
+    "probe RN05",
+    "probe RN04"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-11",
+   "priority": "P2",
+   "classification": "confirmed_defect",
+   "title": "A mandate may be created and approved with an empty freshness predicate",
+   "affected_requirements": [
+    "T-10 (freshness predicate; no run without fresh required evidence)",
+    "F-07"
+   ],
+   "source": [
+    "accounting_agent/service.py create_mandate line 666 (any dict accepted)",
+    "accounting_agent/controls.py mandate_fresh lines 138-145",
+    "accounting_agent/demo.py create_fixture_mandate lines 43-50 (defaults to an empty predicate; used by every mandate probe in the maintained harness)"
+   ],
+   "probe": "RT10b",
+   "minimal_reproduction": [
+    "create_mandate(..., period_rule={'kind':'fixed','period_id':'2026-11'}, freshness={}); approve it; tick on three consecutive days with no new evidence."
+   ],
+   "expected": "Creation is refused, or the mandate records an explicit statement that no evidence is required which the approver must accept.",
+   "actual": "The mandate is accepted and dispatches a run for every slot on unchanged evidence (three runs in the probe). Unknown source kinds and malformed cut-offs are also accepted at creation.",
+   "accounting_or_control_consequence": "The T-10 criterion is met only when the issuer chooses to declare a requirement. The original weakness (a schedule that re-runs regardless of evidence) remains available by default.",
+   "smallest_sufficient_correction": [
+    "create_mandate requires at least one entry; each key must be a source kind read by one of the mandate workflows and each value occurrence_start or a valid timestamp.",
+    "If a no-evidence mandate is wanted for demonstrations, require an explicit {'none': '<reason>'} form that is shown in the approval audit event.",
+    "create_fixture_mandate states a real predicate."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT10b reports OK: creation with {} is refused with 400.",
+    "Probe RT10a unchanged.",
+    "Existing dedup, cap, expiry and revocation tests pass with an explicit predicate."
+   ],
+   "regression_tests": [
+    "probe RT10b",
+    "probe RT10a",
+    "existing mandate tests",
+    "maintained probes P03 to P05, N11, N12"
+   ],
+   "decision_requiring_client_authority": "For a real client: what evidence must be new before each recurring run."
+  },
+  {
+   "id": "RV-12",
+   "priority": "P2",
+   "classification": "confirmed_defect",
+   "title": "A receipt mismatch can only be cleared by re-supplying the receipt, and the reviewer is not told the evidence was revised",
+   "affected_requirements": [
+    "T-17",
+    "T-14",
+    "Batch 2 gate (full month with no weakened blocker)"
+   ],
+   "source": [
+    "accounting_agent/exceptions.py VOCABULARY (no entry for any RECEIPT_* code)",
+    "accounting_agent/modules.py card_prepare lines 195-206 and evidence refs line 238",
+    "scripts/synthetic_month.py lines 27-32 (TX-009 receipt amount changed from 79.99 to 80.00 by the preparer)"
+   ],
+   "probe": "RG0",
+   "minimal_reproduction": [
+    "Teaching fixture: TX-009 is 80.00 and its receipt says 79.99, so the item carries RECEIPT_AMOUNT_POLICY_UNSET.",
+    "There is no disposition for that code. The delivered walkthrough re-supplies the receipt with amount 80.00; the item becomes eligible and is approved."
+   ],
+   "expected": "An item with a receipt exception can be carried by an explicit referral, and when supporting evidence is replaced the artifact says so and asks for a decision by someone other than the supplier.",
+   "actual": "The only route is to change the evidence. The approved artifact cites receipt version 2 with no flag, no disposition and no reference to version 1.",
+   "accounting_or_control_consequence": "A preparer can make third-party evidence agree with the charge and obtain a clean item. The independent reviewer sees a version number only. The teaching-month result for TX-009 rests on this.",
+   "smallest_sufficient_correction": [
+    "Add refer_external for RECEIPT_AMOUNT_*, RECEIPT_DATE_*, RECEIPT_VENDOR_*, RECEIPT_MULTIPLE_* and RECEIPT_CURRENCY_MISMATCH so the item can be carried without touching evidence.",
+    "When an item relies on a supporting document whose version is above 1, list evidence_revisions (earlier version reference, changed fields, supplier) in the artifact and add blocker EVIDENCE_REVISED_REQUIRES_REVIEW, cleared only by disposition revised_evidence_accepted from a granted human who supplied none of the versions.",
+    "Update scripts/synthetic_month.py to take one of these routes for TX-009."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "With the teaching fixture, re-supplying receipt-TX-009 at 80.00 yields EVIDENCE_REVISED_REQUIRES_REVIEW and evidence_revisions naming version 1 and the amount change.",
+    "refer_external on RECEIPT_AMOUNT_POLICY_UNSET is accepted and the item stays ineligible.",
+    "Probe RG0 reports the month complete with TX-009 either referred or accepted through the new disposition."
+   ],
+   "regression_tests": [
+    "probe RG0",
+    "new unit tests for evidence_revisions and the new disposition",
+    "FV-C17",
+    "FV-C18"
+   ],
+   "decision_requiring_client_authority": "For a real client: the document policy, including who may accept a corrected receipt (client question 5)."
+  },
+  {
+   "id": "RV-13",
+   "priority": "P2",
+   "classification": "confirmed_defect",
+   "title": "The statement workpaper does not disclose when line identity, continuity or provenance could not be checked",
+   "affected_requirements": [
+    "T-13 (population identity; limits when authoritative evidence is absent)",
+    "F-12"
+   ],
+   "source": [
+    "accounting_agent/modules.py statement_checks lines 100-130 (line ids optional; continuity checked only when a prior statement is on file; provenance validated but unused)"
+   ],
+   "probe": "RT13n",
+   "minimal_reproduction": [
+    "Statement for November without line_ids, provenance manually_keyed, supplied by the preparer in the same packet as the transactions; October is open with no statement.",
+    "Replace one statement line by a different charge of the same amount."
+   ],
+   "expected": "The substituted item is held, or the workpaper and each item state that line identity and opening-balance continuity were not verified and that the statement was keyed by a contributor.",
+   "actual": "Both items are eligible with no blocker. The workpaper has only account_id, evidence, unreconciled_population, execution and external_reconciliation.",
+   "accounting_or_control_consequence": "Without line ids the control is again a count and totals supplied by the preparer. That limit is acceptable only if the reviewer is told.",
+   "smallest_sufficient_correction": [
+    "Add to the workpaper and to each card item: line_identity (verified or not_supplied), opening_continuity (verified, no_prior_statement or prior_period_statement_missing) and statement_provenance with the supplying actor.",
+    "When the prior period exists and has no statement, raise STATEMENT_PRIOR_PERIOD_MISSING on the account.",
+    "Whether a statement without line ids may support approval is a client policy: until an approved rule says so, raise STATEMENT_LINE_IDENTITY_NOT_VERIFIED."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT13n reports OK: the substituted item is not eligible, or the workpaper discloses line_identity=not_supplied.",
+    "Probe RT13 unchanged; FV-C08, FV-C09 and FV-C19 unchanged."
+   ],
+   "regression_tests": [
+    "probe RT13n",
+    "probe RT13",
+    "FV-C08",
+    "FV-C09",
+    "FV-C19"
+   ],
+   "decision_requiring_client_authority": "For a real client: which document is the authoritative statement, whether it carries line identifiers, and how cycles map to periods (client questions 2 and 4)."
+  },
+  {
+   "id": "RV-14",
+   "priority": "P3",
+   "classification": "confirmed_defect",
+   "title": "The normalised alias is recorded only in the audit event, not where the approver reads the rule",
+   "affected_requirements": [
+    "T-09 addition (probe N18)"
+   ],
+   "source": [
+    "accounting_agent/controls.py _propose_rule lines 76-83",
+    "accounting_agent/service.py state line 789"
+   ],
+   "probe": "RT09d",
+   "minimal_reproduction": [
+    "Propose a vendor rule with alias 'ACME-PAPER/DEMO'. Read state.rules."
+   ],
+   "expected": "The rule record shown for approval includes the normalised aliases and names any existing rule with the same normalised alias.",
+   "actual": "The rule record holds the raw value only. The normalised form 'acme paper demo' is in the rule_proposed audit event. A collision is not reported at proposal; after approval the affected items are held as AMBIGUOUS_VENDOR, which is safe.",
+   "accounting_or_control_consequence": "The approver can approve a punctuation-only collision without seeing it; the consequence is held items, not wrong matches.",
+   "smallest_sufficient_correction": [
+    "Add normalized_aliases and alias_collisions (rule ids) to each vendor_mapping row returned by state and export."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT09d reports OK."
+   ],
+   "regression_tests": [
+    "probe RT09d"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-15",
+   "priority": "P3",
+   "classification": "confirmed_defect",
+   "title": "A disposition may cite only the item's own source row as its evidence",
+   "affected_requirements": [
+    "T-14 (evidence-bound dispositions)"
+   ],
+   "source": [
+    "accounting_agent/exceptions.py disposition line 38"
+   ],
+   "probe": "RT14d",
+   "minimal_reproduction": [
+    "Two identical charges. Disposition D1 as distinct_purchases with evidence containing only the D1 transaction reference."
+   ],
+   "expected": "Refused: distinct purchases must cite supporting evidence for both charges.",
+   "actual": "Accepted.",
+   "accounting_or_control_consequence": "The evidence requirement can be met without any evidence. Receipt blockers still apply when receipts are required.",
+   "smallest_sufficient_correction": [
+    "For distinct_purchases require at least one cited document that is not a transaction row for this item and one for each candidate; for other choices require at least one reference other than the item's own row."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT14d reports OK.",
+    "Probe RT14a unchanged."
+   ],
+   "regression_tests": [
+    "probe RT14d",
+    "probe RT14a"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-16",
+   "priority": "P3",
+   "classification": "confirmed_defect",
+   "title": "The change inventory and the patch omit two changed runtime files",
+   "affected_requirements": [
+    "Documentation accuracy (G0)"
+   ],
+   "source": [
+    "scripts/build_change_report.py line 12 (only .py and .json files are inventoried)",
+    "docs/batch2/changed-files.json",
+    "docs/batch2/source-and-tests.patch"
+   ],
+   "probe": "static check",
+   "minimal_reproduction": [
+    "Compare accounting_agent/web/app.js and index.html with exports/FABLE_BATCH_1_REVIEW_BUNDLE.zip."
+   ],
+   "expected": "Every changed runtime file is in the inventory and the patch.",
+   "actual": "Both files differ from the baseline and appear in neither. All 46 listed hashes are correct.",
+   "accounting_or_control_consequence": "A reviewer working from the patch does not see the UI changes that expose dispositions, finalization and lock acknowledgement.",
+   "smallest_sufficient_correction": [
+    "Include .js, .html and .css under accounting_agent/web in the inventory and the patch."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "evidence/static_checks.py reports no computed-but-unlisted file."
+   ],
+   "regression_tests": [
+    "evidence/static_checks.py"
+   ],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RV-17",
+   "priority": "P3",
+   "classification": "confirmed_defect",
+   "title": "Several packages can be finalized for one period and workflow with no link between them",
+   "affected_requirements": [
+    "T-18"
+   ],
+   "source": [
+    "accounting_agent/packages.py finalize_package lines 23-45",
+    "accounting_agent/storage.py migration 12"
+   ],
+   "probe": "RT18",
+   "minimal_reproduction": [
+    "Finalize the card package; revise a source; re-prepare and review; finalize again."
+   ],
+   "expected": "The second package names the one it replaces, and state shows which package governs.",
+   "actual": "Two unrelated package rows exist for November card preparation.",
+   "accounting_or_control_consequence": "A handover reader cannot tell which package is current without comparing timestamps and events.",
+   "smallest_sufficient_correction": [
+    "Add supersedes_package_id to the package payload when a package already exists for the period and workflow, and a governing flag in state."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe RT18 prints no second-package observation, or the second package payload names package 1."
+   ],
+   "regression_tests": [
+    "probe RT18"
+   ],
+   "decision_requiring_client_authority": null
+  }
+ ],
+ "unverified_concerns": [
+  {
+   "id": "UC-1",
+   "concern": "The mandate policy signature is built from the rules applicable to the sources currently in the target period, so evidence dated after a mid-period rule could change the signature and suspend the mandate although no policy changed.",
+   "source": "accounting_agent/controls.py policy_signature line 148; service.py context lines 259-266",
+   "basis": "code reading; not executed",
+   "direction": "fails safe (false suspension)"
+  },
+  {
+   "id": "UC-2",
+   "concern": "The prior-statement lookback for continuity uses the latest accepted head of the prior statement even when that version is quarantined as late activity for a locked prior period.",
+   "source": "accounting_agent/service.py context lines 270-274",
+   "basis": "code reading; not executed"
+  },
+  {
+   "id": "UC-3",
+   "concern": "Revising a receipt that supports an approved item raises no APPROVED_SOURCE_REVISED event, because the event is matched on the item key of the changed source. The item does go stale.",
+   "source": "accounting_agent/source_control.py lines 39-42",
+   "basis": "code reading; not executed"
+  },
+  {
+   "id": "UC-4",
+   "concern": "If a superseding source is later removed, the superseded head is not restored.",
+   "source": "accounting_agent/source_control.py lines 43-49",
+   "basis": "code reading; not executed"
+  },
+  {
+   "id": "UC-5",
+   "concern": "Synthetic authority grants have no revocation and no rule that the administrator differs from the subject. Acceptable for fictional grants; must be designed before gate G1 (finding F-23).",
+   "source": "accounting_agent/controls.py grant_authority lines 7-17",
+   "basis": "code reading"
+  }
+ ],
+ "deferred_enhancements": [
+  {
+   "id": "DE-1",
+   "note": "Each item envelope carries the run-wide input fingerprint and the run-wide applied-rule list, so a same-period rule or source that affects one item sends every item of that workflow back for review (seen in probe RT09b). Conservative; narrowing it is an efficiency improvement, not a control fix."
+  },
+  {
+   "id": "DE-2",
+   "note": "With multiple receipts allowed, each receipt is still compared with the whole charge. Needs a client document policy."
+  },
+  {
+   "id": "DE-3",
+   "note": "Double-recording detection works within one period population; a journal in a later period citing an earlier period source is not detected. Belongs with settlement pairing and reconciliation in Batch 3."
+  },
+  {
+   "id": "DE-4",
+   "note": "Statement cycles must equal the accounting period. Non-calendar cycles remain deferred, as the developer states."
+  }
+ ],
+ "decisions_requiring_client_authority": [
+  "Whether the person who approves policy (profile or rule) may also review items prepared under it. The code bars them, which follows the earlier review; a small client may not have a third person.",
+  "Document policy: date window, amount tolerance, multiple receipts, and who may accept a corrected or replaced receipt (client question 5).",
+  "Which document is the authoritative card statement, whether it has line identifiers, and how statement cycles map to periods (client questions 2 and 4).",
+  "Treatment of fees, interest, card payments and transfers, and the accounts each disposition may use (client questions 3 and 4).",
+  "The close checklist and the named evidence each line requires; who gives final sign-off (client question 13).",
+  "Who may disposition each exception type, finalize, and lock; and what evidence must be new before a recurring run."
+ ]
+}

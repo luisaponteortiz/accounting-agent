@@ -1,0 +1,377 @@
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate, final-re-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: baseline-re-step-search, current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: current-rf-gate, final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+Waiting for existing validations: final-rf-gate
+All other managed validation jobs finished. Starting five sequential suites.
+Start load averages: (2.11181640625, 2.94140625, 3.875)
+Starting consecutive-make-test-1
+{"command": ["make", "test"], "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS", "started_utc": "2026-11-17T00:04:28.470961+00:00", "elapsed_seconds": 988.446, "exit_code": 0, "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]", "sqlite": "3.51.0", "platform": "macOS-26.5.2-x86_64-i386-64bit"}
+python3 -m unittest discover -s tests -v
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+
+_skipped_occurrences (test_reviewer_probes.ReviewerProbes) ... ok
+test_expired_partial_slot_is_recorded_as_skipped (test_reviewer_probes.ReviewerProbes) ... ok
+test_handlers_only_receive_declared_sources_and_accounting_code_changes_stale (test_reviewer_probes.ReviewerProbes) ... ok
+test_journal_document_does_not_invalidate_card_review (test_reviewer_probes.ReviewerProbes) ... ok
+test_mandate_issuer_is_recorded_contributor (test_reviewer_probes.ReviewerProbes) ... ok
+test_reused_artifact_keeps_review_and_dispute_requires_third_reviewer (test_reviewer_probes.ReviewerProbes) ... ok
+test_unicode_alias_validation_and_accents (test_reviewer_probes.ReviewerProbes) ... ok
+test_all_21_unmodified_RE_probes (test_rf_review_gate.RFReviewGate) ... ok
+test_order_validator_refuses_all_contract_faults (test_rf_review_gate.RFReviewGate) ... ok
+test_probe_validator_refuses_all_contract_faults (test_rf_review_gate.RFReviewGate) ... ok
+test_full_teaching_month_and_isolated_second_client (test_synthetic_month.SyntheticMonth) ... ok
+test_separate_regression_cases (test_validation.ValidationCase) ... ok
+
+----------------------------------------------------------------------
+Ran 241 tests in 987.984s
+
+OK
+
+Completed consecutive-make-test-1 {"label": "consecutive-make-test-1", "exit_code": 0, "expected_methods": 241, "reported_counts": [["241", "987.984"]], "HTTP_methods_executed": 11, "HTTP_setup": [{"class": "test_http.HTTPCase", "total_seconds": 2.424715, "worker_wait_seconds": 2.268372, "setup_failed": false}], "start_load_average": [2.11181640625, 2.94140625, 3.875], "elapsed_seconds": 988.615}
+Starting consecutive-make-test-2
+{"command": ["make", "test"], "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS", "started_utc": "2026-11-17T00:20:57.098005+00:00", "elapsed_seconds": 988.291, "exit_code": 0, "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]", "sqlite": "3.51.0", "platform": "macOS-26.5.2-x86_64-i386-64bit"}
+python3 -m unittest discover -s tests -v
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+
+_skipped_occurrences (test_reviewer_probes.ReviewerProbes) ... ok
+test_expired_partial_slot_is_recorded_as_skipped (test_reviewer_probes.ReviewerProbes) ... ok
+test_handlers_only_receive_declared_sources_and_accounting_code_changes_stale (test_reviewer_probes.ReviewerProbes) ... ok
+test_journal_document_does_not_invalidate_card_review (test_reviewer_probes.ReviewerProbes) ... ok
+test_mandate_issuer_is_recorded_contributor (test_reviewer_probes.ReviewerProbes) ... ok
+test_reused_artifact_keeps_review_and_dispute_requires_third_reviewer (test_reviewer_probes.ReviewerProbes) ... ok
+test_unicode_alias_validation_and_accents (test_reviewer_probes.ReviewerProbes) ... ok
+test_all_21_unmodified_RE_probes (test_rf_review_gate.RFReviewGate) ... ok
+test_order_validator_refuses_all_contract_faults (test_rf_review_gate.RFReviewGate) ... ok
+test_probe_validator_refuses_all_contract_faults (test_rf_review_gate.RFReviewGate) ... ok
+test_full_teaching_month_and_isolated_second_client (test_synthetic_month.SyntheticMonth) ... ok
+test_separate_regression_cases (test_validation.ValidationCase) ... ok
+
+----------------------------------------------------------------------
+Ran 241 tests in 987.862s
+
+OK
+
+Completed consecutive-make-test-2 {"label": "consecutive-make-test-2", "exit_code": 0, "expected_methods": 241, "reported_counts": [["241", "987.862"]], "HTTP_methods_executed": 11, "HTTP_setup": [{"class": "test_http.HTTPCase", "total_seconds": 2.413763, "worker_wait_seconds": 2.259996, "setup_failed": false}], "start_load_average": [3.34521484375, 3.1982421875, 3.27783203125], "elapsed_seconds": 988.438}
+Starting consecutive-make-test-3
+{"command": ["make", "test"], "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS", "started_utc": "2026-11-17T00:37:25.548660+00:00", "elapsed_seconds": 994.983, "exit_code": 0, "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]", "sqlite": "3.51.0", "platform": "macOS-26.5.2-x86_64-i386-64bit"}
+python3 -m unittest discover -s tests -v
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+
+_skipped_occurrences (test_reviewer_probes.ReviewerProbes) ... ok
+test_expired_partial_slot_is_recorded_as_skipped (test_reviewer_probes.ReviewerProbes) ... ok
+test_handlers_only_receive_declared_sources_and_accounting_code_changes_stale (test_reviewer_probes.ReviewerProbes) ... ok
+test_journal_document_does_not_invalidate_card_review (test_reviewer_probes.ReviewerProbes) ... ok
+test_mandate_issuer_is_recorded_contributor (test_reviewer_probes.ReviewerProbes) ... ok
+test_reused_artifact_keeps_review_and_dispute_requires_third_reviewer (test_reviewer_probes.ReviewerProbes) ... ok
+test_unicode_alias_validation_and_accents (test_reviewer_probes.ReviewerProbes) ... ok
+test_all_21_unmodified_RE_probes (test_rf_review_gate.RFReviewGate) ... ok
+test_order_validator_refuses_all_contract_faults (test_rf_review_gate.RFReviewGate) ... ok
+test_probe_validator_refuses_all_contract_faults (test_rf_review_gate.RFReviewGate) ... ok
+test_full_teaching_month_and_isolated_second_client (test_synthetic_month.SyntheticMonth) ... ok
+test_separate_regression_cases (test_validation.ValidationCase) ... ok
+
+----------------------------------------------------------------------
+Ran 241 tests in 994.556s
+
+OK
+
+Completed consecutive-make-test-3 {"label": "consecutive-make-test-3", "exit_code": 0, "expected_methods": 241, "reported_counts": [["241", "994.556"]], "HTTP_methods_executed": 11, "HTTP_setup": [{"class": "test_http.HTTPCase", "total_seconds": 2.507561, "worker_wait_seconds": 2.355119, "setup_failed": false}], "start_load_average": [3.13525390625, 3.10205078125, 3.099609375], "elapsed_seconds": 995.153}
+Starting consecutive-make-test-4
+{"command": ["make", "test"], "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS", "started_utc": "2026-11-17T00:54:00.713100+00:00", "elapsed_seconds": 1007.449, "exit_code": 0, "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]", "sqlite": "3.51.0", "platform": "macOS-26.5.2-x86_64-i386-64bit"}
+python3 -m unittest discover -s tests -v
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+
+skipped_occurrences (test_reviewer_probes.ReviewerProbes) ... ok
+test_expired_partial_slot_is_recorded_as_skipped (test_reviewer_probes.ReviewerProbes) ... ok
+test_handlers_only_receive_declared_sources_and_accounting_code_changes_stale (test_reviewer_probes.ReviewerProbes) ... ok
+test_journal_document_does_not_invalidate_card_review (test_reviewer_probes.ReviewerProbes) ... ok
+test_mandate_issuer_is_recorded_contributor (test_reviewer_probes.ReviewerProbes) ... ok
+test_reused_artifact_keeps_review_and_dispute_requires_third_reviewer (test_reviewer_probes.ReviewerProbes) ... ok
+test_unicode_alias_validation_and_accents (test_reviewer_probes.ReviewerProbes) ... ok
+test_all_21_unmodified_RE_probes (test_rf_review_gate.RFReviewGate) ... ok
+test_order_validator_refuses_all_contract_faults (test_rf_review_gate.RFReviewGate) ... ok
+test_probe_validator_refuses_all_contract_faults (test_rf_review_gate.RFReviewGate) ... ok
+test_full_teaching_month_and_isolated_second_client (test_synthetic_month.SyntheticMonth) ... ok
+test_separate_regression_cases (test_validation.ValidationCase) ... ok
+
+----------------------------------------------------------------------
+Ran 241 tests in 1007.017s
+
+OK
+
+Completed consecutive-make-test-4 {"label": "consecutive-make-test-4", "exit_code": 0, "expected_methods": 241, "reported_counts": [["241", "1007.017"]], "HTTP_methods_executed": 11, "HTTP_setup": [{"class": "test_http.HTTPCase", "total_seconds": 2.592605, "worker_wait_seconds": 2.436205, "setup_failed": false}], "start_load_average": [3.271484375, 3.38330078125, 3.20263671875], "elapsed_seconds": 1007.497}
+Starting consecutive-make-test-5
+{"command": ["make", "test"], "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS", "started_utc": "2026-11-17T01:10:48.227007+00:00", "elapsed_seconds": 1008.734, "exit_code": 0, "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]", "sqlite": "3.51.0", "platform": "macOS-26.5.2-x86_64-i386-64bit"}
+python3 -m unittest discover -s tests -v
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+
+skipped_occurrences (test_reviewer_probes.ReviewerProbes) ... ok
+test_expired_partial_slot_is_recorded_as_skipped (test_reviewer_probes.ReviewerProbes) ... ok
+test_handlers_only_receive_declared_sources_and_accounting_code_changes_stale (test_reviewer_probes.ReviewerProbes) ... ok
+test_journal_document_does_not_invalidate_card_review (test_reviewer_probes.ReviewerProbes) ... ok
+test_mandate_issuer_is_recorded_contributor (test_reviewer_probes.ReviewerProbes) ... ok
+test_reused_artifact_keeps_review_and_dispute_requires_third_reviewer (test_reviewer_probes.ReviewerProbes) ... ok
+test_unicode_alias_validation_and_accents (test_reviewer_probes.ReviewerProbes) ... ok
+test_all_21_unmodified_RE_probes (test_rf_review_gate.RFReviewGate) ... ok
+test_order_validator_refuses_all_contract_faults (test_rf_review_gate.RFReviewGate) ... ok
+test_probe_validator_refuses_all_contract_faults (test_rf_review_gate.RFReviewGate) ... ok
+test_full_teaching_month_and_isolated_second_client (test_synthetic_month.SyntheticMonth) ... ok
+test_separate_regression_cases (test_validation.ValidationCase) ... ok
+
+----------------------------------------------------------------------
+Ran 241 tests in 1008.262s
+
+OK
+
+Completed consecutive-make-test-5 {"label": "consecutive-make-test-5", "exit_code": 0, "expected_methods": 241, "reported_counts": [["241", "1008.262"]], "HTTP_methods_executed": 11, "HTTP_setup": [{"class": "test_http.HTTPCase", "total_seconds": 2.291841, "worker_wait_seconds": 2.117719, "setup_failed": false}], "start_load_average": [3.20849609375, 3.32373046875, 3.259765625], "elapsed_seconds": 1008.844}
+PASS: five consecutive complete make test runs; no omitted methods, unchanged code, eleven HTTP methods each.

@@ -1,0 +1,55 @@
+Fable RA acceptance probes | project root: rv_baseline | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[R01b] (RA-01) a charge already admitted to December that later declares it supersedes an approved charge in locked November is not approvable in both periods
+    B1 arrives in December with no supersession claim: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    B1 is re-sent declaring it supersedes A1 (approved, November locked) -> December B1: None
+    exceptions: [('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')] | moves: [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 0)]
+    events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1'), ('ITEM_LEFT_POPULATION', '2026-12', 'demo_card_001:B1')]
+    -> OK
+
+[R01c] (RA-01) a link that arrives before the link it replaces (unresolved), and is later resolved, is not released while the root is locked
+    A1Y (supersedes A1X, not yet received): {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    A1X then arrives (supersedes locked A1) -> A1Y: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']} | exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    A1Y re-sent so that its link resolves -> A1Y: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | exceptions: []
+    settlement_verified on A1Y: ('ok', 1)
+    independent approval of December A1Y: ('refused', 409, 'Unresolved controls block approval')
+    December A1Y: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | approved in both periods: False
+    -> OK
+
+[R03b] (RA-03) replacing a receipt by re-pointing the old key at another transaction id and supplying a new key is still held and disclosed
+    old key re-pointed away, new key supplied at 40.00 -> {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    receipts relied on: [('receipt-A1-new', 1)] | revisions disclosed: [] | exceptions: []
+    independent approval: ('ok', None)
+    -> WEAK
+
+[R04b] (RA-04) a statement replaced by re-pointing the old key at another cycle and supplying a new key for the period is still held and disclosed
+    old statement key re-pointed to another cycle; a new key supplied that ties -> {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    item revisions: [] | workpaper statement_revisions: None | workpaper blockers: [] | exceptions: [('stmt-2026-11', None, 'UNASSIGNED_ACCOUNTING_PERIOD')]
+    independent approval: ('ok', None)
+    -> WEAK
+
+[R04c] (RA-04) observation: a prior-period statement revised while its period is still open, so that the next opening balance agrees, is disclosed to the next period
+    December opens at 120.00, November closed at 100.00: ['STATEMENT_OPENING_BALANCE_BREAK']
+    preparer restates November (opening 20.00, closing 120.00) -> December D1: {'id': 11, 'eligible': True, 'status': 'pending', 'blockers': []} | November A1: {'id': 6, 'eligible': True, 'status': 'pending', 'blockers': []}
+    December workpaper continuity: verified | statement_revisions: None | D1 revisions: []
+    -> WEAK
+
+[R02b] (RA-02) the earlier author stays barred when the identical mapping is re-proposed for the single item, or under a new rule key
+    contributors (item-scoped re-proposal): ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-worker']
+    identical mapping re-proposed with item scope for this charge: author of the general rule approves: ('ok', None)
+    contributors (new rule key, earlier rule ended the day before): ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-worker']
+    identical mapping re-proposed under a new rule key: author of the earlier rule approves: ('ok', None)
+    -> WEAK
+
+====================================================================================================
+R01b  RA-01        OK     a charge already admitted to December that later declares it supersedes an approved charge in locked November is not approvable in both periods
+R01c  RA-01        OK     a link that arrives before the link it replaces (unresolved), and is later resolved, is not released while the root is locked
+R03b  RA-03        WEAK   replacing a receipt by re-pointing the old key at another transaction id and supplying a new key is still held and disclosed
+R04b  RA-04        WEAK   a statement replaced by re-pointing the old key at another cycle and supplying a new key for the period is still held and disclosed
+R04c  RA-04        WEAK   observation: a prior-period statement revised while its period is still open, so that the next opening balance agrees, is disclosed to the next period
+R02b  RA-02        WEAK   the earlier author stays barred when the identical mapping is re-proposed for the single item, or under a new rule key
+
+Verdict counts: {'OK': 2, 'WEAK': 4}
+RA acceptance gate: FAIL R03b, R04b, R04c, R02b
+exit=1

@@ -1,0 +1,91 @@
+UC-9 source reading only; bespoke journal-chain execution NOT_RUN. No journal fix is authorized or made.
+
+accounting_agent/service.py
+340:             raise ControlError("Intake exceeds 1 MiB limit", 413)
+341:         seen = set()
+342:         for source in packet["sources"]:
+343:             require_keys(source, {"kind", "key", "data"}, {"as_of","source_system","tombstone","removal_reason","supersedes"})
+344:             text_field(source["key"], "source key")
+345:             validate_source(source["kind"], source["data"])
+346:             if source["kind"] == "transaction" and source["key"] != source["data"]["account_id"] + ":" + source["data"]["source_id"]:
+347:                 raise ControlError("Transaction key must retain account and source identity")
+348:             identity = (source["kind"], source["key"])
+349:             if identity in seen:
+350:                 raise ControlError("Repeated source identity in batch")
+
+accounting_agent/source_control.py
+130:             target=db.execute('SELECT snapshot_id FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(actor.scope,claimant['kind'],claim['target_key'])).fetchone()
+131:             if not target or any(ref['source_key']==claimant['source_key'] for ref in self.supersession_refs(db,actor.scope,target['snapshot_id'])):continue
+132:             db.execute("INSERT INTO source_links(scope,old_snapshot_id,new_snapshot_id,reason,created) VALUES(?,?,?,'superseded',?)",(actor.scope,target['snapshot_id'],claimant['id'],utcnow()))
+133:             for ancestor_key in {ref['source_key'] for ref in self.supersession_refs(db,actor.scope,claimant['id'])}:
+134:                 self.source_approval_events(db,actor,ancestor_key,claimant['id'],'APPROVED_SOURCE_SUPERSEDED')
+135: 
+136:     def rebind_chained_sources(self,db,actor,requested_period):
+137:         """Re-evaluate live descendants after intake changes their ancestry."""
+138:         chained=[(len(self.supersession_refs(db,actor.scope,s['id'])),s) for s in self.store.latest(db,actor.scope,'transaction')]
+139:         for depth,source in sorted(chained,key=lambda item:(item[0],item[1]['id'])):
+140:             if depth:self.bind_source(db,actor,source['id'],source['value'],requested_period)
+141: 
+142:     def source_origin(self,db,scope,snapshot_id):
+143:         """Resolve admitted or quarantined origins across the entire identity chain."""
+144:         owners=[]
+145:         for sid in [snapshot_id]+[r['snapshot_id'] for r in self.supersession_refs(db,scope,snapshot_id)]:
+146:             source=db.execute('SELECT kind,source_key FROM snapshots WHERE scope=? AND id=?',(scope,sid)).fetchone()
+147:             head=db.execute('SELECT removed FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(scope,source['kind'],source['source_key'])).fetchone()
+148:             blocked=db.execute("SELECT b.period_id FROM source_heads h JOIN source_periods b ON b.snapshot_id=h.snapshot_id JOIN periods p ON p.scope=b.scope AND p.period_id=b.period_id WHERE h.scope=? AND h.kind=? AND h.source_key=? AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=h.snapshot_id) AND b.reason='SOURCE_MOVED_FROM_LOCKED_PERIOD' AND p.status='locked'",(scope,source['kind'],source['source_key'])).fetchone()
+149:             admitted=db.execute('SELECT b.period_id,p.status FROM snapshots s JOIN source_periods b ON b.snapshot_id=s.id JOIN periods p ON p.scope=b.scope AND p.period_id=b.period_id WHERE s.scope=? AND s.kind=? AND s.source_key=? AND b.admitted=1 ORDER BY s.version DESC,b.id DESC LIMIT 1',(scope,source['kind'],source['source_key'])).fetchone()
+150:             owners.append((source,head,blocked,admitted))
+
+accounting_agent/source_control.py
+9:         old=db.execute('SELECT s.*,h.removed FROM source_heads h JOIN snapshots s ON s.id=h.snapshot_id WHERE h.scope=? AND h.kind=? AND h.source_key=?',(actor.scope,kind,key)).fetchone()
+10:         as_of=source.get('as_of')
+11:         if type(as_of) is int and as_of>=0:order_type,order_value='sequence',str(as_of)
+12:         elif isinstance(as_of,str):order_type,order_value='timestamp',instant(as_of).isoformat()
+13:         elif as_of is None:order_type,order_value='legacy_arrival',utcnow()
+14:         else:raise ControlError('Invalid source as_of')
+15:         system=source.get('source_system',value.get('source_system','fixture'))
+16:         if system!='fixture':raise ControlError('Only fictional source systems are enabled',403)
+17:         removed=source.get('tombstone',False)
+18:         if type(removed) is not bool:raise ControlError('Invalid tombstone')
+19:         reason=source.get('removal_reason')
+20:         if removed and reason not in ('feed_removed','voided','superseded'):raise ControlError('Removal reason required')
+21:         supersedes=source.get('supersedes') or value.get('supersedes_source_id')
+22:         predecessor=None
+23:         if supersedes:
+24:             old_key=supersedes if ':' in supersedes else value.get('account_id','')+':'+supersedes
+25:             predecessor=db.execute('SELECT * FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(actor.scope,kind,old_key)).fetchone()
+26:             if old_key==key:raise ControlError('Supersession requires a different source identity')
+27:             if predecessor and any(ref['source_key']==key for ref in self.supersession_refs(db,actor.scope,predecessor['snapshot_id'])):
+
+accounting_agent/modules.py
+279: def journal_validate(ctx):
+280:     profile = ctx["profile"]
+281:     period = ctx["period"]
+282:     journals = [s for s in ctx["sources"] if s["kind"] == "journal"]
+283:     documents = {s["source_key"]: s for s in ctx["sources"] if s["kind"] == "document"}
+284:     result = []
+285:     for row in journals:
+286:         j = row["value"]
+287:         blockers = period_issues(j, profile, period)
+288:         entry=entry_for(ctx,row,j['lines'],'gl.journal_validate',source_refs=refs([row])+j.get('origin_sources',[]))
+289:         blockers+=validate_entry(entry,profile,period)
+290:         if ctx.get('stale_origins',{}).get(row['source_key']):blockers.append('ORIGIN_SOURCE_SUPERSEDED')
+291:         if any(row["source_key"] in c["owners"] for c in ctx.get("entry_claims",[])):blockers.append("SOURCE_ALREADY_HAS_ENTRY")
+292:         debits=sum((money(l['debit']) for l in j['lines']),Decimal('0.00'));credits=sum((money(l['credit']) for l in j['lines']),Decimal('0.00'))
+293:         signature=lambda v:(v['date'],v['currency'],sorted((l['account_id'],l['debit'],l['credit'],str(sorted(l.get('dimensions',{}).items()))) for l in v['lines']))
+294:         duplicates=[r for r in journals if r['id']!=row['id'] and signature(r['value'])==signature(j)]
+295:         if duplicates:blockers.append('POSSIBLE_DUPLICATE_JOURNAL')
+296:         net={}
+297:         for l in j['lines']:
+298:             key=(l['account_id'],str(sorted(l.get('dimensions',{}).items())));net[key]=net.get(key,Decimal('0.00'))+money(l['debit'])-money(l['credit'])
+299:         if net and not any(net.values()):blockers.append('NO_NET_LEDGER_EFFECT')
+300:         if any(documents[k]['value']['document_type']!='journal_support' or row['source_key'] not in documents[k]['value'].get('journal_keys',[]) for k in j['supporting_keys'] if k in documents):blockers.append('JOURNAL_SUPPORT_NOT_BOUND')
+301:         if not j["supporting_keys"] or any(key not in documents for key in j["supporting_keys"]):
+302:             blockers.append("MISSING_JOURNAL_SUPPORT")
+303:         revised=supporting_revisions(row,ctx['sources'],ctx.get('evidence_revisions',{}))
+304:         if revised:blockers.append('EVIDENCE_REVISED_REQUIRES_REVIEW')
+305:         applied=[d for d in ctx.get('dispositions',[]) if d['item_key']==row['source_key']]
+306:         if any(d['code']=='EVIDENCE_REVISED_REQUIRES_REVIEW' and d['choice']=='revised_evidence_accepted' for d in applied):blockers=[c for c in blockers if c!='EVIDENCE_REVISED_REQUIRES_REVIEW']
+307:         result.append(output(row["source_key"], "journal_proposal", {
+
+Reading inference: journal envelopes accept supersedes and share source_revision/bind_source, while rebind_chained_sources explicitly selects transaction heads. journal_validate also has no unresolved-transition blocker. A late middle link may therefore leave a journal descendant outside the transaction re-evaluation. This is an unexecuted concern for a separately authorized reproduction, not a claim of a verified defect or corrected journal control.

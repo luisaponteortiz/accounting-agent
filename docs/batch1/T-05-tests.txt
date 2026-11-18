@@ -1,0 +1,71 @@
+python3 -m unittest discover -s tests -v
+test_approval_and_export_black_box (test_http.HTTPCase) ... ok
+test_blocked_artifact_approval_fails (test_http.HTTPCase) ... ok
+test_health_and_real_worker_results (test_http.HTTPCase) ... ok
+test_host_origin_and_scope_override_defenses (test_http.HTTPCase) ... ok
+test_invalid_api_requests_have_no_side_effects (test_http.HTTPCase) ... ok
+test_loopback_only_and_static_assets_with_csp (test_http.HTTPCase) ... ok
+test_reviewer_cannot_intake_or_prepare (test_http.HTTPCase) ... ok
+test_session_is_explicitly_synthetic_and_authorization_required (test_http.HTTPCase) ... ok
+test_dated_sources_route_once_to_their_own_period (test_periods.PeriodTests) ... ok
+test_late_locked_evidence_preserves_approval_until_reopen (test_periods.PeriodTests) ... ok
+test_legacy_migration_keeps_immutable_bytes_and_relationships (test_periods.PeriodTests) ... ok
+test_period_authority_overlap_and_scope_denied (test_periods.PeriodTests) ... ok
+test_ambiguous_alias_does_not_choose_arbitrarily (test_platform.PlatformCase) ... ok
+test_backup_restore_and_portable_export_preserve_scope_and_evidence (test_platform.PlatformCase) ... ok
+test_change_during_execution_discards_uncommitted_result (test_platform.PlatformCase) ... ok
+test_changed_inputs_during_export_are_rejected (test_platform.PlatformCase) ... ok
+test_close_readiness_never_claims_completed_close (test_platform.PlatformCase) ... ok
+test_concurrent_workers_do_not_duplicate_artifacts (test_platform.PlatformCase) ... ok
+test_crash_recovery_expired_lease_and_lost_worker_rejected (test_platform.PlatformCase) ... ok
+test_idempotent_intake_and_manual_runs (test_platform.PlatformCase) ... ok
+test_instruction_injection_stays_source_data (test_platform.PlatformCase) ... ok
+test_invalid_scope_components_and_unsafe_backup_destination_rejected (test_platform.PlatformCase) ... ok
+test_journal_balance_exact_account_period_and_support_controls (test_platform.PlatformCase) ... ok
+test_late_duplicate_also_invalidates_earlier_review (test_platform.PlatformCase) ... ok
+test_late_evidence_invalidates_approval_and_new_run_resumes (test_platform.PlatformCase) ... ok
+test_malformed_module_result_rolls_back_whole_checkpoint (test_platform.PlatformCase) ... ok
+test_mandate_expiry_rechecked_before_dispatch (test_platform.PlatformCase) ... ok
+test_mandate_revocation_holds_only_dependent_work (test_platform.PlatformCase) ... ok
+test_module_dependencies_receive_only_committed_scoped_outputs (test_platform.PlatformCase) ... ok
+test_money_rejects_float_nonfinite_precision_and_oversize (test_platform.PlatformCase) ... ok
+test_profile_change_requires_version_and_invalidates_approvals (test_platform.PlatformCase) ... ok
+test_recurring_occurrence_dedup_caps_and_no_response_not_approval (test_platform.PlatformCase) ... ok
+test_required_model_review_remains_blocked_without_model (test_platform.PlatformCase) ... ok
+test_retry_limit_is_persistent (test_platform.PlatformCase) ... ok
+test_review_role_exact_hash_and_append_only_revoke (test_platform.PlatformCase) ... ok
+test_scope_denial_and_second_client_uses_same_engine (test_platform.PlatformCase) ... ok
+test_simulated_recurring_clock_persists_and_worker_uses_it (test_platform.PlatformCase) ... ok
+test_statement_population_mismatch_blocks_clean_items (test_platform.PlatformCase) ... ok
+test_teaching_results_are_not_client_policy (test_platform.PlatformCase) ... ok
+test_unconfigured_and_non_synthetic_profiles_fail_closed (test_platform.PlatformCase) ... ok
+test_unimplemented_capabilities_are_honest_and_unavailable (test_platform.PlatformCase) ... ok
+test_workflows_complete_with_application_outbound_calls_denied (test_platform.PlatformCase) ... ok
+test_workflows_use_shared_runner_and_checkpoint (test_platform.PlatformCase) ... ok
+test_wrong_company_rejected_before_intake (test_platform.PlatformCase) ... ok
+test_independent_validation_runner (test_reviewer_cases.ReviewerCases) ... ok
+test_P01_contributor_cannot_review_colleague_run (test_reviewer_probes.ReviewerProbes) ... ok
+test_P02_identity_kind_not_name_controls_review (test_reviewer_probes.ReviewerProbes) ... ok
+test_P03_stale_occurrence_redispatched (test_reviewer_probes.ReviewerProbes) ... ok
+test_P04_unfit_mandate_does_not_stop_others (test_reviewer_probes.ReviewerProbes) ... ok
+test_P05_one_governing_artifact_across_occurrences (test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P06_unicode_vendor_never_collapses_to_another (test_reviewer_probes.ReviewerProbes) ... ok
+test_P07_stale_source_revision_cannot_replace_newer (test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P08_journal_support_duplicates_no_effect_are_held (test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P09_lock_preserves_review_and_blocks_new_dispatch (test_reviewer_probes.ReviewerProbes) ... ok
+test_P10_second_period_does_not_strand_first (test_reviewer_probes.ReviewerProbes) ... ok
+test_P11_transport_change_does_not_invalidate_accounting (test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P12_close_considers_open_preparation_exceptions (test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P13_statement_population_swap_detected (test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P14_decisions_cannot_be_repeated_or_overwritten (test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P15_receipt_tolerance_is_explicit_client_policy (test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P16_unrelated_receipt_keeps_approved_journal (test_reviewer_probes.ReviewerProbes) ... expected failure
+test_concurrent_ticks_and_skipped_occurrences (test_reviewer_probes.ReviewerProbes) ... ok
+test_mandate_issuer_is_hashed_contributor (test_reviewer_probes.ReviewerProbes) ... ok
+test_unicode_alias_validation_and_accents (test_reviewer_probes.ReviewerProbes) ... ok
+test_separate_regression_cases (test_validation.ValidationCase) ... ok
+
+----------------------------------------------------------------------
+Ran 65 tests in 22.337s
+
+OK (expected failures=9)

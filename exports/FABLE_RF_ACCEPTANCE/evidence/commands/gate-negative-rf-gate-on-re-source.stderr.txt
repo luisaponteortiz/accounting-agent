@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-17-d1f645/de1402ca-78b8-4667-8a44-a885be022d5d/scratchpad/base_re/scripts/verify_re_acceptance_review.py", line 52, in <module>
+    if __name__=='__main__':main()
+  File "/private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-17-d1f645/de1402ca-78b8-4667-8a44-a885be022d5d/scratchpad/base_re/scripts/verify_re_acceptance_review.py", line 45, in main
+    r=run(['exports/FABLE_RE_ACCEPTANCE/fable_re_acceptance_probes.py',str(ROOT)]);validate_probes(r.returncode,r.stdout)
+  File "/private/tmp/claude-501/-Users-luis-Library-Application-Support-Claude-scratch-workspaces-6e119963-87b9-4b10-8d43-9b33b234f1f0-598c2856-3194-4330-af5b-80227cb9756b-scratch-2026-11-17-d1f645/de1402ca-78b8-4667-8a44-a885be022d5d/scratchpad/base_re/scripts/verify_re_acceptance_review.py", line 18, in validate_probes
+    if code or len(parts)!=2:raise ValueError('RF probes require exit 0 and one summary')
+ValueError: RF probes require exit 0 and one summary

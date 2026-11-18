@@ -1,0 +1,14 @@
+python3 scripts/check.py
+PASS: Python syntax, JSON parsing, executable profile validation, workflow DAG/tool registration, DOM text rendering checks.
+No external linter/typechecker/JS compiler installed; these checks are not a claim of those tools passing.
+PASS: capability IDs named in implementation documentation exist in the registry.
+PASS: product requirements schema/evidence/dependencies/crosswalk/client boundaries; 88 records, 27 tickets.
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check.py", line 41, in <module>
+    validate_shared_sources(ROOT,client_terms(register_text))
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check_product_requirements.py", line 67, in validate_shared_sources
+    require(not pattern.search(path.read_text()),'Client-specific fact in shared source: '+str(relative))
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check_product_requirements.py", line 24, in require
+    if not condition:raise ValueError(message)
+ValueError: Client-specific fact in shared source: web/index.html
+make: *** [check] Error 1

@@ -1,0 +1,18 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_product_requirements.ProductRequirements.test_PRV12_omitted_changed_and_invented_results_cannot_promote_records",
+    "tests.test_product_requirements.ProductRequirements.test_PRV12_both_reviewer_authority_files_are_hash_pinned",
+    "tests.test_product_requirements.ProductRequirements.test_PRV13_terms_must_include_the_display_name_in_the_client_heading",
+    "-v"
+  ],
+  "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+  "started_utc": "2026-11-16T16:16:49.299410+00:00",
+  "elapsed_seconds": 6.029,
+  "exit_code": 1,
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "sqlite": "3.51.0",
+  "platform": "macOS-26.5.2-x86_64-i386-64bit"
+}

@@ -1,0 +1,12 @@
+All 35 original probe return expressions are unchanged.
+RN02 original verdict conditions unchanged: held_while_locked, ok, follows
+RN03 original verdict conditions unchanged: ok
+RN07 original verdict conditions unchanged: ok
+RT12a original verdict conditions unchanged: ok
+RT14a original verdict conditions unchanged: ok
+RT14b original verdict conditions unchanged: inline return
+RG0 original verdict conditions unchanged: hand, independent, isolated, month
+RT10b negative probe body unchanged
+RT14d negative probe body unchanged
+RT14b: added assertions cover both D1/D2 decisions and D1 eligibility; all execute before D3 construction.
+Original script checksum preserved: 14dc161e7cebd7624b824a5e4765b66e26a5f6a82fbe9da734928ab846fa328d

@@ -1,0 +1,44 @@
+baseline-re-source-rf-probes                     exit=1  elapsed=179s  python3 /private/tmp/claude-501/rf/scripts/fable_rf_acceptance_probes.py .
+consecutive-make-test-1                          exit=0  elapsed=1533s  make test
+consecutive-make-test-2                          exit=0  elapsed=1428s  make test
+consecutive-make-test-3                          exit=0  elapsed=1625s  make test
+consecutive-make-test-4                          exit=0  elapsed=1007s  make test
+consecutive-make-test-5                          exit=0  elapsed=1016s  make test
+eq-demo                                          exit=0  elapsed=17s  python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . /private/tmp/claude-501/rf/scripts/eq_demo.py
+eq-ra-probes                                     exit=0  elapsed=53s  python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py
+eq-rb-probes                                     exit=0  elapsed=92s  python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py
+eq-rc-probes                                     exit=0  elapsed=91s  python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py
+eq-rd-probes                                     exit=1  elapsed=57s  python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py
+eq-re-probes                                     exit=0  elapsed=177s  python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RE_ACCEPTANCE/fable_re_acceptance_probes.py
+eq-re-step-search-older-resent                   exit=0  elapsed=2146s  python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py --family older-resent-with-claim
+eq-rf-probes                                     exit=0  elapsed=118s  python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . /private/tmp/claude-501/rf/scripts/fable_rf_acceptance_probes.py
+gate-negative-rf-gate-on-re-source               exit=1  elapsed=173s  python3 scripts/verify_re_acceptance_review.py
+make-acceptance-gate                             exit=0  elapsed=52s  make acceptance-gate
+make-batch2-gate                                 exit=0  elapsed=64s  make batch2-gate
+make-check                                       exit=0  elapsed=2s  make check
+make-rb-gate                                     exit=0  elapsed=31s  make rb-gate
+make-rc-gate                                     exit=0  elapsed=27s  make rc-gate
+make-rd-gate                                     exit=0  elapsed=159s  make rd-gate
+make-re-gate                                     exit=0  elapsed=853s  make re-gate
+make-reverification-gate                         exit=0  elapsed=52s  make reverification-gate
+make-rf-gate                                     exit=0  elapsed=5086s  make rf-gate
+make-test-idle-no-hook                           exit=0  elapsed=1020s  make test
+make-test-under-load                             exit=0  elapsed=2602s  make test
+owner-clarification-repro                        exit=0  elapsed=1s  python3 docs/corrections_re/locked_second_claim_reproduction.py
+ra-probes                                        exit=0  elapsed=15s  python3 exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py .
+rb-probes                                        exit=0  elapsed=28s  python3 exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py .
+rb-register-faults-F                             exit=0  elapsed=64s  python3 exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py .
+rc-order-search-120                              exit=0  elapsed=267s  python3 exports/FABLE_RC_ACCEPTANCE/fable_rc_order_search.py . --json /private/tmp/claude-501/rf/out/rc-order-search-120.results.json
+rc-probes                                        exit=0  elapsed=28s  python3 exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py .
+rc-register-faults-G                             exit=0  elapsed=44s  python3 exports/FABLE_RC_ACCEPTANCE/evidence/scripts/fable_rc_register_faults.py /private/tmp/claude-501/rf/run4
+rd-order-search-336                              exit=0  elapsed=436s  python3 exports/FABLE_RD_ACCEPTANCE/fable_rd_order_search.py . --json /private/tmp/claude-501/rf/out/rd-order-search-336.results.json
+rd-probes-12                                     exit=0  elapsed=18s  python3 exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py . Y01 Y02 Y03 Y04 Y06 E01 E02 E03 E03c E04 E05 E06
+rd-register-faults-H                             exit=1  elapsed=22s  python3 exports/FABLE_RD_ACCEPTANCE/evidence/scripts/fable_rd_register_faults.py /private/tmp/claude-501/rf/run5
+re-probes-21                                     exit=0  elapsed=61s  python3 exports/FABLE_RE_ACCEPTANCE/fable_re_acceptance_probes.py .
+re-register-faults-J                             exit=1  elapsed=25s  python3 exports/FABLE_RE_ACCEPTANCE/evidence/scripts/fable_re_register_faults.py /private/tmp/claude-501/rf/run7
+re-step-search-late-row-target                   exit=0  elapsed=3196s  python3 exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py . --family late-row-target --json /private/tmp/claude-501/rf/out/re-step-search-late-row-target.results.json
+re-step-search-older-claim+newer-claim           exit=0  elapsed=2664s  python3 exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py . --family older-claim+newer-claim --json /private/tmp/claude-501/rf/out/re-step-search-older-claim+newer-claim.results.json
+re-step-search-older-resent-with-claim           exit=0  elapsed=1733s  python3 exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py . --family older-resent-with-claim --json /private/tmp/claude-501/rf/out/re-step-search-older-resent-with-claim.results.json
+re-step-search-two-claims+revision               exit=0  elapsed=3213s  python3 exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py . --family two-claims+revision --json /private/tmp/claude-501/rf/out/re-step-search-two-claims+revision.results.json
+rf-probes-own                                    exit=0  elapsed=199s  python3 /private/tmp/claude-501/rf/scripts/fable_rf_acceptance_probes.py .
+y05-adapted                                      exit=0  elapsed=2s  python3 review/fable_rd_feed_contract_probes.py . Y05

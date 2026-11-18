@@ -1,0 +1,46 @@
+test_approval_and_export_black_box (test_http.HTTPCase) ... ok
+test_blocked_artifact_approval_fails (test_http.HTTPCase) ... ok
+test_health_and_real_worker_results (test_http.HTTPCase) ... ok
+test_host_origin_and_scope_override_defenses (test_http.HTTPCase) ... ok
+test_invalid_api_requests_have_no_side_effects (test_http.HTTPCase) ... ok
+test_loopback_only_and_static_assets_with_csp (test_http.HTTPCase) ... ok
+test_reviewer_cannot_intake_or_prepare (test_http.HTTPCase) ... ok
+test_session_is_explicitly_synthetic_and_authorization_required (test_http.HTTPCase) ... ok
+test_ambiguous_alias_does_not_choose_arbitrarily (test_platform.PlatformCase) ... ok
+test_backup_restore_and_portable_export_preserve_scope_and_evidence (test_platform.PlatformCase) ... ok
+test_change_during_execution_discards_uncommitted_result (test_platform.PlatformCase) ... ok
+test_changed_inputs_during_export_are_rejected (test_platform.PlatformCase) ... ok
+test_close_readiness_never_claims_completed_close (test_platform.PlatformCase) ... ok
+test_concurrent_workers_do_not_duplicate_artifacts (test_platform.PlatformCase) ... ok
+test_crash_recovery_expired_lease_and_lost_worker_rejected (test_platform.PlatformCase) ... ok
+test_idempotent_intake_and_manual_runs (test_platform.PlatformCase) ... ok
+test_instruction_injection_stays_source_data (test_platform.PlatformCase) ... ok
+test_invalid_scope_components_and_unsafe_backup_destination_rejected (test_platform.PlatformCase) ... ok
+test_journal_balance_exact_account_period_and_support_controls (test_platform.PlatformCase) ... ok
+test_late_duplicate_also_invalidates_earlier_review (test_platform.PlatformCase) ... ok
+test_late_evidence_invalidates_approval_and_new_run_resumes (test_platform.PlatformCase) ... ok
+test_malformed_module_result_rolls_back_whole_checkpoint (test_platform.PlatformCase) ... ok
+test_mandate_expiry_rechecked_before_dispatch (test_platform.PlatformCase) ... ok
+test_mandate_revocation_holds_only_dependent_work (test_platform.PlatformCase) ... ok
+test_module_dependencies_receive_only_committed_scoped_outputs (test_platform.PlatformCase) ... ok
+test_money_rejects_float_nonfinite_precision_and_oversize (test_platform.PlatformCase) ... ok
+test_profile_change_requires_version_and_invalidates_approvals (test_platform.PlatformCase) ... ok
+test_recurring_occurrence_dedup_caps_and_no_response_not_approval (test_platform.PlatformCase) ... ok
+test_required_model_review_remains_blocked_without_model (test_platform.PlatformCase) ... ok
+test_retry_limit_is_persistent (test_platform.PlatformCase) ... ok
+test_review_role_exact_hash_and_append_only_revoke (test_platform.PlatformCase) ... ok
+test_scope_denial_and_second_client_uses_same_engine (test_platform.PlatformCase) ... ok
+test_simulated_recurring_clock_persists_and_worker_uses_it (test_platform.PlatformCase) ... ok
+test_statement_population_mismatch_blocks_clean_items (test_platform.PlatformCase) ... ok
+test_teaching_results_are_not_client_policy (test_platform.PlatformCase) ... ok
+test_unconfigured_and_non_synthetic_profiles_fail_closed (test_platform.PlatformCase) ... ok
+test_unimplemented_capabilities_are_honest_and_unavailable (test_platform.PlatformCase) ... ok
+test_workflows_complete_with_application_outbound_calls_denied (test_platform.PlatformCase) ... ok
+test_workflows_use_shared_runner_and_checkpoint (test_platform.PlatformCase) ... ok
+test_wrong_company_rejected_before_intake (test_platform.PlatformCase) ... ok
+test_separate_regression_cases (test_validation.ValidationCase) ... ok
+
+----------------------------------------------------------------------
+Ran 41 tests in 10.498s
+
+OK

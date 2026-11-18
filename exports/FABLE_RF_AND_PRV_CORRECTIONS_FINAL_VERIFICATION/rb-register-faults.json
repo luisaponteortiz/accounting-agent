@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/Library/Developer/CommandLineTools/usr/bin/python3",
+    "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py",
+    "."
+  ],
+  "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-rf-final-8ijvq6q7/project",
+  "started_utc": "2026-11-17T01:40:50.529285+00:00",
+  "elapsed_seconds": 56.708,
+  "exit_code": 0
+}

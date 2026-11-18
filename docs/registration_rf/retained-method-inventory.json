@@ -1,0 +1,34 @@
+{
+ "baseline": "tests/*.py in exports/FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+ "retained_methods": 241,
+ "present": 241,
+ "unchanged": 235,
+ "adapted_under_D-033": [
+  "tests/test_product_requirements.py::ProductRequirements.test_PRV03_failed_verdict_cannot_be_promoted",
+  "tests/test_product_requirements.py::ProductRequirements.test_PRV12_omitted_changed_and_invented_results_cannot_promote_records",
+  "tests/test_product_requirements.py::ProductRequirements.test_PRV14_third_authority_is_pinned_and_latest_verdict_controls",
+  "tests/test_product_requirements_rf.py::ProductRequirementsRF.test_fourth_authority_wins_and_all_older_authorities_cannot_override",
+  "tests/test_product_requirements_rf.py::ProductRequirementsRF.test_fourth_changed_verdict_controls_even_with_matching_project_results",
+  "tests/test_product_requirements_rf.py::ProductRequirementsRF.test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused"
+ ],
+ "added_methods": [
+  "tests/test_product_requirements_rf_registration.py::ProductRequirementsRFRegistration.test_shipped_configuration_reads_five_authorities_and_the_fifth_is_latest",
+  "tests/test_product_requirements_rf_registration.py::ProductRequirementsRFRegistration.test_fifth_results_and_report_are_hash_pinned",
+  "tests/test_product_requirements_rf_registration.py::ProductRequirementsRFRegistration.test_three_recorded_scopes_cite_the_fifth_checkpoint_and_nothing_else_moved",
+  "tests/test_product_requirements_rf_registration.py::ProductRequirementsRFRegistration.test_fifth_failed_verdict_cannot_be_promoted_and_a_downgrade_is_accepted_when_results_and_register_follow",
+  "tests/test_product_requirements_rf_registration.py::ProductRequirementsRFRegistration.test_each_older_authority_altered_and_repinned_cannot_override_the_fifth",
+  "tests/test_product_requirements_rf_registration.py::ProductRequirementsRFRegistration.test_results_and_register_that_follow_the_fourth_authority_are_rejected",
+  "tests/test_product_requirements_rf_registration.py::ProductRequirementsRFRegistration.test_record_absent_from_the_fifth_falls_back_to_the_fourth_verdict",
+  "tests/test_product_requirements_rf_registration.py::ProductRequirementsRFRegistration.test_seven_row_order_and_exact_rows_are_enforced_on_five_authorities",
+  "tests/test_product_requirements_rf_registration.py::ProductRequirementsRFRegistration.test_historical_fixture_bytes_are_hash_checked_and_leave_the_shipped_pins_alone"
+ ],
+ "retained_files_text_outside_test_methods_identical": {
+  "tests/test_product_requirements.py": true,
+  "tests/test_product_requirements_rf.py": true
+ },
+ "new_files": [
+  "tests/rf_checkpoint_fixture.py",
+  "tests/test_product_requirements_rf_registration.py"
+ ],
+ "total_methods_now": 250
+}

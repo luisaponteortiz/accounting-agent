@@ -1,0 +1,668 @@
+{
+  "title": "Fable implementation backlog for Accounting Agent OS 0.1.0",
+  "authored": "2026-11-14",
+  "notice": "Review output only. Authorises no connection, posting, payment, model call, hosting or policy activation. All example data is fictional. Implement with synthetic data unless a ticket says it waits for client facts.",
+  "companion_files": ["FABLE_ARCHITECTURE_REVIEW.md", "FABLE_VALIDATION_CASES.json", "run_fable_validation_cases.py", "reviewer_probes.py"],
+  "priority_definitions": {
+    "P0": "Current critical control or correctness defect.",
+    "P1": "Foundation change needed before expanding execution or using approved client samples.",
+    "P2": "Next capability or reliability improvement.",
+    "P3": "Later enhancement."
+  },
+  "ordering": "Implement batches in order. Within a batch, follow the order of ticket_ids in the batches list; every dependency of a ticket appears earlier in that order.",
+  "general_rules_for_every_ticket": [
+    "Run make test, make check and the reviewer runner after each ticket.",
+    "When a ticket deliberately changes an existing contract or test, record the change and the reason in DECISIONS.md.",
+    "Do not weaken an existing blocker to make a case pass.",
+    "New blocker and status names proposed here may be renamed, provided the validation cases file is updated in the same change.",
+    "Keep handlers pure. New persistence goes through storage.py and new authority checks through service.py."
+  ],
+  "batches": [
+    {
+      "phase": "batch_1",
+      "name": "Control integrity and state over time",
+      "objective": "Make the stated review control true, and make state survive a second period and a recurring run.",
+      "ticket_ids": ["T-01", "T-02", "T-03", "T-04", "T-05", "T-06", "T-07", "T-08"],
+      "completion_gate": [
+        "All 41 existing tests pass, or are deliberately changed with the reason recorded in DECISIONS.md.",
+        "Reviewer runner: FV-C15, FV-R01, FV-R03, FV-R04, FV-RC01 and FV-RC02 report FIXED; zero FAIL, UNEXPECTED or DEFERRED-LEAK.",
+        "FV-J08, FV-J09, FV-J10 and FV-CL02 still report KNOWN-FAIL (they belong to batch 2).",
+        "Probes P01 to P06, P09 to P11, P14 and P16 exist as passing unit tests.",
+        "Documentation statements listed in finding F-22 match the code."
+      ]
+    },
+    {
+      "phase": "batch_2",
+      "name": "Accounting substance",
+      "objective": "Add the shared entities every accounting area needs: approved policy rules, exceptions and dispositions, proposed entries, source lifecycle, statement-based completeness, stronger journal controls and period finalization.",
+      "ticket_ids": ["T-09", "T-11", "T-12", "T-10", "T-13", "T-14", "T-15", "T-16", "T-17", "T-18", "T-19"],
+      "order_note": "ticket_ids are listed in implementation order. T-10 follows T-12 because the freshness predicate needs the source as_of field.",
+      "completion_gate": [
+        "Reviewer runner: every executable_now_fails_until_fix case reports FIXED.",
+        "A full synthetic month (the teaching fixture) can be driven to: every item approved or dispositioned, package finalized, period locked, with no direct database edits and no weakened blocker.",
+        "Two synthetic clients in different periods run on one engine with no cross-effects.",
+        "Readiness gate G0 in FABLE_ARCHITECTURE_REVIEW.md section 9 is met and recorded in docs/CONNECTION_READINESS.md."
+      ]
+    },
+    {
+      "phase": "batch_3",
+      "name": "First new capabilities and reliability",
+      "objective": "Add the next capabilities one at a time behind the shared contracts, and harden the runtime.",
+      "ticket_ids": ["T-20", "T-21", "T-22", "T-23", "T-24", "T-25", "T-26", "T-27"],
+      "completion_gate": [
+        "Each new capability passes its FV specification cases and its own adversarial tests before its status changes from deferred.",
+        "Reviewer runner cases for capabilities that are now implemented are moved from future_module_specification to executable_now with verified expectations.",
+        "No connector, schedule, model call or write path exists."
+      ]
+    }
+  ],
+  "implementable_now_with_synthetic_data": ["T-01", "T-02", "T-03", "T-04", "T-05", "T-06", "T-07", "T-08", "T-09", "T-10", "T-11", "T-12", "T-13", "T-14", "T-15", "T-16", "T-17", "T-18", "T-19", "T-20", "T-21", "T-22", "T-24", "T-25", "T-26", "T-27"],
+  "must_await_client_facts_or_authorization": [
+    {"item": "Entering any real Bird Bowl identity, chart, card mapping, vendor rule, threshold, tolerance or authority grant", "waits_for": "Written answers to client questions 1 to 7 and approval through the rule lifecycle (T-09)"},
+    {"item": "T-23 AP bill preparation beyond a synthetic specification", "waits_for": "Client question 12: whether payables are carried in the ledger, and the approval chain"},
+    {"item": "AR and financial-reporting modules", "waits_for": "Client questions 12 and 14, and T-22"},
+    {"item": "Use of approved client samples", "waits_for": "Readiness gate G1"},
+    {"item": "Any connector, live schedule, model call, hosted deployment or ledger write", "waits_for": "Readiness gates G2 to G4 and separate written authorisation"}
+  ],
+  "tickets": [
+    {
+      "id": "T-01",
+      "priority": "P2",
+      "title": "Adopt the reviewer suite and exact assertions before changing behaviour",
+      "finding_ids": ["F-21"],
+      "rationale": "The existing validation test asserts blocker subsets on mutations of the teaching fixture, so it cannot detect a spurious blocker or a regression in authority. Lock current behaviour first so batch 1 changes are visible.",
+      "affected_files_or_modules": ["tests/test_validation.py", "tests/ (new test_reviewer_cases.py, test_authority.py)", "Makefile", "scripts/check.py", "accounting_agent/fixtures/validation.json (relabel)"],
+      "required_behavior": [
+        "Copy FABLE_VALIDATION_CASES.json and run_fable_validation_cases.py into the repository and run the runner from make test.",
+        "Change the issubset assertion in tests/test_validation.py to exact equality of the blocker set.",
+        "Add each probe in reviewer_probes.py as a unit test asserting the REQUIRED behaviour, marked unittest.expectedFailure until its fixing ticket lands.",
+        "Relabel fixtures/validation.json as regression cases derived from the teaching fixture in PROGRESS.md and VERIFICATION.md."
+      ],
+      "acceptance_criteria": [
+        "make test runs the reviewer runner and fails on FAIL, UNEXPECTED or DEFERRED-LEAK.",
+        "Baseline runner result on unchanged code: PASS=28, KNOWN-FAIL=10, DEFERRED-OK=22.",
+        "Adding an extra blocker to any teaching item makes a test fail."
+      ],
+      "tests": ["run_fable_validation_cases.py baseline", "tests/test_validation.py with equality", "expected-failure tests for P01 to P16"],
+      "dependencies": [],
+      "human_decision_required": "None.",
+      "phase": "batch_1"
+    },
+    {
+      "id": "T-02",
+      "priority": "P0",
+      "title": "Fix vendor normalisation so non-Latin and punctuation-only text cannot match",
+      "finding_ids": ["F-03"],
+      "rationale": "normalize() replaces every character outside A-Z, 0-9 and space. An alias and a descriptor made of other characters both become the empty string and match, producing a clean, approval-eligible proposal for the wrong vendor.",
+      "affected_files_or_modules": ["accounting_agent/core.py (normalize)", "accounting_agent/modules.py (card_prepare alias match, vendor_key, receipt vendor check)", "accounting_agent/service.py (validate_profile)"],
+      "required_behavior": [
+        "normalize() applies Unicode NFKC and casefold, keeps characters where str.isalnum() is true, turns the rest into single spaces and trims.",
+        "validate_profile rejects any vendor alias whose normalised form is empty.",
+        "card_prepare treats a descriptor whose normalised form is empty as UNKNOWN_VENDOR without lookup, and uses the raw descriptor in the duplicate key.",
+        "No accent folding by default; an accented and an unaccented spelling do not match unless both are listed as aliases."
+      ],
+      "acceptance_criteria": [
+        "FV-C15 reports FIXED (held with UNKNOWN_VENDOR and UNKNOWN_CATEGORY, or the profile is refused).",
+        "FV-C01 and every existing alias test still pass.",
+        "A profile with alias '---' is refused."
+      ],
+      "tests": ["FV-C15", "FV-C01", "probe P06 as a unit test", "new: punctuation-only alias refused; accented alias matches only its exact accented descriptor"],
+      "dependencies": ["T-01"],
+      "human_decision_required": "None now. Whether to fold accents is a client matching policy to be approved later through T-09.",
+      "phase": "batch_1"
+    },
+    {
+      "id": "T-03",
+      "priority": "P0",
+      "title": "Enforce review independence with actor kind and artifact contributors",
+      "finding_ids": ["F-01"],
+      "rationale": "Review compares the reviewer only with the enqueuing actor and decides human versus automation by an id prefix. The author of the evidence and the policy can approve their own work through a colleague's run.",
+      "affected_files_or_modules": ["accounting_agent/core.py (Actor)", "accounting_agent/service.py (commit, review, authorize)", "accounting_agent/demo.py (actor)", "accounting_agent/http.py (token to actor mapping)", "accounting_agent/storage.py (no schema change needed if contributors live in the artifact envelope)"],
+      "required_behavior": [
+        "Actor gains kind: 'human' or 'service', set only by trusted transport; the demo worker is 'service', demo preparer and reviewer are 'human'.",
+        "At commit, the artifact envelope records contributors: the run actor, the mandate issuer if any, the actor of every source snapshot in the run's input manifest, and the actor who registered the profile version in force.",
+        "review() refuses approve and reject unless actor.kind is 'human' and actor.role is 'reviewer', and refuses when actor.id is in contributors. Remove the startswith('worker') test.",
+        "Revoke remains available to a human reviewer who is not a contributor."
+      ],
+      "acceptance_criteria": [
+        "FV-R01 reports FIXED with status 403.",
+        "A service actor with the reviewer role is refused whatever its id; a human reviewer whose id starts with 'worker' is accepted if not a contributor.",
+        "The existing demo approval flow and tests/test_http.py approval test are unchanged.",
+        "contributors is part of the hashed envelope and visible in the export."
+      ],
+      "tests": ["FV-R01", "probes P01 and P02 as unit tests", "new: mandate issuer cannot review a mandate run's artifacts"],
+      "dependencies": ["T-01"],
+      "human_decision_required": "None to implement. For a real client: whether a person who approved a policy rule may review transactions prepared under it (authority matrix, client question 6).",
+      "phase": "batch_1"
+    },
+    {
+      "id": "T-04",
+      "priority": "P1",
+      "title": "Separate occurrences from runs; re-dispatch held occurrences; isolate unfit mandates",
+      "finding_ids": ["F-08", "F-17"],
+      "rationale": "A recurring run held for stale inputs permanently consumes its occurrence, so the scheduled preparation silently never happens. One mandate that no longer fits the client profile makes every tick raise and creates no run for any mandate.",
+      "affected_files_or_modules": ["accounting_agent/storage.py (new occurrences table; move the uniqueness constraint)", "accounting_agent/service.py (tick, _enqueue, claim, commit, state)", "accounting_agent/web/app.js (show occurrence status)"],
+      "required_behavior": [
+        "New table occurrences(scope, mandate_id, workflow, occurrence_key, status, created) with UNIQUE(mandate_id, workflow, occurrence_key). Status: dispatched, completed, held, awaiting_evidence, skipped_no_catch_up.",
+        "Runs reference an occurrence id. More than one run may link to an occurrence, but at most one may complete.",
+        "When a mandate run is held for stale inputs, the next tick or the next input change re-dispatches a new run for the same occurrence against current inputs, provided the mandate is still valid.",
+        "Each tick writes skipped_no_catch_up rows for occurrences between the previous tick and the current occurrence.",
+        "tick evaluates each mandate independently. A control error for one mandate marks that mandate held with a reason, writes an audit event, and the loop continues. The clock still advances."
+      ],
+      "acceptance_criteria": [
+        "FV-RC01 and FV-RC02 report FIXED; FV-RC03 still passes.",
+        "Exactly one completed run per occurrence under repeated delivery and concurrent workers.",
+        "Skipped and held occurrences appear in state and export.",
+        "Existing recurrence tests pass or are deliberately updated."
+      ],
+      "tests": ["FV-RC01", "FV-RC02", "FV-RC03", "probes P03 and P04 as unit tests", "new: concurrent ticks create one occurrence row"],
+      "dependencies": ["T-01"],
+      "human_decision_required": "None.",
+      "phase": "batch_1"
+    },
+    {
+      "id": "T-05",
+      "priority": "P1",
+      "title": "Introduce accounting periods as records with status; bind runs and sources to a period",
+      "finding_ids": ["F-04"],
+      "rationale": "The period is one mutable field on the client profile. Locking it voids the approvals it should protect, and moving to the next month strands the previous one. The planned November capture and December validation cannot be represented.",
+      "affected_files_or_modules": ["accounting_agent/storage.py (new periods table; runs.period_id)", "accounting_agent/service.py (open_period, lock_period, reopen_period, _enqueue, context, validate_profile)", "accounting_agent/modules.py (period_issues, card_prepare control period)", "accounting_agent/config/bird_bowl.demo.json and bird_bowl.unconfigured.json", "accounting_agent/http.py and web/ (period selector, lock action)", "fixtures and tests that rely on profile.period"],
+      "required_behavior": [
+        "New table periods(scope, period_id, start, end, status, changed_by, changed_at, reason) with an append-only status history. Status: open, in_review, locked.",
+        "Service operations open_period, lock_period and reopen_period, each audited. In this slice they require a human reviewer-role actor who is not the preparer of work in that period; the real authority comes from T-09.",
+        "Remove period from the profile schema. Every run is enqueued for a period_id and handlers receive that period in context.",
+        "Each dated source is assigned to the period containing its accounting date. An item dated in a different open period than the run is reported once under its own period, not as OUTSIDE_PERIOD in another.",
+        "Locking changes status only: it does not bump the client generation or invalidate anything.",
+        "Enqueue is refused for a locked period. A new or revised source dated in a locked period is stored and raises LATE_ACTIVITY_IN_LOCKED_PERIOD against that period."
+      ],
+      "acceptance_criteria": [
+        "FV-R04 reports FIXED.",
+        "Opening a second period leaves every artifact status in the first period unchanged.",
+        "A source dated in a locked period does not change any finalized or approved status and is visible as an exception.",
+        "FV-J07 (locked period holds a clean journal) still passes; update its input to lock via the new operation."
+      ],
+      "tests": ["FV-R04", "FV-J05", "FV-J07", "probes P09 and P10 as unit tests", "new: two-period scenario; lock by an unauthorised actor refused"],
+      "dependencies": ["T-01", "T-03"],
+      "human_decision_required": "None for synthetic implementation. For a real client: who may lock and reopen, and which date governs cutoff (client questions 4, 6 and 9).",
+      "phase": "batch_1"
+    },
+    {
+      "id": "T-06",
+      "priority": "P1",
+      "title": "Scope the input manifest to what each capability reads; narrow the code hash",
+      "finding_ids": ["F-05"],
+      "rationale": "Currency is judged against one fingerprint covering every source of every kind for the client and every Python file in the package. An unrelated card receipt stales an approved journal, and any deployment stales every approval for every client.",
+      "affected_files_or_modules": ["accounting_agent/core.py (Capability gains reads)", "accounting_agent/modules.py (declare reads per capability)", "accounting_agent/service.py (context, _current, _enqueue, code_hash, state)"],
+      "required_behavior": [
+        "Capability declares reads: source kinds, profile sections and look-back (bound period, or an explicit wider population for duplicate detection).",
+        "A run's manifest is built from the declared inputs of its workflow's capabilities within its period. _current compares that manifest.",
+        "Handlers receive only the sources they declared.",
+        "Replace the package-wide code hash with capability version plus a hash of the files that implement handlers and invariants (modules.py and core.py). Changes to http.py, demo.py, __main__.py and web/ do not affect lineage."
+      ],
+      "acceptance_criteria": [
+        "Supplying a card receipt leaves an approved journal artifact approved and current.",
+        "Supplying a journal support document leaves approved card artifacts approved.",
+        "Editing http.py changes no run or artifact status; editing modules.py makes affected runs non-current.",
+        "The late-receipt and late-duplicate tests still invalidate the affected card items."
+      ],
+      "tests": ["probes P11 and P16 as unit tests", "existing test_late_evidence_invalidates_approval_and_new_run_resumes and test_late_duplicate_also_invalidates_earlier_review", "new: handler receives no undeclared source kind"],
+      "dependencies": ["T-05"],
+      "human_decision_required": "None.",
+      "phase": "batch_1"
+    },
+    {
+      "id": "T-07",
+      "priority": "P0",
+      "title": "One governing artifact per item and a decision state machine",
+      "finding_ids": ["F-02"],
+      "rationale": "Recurring runs on unchanged inputs create additional current copies of the same item, which can then carry conflicting decisions. A single artifact accepts repeated approvals, and a later approval overrides another reviewer's rejection.",
+      "affected_files_or_modules": ["accounting_agent/service.py (commit, review, state, export)", "accounting_agent/storage.py (artifact_runs link table; decisions unchanged and append-only)", "accounting_agent/web/app.js (show governing and disputed states)"],
+      "required_behavior": [
+        "The artifact envelope references dependency content hashes, not artifact row ids, so identical inputs give an identical artifact hash across runs.",
+        "At commit, when a current artifact with the same scope, workflow, item key and hash exists, link the run to it instead of inserting a copy.",
+        "The governing artifact for (scope, workflow, period, item key) is the newest from a completed run. review() refuses approve and reject on any other artifact with 409.",
+        "Decision state per artifact: pending to approved or rejected; approved to revoked. Repeating the current state returns 409. A contrary decision by a different reviewer is recorded and sets the state to disputed; disputed is not approved and needs an explicit resolution decision.",
+        "state and export report one review state per item plus full history."
+      ],
+      "acceptance_criteria": [
+        "FV-R03 reports FIXED: one governing artifact for the journal after two recurring occurrences.",
+        "Second identical approval returns 409; reject after approve by another reviewer yields disputed.",
+        "FV-R02 still passes.",
+        "Decision history stays append-only."
+      ],
+      "tests": ["FV-R03", "FV-R02", "probes P05 and P14 as unit tests", "existing test_review_role_exact_hash_and_append_only_revoke"],
+      "dependencies": ["T-03", "T-06"],
+      "human_decision_required": "None to implement. Who resolves a disputed item is an authority-matrix question for a real client.",
+      "phase": "batch_1"
+    },
+    {
+      "id": "T-08",
+      "priority": "P2",
+      "title": "Bring the documents into line with the code",
+      "finding_ids": ["F-22"],
+      "rationale": "A few statements describe behaviour the code does not have. The project's own standard is honest capability states.",
+      "affected_files_or_modules": ["docs/CAPABILITY_CONTRACTS.md", "docs/ARCHITECTURE.md", "PROGRESS.md", "docs/VERIFICATION.md", "FABLE_ACCOUNTING_HANDOFF.md", "accounting_agent/modules.py (package.check)", "DECISIONS.md"],
+      "required_behavior": [
+        "State what the artifact envelope actually binds, and list entity, book and review policy as not yet bound until T-15.",
+        "Describe mandates by the role and actor kind that can issue them.",
+        "Describe the regression fixture as derived from the teaching fixture.",
+        "Either make package.check perform a named check or rename it to package.manifest.",
+        "Include the cited screenshot in the next bundle or remove the citation.",
+        "Record each batch 1 contract change in DECISIONS.md."
+      ],
+      "acceptance_criteria": ["Every row of the F-22 table in the review is resolved.", "No document claims a control that a reviewer probe can defeat."],
+      "tests": ["Manual document check against the F-22 table", "scripts/check.py: assert every capability id named in docs exists in CAPABILITIES"],
+      "dependencies": ["T-02", "T-03", "T-04", "T-05", "T-06", "T-07"],
+      "human_decision_required": "None.",
+      "phase": "batch_1"
+    },
+    {
+      "id": "T-09",
+      "priority": "P1",
+      "title": "Policy approval lifecycle: proposed versions, second-person approval, effective-dated rules",
+      "finding_ids": ["F-06"],
+      "rationale": "The preparer registers and thereby activates the profile that constrains the preparer. There is no proposed state, approver, effective date or supersession, and no way to keep a one-item correction from becoming a rule.",
+      "affected_files_or_modules": ["accounting_agent/service.py (onboard, new propose_rule, approve_rule, reject_rule, context)", "accounting_agent/storage.py (policy_rules and rule_decisions tables; authority_grants table)", "accounting_agent/modules.py (handlers receive only approved, in-window rules)", "accounting_agent/config/ (split demo profile into identity, chart and rules)", "web/ (knowledge view shows status and approver)"],
+      "required_behavior": [
+        "Step 1: a registered profile version is 'proposed'. approve_profile_version by a human other than the proposer moves the client pointer. Runs use only the approved version.",
+        "Step 2: vendor mappings, receipt and matching policy, and close checklist become individually versioned rule records with status (proposed, approved, rejected, superseded), effective_from, effective_to, supersedes, proposed_by, approved_by, evidence references and scope (single_item or reusable). Schema: review section 7.2.",
+        "Handlers receive approved rules whose effective window contains the item's accounting date.",
+        "A service actor or model output can create a proposed rule only.",
+        "authority_grants records who may review, disposition, approve rules, approve mandates, finalize and lock, with effective dates; synthetic grants are labelled as such."
+      ],
+      "acceptance_criteria": [
+        "A proposed version or rule is never applied by a run.",
+        "The proposer cannot approve; a service actor cannot approve.",
+        "A rule effective on the first day of the next period is not applied to an item dated in the current period.",
+        "After supersession, re-preparing an earlier period applies the rule that was in force for that date.",
+        "Export shows, for every artifact, the rule ids and versions applied."
+      ],
+      "tests": ["New unit tests per criterion", "AT-60 mechanics: load package, conflicting or unapproved guidance produces a review request"],
+      "dependencies": ["T-03", "T-05"],
+      "human_decision_required": "For a real client: who approves policy, and what evidence a reusable rule needs (client question 6). Not needed for synthetic implementation.",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-10",
+      "priority": "P1",
+      "title": "Bind standing mandates to an approver, a period rule, policy versions and evidence freshness",
+      "finding_ids": ["F-07"],
+      "rationale": "Mandates are issued, ticked and revoked by the preparer role and know nothing about the period they prepare, the policy in force or whether new evidence exists.",
+      "affected_files_or_modules": ["accounting_agent/service.py (create_mandate, approve_mandate, tick, _mandate_valid)", "accounting_agent/storage.py (mandates columns)", "web/ (mandate view)"],
+      "required_behavior": [
+        "A mandate is created as proposed and becomes active only when approved by a human with the approve_mandate grant who is not the issuer.",
+        "Mandate stores period_rule (which period each occurrence prepares), the rule versions it was approved against, a freshness predicate (required source kinds with as_of on or after the occurrence start) and a mandatory expiry.",
+        "A change to a bound rule moves the mandate to needs_reconfirmation and stops dispatch.",
+        "An occurrence whose freshness predicate is not met is recorded as awaiting_evidence and is dispatched when the evidence arrives within the mandate window."
+      ],
+      "acceptance_criteria": [
+        "Issuer cannot approve own mandate.",
+        "No run is created for an occurrence without fresh required evidence.",
+        "Changing a bound rule halts dispatch and is visible.",
+        "Existing dedup, cap, expiry and revocation tests pass."
+      ],
+      "tests": ["New unit tests per criterion", "FV-RC01 to FV-RC03"],
+      "dependencies": ["T-04", "T-05", "T-09", "T-12"],
+      "human_decision_required": "For a real client: who may approve a mandate.",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-11",
+      "priority": "P1",
+      "title": "Required client facts per capability",
+      "finding_ids": ["F-14"],
+      "rationale": "Legal entity, framework and basis are null in the demo profile and nothing stops a journal from becoming approval-eligible. A partly filled real profile would behave the same way.",
+      "affected_files_or_modules": ["accounting_agent/core.py (Capability.requires_client_facts)", "accounting_agent/modules.py", "accounting_agent/service.py (commit adds blockers; validate_profile reads profile_class and fact_waivers)", "accounting_agent/config/"],
+      "required_behavior": [
+        "Profile gains profile_class (synthetic_demo or client_sample) and fact_waivers.",
+        "Each capability lists the client facts it requires.",
+        "For client_sample, each missing required fact adds CLIENT_FACT_MISSING:<fact> to every artifact of that capability.",
+        "synthetic_demo profiles run only through explicit, labelled waivers, shown in the artifact."
+      ],
+      "acceptance_criteria": [
+        "A client_sample profile with a null accounting basis yields no eligible journal artifact.",
+        "The demo profile yields the same results as today and its waivers appear in the export."
+      ],
+      "tests": ["New unit tests", "all FV executable cases unchanged after adding waivers to the validation base profile"],
+      "dependencies": ["T-09"],
+      "human_decision_required": "None.",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-12",
+      "priority": "P1",
+      "title": "Source lifecycle: ordering, removal and supersession",
+      "finding_ids": ["F-13"],
+      "rationale": "The last write is the current version, so a delayed older batch replaces newer data. Feed removals cannot be represented, and a supersedes link produces only a blocker.",
+      "affected_files_or_modules": ["accounting_agent/modules.py (validate_source, card_prepare)", "accounting_agent/service.py (intake)", "accounting_agent/storage.py (snapshot, latest)"],
+      "required_behavior": [
+        "Source envelope gains as_of (source timestamp or feed sequence) and keeps source_system.",
+        "A version with an older as_of than the current one is stored as history and does not become current.",
+        "A tombstone removes a source from the current population with a reason (feed_removed, voided, superseded) and keeps history.",
+        "supersedes is resolved by the engine: the superseded row leaves the population and the link is kept on both records.",
+        "Revision or removal of a source that has an approved governing artifact raises an exception against that approval."
+      ],
+      "acceptance_criteria": [
+        "Probe P07: the newer amount stays current after the late older batch.",
+        "A tombstoned pending authorisation produces no artifact and no blockers.",
+        "FV-C13 still holds the settled row for review and no longer reports the superseded pending row as an open item."
+      ],
+      "tests": ["probe P07 as a unit test", "FV-C13 (update expectation for the pending row)", "new: tombstone and approved-then-removed cases"],
+      "dependencies": ["T-06"],
+      "human_decision_required": "None for synthetic implementation. Real feed semantics are a provider fact to verify at gate G2.",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-13",
+      "priority": "P1",
+      "title": "Statement-based completeness control",
+      "finding_ids": ["F-12"],
+      "rationale": "The control is a count and one signed total declared in the same intake as the population. It excludes foreign-currency and out-of-period rows silently, passes on substitution, sums payments with purchases and has no balances to chain.",
+      "affected_files_or_modules": ["accounting_agent/modules.py (validate_source: new statement kind; card_prepare)", "accounting_agent/fixtures/build_fixtures.py and teaching.json", "FABLE_VALIDATION_CASES.json (controls become statements)"],
+      "required_behavior": [
+        "New source kind statement: account, statement id, cycle start and end, opening balance, closing balance, totals by activity type (purchases, credits, payments, fees, interest), line count, optional line ids, provenance (system_extract or manually_keyed, and the supplying actor).",
+        "Checks: opening equals the prior statement's closing; opening plus activity equals closing; intake population by activity type equals statement totals for the cycle.",
+        "Rows excluded from the tie (other currency, outside the cycle, pending) are listed in an unreconciled_population section of a per-account package artifact.",
+        "Line-level tie when line ids are supplied.",
+        "A sign convention is declared per source system and validated; payments and purchases are never summed in one direction."
+      ],
+      "acceptance_criteria": [
+        "A foreign-currency row appears as an unreconciled population item (FV-C19 extended).",
+        "An opening-balance break blocks every item on that account.",
+        "Purchases, credits and payments tie separately.",
+        "FV-C08 and FV-C09 pass with statement inputs."
+      ],
+      "tests": ["FV-C08", "FV-C09", "FV-C19", "FV-BK05 arithmetic reused for card accounts", "new: substitution detected when line ids are present"],
+      "dependencies": ["T-05", "T-12"],
+      "human_decision_required": "For a real client: which document is the authoritative statement and how cycles map to periods (client questions 2 and 4).",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-14",
+      "priority": "P1",
+      "title": "Exceptions and dispositions as records; blocker propagation between steps",
+      "finding_ids": ["F-10"],
+      "rationale": "A blocker is a string with no resolution path, so duplicates, credits, splits, payments and foreign charges can never be completed. Upstream blockers do not affect downstream steps.",
+      "affected_files_or_modules": ["accounting_agent/storage.py (exceptions, dispositions tables)", "accounting_agent/service.py (commit opens exceptions; new disposition and revoke_disposition; context passes dispositions)", "accounting_agent/modules.py (handlers consume dispositions; Step declares propagation)", "accounting_agent/core.py (Step.on_dependency_blockers)", "web/ (exception queue and disposition form)"],
+      "required_behavior": [
+        "commit opens one exception row per (item, code) and supersedes it when a later governing artifact no longer has that code.",
+        "disposition() records a choice from a closed vocabulary per code, with evidence references, reason, deciding human and scope (single_item by default). Vocabulary and example: review sections 5 (F-10) and 7.2.",
+        "A disposition is an immutable input in the item's manifest. Re-preparation applies it and cites it in the artifact; the result then needs independent review.",
+        "Only humans with the matching grant may disposition. scope propose_rule creates a proposed rule and nothing else.",
+        "Each Step declares whether dependency blockers propagate; package-level codes propagate by default."
+      ],
+      "acceptance_criteria": [
+        "Two duplicate candidates with a distinct_purchases disposition and distinct receipts become eligible and cite the disposition.",
+        "A split disposition with allocation lines that sum exactly to the charge becomes eligible; lines that do not sum are refused.",
+        "A service actor cannot disposition; a disposition creates no active rule; revoking it re-blocks the item.",
+        "An inventory step with NO_SOURCE_EVIDENCE blocks its dependants."
+      ],
+      "tests": ["New unit tests per criterion", "extend FV-C04, FV-C06 with dispositioned variants"],
+      "dependencies": ["T-03", "T-07", "T-09"],
+      "human_decision_required": "For a real client: who may disposition each exception type and whether that person may also give final review.",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-15",
+      "priority": "P1",
+      "title": "Shared proposed-entry contract and validator",
+      "finding_ids": ["F-09"],
+      "rationale": "A card proposal is a category string and a journal is an upload with no origin. Without one representation of the proposed ledger effect there can be no subledger-to-GL tie, no detection of double recording and no reporting lineage.",
+      "affected_files_or_modules": ["accounting_agent/core.py (proposed_entry contract, validate_entry)", "accounting_agent/modules.py (card_prepare emits entries; journal_validate uses validate_entry)", "accounting_agent/service.py (envelope binds entity, book, period)", "accounting_agent/config/ (card accounts become objects with a liability account; entity and book ids)"],
+      "required_behavior": [
+        "proposed_entry: entity id, book id, period id, entry date, currency, lines (account, debit, credit, dimensions), entry type (standard, accrual, reversal, reclass, settlement), reverses, origin (capability, item key, source references), external posting status not_posted.",
+        "validate_entry is the single place for balance, line shape, account, period and currency checks.",
+        "An eligible card proposal carries its derived entry (debit proposed category, credit the card's liability account).",
+        "One source item may originate at most one live entry in a book; a second raises SOURCE_ALREADY_HAS_ENTRY on both.",
+        "The artifact envelope binds entity, book and period."
+      ],
+      "acceptance_criteria": [
+        "Each approved card item has exactly one proposed entry traceable to its source snapshot.",
+        "A journal citing a source that already has a card-derived entry is held.",
+        "The sum of proposed entries by account for a period is reproducible from the export.",
+        "FV-J01 to FV-J07 still pass through the shared validator."
+      ],
+      "tests": ["FV-J01 to FV-J07", "new: double-recording detection; entry-impact summary equals hand calculation"],
+      "dependencies": ["T-05", "T-11"],
+      "human_decision_required": "For a real client: card liability mapping, entry-date policy, and whether card spend passes through AP or a clearing account (client questions 3 and 4).",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-16",
+      "priority": "P1",
+      "title": "Journal controls: bound support, duplicate detection, no-effect entries",
+      "finding_ids": ["F-15"],
+      "rationale": "A journal supported by any stored document, a journal entered twice, and a journal with no ledger effect are all approval-eligible today.",
+      "affected_files_or_modules": ["accounting_agent/modules.py (validate_source document and journal; journal_validate)"],
+      "required_behavior": [
+        "A support document must be of a type the journal workflow accepts and must reference the journal key; otherwise JOURNAL_SUPPORT_NOT_BOUND.",
+        "Journals with identical date, currency and line set are flagged POSSIBLE_DUPLICATE_JOURNAL on each.",
+        "An entry whose lines net to zero for every account and dimension is held with NO_NET_LEDGER_EFFECT."
+      ],
+      "acceptance_criteria": ["FV-J08, FV-J09 and FV-J10 report FIXED.", "FV-J01 to FV-J07 still pass (update support documents to reference their journals)."],
+      "tests": ["FV-J01 to FV-J10", "probe P08 as a unit test"],
+      "dependencies": ["T-15"],
+      "human_decision_required": "None.",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-17",
+      "priority": "P1",
+      "title": "Receipt-matching policy as an approved client rule with explicit unset values",
+      "finding_ids": ["F-16"],
+      "rationale": "Exact date equality, exact amount equality and one receipt per charge are demo choices in the shared module. A reviewer cannot tell a policy breach from an unset policy.",
+      "affected_files_or_modules": ["accounting_agent/modules.py (card_prepare receipt checks)", "policy rule type receipt_matching (T-09)"],
+      "required_behavior": [
+        "Matching parameters come from an approved receipt_matching rule: date window, amount tolerance, multiple receipts, vendor match method, statement substitution.",
+        "When a parameter is unset, matching stays exact and the blocker names the unset policy (for example RECEIPT_DATE_POLICY_UNSET) instead of reporting a mismatch as a breach.",
+        "No default tolerance is shipped."
+      ],
+      "acceptance_criteria": [
+        "With no rule: FV-C17 and FV-C18 are still held, with policy-unset codes.",
+        "With an approved synthetic rule allowing a one-day window, a receipt dated the day before posting matches; two days does not.",
+        "A proposed rule has no effect."
+      ],
+      "tests": ["FV-C17", "FV-C18", "probe P15 as a unit test", "new window and tolerance cases"],
+      "dependencies": ["T-09"],
+      "human_decision_required": "For a real client: the document policy (client question 5).",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-18",
+      "priority": "P1",
+      "title": "Finalize a reviewed period package",
+      "finding_ids": ["F-05"],
+      "rationale": "Review status is recomputed on every read, so nothing can be handed over as the reviewed package for a period.",
+      "affected_files_or_modules": ["accounting_agent/storage.py (packages table, immutable)", "accounting_agent/service.py (finalize_package, export)", "web/ (finalize action; package view)"],
+      "required_behavior": [
+        "finalize_package(period, workflow) by a human with the finalize grant writes an immutable record: governing artifact ids and hashes, decisions, dispositions, manifest, rule versions, open exceptions and audit chain head.",
+        "Finalization is refused while any item is disputed or any package-level blocker is open; open item-level exceptions are listed explicitly and require an acknowledgement reason.",
+        "Later changes never alter a finalized package; they raise POST_FINALIZATION_CHANGE referencing it.",
+        "Export of a finalized package is byte-stable apart from export metadata."
+      ],
+      "acceptance_criteria": [
+        "Finalized package hash is identical before and after unrelated later intake.",
+        "A source revision after finalization leaves the package unchanged and opens a visible exception.",
+        "A preparer cannot finalize."
+      ],
+      "tests": ["New finalization round-trip and post-finalization change tests"],
+      "dependencies": ["T-05", "T-06", "T-07", "T-14"],
+      "human_decision_required": "For a real client: who may finalize.",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-19",
+      "priority": "P1",
+      "title": "Close readiness over workflow outcomes, with period-bound evidence",
+      "finding_ids": ["F-11"],
+      "rationale": "Close readiness checks whether a document of each required type exists. It ignores open exceptions, review status and the period a document belongs to.",
+      "affected_files_or_modules": ["accounting_agent/modules.py (validate_source document; close_readiness)", "accounting_agent/service.py (context passes period_status)", "close checklist rule type (T-09)"],
+      "required_behavior": [
+        "Documents carry a period and, where relevant, an account reference.",
+        "The service passes period_status to the handler: per workflow, the governing artifacts' review states, open exception counts and package finalization state.",
+        "Checklist requirements are typed: workflow_outcome, reconciliation, tieout, document. Each is evaluated from artifacts for the bound period.",
+        "New blockers: OPEN_PREPARATION_EXCEPTIONS, UNREVIEWED_PREPARATION, plus MISSING_CLOSE_EVIDENCE for a document of the wrong period.",
+        "FINAL_CLOSE_SIGNOFF_REQUIRED and EXTERNAL_STEPS_UNVERIFIED remain."
+      ],
+      "acceptance_criteria": ["FV-CL02 reports FIXED.", "FV-CL04 passes as an executable case.", "FV-CL01 still passes."],
+      "tests": ["FV-CL01", "FV-CL02", "FV-CL04", "probe P12 as a unit test"],
+      "dependencies": ["T-05", "T-07", "T-14", "T-18"],
+      "human_decision_required": "For a real client: the close checklist and sign-off authority (client question 13).",
+      "phase": "batch_2"
+    },
+    {
+      "id": "T-20",
+      "priority": "P2",
+      "title": "Card statement reconciliation workpaper",
+      "finding_ids": ["F-12", "F-09"],
+      "rationale": "First new capability. It reuses statements, periods, proposed entries and dispositions, and gives close readiness a real reconciliation to depend on.",
+      "affected_files_or_modules": ["accounting_agent/modules.py (new banking.card_reconcile_prepare)", "WORKFLOWS (new card_reconciliation)", "docs/CAPABILITY_CONTRACTS.md"],
+      "required_behavior": [
+        "Workpaper: statement opening balance, activity by type, closing balance; proposed entries for the period by status (reviewed, unreviewed, held); reconciling items listed individually; difference.",
+        "Status values keep prepared, reviewed, externally posted and reconciled distinct. With no ledger connection the result can be at most prepared and reviewed.",
+        "A zero difference with unposted proposals is reported as PROPOSED_ADJUSTMENT_UNPOSTED, not as reconciled."
+      ],
+      "acceptance_criteria": ["FV-BK01 arithmetic and status reproduced for a card account.", "FV-BK05 opening break blocks the workpaper.", "Capability status changes only after adversarial tests pass."],
+      "tests": ["FV-BK01", "FV-BK05", "new: one-use matching; held items listed as reconciling items"],
+      "dependencies": ["T-13", "T-15", "T-18"],
+      "human_decision_required": "None for synthetic implementation.",
+      "phase": "batch_3"
+    },
+    {
+      "id": "T-21",
+      "priority": "P2",
+      "title": "Settlement and transfer pairing",
+      "finding_ids": ["F-10", "F-09"],
+      "rationale": "Card payments and inter-account transfers are one event seen from two feeds. Without pairing, each side is either expensed or left held forever.",
+      "affected_files_or_modules": ["accounting_agent/modules.py (new banking.transfer_pair_prepare; new bank transaction source kind)", "disposition vocabulary (settlement_of_card_liability, transfer_pair)"],
+      "required_behavior": [
+        "Propose candidate pairs across accounts by amount, opposite direction and date window (window from an approved rule; unset means same day only).",
+        "A pair is one settlement or transfer entry between balance-sheet accounts; neither side is expensed.",
+        "Ambiguous candidates (more than one possible counterpart) are held. A leg may be used once.",
+        "Legs either side of period end are held with TRANSFER_IN_TRANSIT_AT_PERIOD_END."
+      ],
+      "acceptance_criteria": ["FV-BK02, FV-BK03 and FV-BK04 outcomes reproduced."],
+      "tests": ["FV-BK02", "FV-BK03", "FV-BK04"],
+      "dependencies": ["T-14", "T-15", "T-20"],
+      "human_decision_required": "For a real client: which accounts belong to the entity and the pairing window.",
+      "phase": "batch_3"
+    },
+    {
+      "id": "T-22",
+      "priority": "P2",
+      "title": "Trial-balance snapshot intake with tie checks",
+      "finding_ids": ["F-09"],
+      "rationale": "Reporting, close and subledger ties all start from an authoritative trial balance. Intake and tie checks can be built and tested before any connector exists.",
+      "affected_files_or_modules": ["accounting_agent/modules.py (new trial_balance source kind; new gl.trial_balance_check)", "docs/CAPABILITY_CONTRACTS.md"],
+      "required_behavior": [
+        "trial_balance source: book, as-of date, basis label, account balances as debit or credit, extraction provenance.",
+        "Checks: total debits equal total credits; every account exists in the approved chart; no inactive account carries activity in the period without an exception; period-over-period rollforward when two snapshots exist.",
+        "Entry-impact preview: trial balance plus reviewed proposed entries, labelled as projected and unposted."
+      ],
+      "acceptance_criteria": ["FV-RP01 outcome reproduced.", "Unknown account in the snapshot is held, not dropped.", "Projected balances are never labelled as actual."],
+      "tests": ["FV-RP01", "FV-RP02 precondition (unknown account)", "new rollforward test"],
+      "dependencies": ["T-15"],
+      "human_decision_required": "None for synthetic implementation.",
+      "phase": "batch_3"
+    },
+    {
+      "id": "T-23",
+      "priority": "P2",
+      "title": "AP bill preparation with duplicate control and control-account tie (synthetic specification first)",
+      "finding_ids": ["F-09", "F-10"],
+      "rationale": "First AP capability. It exercises the shared entry, rule and disposition contracts on a second subledger. Payments remain a separately reserved capability.",
+      "affected_files_or_modules": ["accounting_agent/modules.py (new ap.bill_prepare, ap.aging_tieout; bill and vendor_master source kinds)", "split the deferred ap.bills_expenses_payments catalog entry into separate capabilities"],
+      "required_behavior": [
+        "Bill coding proposal from an approved vendor rule; entry via the shared contract.",
+        "Duplicate candidates by vendor, normalised invoice number, date and amount, across intake routes.",
+        "Vendor master changes are versioned sources; a bank-detail change blocks any payment proposal until verified.",
+        "AP subledger total is tied to the GL control account balance from the trial-balance snapshot.",
+        "No payment execution capability is added."
+      ],
+      "acceptance_criteria": ["FV-AP01, FV-AP03 and FV-AP04 outcomes reproduced.", "FV-AP02 and FV-AP05 remain held with policy-missing codes until an approved rule exists."],
+      "tests": ["FV-AP01 to FV-AP05"],
+      "dependencies": ["T-14", "T-15", "T-22"],
+      "human_decision_required": "Client question 12: whether payables are carried in the ledger, the approval chain and receiving practice. Build beyond the synthetic specification only after that answer.",
+      "phase": "batch_3"
+    },
+    {
+      "id": "T-24",
+      "priority": "P2",
+      "title": "Failure classification, backoff, lease heartbeat and a worker that survives errors",
+      "finding_ids": ["F-18"],
+      "rationale": "Every failure is retried immediately up to three times, a handler slower than the lease can never commit, and the demo worker thread stops permanently on any exception.",
+      "affected_files_or_modules": ["accounting_agent/service.py (work_once, _fail, claim, new heartbeat)", "accounting_agent/storage.py (steps.not_before, steps.failure_class)", "accounting_agent/http.py (worker loop)"],
+      "required_behavior": [
+        "Classify failures: transient (retry with stored backoff), deterministic (fail at once with a visible reason), stale (hold).",
+        "Lease heartbeat extends a valid lease; commit still requires the token and current inputs.",
+        "The worker loop records an error and continues; health reports the last error.",
+        "A held run has an explicit outcome: superseded by a named newer run, or resumed."
+      ],
+      "acceptance_criteria": ["A deterministic handler error consumes one attempt.", "A long handler with heartbeat commits.", "The worker continues after an injected database-lock error."],
+      "tests": ["New unit tests per criterion", "existing crash-recovery and retry-limit tests"],
+      "dependencies": ["T-04"],
+      "human_decision_required": "None.",
+      "phase": "batch_3"
+    },
+    {
+      "id": "T-25",
+      "priority": "P2",
+      "title": "Export consistency and audit anchoring",
+      "finding_ids": ["F-19"],
+      "rationale": "The export reads state and history in two transactions and hashes its own timestamp, and the audit chain has no reference outside the database, so truncation is undetectable.",
+      "affected_files_or_modules": ["accounting_agent/service.py (export, verify_audit, state)", "accounting_agent/storage.py"],
+      "required_behavior": [
+        "Read the whole export in one transaction.",
+        "content_hash covers content only; export metadata is hashed separately.",
+        "Every export and finalized package records the audit chain head and length; verify_audit can check a database against a previously exported head.",
+        "state returns paged audit; export returns all."
+      ],
+      "acceptance_criteria": ["Two exports of unchanged state have the same content_hash.", "Deleting the last audit row in a copy is detected against an earlier export."],
+      "tests": ["New unit tests", "existing backup and export tests"],
+      "dependencies": ["T-18"],
+      "human_decision_required": "None. External retention is a hosted-stage decision.",
+      "phase": "batch_3"
+    },
+    {
+      "id": "T-26",
+      "priority": "P2",
+      "title": "Currency contract: validated codes and minor units",
+      "finding_ids": ["F-20"],
+      "rationale": "Two-decimal money and free-text currency sit in the shared core. Adequate for the USD fixture; wrong for the first other currency.",
+      "affected_files_or_modules": ["accounting_agent/core.py (money, new currency table)", "accounting_agent/modules.py (validate_source, period_issues)"],
+      "required_behavior": [
+        "Currency must be an upper-case ISO 4217 code from a bundled table with its minor unit.",
+        "money(value, currency) validates the number of decimals for that currency.",
+        "Foreign items stay held; add optional explicit fields for original amount, original currency, rate, rate source and rate date so a later disposition can use them."
+      ],
+      "acceptance_criteria": ["'usd' is rejected at intake.", "A zero-decimal currency amount with decimals is rejected.", "All existing USD tests pass."],
+      "tests": ["New unit tests", "FV-C19"],
+      "dependencies": [],
+      "human_decision_required": "None until a non-USD account is in scope.",
+      "phase": "batch_3"
+    },
+    {
+      "id": "T-27",
+      "priority": "P3",
+      "title": "Identity interface and bounded reads, ahead of any hosted use",
+      "finding_ids": ["F-23", "F-24"],
+      "rationale": "The demo transport hands every role token to any local caller, and state recomputes and returns everything for the client. Neither is a defect in a loopback demo; both must be addressed before a second user or real data.",
+      "affected_files_or_modules": ["accounting_agent/service.py (identity interface; cached manifests; paged state)", "accounting_agent/http.py (demo identity provider isolated in its own module)", "docs/CONNECTION_READINESS.md"],
+      "required_behavior": [
+        "Service accepts actors only from an IdentityProvider interface that supplies verified id, kind, client membership and grants. The demo provider is one implementation and is excluded from any hosted package.",
+        "Manifests are cached per run and recomputed only when the client's source or rule generation for the declared inputs changes.",
+        "state is paged and filtered by period.",
+        "Record migration triggers from review section 11 in docs/CONNECTION_READINESS.md."
+      ],
+      "acceptance_criteria": ["No service entry point constructs an Actor from request data.", "claim cost does not grow with unrelated sources."],
+      "tests": ["New unit tests", "existing HTTP tests through the demo provider"],
+      "dependencies": ["T-03", "T-06", "T-09"],
+      "human_decision_required": "Hosting, identity provider and support ownership are decisions for Jeff and the client at gate G2.",
+      "phase": "batch_3"
+    }
+  ],
+  "first_batch_for_codex": {
+    "implement_in_order": ["T-01", "T-02", "T-03", "T-04", "T-05", "T-06", "T-07", "T-08"],
+    "stop_condition": "Do not begin batch 2 until every batch 1 completion-gate item is met and recorded in PROGRESS.md."
+  }
+}

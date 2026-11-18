@@ -1,0 +1,178 @@
+{
+ "title": "Fable findings on docs/PRODUCT_REQUIREMENTS.md (76 records, documentation addendum of 15 November 2026)",
+ "authored": "2026-11-15",
+ "reviewed_file_sha256": "34623afcfc7545a858cab853552c121150ec8014cdc86ba8523ef4adf21c50e2",
+ "notice": "Review output only. Authorises no implementation, connection, posting, payment, sending, deployment or policy activation, and opens no gate. Product approval of a requirement is not implementation authority, client-policy approval or operating readiness.",
+ "verdict": "Accepted as the permanent register on condition that PR-01 to PR-03 (status accuracy) are corrected before the register is next cited as evidence. No requested product area is missing. The other findings are improvements or decisions for product and client authority.",
+ "priority_counts": {"P1": 1, "P2": 9, "P3": 7},
+ "classification_counts": {"confirmed_code_defect": 1, "documentation_defect": 10, "future_enhancement": 1, "decision_requiring_product_or_client_authority": 5},
+ "findings": [
+  {
+   "id": "PR-01", "priority": "P1", "classification": "documentation_defect",
+   "title": "AAOS-BNK-03 and AAOS-CTL-04 are recorded as Tested, but their acceptance criteria fail under independent verification",
+   "affected_requirements": ["AAOS-BNK-03", "AAOS-CTL-04", "AAOS-GOV-03"],
+   "evidence": "Register line 403 (status 'Tested for synthetic lifecycle and full-chain locked-origin controls') and line 405 ('supersession chains cannot release a locked-origin charge into a second approved period'); line 587 and line 589 ('a replacement chain never leaves the same expense approved in two periods'). Probes R01b and R01c in FABLE_RA_ACCEPTANCE approve one charge in two periods (RB-01, P1, a regression against the frozen RV submission). Crosswalk rows T-12, C-01–C-06 and RA-01 repeat the claim.",
+   "proposed_correction": "Change both statuses to 'Implemented; independent verification failed (RB-01)'. Add to both acceptance criteria: 'regardless of the order in which a source and its supersession link arrive, including a link declared on a source already admitted to another period and an unresolved link resolved later'. Update the crosswalk rows T-12 and RA-01 and the 'Current evidence' section.",
+   "dependencies": ["RB-01 in FABLE_RA_CORRECTIONS.json"],
+   "acceptance_criteria": ["Neither record says Tested until probes R01b and R01c report OK in an independent run.", "Both acceptance criteria contain the arrival-order clause.", "The 'Current evidence' section states that RA was not accepted and names RB-01 to RB-04."]
+  },
+  {
+   "id": "PR-02", "priority": "P2", "classification": "documentation_defect",
+   "title": "AAOS-CTL-09 and AAOS-BNK-02 overstate replacement-evidence coverage",
+   "affected_requirements": ["AAOS-CTL-09", "AAOS-BNK-02", "AAOS-CTL-01"],
+   "evidence": "Register line 637 ('Tested in current source') and line 639 ('Withdrawing/replacing a receipt or re-supplying a matching statement still creates visible holds'); line 395 ('corrected/replaced statements remain held until valid acceptance'). Probes R03b and R04b: a document replaced by re-pointing the old key is approved with no hold and no disclosure (RB-02). Probe R04c: a restated prior statement is not disclosed to the next period (RB-04).",
+   "proposed_correction": "Qualify both statuses: 'Tested for same-key revision and withdraw-and-replace; re-pointed keys and prior-period restatement open (RB-02, RB-04)'. Extend the AAOS-CTL-09 criterion to 'replacement by any route, including a document moved to another item or cycle'. Add to AAOS-BNK-02: 'a revision of the lookback statement is disclosed to the period that relies on it'.",
+   "dependencies": ["RB-02", "RB-04"],
+   "acceptance_criteria": ["Statuses carry the qualification until probes R03b, R04b and R04c report OK independently.", "Both criteria name the re-pointing route and the lookback statement."]
+  },
+  {
+   "id": "PR-03", "priority": "P3", "classification": "documentation_defect",
+   "title": "AAOS-KNO-04 and AAOS-CTL-01 state rule-author retention more broadly than the source delivers",
+   "affected_requirements": ["AAOS-KNO-04", "AAOS-CTL-01"],
+   "evidence": "Register line 254 ('prior relevant authors/approvers remain contributors even after cosmetic or unlinked re-proposal') and line 559 ('cosmetic/unlinked equivalent rules retain relevant authors'). Probe R02b: an identical rule re-proposed with item scope, or under a new rule key, drops the earlier author (RB-03).",
+   "proposed_correction": "Qualify to 'for the same rule key and item scope' and reference RB-03, or keep the broad wording and mark the criterion unmet until RB-03 is fixed.",
+   "dependencies": ["RB-03"],
+   "acceptance_criteria": ["The two criteria and probe R02b agree: either the wording is narrowed or the probe reports OK."]
+  },
+  {
+   "id": "PR-04", "priority": "P2", "classification": "documentation_defect",
+   "title": "One status field carries two different things, and has no state for independent verification",
+   "affected_requirements": ["AAOS-GOV-02", "AAOS-GOV-03", "all 76 records"],
+   "evidence": "Status conventions at lines 29–36 define Proposed, Approved, Implemented, Tested, Deferred, Rejected/Superseded. 24 of 76 records combine two of these words in one status (evidence/register_checks_output.txt), for example AAOS-BRF-03 'Approved full inbox; ... tested subsets' and AAOS-GL-05 'Deferred ...; tested ... fixtures'. Equivalent unbuilt integrations differ: AAOS-INT-01 is Deferred, AAOS-INT-02 to INT-05 are Approved. No status distinguishes developer-tested from independently verified, which is the distinction the project depends on. Leading-word counts: 26 Approved, 26 Tested, 22 Deferred, 1 Implemented, 1 Proposed.",
+   "proposed_correction": "Split into two fields. Product decision: Proposed, Approved, Rejected, Superseded. Implementation state: Not started, Deferred (with prerequisite), Implemented, Developer-tested, Independently verified, Verification failed. Add a one-line scope note and an evidence pointer (test or probe ids) for any state from Implemented upward. Where a record has a built part and an unbuilt part, state both in the scope note, not in the status.",
+   "dependencies": [],
+   "acceptance_criteria": ["Every record has exactly one value in each field from the defined lists.", "Every Developer-tested or Independently verified record names its tests or probes.", "The four unbuilt named integrations carry the same implementation state.", "A count by field value is reproducible by a script in the repository."]
+  },
+  {
+   "id": "PR-05", "priority": "P2", "classification": "decision_requiring_product_or_client_authority",
+   "title": "Priority does not rank anything: 74 Must, 2 Should, 0 Could",
+   "affected_requirements": ["all 76 records", "AAOS-GOV-02"],
+   "evidence": "evidence/register_checks_output.txt. Only AAOS-ARC-04 and AAOS-BNK-06 are not Must. The register cannot answer which unassigned requirement comes first after G0.",
+   "proposed_correction": "Product owner adds a second ordering field, for example 'needed for': first-client approved samples (G1), first-client operating handoff (G4), second client, platform maturity. Keep Must/Should/Could as the outcome priority.",
+   "dependencies": ["Product owner decision"],
+   "acceptance_criteria": ["Every record has a 'needed for' value.", "The register states that this ordering is not implementation authorization."]
+  },
+  {
+   "id": "PR-06", "priority": "P2", "classification": "decision_requiring_product_or_client_authority",
+   "title": "The reusable client onboarding and offboarding process exists only as Bird Bowl records",
+   "affected_requirements": ["AAOS-BB-01", "AAOS-BB-02", "AAOS-BB-03", "AAOS-BB-06", "AAOS-BB-07", "AAOS-ARC-03", "AAOS-KNO-03", "AAOS-KNO-06"],
+   "evidence": "AGENTS.md (addendum): 'New clients require onboarding and capability validation'. AAOS-ARC-03 line 120 requires that 'a second client onboards using scoped configuration', but no record says how: knowledge capture, held-out validation, operator teach-back, close and unattended readiness, and the host/support agreement are written only for Bird Bowl (lines 685–753). Client offboarding and data return appear in no record; AAOS-CTL-13 mentions deletion authority only.",
+   "proposed_correction": "Add shared records, for example AAOS-ONB-01 'Client onboarding and capability validation' (the five steps above, per client, per capability) and AAOS-ONB-02 'Client offboarding, data return and deletion'. State that AAOS-BB-01 to BB-07 are the first instance of AAOS-ONB-01.",
+   "dependencies": ["Product owner decision", "AAOS-KNO-03", "AAOS-KNO-06", "AAOS-OBS-04", "AAOS-CTL-13"],
+   "acceptance_criteria": ["A shared onboarding record exists whose acceptance criteria name no client.", "Each AAOS-BB record cites the shared record it instantiates.", "An offboarding record states export format, retention, deletion authority and credential revocation."]
+  },
+  {
+   "id": "PR-07", "priority": "P2", "classification": "documentation_defect",
+   "title": "First-client conditions are written into shared requirements",
+   "affected_requirements": ["AAOS-AR-01", "AAOS-AP-01", "AAOS-INT-05", "AAOS-INT-01", "AAOS-KNO-06"],
+   "evidence": "AAOS-AR-01 line 365: 'Bird Bowl AR applicability is validated first' makes a shared AR capability wait on one client. AAOS-AP-01 line 345: 'unknown Bird Bowl AP practices remain questions', and its target stage waits on a Bird Bowl question. AAOS-INT-05 line 537 names Expensify, a Bird Bowl candidate vendor. AAOS-INT-01 line 495 cites the Desktop conversion status. AAOS-KNO-06 line 275 targets 'Bird Bowl G1 validation'.",
+   "proposed_correction": "Rewrite the shared criteria per client: 'applicability is validated for each client before the capability is enabled in that workspace'. Move the Bird Bowl facts to a new record, for example AAOS-BB-08 'AP/AR applicability, ledger edition and transaction-intake route', carrying the Expensify comparison and the Desktop/QBO question.",
+   "dependencies": [],
+   "acceptance_criteria": ["Outside the AAOS-BB section, no acceptance criterion, status or target stage names Bird Bowl, Expensify or Desktop, except where the text says 'for example' or states the product boundary (AAOS-GOV-01, AAOS-ARC-04, AAOS-KNO-01).", "The moved facts appear in an AAOS-BB record."]
+  },
+  {
+   "id": "PR-08", "priority": "P2", "classification": "decision_requiring_product_or_client_authority",
+   "title": "Integrations are named vendors only; no vendor-neutral connector requirement",
+   "affected_requirements": ["AAOS-INT-01", "AAOS-INT-02", "AAOS-INT-03", "AAOS-INT-04", "AAOS-INT-05", "AAOS-INT-06", "AAOS-KNO-03"],
+   "evidence": "Lines 491–539 name QuickBooks Online, Bill.com, Google Workspace/Gmail, Google Drive and bank routes. AAOS-INT-06 covers external writes generically; nothing covers reads. The legacy packet (CONNECTIONS_AND_DECISIONS.md line 119) treats 'BILL, Sage and other provider access as unverified', so other ledgers were already in view. A second client on another ledger or mail system has no requirement to attach to.",
+   "proposed_correction": "Add a shared record, for example AAOS-INT-07 'Connector contract': each connector declares its verified operations, scoped credentials reference, source identity and provenance, pending/removal semantics and explicitly unsupported operations; the client profile selects connectors. Mark INT-01 to INT-05 as the first instances.",
+   "dependencies": ["Product owner decision", "AAOS-KNO-03", "AAOS-CTL-12"],
+   "acceptance_criteria": ["A shared connector record exists with no vendor name in its acceptance criteria.", "Each named integration cites it.", "A fictional second connector of the same kind can be described without changing a shared record."]
+  },
+  {
+   "id": "PR-09", "priority": "P2", "classification": "decision_requiring_product_or_client_authority",
+   "title": "Sales, deposit, payroll and tip work has discovery records but no shared execution requirement; consolidation is hidden inside another record",
+   "affected_requirements": ["AAOS-BB-04", "AAOS-BB-05", "AAOS-BNK-05", "AAOS-GL-03", "AAOS-RPT-01"],
+   "evidence": "AAOS-BB-04 line 722 and AAOS-BB-05 line 732 say execution is 'future / unassigned' or 'later assigned separately', but no shared record exists for it: preparing recurring summary journals from operating sources (daily sales, payroll registers) and matching deposits and merchant settlements to sales. The work would either be lost after discovery or built as Bird Bowl-specific. AAOS-RPT-01 line 473 holds a Proposed consolidation/intercompany requirement inside a Deferred record, which the register's own rule (stable ID per requirement) does not allow to be tracked.",
+   "proposed_correction": "Product owner decides whether to add shared records with status Proposed: summary-source journal preparation (sales, payroll and similar), deposit and merchant-settlement matching (or an explicit extension of AAOS-BNK-05), and consolidation/intercompany reporting. Each depends on per-client approved treatment.",
+   "dependencies": ["Product owner decision", "AAOS-KNO-04", "AAOS-GL-01", "AAOS-BNK-05"],
+   "acceptance_criteria": ["Each of the three topics has its own stable ID with a product decision recorded, or a recorded rejection with reason.", "AAOS-BB-04 and AAOS-BB-05 cite the shared record that would execute what they discover."]
+  },
+  {
+   "id": "PR-10", "priority": "P3", "classification": "documentation_defect",
+   "title": "Scope exclusions are scattered and not recorded as retained decisions",
+   "affected_requirements": ["AAOS-GOV-01", "AAOS-AP-02", "AAOS-BB-05", "AAOS-COM-02"],
+   "evidence": "The register says rejected requirements are retained 'with the decision and reason' (line 23, line 36), but there are no Rejected records. Exclusions appear only in passing: non-accounting agents (line 64), payment execution (line 355), payroll runs and filings (line 731). Tax returns, sales tax filings, 1099 preparation and legal/compliance review (legacy BUILD_PLAN section F) are not mentioned at all, so a reader cannot tell whether they are excluded or forgotten.",
+   "proposed_correction": "Add a short 'Scope exclusions' table with stable IDs and decision references: executive and business-development agents, legal and compliance agent, payroll processing and filings, tax return and information-return preparation, payment execution (reserved, not excluded).",
+   "dependencies": ["Product owner confirmation of each exclusion"],
+   "acceptance_criteria": ["Each exclusion has an ID, a status of Rejected or Reserved, a reason and a decision reference."]
+  },
+  {
+   "id": "PR-11", "priority": "P2", "classification": "decision_requiring_product_or_client_authority",
+   "title": "The November capture month cannot start under the register's own gates",
+   "affected_requirements": ["AAOS-BB-01", "AAOS-BB-02", "AAOS-BB-06", "AAOS-GOV-03"],
+   "evidence": "AAOS-BB-01 targets 'G1 approved local samples' (line 692). G1 requires human G0 acceptance and written client facts and authority (line 44). On 15 November 2026 G0 is not accepted and this review leaves RA open. The pilot describes Luis doing the November work and recording procedures as he goes, which is documentation outside the application. The register does not say whether that may proceed before G1.",
+   "proposed_correction": "Product owner and accounting lead decide and record: (a) procedure capture as written documentation, outside the application and with no client records loaded into it, may proceed now; or (b) the capture and validation months move. State in AAOS-BB-01 and BB-02 which activity needs which gate.",
+   "dependencies": ["Product owner and accounting lead decision"],
+   "acceptance_criteria": ["AAOS-BB-01 distinguishes documentation capture from processing client records in the application and names the gate for each.", "AAOS-BB-02 names the validation month or states that it follows capture by one period.", "DECISIONS.md records the decision."]
+  },
+  {
+   "id": "PR-12", "priority": "P3", "classification": "documentation_defect",
+   "title": "Four dependency entries disagree with the Fable backlog or with the register's own conventions",
+   "affected_requirements": ["AAOS-EXE-02", "AAOS-EXE-03", "AAOS-BNK-02", "AAOS-CTL-01", "AAOS-CTL-04", "AAOS-EXE-07"],
+   "evidence": "(a) AAOS-EXE-02 depends on AAOS-EXE-03 (line 161), but backlog T-10 (mandates) depends on T-04 (occurrences): the direction is reversed. (b) AAOS-EXE-03 omits AAOS-BNK-03 although T-10 depends on T-12. (c) AAOS-BNK-02 omits AAOS-CTL-04 although T-13 depends on T-05. (d) Tested records depend on Deferred records with no conditional marker: AAOS-EXE-03, AAOS-CTL-01 and AAOS-CTL-04 on AAOS-CTL-03; AAOS-EXE-07 on AAOS-CTL-12. The graph is acyclic and all 27 tickets are mapped.",
+   "proposed_correction": "Reverse (a), add (b) and (c), and mark the four dependencies in (d) 'for real authority only' or 'before G1', as the conventions at line 38 allow.",
+   "dependencies": [],
+   "acceptance_criteria": ["AAOS-EXE-03 depends on AAOS-EXE-02 and AAOS-BNK-03; AAOS-EXE-02 does not depend on AAOS-EXE-03.", "AAOS-BNK-02 depends on AAOS-CTL-04.", "No record in a tested state depends unconditionally on a deferred record."]
+  },
+  {
+   "id": "PR-13", "priority": "P3", "classification": "documentation_defect",
+   "title": "Some legacy accounting requirements are preserved only by implication",
+   "affected_requirements": ["AAOS-CLS-02", "AAOS-CLS-03", "AAOS-KNO-06", "AAOS-OBS-01", "AAOS-ARC-04", "AAOS-EXE-07", "AAOS-INT-06", "AAOS-BNK-04"],
+   "evidence": "BUILD_PLAN.md section E lists a minimum close package (identity and system company id, expected source inventory, reconciliations and schedules, proposed adjustments, exceptions, draft client questions, checklist and separate final-close status) and five states that do not imply each other (workpaper prepared, adjustment reviewed, external posting verified, system reconciliation completed, final sign-off). Neither list appears as acceptance criteria. The pilot's task-coverage plan (staff-level and senior-level tasks, what is covered, what stays manual, evidence per task) is only implied by AAOS-KNO-06 and AAOS-OBS-01. Legacy tests AT-24, AT-25, AT-29, AT-40, AT-58 and AT-59 are not cited by ID; only AT-60 and AT-61 are.",
+   "proposed_correction": "Add the package contents and the five states to AAOS-CLS-03 (and the package contents to AAOS-CLS-02 where they already apply). Add 'workflow inventory and task-coverage plan' to AAOS-KNO-06. Add traces: AT-58 to AAOS-ARC-04 and AAOS-ARC-02, AT-59 to AAOS-EXE-07, AT-24 and AT-25 to AAOS-BNK-04 and AAOS-BNK-05, AT-29 and AT-40 to AAOS-INT-06.",
+   "dependencies": [],
+   "acceptance_criteria": ["AAOS-CLS-03 lists the seven package elements and the five states.", "AAOS-KNO-06 names the workflow inventory.", "The six AT ids appear in a Trace field."]
+  },
+  {
+   "id": "PR-14", "priority": "P3", "classification": "documentation_defect",
+   "title": "Acceptance criteria that cannot be tested as written",
+   "affected_requirements": ["AAOS-ARC-03", "AAOS-EXE-05", "AAOS-KNO-01", "AAOS-GL-03", "AAOS-CTL-12", "AAOS-CTL-13", "AAOS-BRF-03", "AAOS-OBS-01"],
+   "evidence": "AAOS-ARC-03 'boundaries survive concurrent clients' gives no test. AAOS-EXE-05 'stalled work has a deterministic monitor' gives no time bound. AAOS-KNO-01 'reusable invariants are distinguished from professional judgment' names no artifact. AAOS-GL-03 'material/unusual changes retain human judgment' has no materiality source. AAOS-CTL-12 status refers to 'comprehensive threat validation' with no list. AAOS-CTL-13 'document retention/recovery targets' has no recovery-point or recovery-time field. AAOS-BRF-03 'genuine urgency' has no rule source. AAOS-OBS-01 defers thresholds without requiring that they be recorded.",
+   "proposed_correction": "For each, name the test, artifact or parameter, and where the value is a client or product decision write 'value set by <owner> before <gate>' so the criterion is checkable as 'value recorded and enforced'.",
+   "dependencies": ["Parameter values are decisions for product or client authority"],
+   "acceptance_criteria": ["Each of the eight criteria names a test, an artifact or a recorded parameter with an owner and a gate."]
+  },
+  {
+   "id": "PR-15", "priority": "P3", "classification": "confirmed_code_defect",
+   "title": "The shared service names one client in what it returns for every client",
+   "affected_requirements": ["AAOS-GOV-01", "AAOS-ARC-01", "AAOS-ARC-02"],
+   "evidence": "accounting_agent/service.py line 827, in state(): 'notice': 'Fictional sandbox; actual Bird Bowl accounting policies remain unconfigured.' The text is returned for any scope, including the second client in the isolation probes. No accounting effect. No fix was made in this review.",
+   "proposed_correction": "Use client-neutral wording or the client name from the profile. Add a check that shared modules contain no client name.",
+   "dependencies": [],
+   "acceptance_criteria": ["state() for a second client does not contain 'Bird Bowl'.", "A check in make check fails if a client name appears in accounting_agent/*.py outside config, fixtures and demo."]
+  },
+  {
+   "id": "PR-16", "priority": "P3", "classification": "future_enhancement",
+   "title": "The shared profile schema still carries card-demonstration fields",
+   "affected_requirements": ["AAOS-KNO-03", "AAOS-GL-05", "AAOS-BNK-06"],
+   "evidence": "service.py validate_profile lines 41, 54 and 79 require a card_accounts key in every client profile and one currency per client; modules.py line 46 accepts one statement sign convention. The register records the currency and sign-convention limits (AAOS-GL-05) but not card_accounts.",
+   "proposed_correction": "Record in AAOS-KNO-03 that account roles (card, bank, clearing) should be typed entries of a general account list when banking work beyond the card demonstration is assigned. No change now.",
+   "dependencies": ["A later assigned banking capability"],
+   "acceptance_criteria": ["AAOS-KNO-03 names the limit and the stage at which it is to be removed."]
+  },
+  {
+   "id": "PR-17", "priority": "P2", "classification": "documentation_defect",
+   "title": "AGENTS.md maintenance instructions are sound in intent but not enforceable",
+   "affected_requirements": ["AAOS-GOV-02", "AAOS-GOV-03"],
+   "evidence": "AGENTS.md (addendum, second and third paragraphs) requires reading and updating the register, preserving IDs and retaining rejections. Missing: (1) who may raise a status and on what evidence; a failed independent probe has no required effect on the register, which is how PR-01 to PR-03 arose; (2) a repeatable check: PROGRESS.md reports documentation checks (unique IDs, fields, acyclic graph, crosswalk) but no script for them is in the repository, and I had to write one to reproduce them; (3) the rule 'record a conflict instead of choosing a weaker control' is in the register only; (4) where facts of a second client go; (5) the file accumulates past authorizations (Batch 1, Batch 2, RA) with no marked current-authority paragraph.",
+   "proposed_correction": "Add to AGENTS.md: statuses above Implemented require named tests; only an independent review may record verification, and a failed independent probe downgrades the record in the same change; run a register check (added to make check) after any register edit; client-specific facts go in that client's section or file, never in shared records; conflicts are recorded, not resolved toward the weaker control. Put the current authorization in one clearly marked paragraph and move history to DECISIONS.md.",
+   "dependencies": ["PR-04 for the status values"],
+   "acceptance_criteria": ["make check fails on a duplicate ID, a missing field, an unknown dependency, a cycle or a backlog ticket missing from the crosswalk.", "AGENTS.md states the five rules.", "AGENTS.md has one paragraph headed as the current authorization."]
+  }
+ ],
+ "minor_notes": [
+  "AAOS-BRF-01 does not say how the briefing is delivered. Delivery by email or notification is a send under AAOS-COM-02; state that the default is in-application and that reporting cutoff and timezone are client profile values.",
+  "The register's 'Current evidence' section (lines 52–58) is accurate about what was claimed on 15 November; I reproduced 154 tests and 29/10/21. It must be updated with this review's outcome.",
+  "Relative links to ../ss_agent_system_handoff/ and ../review/ resolve in the repository layout, not in the transfer container; START_HERE.md explains this."
+ ],
+ "decisions_requiring_product_or_client_authority": [
+  "PR-05: an ordering field beyond Must/Should/Could.",
+  "PR-06: shared onboarding and offboarding requirements.",
+  "PR-08: a vendor-neutral connector requirement.",
+  "PR-09: shared execution requirements for sales, deposit, payroll and tip work, and consolidation.",
+  "PR-10: confirmation of each scope exclusion.",
+  "PR-11: whether November procedure capture may proceed as documentation before G1.",
+  "All nine open decisions already listed in the register at lines 923–933 remain open; none was answered by this review."
+ ]
+}

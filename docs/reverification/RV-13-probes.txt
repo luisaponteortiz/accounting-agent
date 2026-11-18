@@ -1,0 +1,22 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RT13] (T-13) statement control: identity swap, purchase/payment offset, opening break and foreign rows are caught or disclosed
+    same count and total, different line identity: ['STATEMENT_LINE_POPULATION_MISMATCH']
+    purchases and payments overstated by the same amount (net and count tie): ['STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_IDENTITY_NOT_VERIFIED']
+    opening 400.00 against prior closing 500.00: ['STATEMENT_OPENING_BALANCE_BREAK']
+    workpaper unreconciled population: [('demo_card_001:C2', 'currency')]
+    -> OK
+
+[RT13n] (T-13) limits of the statement control when line identities or the prior statement are absent
+    substituted line, statement without line ids, keyed by the preparer, no October statement on file: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED', 'STATEMENT_PRIOR_PERIOD_MISSING']}
+    workpaper fields: ['account_id', 'evidence', 'execution', 'external_reconciliation', 'line_identity', 'opening_continuity', 'statement_provenance', 'unreconciled_population'] | blockers: ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED', 'STATEMENT_PRIOR_PERIOD_MISSING']
+    workpaper discloses that line identity, continuity or provenance was not checked: True
+    -> OK
+
+====================================================================================================
+RT13   T-13       OK     statement control: identity swap, purchase/payment offset, opening break and foreign rows are caught or disclosed
+RT13n  T-13       OK     limits of the statement control when line identities or the prior statement are absent
+
+Verdict counts: {'OK': 2}
+Re-verification gate: PASS

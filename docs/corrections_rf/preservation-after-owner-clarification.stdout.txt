@@ -1,0 +1,14 @@
+{
+  "protected_inputs_unchanged": 1186,
+  "all_prior_archives_unchanged": 16,
+  "all_88_ids_and_order_retained": true,
+  "every_acceptance_criterion_state_and_product_decision_unchanged": true,
+  "four_verified_scopes_BB01_BB02_six_proposed_records_identical": true,
+  "schema_HTTP_deadline_Y05_unchanged": true,
+  "prior_decision_log_bytes_are_prefix": true,
+  "retained_test_methods": 227,
+  "unchanged_retained_methods": 226,
+  "sole_authorized_rewrite": "D-031 / test_PRV14_third_authority_is_pinned_and_latest_verdict_controls",
+  "ten_commits_branch_and_HEAD_unchanged": true,
+  "head": "5af9a6194bc39e2f303cc6b43b0b59094118b8e4"
+}

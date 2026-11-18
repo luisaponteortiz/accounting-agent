@@ -1,0 +1,789 @@
+python3 exports/FABLE_REVERIFICATION/fable_reverification_probes.py . RN01 RN02b RN04 RN05 RN05b RN06 RT09a RT09b RT09c RT09d RT11 RT12b RT12c RT12d RT10a RT10b RT13 RT13n RT14c RT14d RT14e RT14f RT15 RT16 RT17 RT19a RT19b
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RN01] (C-02) every decision type is refused under lock, and accepted again after an authorised reopen
+    setup (A1 approved, A2 disputed, A3 pending): ['ok', 'ok', 'ok'] ['approve', 'disputed', 'pending']
+    lock without acknowledgement while A2 disputed / A3 unreviewed: ('refused', 409, 'Unsettled preparation requires explicit acknowledgement')
+    lock with acknowledgement: ('ok', None)
+    under lock, revoke A1: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, reject A1: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, approve A3: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, reject A3: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, resolve_approve A2: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, resolve_reject A2: ('refused', 409, 'PERIOD_LOCKED')
+    statuses under lock: ['approve', 'disputed', 'pending']
+    under lock, disposition attempt: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, finalize attempt: ('refused', 409, 'PERIOD_LOCKED')
+    reopen by a reviewer without the lock grant: ('refused', 403, 'Human authority grant required: lock')
+    reopen by the granted period administrator: ('ok', None)
+    after reopen, approve A3: ('ok', None)
+    after reopen, resolve_approve A2: ('ok', None)
+    after reopen, revoke A1: ('ok', None)
+    period audit events: ['accounting_period_opened', 'accounting_period_locked', 'accounting_period_open']
+    -> OK
+
+[RN02b] (C-01) a locked, approved item cannot be re-entered in another period through supersession under a new key
+    November A1 approve: ok | A2: ok
+    intake of superseding source dated December: ('ok', {'changed': True, 'generation': 3, 'replay': False})
+    December A1X: None | November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []}
+    source exceptions: [('demo_card_001:A1X', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')] | events: [('APPROVED_SOURCE_SUPERSEDED', 'demo_card_001:A1')]
+    same charge approved in locked November and in December: False
+    -> OK
+
+[RN04] (C-04) a supplier of any version of an item input stays barred; a supplier of another item evidence does not
+    A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []} | contributors: ['rv-policy-approver', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    supplier of the superseded A1 version approves A1: ('refused', 403, 'Independent human review required')
+    supplier of the A2 receipt approves A1 (should be allowed): ('ok', None)
+    supplier of the A2 receipt approves A2 (should be refused): ('refused', 403, 'Independent human review required')
+    -> OK
+
+[RN05] (C-04) the author of the chart and policy stays barred after a colleague re-registers the profile
+    colleague re-registration approved by a second policy approver: ('ok', None)
+    A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []} | profile ref: {'accounting_profile_hash': '1b12877be36ca979ba78b54fec13d3373085e539a417182f0e01e108727cd3d5', 'rule_versions': [{'id': 1, 'version': 1}, {'id': 2, 'version': 1}, {'id': 3, 'version': 1}]}
+    contributors: ['rv-policy-approver', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    author of profile v1 approves A1: ('refused', 403, 'Independent human review required')
+    approver of profile v1 approves A1: ('refused', 403, 'Independent human review required')
+    uninvolved reviewer approves A1 (positive control): ('ok', None)
+    -> OK
+
+[RN05b] (C-04/T-09) the author of a vendor mapping stays barred after a colleague re-proposes the rule with a cosmetic change
+    A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []} | vendor: {'id': 'demo_acme', 'name': 'Acme Paper Demo.'} | applied rules: [{'id': 1, 'version': 1}, {'id': 2, 'version': 1}, {'id': 5, 'version': 2}]
+    contributors: ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    author of mapping v1 (alias and category unchanged in v2) approves A1: ('refused', 403, 'Independent human review required')
+    -> OK
+
+[RN06] (C-05) combining marks survive normalisation; unknown and colliding aliases are held; empty aliases refused
+    normalised-equal flags (last pair is the only one that should be equal): [False, False, False, False, True]
+    different mark: {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']}
+    alias collision across two vendors: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['AMBIGUOUS_VENDOR', 'UNKNOWN_CATEGORY']}
+    exact mark (positive control): {'id': 4, 'eligible': True, 'status': 'pending', 'blockers': []}
+    profile with an alias that normalises to nothing: ('refused', 400, 'Vendor alias must contain letters or digits')
+    rule with an alias that normalises to nothing: ('refused', 400, 'Invalid vendor aliases')
+    -> OK
+
+[RT09a] (T-09) a proposed profile is inert; the proposer, an ungranted human and a service cannot approve it
+    enqueue under a proposed profile: ('refused', 409, 'POLICY_NOT_APPROVED')
+    proposer approves own profile: ('refused', 403, 'Profile proposer cannot approve')
+    human without the approve_profile grant: ('refused', 403, 'Human authority grant required: approve_profile')
+    independent granted approver: ('ok', None)
+    after approval A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []}
+    -> OK
+
+[RT09b] (T-09) rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive
+    rule proposed only -> M1 (Nov): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] | M2 (Dec): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    approve A1 (Nov): ok
+    rule proposer approves own rule: ('refused', 403, 'Rule proposer cannot approve/reject')
+    rule approved, effective December -> A1 status: approve | M1 (Nov): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] | M2 (Dec): {'id': 11, 'eligible': True, 'status': 'pending', 'blockers': []} DEMO_REPAIRS
+    after an unrelated close-checklist rule -> A1 status: approve | same artifact: True
+    after a superseding rule effective 2027-01-01 -> M2 category: DEMO_REPAIRS | applied rules: [{'id': 1, 'version': 1}, {'id': 2, 'version': 1}, {'id': 4, 'version': 1}]
+    review policy effective 15 November -> A1 (3 Nov): [] pending | M1 (20 Nov): ['MODEL_REVIEW_UNAVAILABLE', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    observation: the approval of A1 (dated before the new policy) did not survive a same-period rule that applies only to later items
+    -> OK
+
+[RT09c] (T-09) a vendor removed from the approved profile no longer produces a clean match
+    approved profile v2 vendors: ['demo_acme']
+    Metro item under v2: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']} | vendor: None | category: None
+    -> OK
+
+[RT09d] (T-09) normalised alias form is visible to the rule approver; punctuation-only collisions are held
+    rule record keys: ['alias_collisions', 'approved_by', 'effective_end', 'effective_from', 'effective_to', 'evidence', 'id', 'item_key', 'kind', 'normalized_aliases', 'profile_id', 'proposed_by', 'proposer_kind', 'rule_key', 'scope', 'status', 'supersedes', 'value', 'version']
+    normalised form on the rule record: True | in the rule_proposed audit event: ['acme paper demo']
+    ACME item after approving the colliding alias: {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['AMBIGUOUS_VENDOR', 'UNKNOWN_CATEGORY']}
+    -> OK
+
+[RT11] (T-11) client_sample with missing facts yields no eligible item; demo waivers are explicit in artifact and export
+    client_sample demo_card_001:A1 {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['CLIENT_FACT_MISSING:accounting_basis', 'CLIENT_FACT_MISSING:accounting_framework', 'CLIENT_FACT_MISSING:legal_entity']}
+    client_sample demo_card_001:A2 {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['CLIENT_FACT_MISSING:accounting_basis', 'CLIENT_FACT_MISSING:accounting_framework', 'CLIENT_FACT_MISSING:legal_entity']}
+    client_sample J1 {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['CLIENT_FACT_MISSING:accounting_basis', 'CLIENT_FACT_MISSING:accounting_framework', 'CLIENT_FACT_MISSING:legal_entity']}
+    synthetic_demo eligible: [True, True] | waivers on artifacts: [['accounting_basis', 'accounting_framework', 'legal_entity'], ['accounting_basis', 'accounting_framework', 'legal_entity']] | in export: True
+    -> OK
+
+[RT12b] (T-12/T-18) unrelated later intake leaves a locked, finalized period untouched (no new quarantine, no change event)
+    finalize November card package: ('ok', 1)
+    source exceptions before: 0 | after December-only intake: []
+    accounting events after December-only intake: []
+    November statuses: ['approve', 'approve'] | package hash unchanged: True
+    -> OK
+
+[RT12c] (T-12) evidence received before its period opens is adopted; a receipt follows its charge across a month boundary in either arrival order
+    before opening: 5 quarantined | after opening November: [] | A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []}
+    receipt first -> December B1 blockers: ['RECEIPT_DATE_POLICY_UNSET', 'STATEMENT_PRIOR_PERIOD_MISSING'] | evidence listed: ['demo_card_001:B1', 'receipt-B1', 'stmt-2026-12']
+    charge first -> December B1 blockers: ['RECEIPT_DATE_POLICY_UNSET', 'STATEMENT_PRIOR_PERIOD_MISSING'] | evidence listed: ['demo_card_001:B1', 'receipt-B1', 'stmt-2026-12']
+    -> OK
+
+[RT12d] (T-12/T-18) a removed or superseded source leaves no open item behind and raises an event when it had been approved
+    pending P1 before removal: {'id': 4, 'eligible': False, 'status': 'pending', 'blockers': ['MISSING_RECEIPT', 'PENDING_TRANSACTION']}
+    after tombstone -> P1 in current sources: False | P1 governing artifact: None | A1: pending
+    finalize the card package after every remaining item is approved (['ok', 'ok']): ('ok', 1)
+    events after removing approved A2 and superseding approved A1: [('ITEM_LEFT_POPULATION', 'demo_card_001:P1'), ('APPROVED_SOURCE_REMOVED', 'demo_card_001:A2'), ('APPROVED_SOURCE_REMOVED', 'demo_card_001:A2'), ('POST_FINALIZATION_CHANGE', 'package:1'), ('APPROVED_SOURCE_SUPERSEDED', 'demo_card_001:A1'), ('APPROVED_SOURCE_SUPERSEDED', 'demo_card_001:A1'), ('POST_FINALIZATION_CHANGE', 'package:1')]
+    removal event raised: True | supersession event raised: True | finalization blocked by the removed pending row: False
+    -> OK
+
+[RT10a] (T-10) mandates: independent approval, fixed target period, fresh-evidence wait and wake-up, suspension on policy change
+    issuer approves own mandate: ('refused', 403, 'Mandate issuer cannot approve')
+    tick while the mandate is only proposed -> runs: [] | occurrences: 0
+    tick with no fresh evidence -> runs: [] | occurrences: [('awaiting_evidence', 'Fresh evidence required')]
+    after fresh evidence arrives -> mandate runs (id, period, status, mandate): [(1, '2026-11', 'prepared_with_exceptions', 1)] | occurrences: [('completed', True)]
+    tick after a bound policy change -> runs: [] | mandate: ('needs_reconfirmation', 0, 'Bound policy changed; independent reconfirmation required')
+    -> OK
+
+[RT10b] (T-10) a mandate must state what fresh evidence it needs before it can dispatch
+    create a mandate with an empty freshness predicate: ('refused', 400, 'Nonempty freshness predicate required')
+    -> OK
+
+[RT13] (T-13) statement control: identity swap, purchase/payment offset, opening break and foreign rows are caught or disclosed
+    same count and total, different line identity: ['STATEMENT_LINE_POPULATION_MISMATCH']
+    purchases and payments overstated by the same amount (net and count tie): ['STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_IDENTITY_NOT_VERIFIED']
+    opening 400.00 against prior closing 500.00: ['STATEMENT_OPENING_BALANCE_BREAK']
+    workpaper unreconciled population: [('demo_card_001:C2', 'currency')]
+    -> OK
+
+[RT13n] (T-13) limits of the statement control when line identities or the prior statement are absent
+    substituted line, statement without line ids, keyed by the preparer, no October statement on file: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED', 'STATEMENT_PRIOR_PERIOD_MISSING']}
+    workpaper fields: ['account_id', 'evidence', 'execution', 'external_reconciliation', 'line_identity', 'opening_continuity', 'statement_provenance', 'statement_revisions', 'unreconciled_population'] | blockers: ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED', 'STATEMENT_PRIOR_PERIOD_MISSING']
+    workpaper discloses that line identity, continuity or provenance was not checked: True
+    -> OK
+
+[RT14c] (T-14) after one of two charges is excluded as a duplicate, the surviving charge has a truthful path to approval
+    D2 dispositioned as duplicate_of D1: ('ok', 1)
+    excluded D2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['DUPLICATE_EXCLUDED']} | entry: None
+    surviving D1: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    -> OK
+
+[RT14d] (T-14) evidence cited for a disposition must be more than the item's own source row
+    distinct_purchases citing only the charge itself: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    -> OK
+
+[RT14e] (T-14/T-15) a card payment cannot be turned into a credit to an expense account through dispositions
+    payment before: ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    dispositions (standalone_credit, confirm_vendor, code_category): [('refused', 400, 'Payments require settlement or referral'), ('refused', 400, 'Payments require settlement or referral'), ('refused', 400, 'Payments require settlement or referral')]
+    payment after: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']} | entry: None
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[RT14f] (T-14) an empty inventory blocks the steps that depend on it
+    artifacts with no source evidence: {'package-manifest': ['NO_SOURCE_EVIDENCE', 'STATEMENT_CONTROL_MISSING_OR_AMBIGUOUS'], 'statement:demo_card_001': ['NO_SOURCE_EVIDENCE', 'STATEMENT_CONTROL_MISSING_OR_AMBIGUOUS'], 'no-transactions': ['NO_SOURCE_EVIDENCE', 'NO_TRANSACTIONS'], 'inventory': ['NO_SOURCE_EVIDENCE']}
+    -> OK
+
+[RT15] (T-15) one source, one live entry: a journal citing a card item is held on both, and stays held after the source is revised
+    card entry: [('DEMO_OFFICE_SUPPLIES', '40.00', '0.00'), ('DEMO_CARD_LIABILITY', '0.00', '40.00')] | origin: demo_card_001:A1 [3] | posting: not_posted
+    journal cites the card source -> card: ['SOURCE_ALREADY_HAS_ENTRY'] | journal: ['SOURCE_ALREADY_HAS_ENTRY']
+    after a cosmetic revision of the card source -> card: {'id': 16, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_ALREADY_HAS_ENTRY']} | journal: {'id': 20, 'eligible': False, 'status': 'pending', 'blockers': ['ORIGIN_SOURCE_SUPERSEDED', 'SOURCE_ALREADY_HAS_ENTRY']}
+    independent approval of both (40.00 expense recorded twice): ['refused', 'refused']
+    -> OK
+
+[RT16] (T-16) journal controls tested one at a time: wrong-type support, unbound support, duplicates, no net effect, dimensions
+    J-OK         eligible=True  []
+    J-WRONGTYPE  eligible=False ['JOURNAL_SUPPORT_NOT_BOUND']
+    J-UNBOUND    eligible=False ['JOURNAL_SUPPORT_NOT_BOUND']
+    J-NOKEYS     eligible=False ['JOURNAL_SUPPORT_NOT_BOUND']
+    J-DUPA       eligible=False ['POSSIBLE_DUPLICATE_JOURNAL']
+    J-DUPB       eligible=False ['POSSIBLE_DUPLICATE_JOURNAL']
+    J-ZERO       eligible=False ['NO_NET_LEDGER_EFFECT']
+    J-DIM        eligible=False ['DIMENSIONS_NOT_CONFIGURED']
+    J-DIMZERO    eligible=False ['DIMENSIONS_NOT_CONFIGURED', 'NO_NET_LEDGER_EFFECT']
+    J-MISSING    eligible=False ['MISSING_JOURNAL_SUPPORT']
+    -> OK
+
+[RT17] (T-17) receipt policy: unset stays explicit, a proposed rule has no effect, both sides of the date and amount boundaries
+    no rule: {'R0': [], 'R1': ['RECEIPT_DATE_POLICY_UNSET'], 'R2': ['RECEIPT_DATE_POLICY_UNSET'], 'R3': ['RECEIPT_AMOUNT_POLICY_UNSET'], 'R4': ['RECEIPT_AMOUNT_POLICY_UNSET'], 'R5': ['RECEIPT_DATE_POLICY_UNSET'], 'R6': ['RECEIPT_MULTIPLE_POLICY_UNSET'], 'R7': ['RECEIPT_VENDOR_POLICY_UNSET']}
+    rule proposed only, unchanged: True
+    approved window 1 day, tolerance 0.05: {'R0': [], 'R1': [], 'R2': ['RECEIPT_DATE_MISMATCH'], 'R3': [], 'R4': ['RECEIPT_AMOUNT_MISMATCH'], 'R5': [], 'R6': ['RECEIPT_MULTIPLE_POLICY_UNSET'], 'R7': ['RECEIPT_VENDOR_POLICY_UNSET']}
+    -> OK
+
+[RT19a] (T-19) close readiness: a document label alone does not complete reconciliation or tie-out requirements
+    items unreviewed -> blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'MISSING_CLOSE_EVIDENCE', 'OPEN_PREPARATION_EXCEPTIONS', 'UNREVIEWED_PREPARATION']
+    after review the earlier checklist is: stale | shipped checklist [{'document_type': 'trial_balance', 'type': 'document'}, {'document_type': 'card_statement', 'type': 'document'}, {'document_type': 'bank_reconciliation', 'type': 'reconciliation'}, {'document_type': 'ap_tieout', 'type': 'tieout'}, {'document_type': 'ar_tieout', 'type': 'tieout'}]
+    requirement results with label-only documents: [('trial_balance', True), ('card_statement', True), ('bank_reconciliation', False), ('ap_tieout', False), ('ar_tieout', False)] | blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'MISSING_CLOSE_EVIDENCE', 'OPEN_PREPARATION_EXCEPTIONS']
+    typed checklist results: [('reconciliation', False), ('tieout', False), ('workflow_outcome', True)] | blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'MISSING_CLOSE_EVIDENCE', 'OPEN_PREPARATION_EXCEPTIONS']
+    typed requirements hold: True | label-only documents satisfy reconciliation/tie-out under the shipped checklist: False
+    -> OK
+
+[RT19b] (T-19) close readiness waits for in-flight preparation and does not adopt changed sources
+    step order (run, capability): [(1, 'evidence.inventory'), (1, 'banking.card_prepare'), (1, 'package.manifest'), (2, 'evidence.inventory'), (2, 'close.readiness'), (2, 'package.manifest')]
+    close started after card finished: True | items seen by the checklist: ['demo_card_001:A1', 'demo_card_001:A2'] | current: True
+    queued close run, then a review decision -> run 3 completed with refreshed statuses: [('demo_card_001:A1', 'approve'), ('demo_card_001:A2', 'approve')]
+    queued close run, then a new close document -> run 4 status: held (must not complete on inputs it was not queued with)
+    -> OK
+
+====================================================================================================
+RN01   C-02       OK     every decision type is refused under lock, and accepted again after an authorised reopen
+RN02b  C-01       OK     a locked, approved item cannot be re-entered in another period through supersession under a new key
+RN04   C-04       OK     a supplier of any version of an item input stays barred; a supplier of another item evidence does not
+RN05   C-04       OK     the author of the chart and policy stays barred after a colleague re-registers the profile
+RN05b  C-04/T-09  OK     the author of a vendor mapping stays barred after a colleague re-proposes the rule with a cosmetic change
+RN06   C-05       OK     combining marks survive normalisation; unknown and colliding aliases are held; empty aliases refused
+RT09a  T-09       OK     a proposed profile is inert; the proposer, an ungranted human and a service cannot approve it
+RT09b  T-09       OK     rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive
+RT09c  T-09       OK     a vendor removed from the approved profile no longer produces a clean match
+RT09d  T-09       OK     normalised alias form is visible to the rule approver; punctuation-only collisions are held
+RT11   T-11       OK     client_sample with missing facts yields no eligible item; demo waivers are explicit in artifact and export
+RT12b  T-12/T-18  OK     unrelated later intake leaves a locked, finalized period untouched (no new quarantine, no change event)
+RT12c  T-12       OK     evidence received before its period opens is adopted; a receipt follows its charge across a month boundary in either arrival order
+RT12d  T-12/T-18  OK     a removed or superseded source leaves no open item behind and raises an event when it had been approved
+RT10a  T-10       OK     mandates: independent approval, fixed target period, fresh-evidence wait and wake-up, suspension on policy change
+RT10b  T-10       OK     a mandate must state what fresh evidence it needs before it can dispatch
+RT13   T-13       OK     statement control: identity swap, purchase/payment offset, opening break and foreign rows are caught or disclosed
+RT13n  T-13       OK     limits of the statement control when line identities or the prior statement are absent
+RT14c  T-14       OK     after one of two charges is excluded as a duplicate, the surviving charge has a truthful path to approval
+RT14d  T-14       OK     evidence cited for a disposition must be more than the item's own source row
+RT14e  T-14/T-15  OK     a card payment cannot be turned into a credit to an expense account through dispositions
+RT14f  T-14       OK     an empty inventory blocks the steps that depend on it
+RT15   T-15       OK     one source, one live entry: a journal citing a card item is held on both, and stays held after the source is revised
+RT16   T-16       OK     journal controls tested one at a time: wrong-type support, unbound support, duplicates, no net effect, dimensions
+RT17   T-17       OK     receipt policy: unset stays explicit, a proposed rule has no effect, both sides of the date and amount boundaries
+RT19a  T-19       OK     close readiness: a document label alone does not complete reconciliation or tie-out requirements
+RT19b  T-19       OK     close readiness waits for in-flight preparation and does not adopt changed sources
+
+Verdict counts: {'OK': 27}
+Re-verification gate: PASS
+python3 review/fable_reverification_probes.py .
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RN01] (C-02) every decision type is refused under lock, and accepted again after an authorised reopen
+    setup (A1 approved, A2 disputed, A3 pending): ['ok', 'ok', 'ok'] ['approve', 'disputed', 'pending']
+    lock without acknowledgement while A2 disputed / A3 unreviewed: ('refused', 409, 'Unsettled preparation requires explicit acknowledgement')
+    lock with acknowledgement: ('ok', None)
+    under lock, revoke A1: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, reject A1: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, approve A3: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, reject A3: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, resolve_approve A2: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, resolve_reject A2: ('refused', 409, 'PERIOD_LOCKED')
+    statuses under lock: ['approve', 'disputed', 'pending']
+    under lock, disposition attempt: ('refused', 409, 'PERIOD_LOCKED')
+    under lock, finalize attempt: ('refused', 409, 'PERIOD_LOCKED')
+    reopen by a reviewer without the lock grant: ('refused', 403, 'Human authority grant required: lock')
+    reopen by the granted period administrator: ('ok', None)
+    after reopen, approve A3: ('ok', None)
+    after reopen, resolve_approve A2: ('ok', None)
+    after reopen, revoke A1: ('ok', None)
+    period audit events: ['accounting_period_opened', 'accounting_period_locked', 'accounting_period_open']
+    -> OK
+
+[RN02] (C-01) a source re-dated out of a locked period enters no other period until the origin is reopened
+    November A1 approve: ok | A2 approve: ok
+    lock November: ('ok', None)
+    replay result: {'changed': False, 'generation': 3, 'replay': True} | source exceptions: [('demo_card_001:A1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    while November is locked -> December A1: None | November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []}
+    move history (from, to, blocked, had_approval): [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 1)]
+    after a recurring December run -> December A1: None
+    after reopen -> November governing A1: None | old approved artifact status: stale | December A1: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    current governing A1 artifacts across periods: [('2026-12', 15, 'pending')]
+    supporting receipt followed the transaction to December: True
+    -> OK
+
+[RN02b] (C-01) a locked, approved item cannot be re-entered in another period through supersession under a new key
+    November A1 approve: ok | A2: ok
+    intake of superseding source dated December: ('ok', {'changed': True, 'generation': 3, 'replay': False})
+    December A1X: None | November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []}
+    source exceptions: [('demo_card_001:A1X', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')] | events: [('APPROVED_SOURCE_SUPERSEDED', 'demo_card_001:A1')]
+    same charge approved in locked November and in December: False
+    -> OK
+
+[RN03] (C-03) identical work by another enqueuer or mandate issuer keeps the governing artifact and its rejection
+    reject A1: ok | approve A2: ok
+    A1 artifacts: 1 | governing id unchanged: True | hash unchanged: True | status: reject | runs linked: [1, 2]
+    A2 status: approve | contributors of A1: ['rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+    colleague who became a contributor tries to decide A1: ('refused', 403, 'Independent human review required')
+    -> OK
+
+[RN04] (C-04) a supplier of any version of an item input stays barred; a supplier of another item evidence does not
+    A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []} | contributors: ['rv-policy-approver', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    supplier of the superseded A1 version approves A1: ('refused', 403, 'Independent human review required')
+    supplier of the A2 receipt approves A1 (should be allowed): ('ok', None)
+    supplier of the A2 receipt approves A2 (should be refused): ('refused', 403, 'Independent human review required')
+    -> OK
+
+[RN05] (C-04) the author of the chart and policy stays barred after a colleague re-registers the profile
+    colleague re-registration approved by a second policy approver: ('ok', None)
+    A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []} | profile ref: {'accounting_profile_hash': '1b12877be36ca979ba78b54fec13d3373085e539a417182f0e01e108727cd3d5', 'rule_versions': [{'id': 1, 'version': 1}, {'id': 2, 'version': 1}, {'id': 3, 'version': 1}]}
+    contributors: ['rv-policy-approver', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    author of profile v1 approves A1: ('refused', 403, 'Independent human review required')
+    approver of profile v1 approves A1: ('refused', 403, 'Independent human review required')
+    uninvolved reviewer approves A1 (positive control): ('ok', None)
+    -> OK
+
+[RN05b] (C-04/T-09) the author of a vendor mapping stays barred after a colleague re-proposes the rule with a cosmetic change
+    A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []} | vendor: {'id': 'demo_acme', 'name': 'Acme Paper Demo.'} | applied rules: [{'id': 1, 'version': 1}, {'id': 2, 'version': 1}, {'id': 5, 'version': 2}]
+    contributors: ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    author of mapping v1 (alias and category unchanged in v2) approves A1: ('refused', 403, 'Independent human review required')
+    -> OK
+
+[RN06] (C-05) combining marks survive normalisation; unknown and colliding aliases are held; empty aliases refused
+    normalised-equal flags (last pair is the only one that should be equal): [False, False, False, False, True]
+    different mark: {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']}
+    alias collision across two vendors: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['AMBIGUOUS_VENDOR', 'UNKNOWN_CATEGORY']}
+    exact mark (positive control): {'id': 4, 'eligible': True, 'status': 'pending', 'blockers': []}
+    profile with an alias that normalises to nothing: ('refused', 400, 'Vendor alias must contain letters or digits')
+    rule with an alias that normalises to nothing: ('refused', 400, 'Invalid vendor aliases')
+    -> OK
+
+[RN07] (C-06) actor kind is mandatory; a service identity cannot use any human authority whatever its name, role or grants
+    actor without kind: refused | invalid kind: refused
+    service grants authority: ('refused', 403, 'Human administrator required')
+    service approves profile: ('refused', 403, 'Human authority grant required: approve_profile')
+    service opens period: ('refused', 403, 'Period administration requires a human reviewer')
+    service approves item: ('refused', 403, 'Human authority grant required: review')
+    service rejects item: ('refused', 403, 'Human authority grant required: review')
+    service dispositions: ('refused', 403, 'Human authority grant required: disposition')
+    service approves rule: ('refused', 403, 'Human authority grant required: approve_rule')
+    service approves mandate: ('refused', 403, 'Human authority grant required: approve_mandate')
+    service creates mandate: ('refused', 403, 'Synthetic mandate requires a human preparer')
+    service finalizes: ('refused', 403, 'Human authority grant required: finalize')
+    service locks: ('refused', 403, 'Period administration requires a human reviewer')
+    granted human approves item (positive control): ('ok', None)
+    -> OK
+
+[RT09a] (T-09) a proposed profile is inert; the proposer, an ungranted human and a service cannot approve it
+    enqueue under a proposed profile: ('refused', 409, 'POLICY_NOT_APPROVED')
+    proposer approves own profile: ('refused', 403, 'Profile proposer cannot approve')
+    human without the approve_profile grant: ('refused', 403, 'Human authority grant required: approve_profile')
+    independent granted approver: ('ok', None)
+    after approval A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []}
+    -> OK
+
+[RT09b] (T-09) rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive
+    rule proposed only -> M1 (Nov): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] | M2 (Dec): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    approve A1 (Nov): ok
+    rule proposer approves own rule: ('refused', 403, 'Rule proposer cannot approve/reject')
+    rule approved, effective December -> A1 status: approve | M1 (Nov): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] | M2 (Dec): {'id': 11, 'eligible': True, 'status': 'pending', 'blockers': []} DEMO_REPAIRS
+    after an unrelated close-checklist rule -> A1 status: approve | same artifact: True
+    after a superseding rule effective 2027-01-01 -> M2 category: DEMO_REPAIRS | applied rules: [{'id': 1, 'version': 1}, {'id': 2, 'version': 1}, {'id': 4, 'version': 1}]
+    review policy effective 15 November -> A1 (3 Nov): [] pending | M1 (20 Nov): ['MODEL_REVIEW_UNAVAILABLE', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    observation: the approval of A1 (dated before the new policy) did not survive a same-period rule that applies only to later items
+    -> OK
+
+[RT09c] (T-09) a vendor removed from the approved profile no longer produces a clean match
+    approved profile v2 vendors: ['demo_acme']
+    Metro item under v2: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']} | vendor: None | category: None
+    -> OK
+
+[RT09d] (T-09) normalised alias form is visible to the rule approver; punctuation-only collisions are held
+    rule record keys: ['alias_collisions', 'approved_by', 'effective_end', 'effective_from', 'effective_to', 'evidence', 'id', 'item_key', 'kind', 'normalized_aliases', 'profile_id', 'proposed_by', 'proposer_kind', 'rule_key', 'scope', 'status', 'supersedes', 'value', 'version']
+    normalised form on the rule record: True | in the rule_proposed audit event: ['acme paper demo']
+    ACME item after approving the colliding alias: {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['AMBIGUOUS_VENDOR', 'UNKNOWN_CATEGORY']}
+    -> OK
+
+[RT11] (T-11) client_sample with missing facts yields no eligible item; demo waivers are explicit in artifact and export
+    client_sample demo_card_001:A1 {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['CLIENT_FACT_MISSING:accounting_basis', 'CLIENT_FACT_MISSING:accounting_framework', 'CLIENT_FACT_MISSING:legal_entity']}
+    client_sample demo_card_001:A2 {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['CLIENT_FACT_MISSING:accounting_basis', 'CLIENT_FACT_MISSING:accounting_framework', 'CLIENT_FACT_MISSING:legal_entity']}
+    client_sample J1 {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['CLIENT_FACT_MISSING:accounting_basis', 'CLIENT_FACT_MISSING:accounting_framework', 'CLIENT_FACT_MISSING:legal_entity']}
+    synthetic_demo eligible: [True, True] | waivers on artifacts: [['accounting_basis', 'accounting_framework', 'legal_entity'], ['accounting_basis', 'accounting_framework', 'legal_entity']] | in export: True
+    -> OK
+
+[RT12a] (T-12) older, conflicting, mixed-order and unordered deliveries never replace an accepted ordered head
+    current amount: 50.00 | eligible: True | retained-as-history events: 4 | replay: True
+    after newer sequence 7 (positive control): 55.00 {'id': 10, 'eligible': True, 'status': 'pending', 'blockers': []}
+    -> OK
+
+[RT12b] (T-12/T-18) unrelated later intake leaves a locked, finalized period untouched (no new quarantine, no change event)
+    finalize November card package: ('ok', 1)
+    source exceptions before: 0 | after December-only intake: []
+    accounting events after December-only intake: []
+    November statuses: ['approve', 'approve'] | package hash unchanged: True
+    -> OK
+
+[RT12c] (T-12) evidence received before its period opens is adopted; a receipt follows its charge across a month boundary in either arrival order
+    before opening: 5 quarantined | after opening November: [] | A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []}
+    receipt first -> December B1 blockers: ['RECEIPT_DATE_POLICY_UNSET', 'STATEMENT_PRIOR_PERIOD_MISSING'] | evidence listed: ['demo_card_001:B1', 'receipt-B1', 'stmt-2026-12']
+    charge first -> December B1 blockers: ['RECEIPT_DATE_POLICY_UNSET', 'STATEMENT_PRIOR_PERIOD_MISSING'] | evidence listed: ['demo_card_001:B1', 'receipt-B1', 'stmt-2026-12']
+    -> OK
+
+[RT12d] (T-12/T-18) a removed or superseded source leaves no open item behind and raises an event when it had been approved
+    pending P1 before removal: {'id': 4, 'eligible': False, 'status': 'pending', 'blockers': ['MISSING_RECEIPT', 'PENDING_TRANSACTION']}
+    after tombstone -> P1 in current sources: False | P1 governing artifact: None | A1: pending
+    finalize the card package after every remaining item is approved (['ok', 'ok']): ('ok', 1)
+    events after removing approved A2 and superseding approved A1: [('ITEM_LEFT_POPULATION', 'demo_card_001:P1'), ('APPROVED_SOURCE_REMOVED', 'demo_card_001:A2'), ('APPROVED_SOURCE_REMOVED', 'demo_card_001:A2'), ('POST_FINALIZATION_CHANGE', 'package:1'), ('APPROVED_SOURCE_SUPERSEDED', 'demo_card_001:A1'), ('APPROVED_SOURCE_SUPERSEDED', 'demo_card_001:A1'), ('POST_FINALIZATION_CHANGE', 'package:1')]
+    removal event raised: True | supersession event raised: True | finalization blocked by the removed pending row: False
+    -> OK
+
+[RT10a] (T-10) mandates: independent approval, fixed target period, fresh-evidence wait and wake-up, suspension on policy change
+    issuer approves own mandate: ('refused', 403, 'Mandate issuer cannot approve')
+    tick while the mandate is only proposed -> runs: [] | occurrences: 0
+    tick with no fresh evidence -> runs: [] | occurrences: [('awaiting_evidence', 'Fresh evidence required')]
+    after fresh evidence arrives -> mandate runs (id, period, status, mandate): [(1, '2026-11', 'prepared_with_exceptions', 1)] | occurrences: [('completed', True)]
+    tick after a bound policy change -> runs: [] | mandate: ('needs_reconfirmation', 0, 'Bound policy changed; independent reconfirmation required')
+    -> OK
+
+[RT10b] (T-10) a mandate must state what fresh evidence it needs before it can dispatch
+    create a mandate with an empty freshness predicate: ('refused', 400, 'Nonempty freshness predicate required')
+    -> OK
+
+[RT13] (T-13) statement control: identity swap, purchase/payment offset, opening break and foreign rows are caught or disclosed
+    same count and total, different line identity: ['STATEMENT_LINE_POPULATION_MISMATCH']
+    purchases and payments overstated by the same amount (net and count tie): ['STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_IDENTITY_NOT_VERIFIED']
+    opening 400.00 against prior closing 500.00: ['STATEMENT_OPENING_BALANCE_BREAK']
+    workpaper unreconciled population: [('demo_card_001:C2', 'currency')]
+    -> OK
+
+[RT13n] (T-13) limits of the statement control when line identities or the prior statement are absent
+    substituted line, statement without line ids, keyed by the preparer, no October statement on file: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED', 'STATEMENT_PRIOR_PERIOD_MISSING']}
+    workpaper fields: ['account_id', 'evidence', 'execution', 'external_reconciliation', 'line_identity', 'opening_continuity', 'statement_provenance', 'statement_revisions', 'unreconciled_population'] | blockers: ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED', 'STATEMENT_PRIOR_PERIOD_MISSING']
+    workpaper discloses that line identity, continuity or provenance was not checked: True
+    -> OK
+
+[RT14a] (T-14) dispositions: closed vocabulary, exact split, separate review, revocation, inert rule proposal, referral never clears
+    before: {'D1': ['POSSIBLE_DUPLICATE'], 'D2': ['POSSIBLE_DUPLICATE'], 'S1': ['SPLIT_REQUIRES_REVIEW'], 'F1': ['CURRENCY_MISMATCH']}
+    override a currency hold with a clearing choice: ('refused', 400, 'Unsupported disposition; this control cannot be overridden')
+    disposition by a reviewer without the grant: ('refused', 403, 'Human authority grant required: disposition')
+    split that does not sum to the charge: ('refused', 400, 'Allocation must sum exactly to charge')
+    disposition with no evidence: ('refused', 400, 'Current scoped evidence references required')
+    accepted dispositions: ['ok', 'ok', 'ok', 'ok'] | rule proposal via disposition: ('ok', 5)
+    after: {'D1': (True, [], [1]), 'D2': (True, [], [2]), 'S1': (True, [], [3]), 'F1': (False, ['CURRENCY_MISMATCH'], [4])}
+    split entry lines: [('DEMO_REPAIRS', '20.00', '0.00'), ('DEMO_OFFICE_SUPPLIES', '15.00', '0.00'), ('DEMO_CARD_LIABILITY', '0.00', '35.00')]
+    dispositioner approves the item they dispositioned: ('refused', 403, 'Independent human review required')
+    independent reviewer approves it (positive control): ('ok', None)
+    revoke the D2 disposition: ('ok', None)
+    D2 after revocation: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['POSSIBLE_DUPLICATE']}
+    -> OK
+
+[RT14b] (T-14) a distinct-purchases disposition does not cover a duplicate candidate that arrives afterwards
+    initial distinct-purchases disposition D1: ('ok', 1)
+    initial distinct-purchases disposition D2: ('ok', 2)
+    D1 after disposition: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    after a third identical charge arrives -> D1: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'POSSIBLE_DUPLICATE']} | candidates listed on D1: ['demo_card_001:D2', 'demo_card_001:D3'] | D3: ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'POSSIBLE_DUPLICATE']
+    -> OK
+
+[RT14c] (T-14) after one of two charges is excluded as a duplicate, the surviving charge has a truthful path to approval
+    D2 dispositioned as duplicate_of D1: ('ok', 1)
+    excluded D2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['DUPLICATE_EXCLUDED']} | entry: None
+    surviving D1: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    -> OK
+
+[RT14d] (T-14) evidence cited for a disposition must be more than the item's own source row
+    distinct_purchases citing only the charge itself: ('refused', 400, 'Related receipt, document or statement required as supporting evidence')
+    -> OK
+
+[RT14e] (T-14/T-15) a card payment cannot be turned into a credit to an expense account through dispositions
+    payment before: ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    dispositions (standalone_credit, confirm_vendor, code_category): [('refused', 400, 'Payments require settlement or referral'), ('refused', 400, 'Payments require settlement or referral'), ('refused', 400, 'Payments require settlement or referral')]
+    payment after: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']} | entry: None
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[RT14f] (T-14) an empty inventory blocks the steps that depend on it
+    artifacts with no source evidence: {'package-manifest': ['NO_SOURCE_EVIDENCE', 'STATEMENT_CONTROL_MISSING_OR_AMBIGUOUS'], 'statement:demo_card_001': ['NO_SOURCE_EVIDENCE', 'STATEMENT_CONTROL_MISSING_OR_AMBIGUOUS'], 'no-transactions': ['NO_SOURCE_EVIDENCE', 'NO_TRANSACTIONS'], 'inventory': ['NO_SOURCE_EVIDENCE']}
+    -> OK
+
+[RT15] (T-15) one source, one live entry: a journal citing a card item is held on both, and stays held after the source is revised
+    card entry: [('DEMO_OFFICE_SUPPLIES', '40.00', '0.00'), ('DEMO_CARD_LIABILITY', '0.00', '40.00')] | origin: demo_card_001:A1 [3] | posting: not_posted
+    journal cites the card source -> card: ['SOURCE_ALREADY_HAS_ENTRY'] | journal: ['SOURCE_ALREADY_HAS_ENTRY']
+    after a cosmetic revision of the card source -> card: {'id': 16, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_ALREADY_HAS_ENTRY']} | journal: {'id': 20, 'eligible': False, 'status': 'pending', 'blockers': ['ORIGIN_SOURCE_SUPERSEDED', 'SOURCE_ALREADY_HAS_ENTRY']}
+    independent approval of both (40.00 expense recorded twice): ['refused', 'refused']
+    -> OK
+
+[RT16] (T-16) journal controls tested one at a time: wrong-type support, unbound support, duplicates, no net effect, dimensions
+    J-OK         eligible=True  []
+    J-WRONGTYPE  eligible=False ['JOURNAL_SUPPORT_NOT_BOUND']
+    J-UNBOUND    eligible=False ['JOURNAL_SUPPORT_NOT_BOUND']
+    J-NOKEYS     eligible=False ['JOURNAL_SUPPORT_NOT_BOUND']
+    J-DUPA       eligible=False ['POSSIBLE_DUPLICATE_JOURNAL']
+    J-DUPB       eligible=False ['POSSIBLE_DUPLICATE_JOURNAL']
+    J-ZERO       eligible=False ['NO_NET_LEDGER_EFFECT']
+    J-DIM        eligible=False ['DIMENSIONS_NOT_CONFIGURED']
+    J-DIMZERO    eligible=False ['DIMENSIONS_NOT_CONFIGURED', 'NO_NET_LEDGER_EFFECT']
+    J-MISSING    eligible=False ['MISSING_JOURNAL_SUPPORT']
+    -> OK
+
+[RT17] (T-17) receipt policy: unset stays explicit, a proposed rule has no effect, both sides of the date and amount boundaries
+    no rule: {'R0': [], 'R1': ['RECEIPT_DATE_POLICY_UNSET'], 'R2': ['RECEIPT_DATE_POLICY_UNSET'], 'R3': ['RECEIPT_AMOUNT_POLICY_UNSET'], 'R4': ['RECEIPT_AMOUNT_POLICY_UNSET'], 'R5': ['RECEIPT_DATE_POLICY_UNSET'], 'R6': ['RECEIPT_MULTIPLE_POLICY_UNSET'], 'R7': ['RECEIPT_VENDOR_POLICY_UNSET']}
+    rule proposed only, unchanged: True
+    approved window 1 day, tolerance 0.05: {'R0': [], 'R1': [], 'R2': ['RECEIPT_DATE_MISMATCH'], 'R3': [], 'R4': ['RECEIPT_AMOUNT_MISMATCH'], 'R5': [], 'R6': ['RECEIPT_MULTIPLE_POLICY_UNSET'], 'R7': ['RECEIPT_VENDOR_POLICY_UNSET']}
+    -> OK
+
+[RT18] (T-18) finalization: independent granted human, acknowledgement of carried items, frozen bytes, visible later changes
+    finalize refused for preparer role: ('refused', 403, 'Client scope or role denied')
+    finalize refused for same person in a reviewer role: ('refused', 403, 'Independent finalizer required')
+    finalize refused for reviewer without the finalize grant: ('refused', 403, 'Human authority grant required: finalize')
+    finalize refused for no acknowledgement while A3 is carried: ('refused', 409, 'Unreviewed/carried exceptions require acknowledgement')
+    finalize by the independent finalizer with acknowledgement: ('ok', 1)
+    package records: ['acknowledgement', 'audit_head', 'authority', 'dispositions', 'finalizer', 'items', 'manifest', 'open_exceptions', 'period_id', 'quarantined_sources', 'reason', 'removed_items', 'rule_versions', 'scope', 'supersedes_package_id', 'workflow'] | carried: [{'blockers': ['MISSING_RECEIPT', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'], 'item_key': 'demo_card_001:A3', 'status': 'pending'}] | authority: preparation_only_not_external_close
+    after unrelated journal intake -> events: [] | after a card source revision -> events: [('APPROVED_SOURCE_REVISED', 'demo_card_001:A2'), ('APPROVED_SOURCE_REVISED', 'demo_card_001:A2'), ('APPROVED_SOURCE_REVISED', 'demo_card_001:A1'), ('APPROVED_SOURCE_REVISED', 'demo_card_001:A2'), ('POST_FINALIZATION_CHANGE', 'package:1')]
+    package bytes unchanged: True
+    finalize again while items are stale, with acknowledgement: ('refused', 409, 'Stale/disputed items cannot be finalized')
+    finalize while A1 is disputed, with acknowledgement: ('refused', 409, 'Stale/disputed items cannot be finalized')
+    third reviewer resolves the dispute: ('ok', None)
+    mistaken revoke by a fourth reviewer: ('ok', None)
+    recovery by a fifth independent reviewer: ('ok', None)
+    second package for the same period and workflow: ('ok', 2)
+    A1 status after recovery: approve | packages on file for November card preparation: 2
+    observation: a second package was accepted with no link to, or supersession of, the first
+    -> OK
+
+[RT19a] (T-19) close readiness: a document label alone does not complete reconciliation or tie-out requirements
+    items unreviewed -> blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'MISSING_CLOSE_EVIDENCE', 'OPEN_PREPARATION_EXCEPTIONS', 'UNREVIEWED_PREPARATION']
+    after review the earlier checklist is: stale | shipped checklist [{'document_type': 'trial_balance', 'type': 'document'}, {'document_type': 'card_statement', 'type': 'document'}, {'document_type': 'bank_reconciliation', 'type': 'reconciliation'}, {'document_type': 'ap_tieout', 'type': 'tieout'}, {'document_type': 'ar_tieout', 'type': 'tieout'}]
+    requirement results with label-only documents: [('trial_balance', True), ('card_statement', True), ('bank_reconciliation', False), ('ap_tieout', False), ('ar_tieout', False)] | blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'MISSING_CLOSE_EVIDENCE', 'OPEN_PREPARATION_EXCEPTIONS']
+    typed checklist results: [('reconciliation', False), ('tieout', False), ('workflow_outcome', True)] | blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'MISSING_CLOSE_EVIDENCE', 'OPEN_PREPARATION_EXCEPTIONS']
+    typed requirements hold: True | label-only documents satisfy reconciliation/tie-out under the shipped checklist: False
+    -> OK
+
+[RT19b] (T-19) close readiness waits for in-flight preparation and does not adopt changed sources
+    step order (run, capability): [(1, 'evidence.inventory'), (1, 'banking.card_prepare'), (1, 'package.manifest'), (2, 'evidence.inventory'), (2, 'close.readiness'), (2, 'package.manifest')]
+    close started after card finished: True | items seen by the checklist: ['demo_card_001:A1', 'demo_card_001:A2'] | current: True
+    queued close run, then a review decision -> run 3 completed with refreshed statuses: [('demo_card_001:A1', 'approve'), ('demo_card_001:A2', 'approve')]
+    queued close run, then a new close document -> run 4 status: held (must not complete on inputs it was not queued with)
+    -> OK
+
+[RG0] (G0) teaching month through service operations only; lineage, entry impact and second-client isolation recomputed
+    as delivered, before any correction:
+      J-002                  ['UNBALANCED_JOURNAL']
+      demo_card_001:TX-003   ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+      demo_card_001:TX-004   ['POSSIBLE_DUPLICATE']
+      demo_card_001:TX-005   ['POSSIBLE_DUPLICATE']
+      demo_card_001:TX-006   ['CREDIT_REQUIRES_REVIEW', 'NON_EXPENSE_REQUIRES_REVIEW']
+      demo_card_001:TX-007   ['PENDING_TRANSACTION']
+      demo_card_001:TX-009   ['RECEIPT_AMOUNT_POLICY_UNSET']
+      demo_card_001:TX-010   ['SPLIT_REQUIRES_REVIEW']
+      demo_card_001:TX-011   ['CURRENCY_MISMATCH']
+      demo_card_001:TX-012   ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    quarantined sources: [('demo_card_001:TX-008', 'UNASSIGNED_ACCOUNTING_PERIOD'), ('receipt-TX-008', 'UNASSIGNED_ACCOUNTING_PERIOD')]
+    held items whose blockers have no disposition vocabulary at all: ['J-002']
+    dispositions accepted: 9 of 9
+    approved (11): ['J-001', 'J-002', 'demo_card_001:TX-001', 'demo_card_001:TX-002', 'demo_card_001:TX-003', 'demo_card_001:TX-004', 'demo_card_001:TX-005', 'demo_card_001:TX-006', 'demo_card_001:TX-009', 'demo_card_001:TX-010', 'demo_card_001:TX-012']
+    carried: [('demo_card_001:TX-011', ['CURRENCY_MISMATCH'], [10]), ('demo_card_001:TX-007', ['PENDING_TRANSACTION'], [9])]
+    entry impact from approved artifacts: {'DEMO_CARD_LIABILITY': '-291.00', 'DEMO_CASH': '-300.00', 'DEMO_OFFICE_SUPPLIES': '391.00', 'DEMO_REPAIRS': '200.00'} | equals hand calculation: True | nets to zero: True
+    TX-009 evidence versions relied on: [('receipt-TX-009', 2)] (version 2 is the preparer's re-supplied receipt)
+    finalize without acknowledgement: refused | packages: ['ok', 'ok'] | lock: ok | distinct people: True | reviewer and finalizer outside every lineage: True
+    card package carries: [('demo_card_001:TX-007', ['PENDING_TRANSACTION']), ('demo_card_001:TX-011', ['CURRENCY_MISMATCH'])] | quarantined named: ['demo_card_001:TX-008', 'receipt-TX-008']
+    second client reviewer decides a first-client artifact: ('refused', 404, 'Artifact not found in client scope')
+    first client reviewer decides a second-client artifact: ('refused', 404, 'Artifact not found in client scope')
+    second client preparer sends a first-client packet: ('refused', 403, 'Synthetic source scope mismatch')
+    second client December journal approved: ok | first client records unchanged and both audit chains verify: True
+    month reaches approved-or-dispositioned, finalized and locked: True | but only after evidence for ['J-002'] was re-supplied by the preparer
+    -> OK
+
+====================================================================================================
+RN01   C-02       OK     every decision type is refused under lock, and accepted again after an authorised reopen
+RN02   C-01       OK     a source re-dated out of a locked period enters no other period until the origin is reopened
+RN02b  C-01       OK     a locked, approved item cannot be re-entered in another period through supersession under a new key
+RN03   C-03       OK     identical work by another enqueuer or mandate issuer keeps the governing artifact and its rejection
+RN04   C-04       OK     a supplier of any version of an item input stays barred; a supplier of another item evidence does not
+RN05   C-04       OK     the author of the chart and policy stays barred after a colleague re-registers the profile
+RN05b  C-04/T-09  OK     the author of a vendor mapping stays barred after a colleague re-proposes the rule with a cosmetic change
+RN06   C-05       OK     combining marks survive normalisation; unknown and colliding aliases are held; empty aliases refused
+RN07   C-06       OK     actor kind is mandatory; a service identity cannot use any human authority whatever its name, role or grants
+RT09a  T-09       OK     a proposed profile is inert; the proposer, an ungranted human and a service cannot approve it
+RT09b  T-09       OK     rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive
+RT09c  T-09       OK     a vendor removed from the approved profile no longer produces a clean match
+RT09d  T-09       OK     normalised alias form is visible to the rule approver; punctuation-only collisions are held
+RT11   T-11       OK     client_sample with missing facts yields no eligible item; demo waivers are explicit in artifact and export
+RT12a  T-12       OK     older, conflicting, mixed-order and unordered deliveries never replace an accepted ordered head
+RT12b  T-12/T-18  OK     unrelated later intake leaves a locked, finalized period untouched (no new quarantine, no change event)
+RT12c  T-12       OK     evidence received before its period opens is adopted; a receipt follows its charge across a month boundary in either arrival order
+RT12d  T-12/T-18  OK     a removed or superseded source leaves no open item behind and raises an event when it had been approved
+RT10a  T-10       OK     mandates: independent approval, fixed target period, fresh-evidence wait and wake-up, suspension on policy change
+RT10b  T-10       OK     a mandate must state what fresh evidence it needs before it can dispatch
+RT13   T-13       OK     statement control: identity swap, purchase/payment offset, opening break and foreign rows are caught or disclosed
+RT13n  T-13       OK     limits of the statement control when line identities or the prior statement are absent
+RT14a  T-14       OK     dispositions: closed vocabulary, exact split, separate review, revocation, inert rule proposal, referral never clears
+RT14b  T-14       OK     a distinct-purchases disposition does not cover a duplicate candidate that arrives afterwards
+RT14c  T-14       OK     after one of two charges is excluded as a duplicate, the surviving charge has a truthful path to approval
+RT14d  T-14       OK     evidence cited for a disposition must be more than the item's own source row
+RT14e  T-14/T-15  OK     a card payment cannot be turned into a credit to an expense account through dispositions
+RT14f  T-14       OK     an empty inventory blocks the steps that depend on it
+RT15   T-15       OK     one source, one live entry: a journal citing a card item is held on both, and stays held after the source is revised
+RT16   T-16       OK     journal controls tested one at a time: wrong-type support, unbound support, duplicates, no net effect, dimensions
+RT17   T-17       OK     receipt policy: unset stays explicit, a proposed rule has no effect, both sides of the date and amount boundaries
+RT18   T-18       OK     finalization: independent granted human, acknowledgement of carried items, frozen bytes, visible later changes
+RT19a  T-19       OK     close readiness: a document label alone does not complete reconciliation or tie-out requirements
+RT19b  T-19       OK     close readiness waits for in-flight preparation and does not adopt changed sources
+RG0    G0         OK     teaching month through service operations only; lineage, entry impact and second-client isolation recomputed
+
+Verdict counts: {'OK': 35}
+Re-verification gate: PASS
+python3 scripts/verify_corrective_checkpoint.py
+FROZEN CORRECTIVE CHECKPOINT: original supplied script; not the later Batch 2 API.
+
+### P01 evidence+policy author approves through a colleague's run
+  human-a approving own evidence: refused 403 (Independent human review required)
+  VERDICT: OK
+
+### P02 human/service decided by kind, not by actor id
+  service reviewer: refused 403 (Independent human review required) | human named worker-...: accepted
+  VERDICT: OK
+
+### P03 recurring occurrence survives evidence arriving before the worker runs
+  ticks [4] [5] | occurrences [('2026-11-15', 'completed')] | completed runs for occurrence [5] | current J-001 artifacts [23]
+  VERDICT: OK
+
+### P04 one unfit mandate does not stop the others
+  tick: accepted | occurrences [('journal_preparation', 'held', 'Workflow unavailable for this client'), ('card_preparation', 'dispatched', None)] | mandate status [(2, 'active'), (1, 'held')]
+  VERDICT: OK
+
+### P05 two recurring occurrences on identical inputs: one governing artifact
+  J-001 artifacts (id, runs, governing, status): [(15, [2, 4, 5], True, 'pending')]
+  VERDICT: OK
+
+### P06 CJK alias does not match a different CJK descriptor
+  vendor: None | eligible: False | blockers: ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+  VERDICT: OK
+
+### P07 late older batch replaces newer source version (Batch 2: F-13)
+  current version: 3 | amount: 42.50
+  VERDICT: DEFERRED
+
+### P08 journal support / duplicate / no-effect (Batch 2: F-15)
+  eligible: [('J-001', True), ('J-003', True), ('J-004', True)]
+  VERDICT: DEFERRED
+
+### P09 locking the period preserves approvals and blocks new dispatch
+  status after lock: approve | enqueue in locked period: refused 409 (PERIOD_LOCKED)
+  VERDICT: OK
+
+### P10 opening December does not strand November
+  November TX-001 status: approve | December card items: ['no-transactions']
+  VERDICT: OK
+
+### P11 real file edits: transport change keeps approval, handler change stales it
+  status after editing each file: {'http.py': 'approve', '__main__.py': 'approve', 'demo.py': 'approve', 'service.py': 'approve', 'storage.py': 'approve', 'modules.py': 'stale', 'core.py': 'stale'}
+  VERDICT: OK
+
+### P12 close readiness ignores open exceptions (Batch 2: F-11)
+  blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED']
+  VERDICT: DEFERRED
+
+### P13 statement control passes on population substitution (Batch 2: F-12)
+  TX-001 eligible after swap: True
+  VERDICT: DEFERRED
+
+### P14 repeated and contradictory decisions on one artifact
+   [('REV approve', 'accepted'), ('REV approve again', 'refused 409 (Duplicate or invalid review transition)'), ('R2 reject', 'accepted'), ('REV approve again', 'refused 409 (Duplicate or invalid review transition)')] | status: disputed
+  VERDICT: OK
+
+### P15 receipt dated the day before posting (Batch 2: F-16)
+  blockers: ['RECEIPT_DATE_MISMATCH']
+  VERDICT: DEFERRED
+
+### P16 unrelated card receipt leaves an approved journal intact
+  journal status in export: approve | card TX-001 (same workflow as the receipt): stale
+  VERDICT: OK
+
+### N01 decisions recorded in a locked period
+  under lock: {'approve pending TX-001': 'refused 409 (PERIOD_LOCKED)', 'revoke approved J-001': 'refused 409 (PERIOD_LOCKED)'} | J-001 now: approve | TX-001 now: pending
+  VERDICT: OK
+
+### N02 source re-dated out of a locked period is approvable in both periods
+  November TX-001: approve amount 42.50 date 2026-11-03
+  December TX-001: blockers None | approval no December item exists | date None
+  exceptions raised against November for the moved source: [('demo_card_001:TX-001', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-TX-001', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+  VERDICT: OK
+
+### N03 rejection displaced by an identical re-preparation under another actor
+  new artifact created: False | identical accounting data: True | approval of the copy: accepted
+  J-001 artifacts (id, governing, status, decisions): [(15, True, 'disputed', ['reject', 'approve'])]
+  VERDICT: OK
+
+### N04 evidence author regains review rights after a colleague's trivial revision
+  contributors on artifact: ['human-a', 'human-b', 'worker-demo'] | human-a approving own entry: refused 403 (Independent human review required)
+  VERDICT: OK
+
+### N05 policy author regains review rights after a colleague re-registers the profile
+  mapping rules authored by human-a; contributors: ['human-a', 'human-b', 'worker-demo'] | human-a approving item coded by own mapping: refused 403 (Independent human review required)
+  VERDICT: OK
+
+### N06 combining-mark scripts: different words collapse to the same alias
+  Thai            'กิน' vs 'กัน' -> 'กิน' vs 'กัน'  equal=False
+  Devanagari      'किताब' vs 'कुताब' -> 'किताब' vs 'कुताब'  equal=False
+  Hebrew pointed  'דָּבָר' vs 'דֶּבֶר' -> 'דָּבָר' vs 'דֶּבֶר'  equal=False
+  end to end: vendor None | category None | eligible False | blockers ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+  VERDICT: OK
+
+### N07 actor created without an explicit kind
+  an actor without a kind cannot be constructed: TypeError
+  VERDICT: OK
+
+### N08 evidence received before its period is opened
+  re-supply of identical evidence: {'changed': False, 'generation': 2, 'replay': False}
+  still quarantined after the period opened: ['demo-card-control', 'demo_card_001:TX-008', 'journal-support-001', 'receipt-TX-008', 'trial-balance-placeholder']
+  J-001 blockers: ['MISSING_JOURNAL_SUPPORT'] | TX-001 blockers: ['STATEMENT_CONTROL_MISSING_OR_AMBIGUOUS']
+  VERDICT: WEAK
+
+### N09 receipt dated in the prior month for a first-of-month charge
+  TX-001 blockers: ['MISSING_RECEIPT'] | receipt status: [('receipt-TX-001', 'UNASSIGNED_ACCOUNTING_PERIOD')] | evidence listed on artifact: ['demo_card_001:TX-001', 'demo-card-control']
+  VERDICT: WEAK
+
+### N10 lock then reopen with no new evidence keeps approvals; lock preconditions
+  governing items unreviewed, blocked or stale at lock time: 12 | lock: accepted | card TX-001 while locked: stale | J-001 after lock+reopen: approve
+  VERDICT: NOTE
+
+### N11 recurring run across a period boundary; held occurrence recovers
+  before December exists: [('2026-11-29', 'completed', None), ('2026-11-30', 'skipped_no_catch_up', 'No event delivered for this slot'), ('2026-12-01', 'held', 'Accounting period for occurrence not configured')]
+  after opening December: [('2026-11-29', 'completed'), ('2026-11-30', 'skipped_no_catch_up'), ('2026-12-01', 'completed'), ('2026-12-02', 'completed')] | run periods: [('2026-11', 'prepared_with_exceptions'), ('2026-12', 'prepared_with_exceptions')] | ticks [4] [] [5, 6]
+  VERDICT: OK
+
+### N12 concurrent ticks, drains and contrary decisions
+  identical tick results: True | completed runs per occurrence: [1, 1] | max governing per item: 1
+  simultaneous approve/reject by two reviewers: ['accepted', 'accepted'] | status: disputed | audit chain intact: True
+  VERDICT: OK
+
+### N13 approval invalidation: evidence, policy and source changes inside one workflow
+   {'after card receipt': 'stale', 're-prepared': (True, 'pending'), 'after policy change': 'stale'} | decision on stale artifact: refused 409 (Preparation is stale, unfinished or not governing)
+  VERDICT: OK
+
+### N14 reviewer who supplied one document is barred from the whole workflow population
+  supplied only the TX-002 receipt; reviewing unrelated TX-001: refused 403 (Independent human review required)
+  VERDICT: NOTE
+
+### N15 revoked approval and repeated dispute
+  after revoke: new approval refused 409 (Duplicate or invalid review transition) | re-preparing unchanged inputs returns the same artifact: True
+  after third-reviewer resolution, the overruled reviewer rejects again: accepted | status: disputed
+  VERDICT: NOTE
+
+================ summary
+P01  OK        evidence+policy author approves through a colleague's run
+P02  OK        human/service decided by kind, not by actor id
+P03  OK        recurring occurrence survives evidence arriving before the worker runs
+P04  OK        one unfit mandate does not stop the others
+P05  OK        two recurring occurrences on identical inputs: one governing artifact
+P06  OK        CJK alias does not match a different CJK descriptor
+P07  DEFERRED  late older batch replaces newer source version (Batch 2: F-13)
+P08  DEFERRED  journal support / duplicate / no-effect (Batch 2: F-15)
+P09  OK        locking the period preserves approvals and blocks new dispatch
+P10  OK        opening December does not strand November
+P11  OK        real file edits: transport change keeps approval, handler change stales it
+P12  DEFERRED  close readiness ignores open exceptions (Batch 2: F-11)
+P13  DEFERRED  statement control passes on population substitution (Batch 2: F-12)
+P14  OK        repeated and contradictory decisions on one artifact
+P15  DEFERRED  receipt dated the day before posting (Batch 2: F-16)
+P16  OK        unrelated card receipt leaves an approved journal intact
+N01  OK        decisions recorded in a locked period
+N02  OK        source re-dated out of a locked period is approvable in both periods
+N03  OK        rejection displaced by an identical re-preparation under another actor
+N04  OK        evidence author regains review rights after a colleague's trivial revision
+N05  OK        policy author regains review rights after a colleague re-registers the profile
+N06  OK        combining-mark scripts: different words collapse to the same alias
+N07  OK        actor created without an explicit kind
+N08  WEAK      evidence received before its period is opened
+N09  WEAK      receipt dated in the prior month for a first-of-month charge
+N10  NOTE      lock then reopen with no new evidence keeps approvals; lock preconditions
+N11  OK        recurring run across a period boundary; held occurrence recovers
+N12  OK        concurrent ticks, drains and contrary decisions
+N13  OK        approval invalidation: evidence, policy and source changes inside one workflow
+N14  NOTE      reviewer who supplied one document is barred from the whole workflow population
+N15  NOTE      revoked approval and repeated dispute
+
+### N16 policy changed and reverted: does the earlier approval come back without review?
+  after change: stale | after revert by another registrant: approve
+  VERDICT: NOTE
+
+### N17 later policy change versus earlier periods (Batch 2: F-06 effective dating)
+  new December vendor rule added -> approved November item: open period stale | locked period approve | after reopen stale
+  VERDICT: DEFERRED
+
+### N18 punctuation that distinguishes merchants is discarded
+  'A+ CLEANERS'    'A CLEANERS'     equal=True
+  '#1 PIZZA'       '1 PIZZA'        equal=True
+  'C++ CONSULTING' 'C CONSULTING'   equal=True
+  'AT&T'           'AT T'           equal=True
+  VERDICT: NOTE
+
+================ supplementary
+N16  NOTE      policy changed and reverted: does the earlier approval come back without review?
+N17  DEFERRED  later policy change versus earlier periods (Batch 2: F-06 effective dating)
+N18  NOTE      punctuation that distinguishes merchants is discarded
+
+Corrective gate (C-01 to C-06): PASS

@@ -1,0 +1,8 @@
+{
+  "reason": "Finder metadata and runtime database files are excluded by the established bundle payload rules. No such file was changed or removed; initial host hashes are retained here.",
+  "files": {
+    "exports/.DS_Store": "884b786443bb9d110dc69882f55a0982fa315ed6b38d6fa6f7370423a6c17b30",
+    "exports/local-synthetic-backup-final.sqlite3": "3d3aa78537065083a5bbd08f7188780c4e30c283ea0a13eca0380ee629c8b4d5",
+    "exports/local-synthetic-backup.sqlite3": "274aadbd6d2910bd6a896882f70a57bc5bfe029a3df66aa4d49b0dddf9dd4cd0"
+  }
+}

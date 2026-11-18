@@ -1,0 +1,22 @@
+{
+  "synthetic": true,
+  "organization_id": "demo_org",
+  "client_id": "bird_bowl_demo",
+  "external_company_id": "fixture_realm_001",
+  "batch_id": "late-receipt-v1",
+  "sources": [
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-002",
+      "data": {
+        "transaction_source_id": "TX-002",
+        "account_id": "demo_card_001",
+        "date": "2026-11-04",
+        "vendor": "METRO REPAIR DEMO",
+        "amount": "180.00",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-002; not an authentic document."
+      }
+    }
+  ]
+}

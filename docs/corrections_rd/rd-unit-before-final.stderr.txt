@@ -1,0 +1,59 @@
+test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop (test_review_corrections_rd.ReviewCorrectionsRD) ... FAIL
+test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (test_review_corrections_rd.ReviewCorrectionsRD) ... test_RD02_amount_revision_keeps_claim_with_or_without_repeat_and_restart (test_review_corrections_rd.ReviewCorrectionsRD) ... test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced (test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD02_retired_claimant_resent_unchanged_without_claim (test_review_corrections_rd.ReviewCorrectionsRD) ... 
+======================================================================
+FAIL: test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop (test_review_corrections_rd.ReviewCorrectionsRD)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/aaos-rd-baseline-unit/tests/test_review_corrections_rd.py", line 98, in test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop
+    self.assertTrue(o.intake(f.PREP2, claim)['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (test_review_corrections_rd.ReviewCorrectionsRD) (approved=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/aaos-rd-baseline-unit/tests/test_review_corrections_rd.py", line 69, in test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target
+    self.assertTrue(result['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (test_review_corrections_rd.ReviewCorrectionsRD) (approved=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/aaos-rd-baseline-unit/tests/test_review_corrections_rd.py", line 69, in test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target
+    self.assertTrue(result['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RD02_amount_revision_keeps_claim_with_or_without_repeat_and_restart (test_review_corrections_rd.ReviewCorrectionsRD) (claim_repeated=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/aaos-rd-baseline-unit/tests/test_review_corrections_rd.py", line 121, in test_RD02_amount_revision_keeps_claim_with_or_without_repeat_and_restart
+    self.assertTrue({TRANSITION, UNRESOLVED} <= set(f.gov(o, f.CARD+':Y', '2026-12')['blockers']))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RD02_retired_claimant_resent_unchanged_without_claim (test_review_corrections_rd.ReviewCorrectionsRD) (order=('claim', 'terminal'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/aaos-rd-baseline-unit/tests/test_review_corrections_rd.py", line 153, in test_RD02_retired_claimant_resent_unchanged_without_claim
+    self.held(o, f.CARD+':Z', 'receipt-Z')
+  File "/tmp/aaos-rd-baseline-unit/tests/test_review_corrections_rd.py", line 35, in held
+    self.assertTrue(set(keys) <= held, (keys, held))
+AssertionError: False is not true : (('demo_card_001:Z', 'receipt-Z'), {'demo_card_001:X', 'receipt-X'})
+
+======================================================================
+FAIL: test_RD02_retired_claimant_resent_unchanged_without_claim (test_review_corrections_rd.ReviewCorrectionsRD) (order=('terminal', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/aaos-rd-baseline-unit/tests/test_review_corrections_rd.py", line 153, in test_RD02_retired_claimant_resent_unchanged_without_claim
+    self.held(o, f.CARD+':Z', 'receipt-Z')
+  File "/tmp/aaos-rd-baseline-unit/tests/test_review_corrections_rd.py", line 35, in held
+    self.assertTrue(set(keys) <= held, (keys, held))
+AssertionError: False is not true : (('demo_card_001:Z', 'receipt-Z'), {'demo_card_001:X', 'receipt-X'})
+
+----------------------------------------------------------------------
+Ran 5 tests in 4.113s
+
+FAILED (failures=6)

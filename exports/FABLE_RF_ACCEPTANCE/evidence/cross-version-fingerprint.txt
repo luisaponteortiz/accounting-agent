@@ -1,0 +1,16 @@
+== create with the RE checkpoint source
+review: ('ok', None)
+finalize: ('ok', 1)
+U approved: True | database: /private/tmp/claude-501/rf/xver/probe001.sqlite3
+== control: inspect with the RE checkpoint source (copy of the database)
+opened by this source: U governing artifact review status: approve | November A1: approve
+POST_FINALIZATION_CHANGE events before any new delivery: 0
+one unrelated delivery: ('ok', {'changed': True, 'generation': 4, 'replay': False})
+POST_FINALIZATION_CHANGE events after it: 1
+after a new preparation: U review status: pending | audit verifies: True
+== inspect with the RF checkpoint source (copy of the database)
+opened by this source: U governing artifact review status: stale | November A1: approve
+POST_FINALIZATION_CHANGE events before any new delivery: 0
+one unrelated delivery: ('ok', {'changed': True, 'generation': 4, 'replay': False})
+POST_FINALIZATION_CHANGE events after it: 1
+after a new preparation: U review status: pending | audit verifies: True

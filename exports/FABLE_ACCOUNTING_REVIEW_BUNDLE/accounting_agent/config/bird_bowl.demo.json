@@ -1,0 +1,26 @@
+{
+  "schema_version": "1", "version": "fictional-demo-1", "synthetic": true,
+  "organization_id": "demo_org", "client_id": "bird_bowl_demo",
+  "name": "Bird Bowl — fictional sandbox", "approval_status": "approved_demo_only",
+  "notice": "All accounts, vendors, policies and financial amounts are fictional. No actual Bird Bowl accounting policy is configured.",
+  "legal_entity": null, "accounting_framework": null, "accounting_basis": null,
+  "external_company_id": "fixture_realm_001", "currency": "USD",
+  "period": {"start": "2026-11-01", "end": "2026-11-30", "locked": false},
+  "accounts": [
+    {"id": "DEMO_OFFICE_SUPPLIES", "type": "expense", "active": true},
+    {"id": "DEMO_REPAIRS", "type": "expense", "active": true},
+    {"id": "DEMO_CARD_LIABILITY", "type": "liability", "active": true},
+    {"id": "DEMO_CASH", "type": "asset", "active": true}
+  ],
+  "card_accounts": ["demo_card_001"],
+  "vendors": [
+    {"id": "demo_acme", "name": "Acme Paper Demo", "aliases": ["ACME PAPER DEMO", "ACME PAPER DEMO 001"], "category": "DEMO_OFFICE_SUPPLIES"},
+    {"id": "demo_metro", "name": "Metro Repair Demo", "aliases": ["METRO REPAIR DEMO"], "category": "DEMO_REPAIRS"}
+  ],
+  "customers": [], "dimensions": [],
+  "policies": {"receipt_required": true, "review": "independent_human", "model_review_required": false},
+  "procedures": ["card_preparation", "journal_preparation", "close_readiness"],
+  "historical_decisions": [], "credentials_reference": null,
+  "systems": {"ledger": "unconnected", "intake": "fixture"},
+  "required_close_evidence": ["trial_balance", "card_statement", "bank_reconciliation", "ap_tieout", "ar_tieout"]
+}

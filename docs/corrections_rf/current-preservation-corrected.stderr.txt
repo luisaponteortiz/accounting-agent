@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/verify_rf_preservation.py", line 32, in <module>
+    if __name__=='__main__':main()
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/verify_rf_preservation.py", line 13, in main
+    inventory=prepare()
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/build_rf_review_bundle.py", line 63, in prepare
+    for name, expected in protected.items():assert name in current and sha(current[name]) == expected, 'Changed immutable input: '+name
+AssertionError: Changed immutable input: exports/local-synthetic-backup-final.sqlite3

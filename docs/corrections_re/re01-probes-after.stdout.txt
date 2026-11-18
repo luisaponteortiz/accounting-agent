@@ -1,0 +1,23 @@
+
+=== E03 [RD-01] the claim arrives in a message ORDERED BEFORE the governing version (provider sequence), delivered late
+    [unknown-target] A1Y sequence 4 (older) delivered late with supersedes=A1X (not received): ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    [unknown-target] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1'), ('SOURCE_SUPERSESSION_UNRESOLVED', None, 'demo_card_001:A1Y')]
+    [unknown-target] links: [('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')] | held: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] | A1Y: None
+    [unknown-target] approved in both periods: False
+    [known-target] A1Y sequence 4 (older) delivered late with supersedes=A1: ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    [known-target] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')]
+    [known-target] links: [('demo_card_001:A1', 'demo_card_001:A1Y')] | held: ['demo_card_001:A1Y', 'receipt-A1Y'] | A1Y: None
+    [known-target] approved in both periods: False
+--- E03: OK
+
+=== E03c [RD-01] control for E03: the same two messages delivered in provider order (sequence 4 with the claim, then sequence 5)
+    [unknown-target] links: [('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')] | held: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] | A1Y: None
+    [unknown-target] approved in both periods or not held: False
+    [known-target] links: [('demo_card_001:A1', 'demo_card_001:A1Y')] | held: ['demo_card_001:A1Y', 'receipt-A1Y'] | A1Y: None
+    [known-target] approved in both periods or not held: False
+--- E03c: OK
+
+SUMMARY
+  E03   RD-01    OK
+  E03c  RD-01    OK
+  totals: {'OK': 2, 'NOTE': 0, 'WEAK': 0, 'ERROR': 0}

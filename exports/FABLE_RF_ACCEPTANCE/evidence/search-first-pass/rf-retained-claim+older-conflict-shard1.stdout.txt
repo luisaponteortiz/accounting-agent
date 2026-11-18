@@ -1,0 +1,6 @@
+retained-claim+older-conflict             1 P B Q7 Q6 Q5cB Q6cP            single no-release linked repeat-ok audit-ok early=[] held=['P', 'receipt-P'] links=['P>A1', 'Q>B']
+retained-claim+older-conflict             3 P B Q7 Q6cP Q5cB Q6            single no-release linked repeat-ok audit-ok early=[] held=['P', 'Q', 'receipt-P', 'receipt-Q'] links=['P>A1', 'Q>P']
+retained-claim+older-conflict             5 P B Q7 Q5cB Q6cP Q6            single no-release linked repeat-ok audit-ok early=[] held=['P', 'receipt-P'] links=['P>A1', 'Q>B']
+retained-claim+older-conflict             7 P B Q6 Q7 Q5cB Q6cP            single no-release linked repeat-ok audit-ok early=[] held=['P', 'receipt-P'] links=['P>A1', 'Q>B']
+retained-claim+older-conflict             9 P B Q6 Q6cP Q5cB Q7            single no-release linked repeat-ok audit-ok early=[] held=['P', 'Q', 'receipt-P', 'receipt-Q'] links=['P>A1', 'Q>P']
+retained-claim+older-conflict            11 P B Q6 Q5cB Q6cP Q7            single no-release linked repeat-ok audit-ok early=[] held=['P', 'receipt-P'] links=['P>A1', 'Q>B']

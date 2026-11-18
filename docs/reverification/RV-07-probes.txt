@@ -1,0 +1,60 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RT14a] (T-14) dispositions: closed vocabulary, exact split, separate review, revocation, inert rule proposal, referral never clears
+    before: {'D1': ['POSSIBLE_DUPLICATE'], 'D2': ['POSSIBLE_DUPLICATE'], 'S1': ['SPLIT_REQUIRES_REVIEW'], 'F1': ['CURRENCY_MISMATCH']}
+    override a currency hold with a clearing choice: ('refused', 400, 'Unsupported disposition; this control cannot be overridden')
+    disposition by a reviewer without the grant: ('refused', 403, 'Human authority grant required: disposition')
+    split that does not sum to the charge: ('refused', 400, 'Allocation must sum exactly to charge')
+    disposition with no evidence: ('refused', 400, 'Current scoped evidence references required')
+    accepted dispositions: ['ok', 'ok', 'ok', 'ok'] | rule proposal via disposition: ('ok', 5)
+    after: {'D1': (True, [], [1]), 'D2': (True, [], [2]), 'S1': (True, [], [3]), 'F1': (False, ['CURRENCY_MISMATCH'], [4])}
+    split entry lines: [('DEMO_REPAIRS', '20.00', '0.00'), ('DEMO_OFFICE_SUPPLIES', '15.00', '0.00'), ('DEMO_CARD_LIABILITY', '0.00', '35.00')]
+    dispositioner approves the item they dispositioned: ('refused', 403, 'Independent human review required')
+    independent reviewer approves it (positive control): ('ok', None)
+    revoke the D2 disposition: ('ok', None)
+    D2 after revocation: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['POSSIBLE_DUPLICATE']}
+    -> OK
+
+[RT14e] (T-14/T-15) a card payment cannot be turned into a credit to an expense account through dispositions
+    payment before: ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    dispositions (standalone_credit, confirm_vendor, code_category): [('refused', 400, 'Payments require settlement or referral'), ('refused', 400, 'Payments require settlement or referral'), ('refused', 400, 'Payments require settlement or referral')]
+    payment after: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']} | entry: None
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[RG0] (G0) teaching month through service operations only; lineage, entry impact and second-client isolation recomputed
+    as delivered, before any correction:
+      J-002                  ['UNBALANCED_JOURNAL']
+      demo_card_001:TX-003   ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+      demo_card_001:TX-004   ['POSSIBLE_DUPLICATE']
+      demo_card_001:TX-005   ['POSSIBLE_DUPLICATE']
+      demo_card_001:TX-006   ['CREDIT_REQUIRES_REVIEW', 'NON_EXPENSE_REQUIRES_REVIEW']
+      demo_card_001:TX-007   ['PENDING_TRANSACTION']
+      demo_card_001:TX-009   ['RECEIPT_AMOUNT_POLICY_UNSET']
+      demo_card_001:TX-010   ['SPLIT_REQUIRES_REVIEW']
+      demo_card_001:TX-011   ['CURRENCY_MISMATCH']
+      demo_card_001:TX-012   ['NON_EXPENSE_REQUIRES_REVIEW', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    quarantined sources: [('demo_card_001:TX-008', 'UNASSIGNED_ACCOUNTING_PERIOD'), ('receipt-TX-008', 'UNASSIGNED_ACCOUNTING_PERIOD')]
+    held items whose blockers have no disposition vocabulary at all: ['J-002', 'demo_card_001:TX-009']
+    dispositions accepted: 9 of 9
+    approved (11): ['J-001', 'J-002', 'demo_card_001:TX-001', 'demo_card_001:TX-002', 'demo_card_001:TX-003', 'demo_card_001:TX-004', 'demo_card_001:TX-005', 'demo_card_001:TX-006', 'demo_card_001:TX-009', 'demo_card_001:TX-010', 'demo_card_001:TX-012']
+    carried: [('demo_card_001:TX-011', ['CURRENCY_MISMATCH'], [9]), ('demo_card_001:TX-007', ['PENDING_TRANSACTION'], [8])]
+    entry impact from approved artifacts: {'DEMO_CARD_LIABILITY': '-291.00', 'DEMO_CASH': '-300.00', 'DEMO_OFFICE_SUPPLIES': '391.00', 'DEMO_REPAIRS': '200.00'} | equals hand calculation: True | nets to zero: True
+    TX-009 evidence versions relied on: [('receipt-TX-009', 2)] (version 2 is the preparer's re-supplied receipt)
+    finalize without acknowledgement: refused | packages: ['ok', 'ok'] | lock: ok | distinct people: True | reviewer and finalizer outside every lineage: True
+    card package carries: [('demo_card_001:TX-007', ['PENDING_TRANSACTION']), ('demo_card_001:TX-011', ['CURRENCY_MISMATCH'])] | quarantined named: ['demo_card_001:TX-008', 'receipt-TX-008']
+    second client reviewer decides a first-client artifact: ('refused', 404, 'Artifact not found in client scope')
+    first client reviewer decides a second-client artifact: ('refused', 404, 'Artifact not found in client scope')
+    second client preparer sends a first-client packet: ('refused', 403, 'Synthetic source scope mismatch')
+    second client December journal approved: ok | first client records unchanged and both audit chains verify: True
+    month reaches approved-or-dispositioned, finalized and locked: True | but only after evidence for ['J-002', 'demo_card_001:TX-009'] was re-supplied by the preparer
+    -> OK
+
+====================================================================================================
+RT14a  T-14       OK     dispositions: closed vocabulary, exact split, separate review, revocation, inert rule proposal, referral never clears
+RT14e  T-14/T-15  OK     a card payment cannot be turned into a credit to an expense account through dispositions
+RG0    G0         OK     teaching month through service operations only; lineage, entry impact and second-client isolation recomputed
+
+Verdict counts: {'OK': 3}
+Re-verification gate: PASS

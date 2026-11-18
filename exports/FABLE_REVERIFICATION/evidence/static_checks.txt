@@ -1,0 +1,18 @@
+1. changed-files.json against the Batch 1 baseline archive
+   inventory keys: ['baseline', 'files', 'original_test_methods']
+   source/test files that differ from baseline (computed): 37 | removed: []
+   listed in inventory: 46 | computed-but-unlisted: ['accounting_agent/web/app.js', 'accounting_agent/web/index.html'] | listed hash mismatches: []
+   files in patch: 46 | computed changes missing from patch: ['accounting_agent/web/app.js', 'accounting_agent/web/index.html']
+2. the four verification inputs: outer bundle, frozen corrective archive, recorded checksums
+   FABLE_BATCH_1_1_CORRECTIONS.json   recorded==outer:True outer==frozen:True outer==reviewer original:True
+   FABLE_BATCH_1_VERIFICATION.md      recorded==outer:True outer==frozen:True outer==reviewer original:True
+   batch1_probe_output.txt            recorded==outer:True outer==frozen:True outer==reviewer original:True
+   batch1_verification_probes.py      recorded==outer:True outer==frozen:True outer==reviewer original:True
+3. frozen checkpoint contains no Batch 2 modules
+   python modules in frozen archive: ['__init__.py', '__main__.py', 'build_fixtures.py', 'core.py', 'demo.py', 'http.py', 'modules.py', 'service.py', 'storage.py']
+4. original platform/HTTP test methods retained
+   test_platform.py: original methods 32, still present 32, current methods 32
+   test_http.py: original methods 8, still present 8, current methods 11
+   total original 40 | retained 40 | bodies changed 14 | fewer assertions than original: []
+5. expectedFailure markers left in tests: 0
+   probe tests for P08/P15: ['test_P08_unbound_journal_support', 'test_P08_duplicate_journals', 'test_P08_no_effect_journal', 'test_P15_receipt_tolerance_is_explicit_client_policy']

@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check.py", line 39, in <module>
+    register=validate_register(register_text,ROOT)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check_product_requirements.py", line 212, in validate_register
+    if target:require((root/'docs'/target).exists(),'Missing evidence/source link: '+target)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check_product_requirements.py", line 35, in require
+    if not condition:raise ValueError(message)
+ValueError: Missing evidence/source link: corrections_rf/RF_CORRECTIONS_REPORT.md
+make: *** [check] Error 1

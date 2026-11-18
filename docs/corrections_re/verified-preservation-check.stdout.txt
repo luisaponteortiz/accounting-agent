@@ -1,0 +1,22 @@
+{
+  "protected_inputs_unchanged": 719,
+  "all_88_ids_and_order_retained": true,
+  "product_decisions_changed": 0,
+  "implementation_states_changed": 0,
+  "changed_register_records": [
+    "AAOS-BNK-03",
+    "AAOS-CTL-04",
+    "AAOS-GOV-02",
+    "AAOS-GOV-03"
+  ],
+  "owner_confirmed_BB01_BB02_all_fields_identical": true,
+  "all_four_verified_records_identical": true,
+  "six_named_unratified_records_still_proposed_and_identical": true,
+  "schema_files_unchanged": true,
+  "prior_decision_log_bytes_are_prefix": true,
+  "baseline_methods_retained": 205,
+  "current_test_methods": 227,
+  "only_authorized_earlier_method_rewritten": true,
+  "branch_and_eight_commits_unchanged": true,
+  "head": "542688b57ece08ea55082d68b713ccf6433fd8ce"
+}

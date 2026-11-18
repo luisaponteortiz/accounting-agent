@@ -1,0 +1,16 @@
+test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... 
+======================================================================
+ERROR: test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (tests.test_review_corrections_rd.ReviewCorrectionsRD) (approved=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rd.py", line 84, in test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target
+    self.assertTrue(any(e['code'].startswith('APPROVED_SOURCE_') and e['payload']['artifact_id'] == prior['id']
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rd.py", line 84, in <genexpr>
+    self.assertTrue(any(e['code'].startswith('APPROVED_SOURCE_') and e['payload']['artifact_id'] == prior['id']
+TypeError: string indices must be integers
+
+----------------------------------------------------------------------
+Ran 2 tests in 2.478s
+
+FAILED (errors=1)

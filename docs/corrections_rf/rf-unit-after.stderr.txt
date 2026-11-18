@@ -1,0 +1,112 @@
+test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) ... test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) ... ok
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 64, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.assertTrue(expected<=p.held_under(o),(expected,p.held_under(o)))
+AssertionError: False is not true : ({'receipt-Z', 'receipt-Q', 'demo_card_001:Q', 'demo_card_001:Z'}, {'receipt-P', 'demo_card_001:P', 'receipt-Z', 'demo_card_001:Z'})
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 51, in test_RF01_retained_message_matrix_and_repeated_claim
+    if replacement=='approved-before':self.approve(o,'Z')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 37, in approve
+    self.assertIsNotNone(a);self.assertTrue(a['eligible'],a['blockers']);self.assertTrue(p.approved(o,p.K(key),'2026-12'))
+AssertionError: 0 is not true : ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 64, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.assertTrue(expected<=p.held_under(o),(expected,p.held_under(o)))
+AssertionError: False is not true : ({'receipt-Z', 'receipt-Q', 'demo_card_001:Q', 'demo_card_001:Z'}, {'receipt-P', 'demo_card_001:P', 'receipt-Z', 'demo_card_001:Z'})
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='approve-after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 64, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.assertTrue(expected<=p.held_under(o),(expected,p.held_under(o)))
+AssertionError: False is not true : ({'receipt-Z', 'receipt-Q', 'demo_card_001:Q', 'demo_card_001:Z'}, {'receipt-P', 'demo_card_001:P', 'receipt-Z', 'demo_card_001:Z'})
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 64, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.assertTrue(expected<=p.held_under(o),(expected,p.held_under(o)))
+AssertionError: False is not true : ({'receipt-Z', 'receipt-Q', 'demo_card_001:Q', 'demo_card_001:Z'}, {'receipt-P', 'demo_card_001:P', 'receipt-Z', 'demo_card_001:Z'})
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 51, in test_RF01_retained_message_matrix_and_repeated_claim
+    if replacement=='approved-before':self.approve(o,'Z')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 37, in approve
+    self.assertIsNotNone(a);self.assertTrue(a['eligible'],a['blockers']);self.assertTrue(p.approved(o,p.K(key),'2026-12'))
+AssertionError: 0 is not true : ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 64, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.assertTrue(expected<=p.held_under(o),(expected,p.held_under(o)))
+AssertionError: False is not true : ({'receipt-Z', 'receipt-Q', 'demo_card_001:Q', 'demo_card_001:Z'}, {'receipt-P', 'demo_card_001:P', 'receipt-Z', 'demo_card_001:Z'})
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='approve-after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 64, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.assertTrue(expected<=p.held_under(o),(expected,p.held_under(o)))
+AssertionError: False is not true : ({'receipt-Z', 'receipt-Q', 'demo_card_001:Q', 'demo_card_001:Z'}, {'receipt-P', 'demo_card_001:P', 'receipt-Z', 'demo_card_001:Z'})
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 64, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.assertTrue(expected<=p.held_under(o),(expected,p.held_under(o)))
+AssertionError: False is not true : ({'receipt-Z', 'receipt-Q', 'demo_card_001:Q', 'demo_card_001:Z'}, {'receipt-P', 'demo_card_001:P', 'receipt-Z', 'demo_card_001:Z'})
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 51, in test_RF01_retained_message_matrix_and_repeated_claim
+    if replacement=='approved-before':self.approve(o,'Z')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 37, in approve
+    self.assertIsNotNone(a);self.assertTrue(a['eligible'],a['blockers']);self.assertTrue(p.approved(o,p.K(key),'2026-12'))
+AssertionError: 0 is not true : ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 64, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.assertTrue(expected<=p.held_under(o),(expected,p.held_under(o)))
+AssertionError: False is not true : ({'receipt-Z', 'receipt-Q', 'demo_card_001:Q', 'demo_card_001:Z'}, {'receipt-P', 'demo_card_001:P', 'receipt-Z', 'demo_card_001:Z'})
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 51, in test_RF01_retained_message_matrix_and_repeated_claim
+    if replacement=='approved-before':self.approve(o,'Z')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 37, in approve
+    self.assertIsNotNone(a);self.assertTrue(a['eligible'],a['blockers']);self.assertTrue(p.approved(o,p.K(key),'2026-12'))
+AssertionError: 0 is not true : ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+
+----------------------------------------------------------------------
+Ran 4 tests in 56.215s
+
+FAILED (failures=12)

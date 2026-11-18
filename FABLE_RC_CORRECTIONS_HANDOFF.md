@@ -1,0 +1,9 @@
+# RC/PRV correction handoff
+
+The new archive is FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip; its adjacent .zip.sha256 identifies the delivered bytes. Extract it into a disposable directory and use FABLE_RC_REVIEW_PROMPT.md as the exact next independent-verification assignment. START_HERE.md explains the directly runnable layout.
+
+RC-01–03 and PRV-01–10 are the authorized scope. The developer reproduced the three failures before source edits and added arrival-order, withdrawal disclosure, reopen/relock, acceptance-lineage and idempotence regressions. The unchanged 18 probes now report sixteen OK and the two expected policy NOTE results in developer execution. The complete suite passed 192 tests, including all eleven HTTP methods. All required gates pass; retained probes report fourteen OK, the reviewer cases remain 29 PASS / 10 FIXED / 21 DEFERRED-OK, and the unchanged register fault script has 37/37 agreement with zero gaps. Full command results, intermediate failures, ticket coverage and NOT_RUN disclosures are in docs/corrections_rc/RC_CORRECTIONS_REPORT.md.
+
+The three failed requirements remain Verification failed. Four other records are independently verified only from Fable's returned V2 report and its named scope, with UC-10/UC-11 limits. D-016/D-017 are pre-existing owner-confirmed decisions; their AAOS-BB-01/02 wording is preserved except assigned Dependencies cleanup. All original reviewer inputs, prior archives/sidecars, original test methods and the three Git commits remain unchanged.
+
+The reference experiment did not cover withdrawal disclosure or changed-chain transition acceptance after reopen. Inspect those added controls and their before/after evidence. No schema, API/probe adaptation, product redesign, Proposed/deferred capability or stack change was made. Human G0, G1–G4, Batch 3 and all live actions remain closed pending their separate authority.

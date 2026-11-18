@@ -1,0 +1,26 @@
+Fable RA acceptance probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[R02a] (RA-02) unlinked re-proposals keep the earlier author barred (vendor mapping and receipt policy); cosmetic and non-cosmetic values, other categories and aliases behave as specified; an independent reviewer can approve
+    unlinked cosmetic vendor re-proposal: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    independent reviewer approves (positive control): ('ok', None)
+    unlinked identical receipt policy: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    unlinked receipt policy with a different earlier value: its author approves (should be allowed): ('ok', None)
+    earlier version had a different category: its author approves (should be allowed): ('ok', None)
+    earlier version did not cover this description: its author approves (should be allowed): ('ok', None)
+    later version adds an alias, same category for this description: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    -> OK
+
+[R02b] (RA-02) the earlier author stays barred when the identical mapping is re-proposed for the single item, or under a new rule key
+    contributors (item-scoped re-proposal): ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    identical mapping re-proposed with item scope for this charge: author of the general rule approves: ('refused', 403, 'Independent human review required')
+    contributors (new rule key, earlier rule ended the day before): ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    identical mapping re-proposed under a new rule key: author of the earlier rule approves: ('refused', 403, 'Independent human review required')
+    -> OK
+
+====================================================================================================
+R02a  RA-02        OK     unlinked re-proposals keep the earlier author barred (vendor mapping and receipt policy); cosmetic and non-cosmetic values, other categories and aliases behave as specified; an independent reviewer can approve
+R02b  RA-02        OK     the earlier author stays barred when the identical mapping is re-proposed for the single item, or under a new rule key
+
+Verdict counts: {'OK': 2}
+RA acceptance gate: PASS

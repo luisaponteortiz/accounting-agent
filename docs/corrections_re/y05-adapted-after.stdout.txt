@@ -1,0 +1,26 @@
+
+=== Y05 [RD-02] most recent target wins; open target; cycle refusal; already linked identity; unrelated intake
+    assert (a) the second target is recorded once and changes the control state           yes
+    assert (a) the second claim changes no binding, move or link                          yes
+    assert (a) the first claim still links when its target arrives                        yes
+    assert (a) the contested target is not applied and the row stays blocked in December  yes
+    (b) A1Y {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | B9 None | links [('demo_card_001:B9', 'demo_card_001:A1Y')] | held []
+    assert (b) open target: linked, the target is retired, the claimant stays in December with a review blocker and no hold yes
+    (c) A1X arrives claiming A1Y, which claims A1X: ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    (c) links=[('demo_card_001:A1Y', 'demo_card_001:A1X')]
+    assert (c) at most one direction is linked                                            yes
+    (c) A1Y repeats its claim on A1X: ('refused', 400, 'Supersession cycle is not permitted')
+    assert (c) the closing claim is refused or ignored; still at most one link            yes
+    assert (d) unrelated intake adds no link, move or chain binding                       yes
+    assert (d) a second unrelated intake adds no chain event (3) and no chain binding (6) yes
+    (e) reopen November: ('ok', None)
+    (e) relock November: ('refused', 409, 'Unsettled preparation requires explicit acknowledgement')
+    (e) relock November with acknowledgement: ('ok', None)
+    assert (e) November is locked again                                                   yes
+    (e) held after relock: []
+    assert (e) after release and relock, unrelated intake adds no link, move or chain binding yes
+--- Y05: OK
+
+SUMMARY
+  Y05   RD-02    OK
+  totals: {'OK': 1, 'NOTE': 0, 'WEAK': 0, 'ERROR': 0}

@@ -1,0 +1,19 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RT09d] (T-09) normalised alias form is visible to the rule approver; punctuation-only collisions are held
+    rule record keys: ['alias_collisions', 'approved_by', 'effective_end', 'effective_from', 'effective_to', 'evidence', 'id', 'item_key', 'kind', 'normalized_aliases', 'profile_id', 'proposed_by', 'proposer_kind', 'rule_key', 'scope', 'status', 'supersedes', 'value', 'version']
+    normalised form on the rule record: True | in the rule_proposed audit event: ['acme paper demo']
+    ACME item after approving the colliding alias: {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['AMBIGUOUS_VENDOR', 'UNKNOWN_CATEGORY']}
+    -> OK
+
+[RT14d] (T-14) evidence cited for a disposition must be more than the item's own source row
+    distinct_purchases citing only the charge itself: ('refused', 400, 'Supporting evidence beyond the item source is required')
+    -> OK
+
+====================================================================================================
+RT09d  T-09       OK     normalised alias form is visible to the rule approver; punctuation-only collisions are held
+RT14d  T-14       OK     evidence cited for a disposition must be more than the item's own source row
+
+Verdict counts: {'OK': 2}
+Re-verification gate: PASS

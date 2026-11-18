@@ -1,0 +1,10 @@
+test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (tests.test_product_requirements.ProductRequirements) ... ok
+test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_changed_verdict_controls_even_with_matching_project_results (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_results_and_report_are_hash_pinned (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 24.464s
+
+OK

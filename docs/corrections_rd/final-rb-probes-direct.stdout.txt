@@ -1,0 +1,230 @@
+N01a [RB-01] late link on a destination that is already approved: approval stops governing, events and blocked move recorded, root history kept; reopen admits only the replacement; relock, replay and restart are stable
+    B1 approved in December before any claim: ('ok', None)
+    after the claim -> December B1: None | held under November: ['demo_card_001:B1', 'receipt-B1']
+    moves: [('demo_card_001:B1', '2026-11', '2026-12', 1, 1), ('receipt-B1', '2026-11', '2026-12', 1, 0)]
+    events: [('APPROVED_SOURCE_REVISED', '2026-12', 'demo_card_001:B1'), ('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1'), ('ITEM_LEFT_POPULATION', '2026-12', 'demo_card_001:B1')]
+    replay flagged: True | A1 versions kept: 1 | B1 artifacts kept (history): 1 | any still governing: False
+    finalize December while B1 is quarantined, no acknowledgement: ('refused', 409, 'Package control remains open')
+    after reopen -> November: ['demo_card_001:A2'] | December: ['demo_card_001:B1', 'demo_card_001:D1'] | B1: {'id': 21, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']}
+    settlement_verified on demo_card_001:B1: ('ok', 1)
+    independent approval of demo_card_001:B1: ('ok', None)
+    relock November: ('ok', None)
+    after relock and a destination revision -> B1: {'id': 31, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW']} | held: []
+    restart identical: True | audit chain: True | no same-period move rows: True
+    quarantined=True evidence=True released=True single=True relock=True
+    => OK
+
+N01b [RB-01] late link when the locked ancestor was withdrawn (tombstoned) after the lock: the replacement is not approvable in a second period
+    [fresh-link-after-tombstone] December B1: None
+    [fresh-link-after-tombstone] exceptions: [('demo_card_001:A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD'), ('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [fresh-link-after-tombstone] moves: [('demo_card_001:B1', '2026-11', '2026-12', 1, 1), ('receipt-B1', '2026-11', '2026-12', 1, 0)]
+    [fresh-link-after-tombstone] events: [('APPROVED_SOURCE_REMOVED', '2026-11', 'demo_card_001:A1'), ('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')]
+    [fresh-link-after-tombstone] November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December B1: None | approved in both periods: False
+    [late-link-after-tombstone] December B1: None
+    [late-link-after-tombstone] exceptions: [('demo_card_001:A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD'), ('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [late-link-after-tombstone] moves: [('demo_card_001:B1', '2026-11', '2026-12', 1, 1), ('receipt-B1', '2026-11', '2026-12', 1, 0)]
+    [late-link-after-tombstone] events: [('APPROVED_SOURCE_REMOVED', '2026-11', 'demo_card_001:A1'), ('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1'), ('ITEM_LEFT_POPULATION', '2026-12', 'demo_card_001:B1')]
+    [late-link-after-tombstone] November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December B1: None | approved in both periods: False
+    => OK
+
+N01c [RB-01] late link declared on a middle source whose replacement is already admitted (and approved) in December: the replacement does not stay approved beside the locked root
+    [pre_approved=False] C1 replaces B1 inside December: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']}
+    [pre_approved=False] B1 then declares it supersedes A1 (locked) -> C1: None | December governing: ['no-transactions']
+    [pre_approved=False] exceptions: [('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [pre_approved=False] November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December C1: None | December B1: None | approved in both periods: False
+    settlement_verified on demo_card_001:C1: ('ok', 1)
+    independent approval of demo_card_001:C1: ('ok', None)
+    [pre_approved=True] C1 replaces B1 inside December: {'id': 15, 'eligible': True, 'status': 'approve', 'blockers': []}
+    [pre_approved=True] B1 then declares it supersedes A1 (locked) -> C1: None | December governing: ['no-transactions']
+    [pre_approved=True] exceptions: [('demo_card_001:B1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-C1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [pre_approved=True] November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December C1: None | December B1: None | approved in both periods: False
+    => OK
+
+N01d [RB-01] an unresolved link that is never re-sent: a further replacement of the unresolved source is not released while the root is locked
+    A1Y (supersedes A1X, not yet received): {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    A1X arrives (supersedes locked A1) -> held: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] | A1Y: None
+    A1Z arrives superseding A1Y (A1Y never re-sent) -> A1Z: None | December governing: ['no-transactions']
+    exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Z', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Z', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | December A1Z: None | approved in both periods: False
+    => OK
+
+N01e [RB-01] three-deep chain delivered newest first with every link later resolved by re-sending: nothing is released while the root is locked; reopen admits only the terminal source
+    newest first, nothing re-sent -> December governing: []
+    A1Y then A1Z re-sent -> December governing: [] | held under November: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'demo_card_001:A1Z', 'receipt-A1X', 'receipt-A1Z']
+    after reopen -> November: ['demo_card_001:A2'] | December: ['demo_card_001:A1Z'] | A1 or A1X ever admitted to December: []
+    => OK
+
+N01f [RB-01] control: a late link to a charge in an OPEN prior period is an ordinary supersession, not a quarantine; no same-period move row
+    November open -> A1: None | December B1: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | held: [] | moves: []
+    => OK
+
+N01g [RB-01/RV-01] a charge superseded while its period was open, the period then locked before it was re-prepared: the superseded charge does not stay approved beside its replacement
+    lock November without re-preparing it, no acknowledgement: ('refused', 409, 'Unsettled preparation requires explicit acknowledgement')
+    lock November without re-preparing it, with acknowledgement: ('ok', None)
+    settlement_verified on demo_card_001:B1: ('ok', 1)
+    independent approval of demo_card_001:B1: ('ok', None)
+    November A1: {'id': 2, 'eligible': True, 'status': 'stale', 'blockers': []} | December B1: {'id': 11, 'eligible': True, 'status': 'approve', 'blockers': []} | approved in both periods: False
+    => OK
+
+N02a [RB-02] receipt re-pointed to another existing charge or to a void id, in one packet or two and in either order, by a second supplier: held, disclosed with both identities, both suppliers refused, acceptance item-bound and separate from final review, later change lapses it
+    [void-one-packet] A1: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [void-one-packet] revisions: [('replaced', 'receipt-A1', 1, 'rv-preparer', 'receipt-A1-new', 'rv-preparer-2', ['amount', 'content'])]
+    [void-one-packet] independent approval without acceptance: ('refused', 409, 'Unresolved controls block approval')
+    [void-one-packet] supplier rv-preparer accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    [void-one-packet] supplier rv-preparer-2 accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    [void-one-packet] granted non-supplier accepts for A1: ('ok', 1)
+    [void-one-packet] the acceptor gives the final review: ('refused', 403, 'Independent human review required')
+    [void-one-packet] independent final review: ('ok', None)
+    [void-one-packet] after a further change: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [other-charge-repoint-first] after the re-point only -> A1: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['MISSING_RECEIPT']}
+    [other-charge-repoint-first] A1: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [other-charge-repoint-first] revisions: [('replaced', 'receipt-A1', 1, 'rv-preparer', 'receipt-A1-new', 'rv-preparer-2', ['amount', 'content'])]
+    [other-charge-repoint-first] A2 (now carries two receipts): ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'RECEIPT_AMOUNT_POLICY_UNSET', 'RECEIPT_DATE_POLICY_UNSET', 'RECEIPT_MULTIPLE_POLICY_UNSET', 'RECEIPT_VENDOR_POLICY_UNSET']
+    [other-charge-repoint-first] independent approval without acceptance: ('refused', 409, 'Unresolved controls block approval')
+    [other-charge-repoint-first] supplier rv-preparer accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    [other-charge-repoint-first] supplier rv-preparer-2 accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    [other-charge-repoint-first] granted non-supplier accepts for A1: ('ok', 1)
+    [other-charge-repoint-first] the acceptor gives the final review: ('refused', 403, 'Independent human review required')
+    [other-charge-repoint-first] independent final review: ('ok', None)
+    [other-charge-repoint-first] after a further change: {'id': 22, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [void-replacement-first] A1: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [void-replacement-first] revisions: [('replaced', 'receipt-A1', 1, 'rv-preparer', 'receipt-A1-new', 'rv-preparer-2', ['amount', 'content'])]
+    [void-replacement-first] independent approval without acceptance: ('refused', 409, 'Unresolved controls block approval')
+    [void-replacement-first] supplier rv-preparer accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    [void-replacement-first] supplier rv-preparer-2 accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    [void-replacement-first] granted non-supplier accepts for A1: ('ok', 1)
+    [void-replacement-first] the acceptor gives the final review: ('refused', 403, 'Independent human review required')
+    [void-replacement-first] independent final review: ('ok', None)
+    [void-replacement-first] after a further change: {'id': 22, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    additional still-active receipt: ['RECEIPT_MULTIPLE_POLICY_UNSET'] | revisions: []
+    variants: [True, True, True] | additional-receipt control: True
+    => OK
+
+N02b [RB-02] statement re-pointed to another cycle in a separate packet before or after the tying replacement: every relying item held, workpaper discloses, suppliers refused, acceptance item-bound, later change lapses it
+    [repoint-first] after the first packet -> A1: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_CONTROL_MISSING_OR_AMBIGUOUS']}
+    [repoint-first] A1: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} | A2: {'id': 13, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [repoint-first] workpaper statement_revisions: [('replaced', 'stmt-2026-11', 1, 'rv-preparer', 'stmt-2026-11-b', 'rv-preparer-2', ['closing_balance', 'statement_id', 'totals'])]
+    [repoint-first] independent approval without acceptance: ('refused', 409, 'Unresolved controls block approval')
+    [repoint-first] supplier rv-preparer accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    [repoint-first] supplier rv-preparer-2 accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    [repoint-first] granted non-supplier accepts for A1: ('ok', 1)
+    [repoint-first] the acceptor gives the final review: ('refused', 403, 'Independent human review required')
+    [repoint-first] independent final review: ('ok', None)
+    [repoint-first] after a further change: {'id': 22, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [replacement-first] after the first packet -> A1: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_CONTROL_MISSING_OR_AMBIGUOUS']}
+    [replacement-first] A1: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} | A2: {'id': 13, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [replacement-first] workpaper statement_revisions: [('replaced', 'stmt-2026-11', 1, 'rv-preparer', 'stmt-2026-11-b', 'rv-preparer-2', ['closing_balance', 'statement_id', 'totals'])]
+    [replacement-first] independent approval without acceptance: ('refused', 409, 'Unresolved controls block approval')
+    [replacement-first] supplier rv-preparer accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    [replacement-first] supplier rv-preparer-2 accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    [replacement-first] granted non-supplier accepts for A1: ('ok', 1)
+    [replacement-first] the acceptor gives the final review: ('refused', 403, 'Independent human review required')
+    [replacement-first] independent final review: ('ok', None)
+    [replacement-first] after a further change: {'id': 22, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    variants: [True, True]
+    => OK
+
+N02c [RB-02] observation: a contradicting receipt supplied AFTER the one now relied on, then moved away from the charge
+    two active receipts (40.00 then 39.99): ['RECEIPT_AMOUNT_POLICY_UNSET', 'RECEIPT_MULTIPLE_POLICY_UNSET']
+    the later receipt is re-pointed away -> A1: {'id': 12, 'eligible': True, 'status': 'pending', 'blockers': []} | revisions: []
+    => NOTE
+
+N03a [RB-03] identical vendor mapping and receipt policy re-proposed with item scope, under a new key, and as a three-step chain keep every earlier author and approver barred; an independent reviewer approves
+    [vendor_mapping item-scope] author of the earlier rule approves: ('refused', 403, 'Independent human review required')
+    [vendor_mapping item-scope] approver of the earlier rule approves: ('refused', 403, 'Independent human review required')
+    independent reviewer approves (positive control): ('ok', None)
+    [vendor_mapping new-key] author of the earlier rule approves: ('refused', 403, 'Independent human review required')
+    [vendor_mapping new-key] approver of the earlier rule approves: ('refused', 403, 'Independent human review required')
+    independent reviewer approves (positive control): ('ok', None)
+    [receipt_matching item-scope] author of the earlier rule approves: ('refused', 403, 'Independent human review required')
+    [receipt_matching item-scope] approver of the earlier rule approves: ('refused', 403, 'Independent human review required')
+    independent reviewer approves (positive control): ('ok', None)
+    [receipt_matching new-key] author of the earlier rule approves: ('refused', 403, 'Independent human review required')
+    [receipt_matching new-key] approver of the earlier rule approves: ('refused', 403, 'Independent human review required')
+    independent reviewer approves (positive control): ('ok', None)
+    three-step chain contributors: ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-preparer-2', 'rv-reviewer-3', 'rv-reviewer-4', 'rv-worker']
+    author of step 1 approves: ('refused', 403, 'Independent human review required')
+    author of step 2 approves: ('refused', 403, 'Independent human review required')
+    independent reviewer approves (positive control): ('ok', None)
+    results: [True, True, True, True, True]
+    => OK
+
+N03b [RB-03] unrelated earlier rules do not bar a reviewer: another item scope, another description, another category, another policy value, another client
+    earlier identical mapping was scoped to another charge (A2): its author approves A1: ('ok', None)
+    earlier rule under another key covered another description: its author approves: ('ok', None)
+    earlier general rule had another category: its author approves: ('ok', None)
+    earlier receipt policy under another key had another value: its author approves: ('ok', None)
+    same person authored the identical rule for another client: approves here: ('ok', None)
+    results: {'other item scope': True, 'other description': True, 'other category': True, 'other policy value': True, 'other client': True}
+    => OK
+
+N03c [RB-03/RA-02] a receipt policy cannot be re-proposed with the same money value written differently (0.0 for 0.00), so exact value comparison cannot be sidestepped that way
+    tolerance 0.00 proposed: ('ok', 5)
+    tolerance '0.0' proposed: ('refused', 400, 'Money must be a bounded decimal string with exactly two places')
+    tolerance '0' proposed: ('refused', 400, 'Money must be a bounded decimal string with exactly two places')
+    tolerance '0.000' proposed: ('refused', 400, 'Money must be a bounded decimal string with exactly two places')
+    tolerance ' 0.00' proposed: ('refused', 400, 'Money must be a bounded decimal string with exactly two places')
+    => OK
+
+N04a [RB-04] restated November statement: December discloses it and stays unverified with no and with partial acceptance; verified only when every November item is accepted; restater and acceptor cannot review December; revocation re-blocks and removes the approval, also before December is re-prepared
+    after the restatement -> D1: {'id': 16, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW']}
+    December workpaper: continuity=prior_statement_revision_unaccepted | prior revisions=[('revised', 1, 'rv-preparer', 'rv-preparer-2', ['closing_balance', 'opening_balance'])] | acceptance={'acceptances': [], 'accepted': False, 'accepted_item_keys': [], 'period_id': '2026-11', 'relying_item_keys': ['demo_card_001:A1', 'demo_card_001:A2'], 'statement_snapshot_id': 13}
+    independent approval of D1 with no November acceptance: ('refused', 409, 'Unresolved controls block approval')
+    acceptance for November A1 only: ('ok', 1)
+    partial -> D1: {'id': 25, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW']} | continuity: prior_statement_revision_unaccepted | accepted items: ['demo_card_001:A1']
+    acceptance for November A2: ('ok', 2)
+    all accepted -> D1: {'id': 34, 'eligible': True, 'status': 'pending', 'blockers': []} | continuity: verified | D1 contributors: ['rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+    the November acceptor reviews December D1: ('refused', 403, 'Independent human review required')
+    the supplier of the restated November statement reviews December D1: ('refused', 403, 'Independent human review required')
+    independent final review of D1: ('ok', None)
+    revoke the A1 acceptance: ('ok', None)
+    finalize December after the revocation, before re-preparing it: ('refused', 409, 'Stale/disputed items cannot be finalized')
+    before re-preparation -> D1: {'id': 34, 'eligible': True, 'status': 'stale', 'blockers': []}
+    after re-preparation -> D1: {'id': 43, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW']} | continuity: prior_statement_revision_unaccepted
+    none=True partial=True full=True separate=True reblocked=True audit=True
+    => OK
+
+N04b [RB-04] new evidence after full acceptance: a further change to the November statement lapses the acceptance and re-blocks an approved December item
+    D1 approved with continuity verified: ('ok', None)
+    finalize December after the further change, before re-preparing: ('refused', 409, 'Stale/disputed items cannot be finalized')
+    after a further change -> D1: {'id': 34, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW']} | continuity: prior_statement_revision_unaccepted
+    => OK
+
+N04c [RB-04/RB-02] the November statement replaced by re-pointing its key (or withdrawn and replaced) so that the opening agrees is disclosed to December; a withdrawn statement with no replacement is reported missing
+    [repointed] D1: {'id': 16, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW']} | continuity: prior_statement_revision_unaccepted | prior revisions: [('replaced', 'stmt-2026-11', ['closing_balance', 'opening_balance', 'statement_id'])]
+    [withdrawn-and-replaced] D1: {'id': 16, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW']} | continuity: prior_statement_revision_unaccepted | prior revisions: [('replaced', 'stmt-2026-11', ['closing_balance', 'opening_balance', 'statement_id']), ('replaced', 'stmt-2026-11', ['closing_balance', 'opening_balance', 'statement_id'])]
+    [withdrawn-only] D1: {'id': 16, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_PRIOR_PERIOD_MISSING']} | continuity: prior_period_statement_missing | prior revisions: []
+    results: {'repointed': True, 'withdrawn-and-replaced': True, 'withdrawn-only': True}
+    => OK
+
+N04d [RB-04] locked November: a late restatement is quarantined and December keeps the frozen balance; a restatement made before the lock and never accepted is not authenticated by the lock
+    late restatement of locked November -> D1: ['STATEMENT_OPENING_BALANCE_BREAK'] | continuity: mismatch | exceptions: [('stmt-2026-11', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD')]
+    lock November with the restatement unaccepted (acknowledged): ('ok', None)
+    November locked with an unaccepted restatement -> D1: {'id': 16, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW']} | continuity: prior_statement_revision_unaccepted
+    frozen=True not_authenticated=True
+    => OK
+
+N04e [RB-04] observation: a restated prior statement whose period has no card activity has no acceptance route
+    zero-activity November restated -> D1: {'id': 14, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW']} | continuity: prior_statement_revision_unaccepted | acceptance: {'acceptances': [], 'accepted': False, 'accepted_item_keys': [], 'period_id': '2026-11', 'relying_item_keys': [], 'statement_snapshot_id': 9}
+    => NOTE
+
+SUMMARY
+N01a   RB-01        OK
+N01b   RB-01        OK
+N01c   RB-01        OK
+N01d   RB-01        OK
+N01e   RB-01        OK
+N01f   RB-01        OK
+N01g   RB-01/RV-01  OK
+N02a   RB-02        OK
+N02b   RB-02        OK
+N02c   RB-02        NOTE
+N03a   RB-03        OK
+N03b   RB-03        OK
+N03c   RB-03/RA-02  OK
+N04a   RB-04        OK
+N04b   RB-04        OK
+N04c   RB-04/RB-02  OK
+N04d   RB-04        OK
+N04e   RB-04        NOTE
+{"counts": {"OK": 16, "WEAK": 0, "NOTE": 2, "ERROR": 0}}

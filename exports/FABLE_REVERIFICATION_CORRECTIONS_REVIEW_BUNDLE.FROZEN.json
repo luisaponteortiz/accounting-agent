@@ -1,0 +1,18 @@
+{
+  "status": "FROZEN_AWAITING_FABLE_INDEPENDENT_VERIFICATION",
+  "recorded_at_utc": "2026-11-15T15:39:01.595874+00:00",
+  "bundle_path": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_REVERIFICATION_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "bundle_sha256": "247c1cfd31a2128573b5ae29d633c0d9e74bb076a38a5fc3d9844b6748cc1c75",
+  "review_manifest_sha256": "0ee2c6dd3ab99b0f688e639f05f6febc7649ce49887cae16d50d47eae3542d97",
+  "verified_packaged_and_working_files": 243,
+  "review_scope": [
+    "RV-01 through RV-17",
+    "seven probe adaptations",
+    "strengthened RT14b"
+  ],
+  "user_instruction": "Keep this version frozen and do not begin Batch 3 until the user returns with independent verification results.",
+  "work_boundary": "Preserve the bundle, saved prompt, source, tests, review inputs and evidence listed in its manifest. Do not rebuild or implement further changes while awaiting results.",
+  "batch3_authorized": false,
+  "next_action": "Wait for the user to return with Fable results; receipt of results alone does not authorize Batch 3.",
+  "administrative_record_outside_frozen_bundle": true
+}

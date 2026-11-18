@@ -1,0 +1,15 @@
+{
+  "test_methods": 262,
+  "gates_listed": 8,
+  "feed_contract_codes_described": 6,
+  "capabilities_named": 12,
+  "human_g0_accepted": true,
+  "latest_review": "RF",
+  "records": 88,
+  "independently_verified": 7,
+  "verification_failed": 0,
+  "links_checked": 161,
+  "decisions_recorded": 37,
+  "verification_rule_decision": "D-037",
+  "current_documents": 10
+}

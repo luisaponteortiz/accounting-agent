@@ -1,0 +1,3 @@
+db5d1ed4c12ea940fb00fff6872ff1ab83444f7f Record PR-11 confirmation in the register (D-016, D-017)
+83b58932174a9b3ff6f76104083a4a8944b9e37e Add decision log with PR-11 owner confirmation (D-016)
+e51b0d7abe7bb7beccc1a0a6d757ffe07afa9f4d Add Fable RB/PR independent review and Codex correction prompt

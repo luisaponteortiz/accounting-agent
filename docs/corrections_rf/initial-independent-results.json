@@ -1,0 +1,61 @@
+{
+  "authority": "Derived exactly from three hash-pinned reviewer authorities in chronological order; latest verdict wins per record and the original seven-row order is enforced. Developer passes cannot amend verdicts.",
+  "results": [
+    {
+      "id": "AAOS-KNO-04",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md",
+      "report_sha256": "e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0",
+      "bundle_sha256": "0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9",
+      "scope": "Synthetic local preparation controls exercised by the named probes and the retained gates, at the bundle checkpoint named. Not client policy, connected operation, reconciliation completion, close or operating readiness."
+    },
+    {
+      "id": "AAOS-CTL-01",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md",
+      "report_sha256": "e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0",
+      "bundle_sha256": "0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9",
+      "scope": "Synthetic local preparation controls exercised by the named probes and the retained gates, at the bundle checkpoint named. Not client policy, connected operation, reconciliation completion, close or operating readiness."
+    },
+    {
+      "id": "AAOS-BNK-02",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md",
+      "report_sha256": "e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0",
+      "bundle_sha256": "0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9",
+      "scope": "Synthetic local preparation controls exercised by the named probes and the retained gates, at the bundle checkpoint named. Not client policy, connected operation, reconciliation completion, close or operating readiness."
+    },
+    {
+      "id": "AAOS-CTL-09",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md",
+      "report_sha256": "e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0",
+      "bundle_sha256": "0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9",
+      "scope": "Synthetic local preparation controls exercised by the named probes and the retained gates, at the bundle checkpoint named. Not client policy, connected operation, reconciliation completion, close or operating readiness."
+    },
+    {
+      "id": "AAOS-BNK-03",
+      "state": "Verification failed",
+      "report_path": "exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md",
+      "report_sha256": "e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0",
+      "bundle_sha256": "0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9",
+      "scope": "Synthetic local preparation controls exercised by the named probes and the retained gates, at the bundle checkpoint named. Not client policy, connected operation, reconciliation completion, close or operating readiness."
+    },
+    {
+      "id": "AAOS-CTL-04",
+      "state": "Verification failed",
+      "report_path": "exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md",
+      "report_sha256": "e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0",
+      "bundle_sha256": "0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9",
+      "scope": "Synthetic local preparation controls exercised by the named probes and the retained gates, at the bundle checkpoint named. Not client policy, connected operation, reconciliation completion, close or operating readiness."
+    },
+    {
+      "id": "AAOS-GOV-03",
+      "state": "Verification failed",
+      "report_path": "exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md",
+      "report_sha256": "e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0",
+      "bundle_sha256": "0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9",
+      "scope": "Synthetic local preparation controls exercised by the named probes and the retained gates, at the bundle checkpoint named. Not client policy, connected operation, reconciliation completion, close or operating readiness."
+    }
+  ]
+}

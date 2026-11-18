@@ -1,0 +1,16 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_feed_contract.FeedContract.test_target_selector_cannot_review_a_descendant_using_their_selection",
+    "-v"
+  ],
+  "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+  "started_utc": "2026-11-16T19:46:17.323491+00:00",
+  "elapsed_seconds": 1.286,
+  "exit_code": 0,
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "sqlite": "3.51.0",
+  "platform": "macOS-26.5.2-x86_64-i386-64bit"
+}

@@ -1,0 +1,6 @@
+test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 43.697s
+
+OK

@@ -1,0 +1,33 @@
+== idle, before the five runs
+2026-11-17T03:37:07Z
+22:37  up 7 days,  9:11, 1 user, load averages: 16.30 8.46 19.60
+rd_x seconds until the worker finished (test deadline is 5.0): ['10.06', '9.70', '12.18', '20.66', '7.78']
+rf_x seconds until the worker finished (test deadline is 5.0): ['3.14', '3.47', '2.77', '3.28', '2.89']
+re_x seconds until the worker finished (test deadline is 5.0): ['11.16', '19.24', '19.59', '11.06', '11.09']
+== 8 busy processes, RD then RF then RD then RF (same load for both)
+22:39  up 7 days,  9:14, 1 user, load averages: 26.22 16.99 21.29
+rd_x seconds until the worker finished (test deadline is 5.0): ['15.79', '13.83', '11.25', '17.58']
+rf_x seconds until the worker finished (test deadline is 5.0): ['3.99', '3.15', '3.16', '3.09']
+rd_x seconds until the worker finished (test deadline is 5.0): ['8.10', '9.63', '10.51', '10.24']
+rf_x seconds until the worker finished (test deadline is 5.0): ['2.79', '3.02', '3.17', '2.55']
+22:42  up 7 days,  9:16, 1 user, load averages: 87.45 61.98 39.93
+tools/idle_batch.sh: line 7: 47925 Terminated: 15          python3 $R/tools/burn.py 200
+tools/idle_batch.sh: line 7: 47926 Terminated: 15          python3 $R/tools/burn.py 200
+tools/idle_batch.sh: line 7: 47927 Terminated: 15          python3 $R/tools/burn.py 200
+tools/idle_batch.sh: line 7: 47928 Terminated: 15          python3 $R/tools/burn.py 200
+tools/idle_batch.sh: line 7: 47929 Terminated: 15          python3 $R/tools/burn.py 200
+tools/idle_batch.sh: line 7: 47930 Terminated: 15          python3 $R/tools/burn.py 200
+tools/idle_batch.sh: line 7: 47931 Terminated: 15          python3 $R/tools/burn.py 200
+tools/idle_batch.sh: line 7: 47932 Terminated: 15          python3 $R/tools/burn.py 200
+== 16 busy processes, RD then RF then RD then RF (same load for both)
+22:42  up 7 days,  9:17, 1 user, load averages: 64.83 58.48 39.19
+rd_x seconds until the worker finished (test deadline is 5.0): ['15.16', '18.96', '25.77', 'not within 60']
+rf_x seconds until the worker finished (test deadline is 5.0): ['8.14', '3.84', '4.47', '4.26']
+rd_x seconds until the worker finished (test deadline is 5.0): ['19.01', 'not within 60', '11.39', '10.63']
+rf_x seconds until the worker finished (test deadline is 5.0): ['3.11', '2.77', '8.80', '2.76']
+22:46  up 7 days,  9:21, 1 user, load averages: 32.82 43.77 37.76
+== idle, after the five runs
+2026-11-17T05:37:53Z
+ 0:37  up 7 days, 11:12, 1 user, load averages: 3.60 4.31 6.31
+rd_x seconds until the worker finished (test deadline is 5.0): ['4.47', '4.05', '3.83', '3.98', '4.12']
+rf_x seconds until the worker finished (test deadline is 5.0): ['2.06', '2.32', '2.20', '2.23', '2.21']

@@ -1,0 +1,235 @@
+test_clause2_different_older_claim_is_contested_and_timestamp_order (tests.test_feed_contract.FeedContract) ... FAIL
+test_clause2_known_unknown_older_conflicting_and_approved (tests.test_feed_contract.FeedContract) ... test_clause7_both_targets_orders_pending_linked_third_and_repeats (tests.test_feed_contract.FeedContract) ... test_clause7_earlier_approval_stales_and_existing_dispositions_cannot_clear (tests.test_feed_contract.FeedContract) ... FAIL
+test_clause8_no_provider_release_with_open_target_early_or_last (tests.test_feed_contract.FeedContract) ... test_clause9_first_target_stands_clears_only_conflict_and_preserves_history (tests.test_feed_contract.FeedContract) ... ERROR
+test_clause9_refuses_missing_grant_suppliers_undeclared_and_bad_support (tests.test_feed_contract.FeedContract) ... ok
+test_clause9_release_needs_lock_and_reopen_does_not_clear_conflict (tests.test_feed_contract.FeedContract) ... ERROR
+test_clause9_second_target_known_or_unknown_has_ordinary_consequences (tests.test_feed_contract.FeedContract) ... test_cycle_self_refusals_remain_atomic_before_contest (tests.test_feed_contract.FeedContract) ... ok
+
+======================================================================
+ERROR: test_clause9_first_target_stands_clears_only_conflict_and_preserves_history (tests.test_feed_contract.FeedContract)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 129, in test_clause9_first_target_stands_clears_only_conflict_and_preserves_history
+    before=self.p.lifecycle(o);self.decide(o,'B');after=self.p.lifecycle(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 33, in decide
+    return o.disposition(who or self.f.DISP,'card_preparation','2026-12',self.f.CARD+':Y',CONFLICT,CHOICE,{'target_key':self.f.CARD+':'+target},self.evidence(o) if evidence is None else evidence,'Fictional independent feed-target decision')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/accounting_agent/exceptions.py", line 61, in disposition
+    if choice not in VOCABULARY.get(code,set()):raise ControlError('Unsupported disposition; this control cannot be overridden')
+accounting_agent.core.ControlError: Unsupported disposition; this control cannot be overridden
+
+======================================================================
+ERROR: test_clause9_release_needs_lock_and_reopen_does_not_clear_conflict (tests.test_feed_contract.FeedContract)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 151, in test_clause9_release_needs_lock_and_reopen_does_not_clear_conflict
+    self.decide(o,'B');self.prep(o);self.assertNotIn(f.CARD+':Y',self.p.held_under(o));self.assertIsNotNone(self.gov(o));self.assertNotEqual(self.gov(o)['review_status'],'approve')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 33, in decide
+    return o.disposition(who or self.f.DISP,'card_preparation','2026-12',self.f.CARD+':Y',CONFLICT,CHOICE,{'target_key':self.f.CARD+':'+target},self.evidence(o) if evidence is None else evidence,'Fictional independent feed-target decision')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/accounting_agent/exceptions.py", line 61, in disposition
+    if choice not in VOCABULARY.get(code,set()):raise ControlError('Unsupported disposition; this control cannot be overridden')
+accounting_agent.core.ControlError: Unsupported disposition; this control cannot be overridden
+
+======================================================================
+ERROR: test_clause9_second_target_known_or_unknown_has_ordinary_consequences (tests.test_feed_contract.FeedContract) (known=False, locked=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 140, in test_clause9_second_target_known_or_unknown_has_ordinary_consequences
+    self.decide(o,'X');self.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 33, in decide
+    return o.disposition(who or self.f.DISP,'card_preparation','2026-12',self.f.CARD+':Y',CONFLICT,CHOICE,{'target_key':self.f.CARD+':'+target},self.evidence(o) if evidence is None else evidence,'Fictional independent feed-target decision')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/accounting_agent/exceptions.py", line 61, in disposition
+    if choice not in VOCABULARY.get(code,set()):raise ControlError('Unsupported disposition; this control cannot be overridden')
+accounting_agent.core.ControlError: Unsupported disposition; this control cannot be overridden
+
+======================================================================
+ERROR: test_clause9_second_target_known_or_unknown_has_ordinary_consequences (tests.test_feed_contract.FeedContract) (known=True, locked=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 140, in test_clause9_second_target_known_or_unknown_has_ordinary_consequences
+    self.decide(o,'X');self.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 33, in decide
+    return o.disposition(who or self.f.DISP,'card_preparation','2026-12',self.f.CARD+':Y',CONFLICT,CHOICE,{'target_key':self.f.CARD+':'+target},self.evidence(o) if evidence is None else evidence,'Fictional independent feed-target decision')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/accounting_agent/exceptions.py", line 61, in disposition
+    if choice not in VOCABULARY.get(code,set()):raise ControlError('Unsupported disposition; this control cannot be overridden')
+accounting_agent.core.ControlError: Unsupported disposition; this control cannot be overridden
+
+======================================================================
+ERROR: test_clause9_second_target_known_or_unknown_has_ordinary_consequences (tests.test_feed_contract.FeedContract) (known=True, locked=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 140, in test_clause9_second_target_known_or_unknown_has_ordinary_consequences
+    self.decide(o,'X');self.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 33, in decide
+    return o.disposition(who or self.f.DISP,'card_preparation','2026-12',self.f.CARD+':Y',CONFLICT,CHOICE,{'target_key':self.f.CARD+':'+target},self.evidence(o) if evidence is None else evidence,'Fictional independent feed-target decision')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/accounting_agent/exceptions.py", line 61, in disposition
+    if choice not in VOCABULARY.get(code,set()):raise ControlError('Unsupported disposition; this control cannot be overridden')
+accounting_agent.core.ControlError: Unsupported disposition; this control cannot be overridden
+
+======================================================================
+FAIL: test_clause2_different_older_claim_is_contested_and_timestamp_order (tests.test_feed_contract.FeedContract)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 103, in test_clause2_different_older_claim_is_contested_and_timestamp_order
+    self.assertIn(CONFLICT,self.gov(o)['blockers']);self.assertNotIn((f.CARD+':X',f.CARD+':Y'),self.p.links(o))
+AssertionError: 'SOURCE_CLAIM_CONFLICT' not found in ['SOURCE_TRANSITION_REQUIRES_REVIEW']
+
+======================================================================
+FAIL: test_clause2_known_unknown_older_conflicting_and_approved (tests.test_feed_contract.FeedContract) (known=True, approved=False, conflict=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 54, in test_clause2_known_unknown_older_conflicting_and_approved
+    self.assertTrue(self.send(o,'late',[claim])['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_clause2_known_unknown_older_conflicting_and_approved (tests.test_feed_contract.FeedContract) (known=True, approved=False, conflict=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 54, in test_clause2_known_unknown_older_conflicting_and_approved
+    self.assertTrue(self.send(o,'late',[claim])['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_clause2_known_unknown_older_conflicting_and_approved (tests.test_feed_contract.FeedContract) (known=True, approved=True, conflict=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 54, in test_clause2_known_unknown_older_conflicting_and_approved
+    self.assertTrue(self.send(o,'late',[claim])['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_clause2_known_unknown_older_conflicting_and_approved (tests.test_feed_contract.FeedContract) (known=True, approved=True, conflict=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 54, in test_clause2_known_unknown_older_conflicting_and_approved
+    self.assertTrue(self.send(o,'late',[claim])['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_clause2_known_unknown_older_conflicting_and_approved (tests.test_feed_contract.FeedContract) (known=False, approved=False, conflict=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 54, in test_clause2_known_unknown_older_conflicting_and_approved
+    self.assertTrue(self.send(o,'late',[claim])['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_clause2_known_unknown_older_conflicting_and_approved (tests.test_feed_contract.FeedContract) (known=False, approved=False, conflict=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 54, in test_clause2_known_unknown_older_conflicting_and_approved
+    self.assertTrue(self.send(o,'late',[claim])['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_clause2_known_unknown_older_conflicting_and_approved (tests.test_feed_contract.FeedContract) (known=False, approved=True, conflict=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 54, in test_clause2_known_unknown_older_conflicting_and_approved
+    self.assertTrue(self.send(o,'late',[claim])['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_clause2_known_unknown_older_conflicting_and_approved (tests.test_feed_contract.FeedContract) (known=False, approved=True, conflict=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 54, in test_clause2_known_unknown_older_conflicting_and_approved
+    self.assertTrue(self.send(o,'late',[claim])['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_clause7_both_targets_orders_pending_linked_third_and_repeats (tests.test_feed_contract.FeedContract) (first='B', known=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 77, in test_clause7_both_targets_orders_pending_linked_third_and_repeats
+    for t in ('bindings','moves','links'):self.assertEqual(before[t],after[t])
+AssertionError: Lists differ: [(1, [865 chars]:00')] != [(1, [865 chars]:00'), (10, 'demo_org/bird_bowl_demo/local', 1[54 chars]00')]
+
+Second list contains 1 additional elements.
+First extra element 9:
+(10, 'demo_org/bird_bowl_demo/local', 15, '2026-12', 1, None, '2026-11-16T18:49:48.675343+00:00')
+
+Diff is 1370 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_clause7_both_targets_orders_pending_linked_third_and_repeats (tests.test_feed_contract.FeedContract) (first='B', known=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 77, in test_clause7_both_targets_orders_pending_linked_third_and_repeats
+    for t in ('bindings','moves','links'):self.assertEqual(before[t],after[t])
+AssertionError: Lists differ: [(1, [767 chars]:00')] != [(1, [767 chars]:00'), (9, 'demo_org/bird_bowl_demo/local', 13[53 chars]00')]
+
+Second list contains 1 additional elements.
+First extra element 8:
+(9, 'demo_org/bird_bowl_demo/local', 13, '2026-12', 1, None, '2026-11-16T18:49:49.082972+00:00')
+
+Diff is 1244 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_clause7_both_targets_orders_pending_linked_third_and_repeats (tests.test_feed_contract.FeedContract) (first='X', known=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 77, in test_clause7_both_targets_orders_pending_linked_third_and_repeats
+    for t in ('bindings','moves','links'):self.assertEqual(before[t],after[t])
+AssertionError: Lists differ: [(1, [1277 chars]:00')] != [(1, [1277 chars]:00'), (13, 'demo_org/bird_bowl_demo/local', 1[83 chars]00')]
+
+Second list contains 1 additional elements.
+First extra element 12:
+(13, 'demo_org/bird_bowl_demo/local', 16, '2026-11', 0, 'SOURCE_MOVED_FROM_LOCKED_PERIOD', '2026-11-16T18:49:49.626830+00:00')
+
+Diff is 1892 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_clause7_both_targets_orders_pending_linked_third_and_repeats (tests.test_feed_contract.FeedContract) (first='X', known=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 77, in test_clause7_both_targets_orders_pending_linked_third_and_repeats
+    for t in ('bindings','moves','links'):self.assertEqual(before[t],after[t])
+AssertionError: Lists differ: [(1, [767 chars]:00')] != [(1, [767 chars]:00'), (9, 'demo_org/bird_bowl_demo/local', 13[53 chars]00')]
+
+Second list contains 1 additional elements.
+First extra element 8:
+(9, 'demo_org/bird_bowl_demo/local', 13, '2026-12', 1, None, '2026-11-16T18:49:50.032745+00:00')
+
+Diff is 1244 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_clause7_earlier_approval_stales_and_existing_dispositions_cannot_clear (tests.test_feed_contract.FeedContract)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 91, in test_clause7_earlier_approval_stales_and_existing_dispositions_cannot_clear
+    a=self.gov(o);self.assertIn(CONFLICT,a['blockers']);self.assertFalse(a['eligible'])
+AssertionError: 'SOURCE_CLAIM_CONFLICT' not found in ['SOURCE_TRANSITION_REQUIRES_REVIEW']
+
+======================================================================
+FAIL: test_clause8_no_provider_release_with_open_target_early_or_last (tests.test_feed_contract.FeedContract) (early=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 112, in test_clause8_no_provider_release_with_open_target_early_or_last
+    for t in ('bindings','moves','links'):self.assertEqual(before[t],mid[t])
+AssertionError: Lists differ: [(1, [1376 chars]:00')] != [(1, [1376 chars]:00'), (14, 'demo_org/bird_bowl_demo/local', 1[54 chars]00')]
+
+Second list contains 1 additional elements.
+First extra element 13:
+(14, 'demo_org/bird_bowl_demo/local', 18, '2026-12', 1, None, '2026-11-16T18:49:51.224015+00:00')
+
+Diff is 1989 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_clause8_no_provider_release_with_open_target_early_or_last (tests.test_feed_contract.FeedContract) (early=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 112, in test_clause8_no_provider_release_with_open_target_early_or_last
+    for t in ('bindings','moves','links'):self.assertEqual(before[t],mid[t])
+AssertionError: Lists differ: [(1, [1277 chars]:00')] != [(1, [1277 chars]:00'), (13, 'demo_org/bird_bowl_demo/local', 1[83 chars]00')]
+
+Second list contains 1 additional elements.
+First extra element 12:
+(13, 'demo_org/bird_bowl_demo/local', 16, '2026-11', 0, 'SOURCE_MOVED_FROM_LOCKED_PERIOD', '2026-11-16T18:49:51.653248+00:00')
+
+Diff is 1892 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 10 tests in 11.595s
+
+FAILED (failures=16, errors=5)

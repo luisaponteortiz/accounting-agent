@@ -1,0 +1,64 @@
+docs/batch2 current inventory hashes match
+docs/reverification current inventory hashes match
+docs/acceptance_ra current inventory hashes match
+Manifest verified: 324 files; no unlisted entries
+All 57 preservation hashes match, including 27 new independent files and four frozen archives
+Prompt/handoff, setup disclosures, exact patches and frozen guard sidecar are included
+Runtime database and credential-extension exclusions: PASS
+Extracted-package command: make check
+python3 scripts/check.py
+PASS: Python syntax, JSON parsing, executable profile validation, workflow DAG/tool registration, DOM text rendering checks.
+No external linter/typechecker/JS compiler installed; these checks are not a claim of those tools passing.
+PASS: capability IDs named in implementation documentation exist in the registry.
+EXIT 0
+Extracted-package command: /Library/Developer/CommandLineTools/usr/bin/python3 -m unittest tests.test_acceptance_gate.AcceptanceGate.test_packager_refuses_to_overwrite_frozen_submission -v
+test_packager_refuses_to_overwrite_frozen_submission (tests.test_acceptance_gate.AcceptanceGate) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.113s
+
+OK
+EXIT 0
+Extracted-package command: /Library/Developer/CommandLineTools/usr/bin/python3 exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py . A10 X01 X12k X12s
+Fable RV acceptance probes | project root: accounting-ra-package-4zriil43 | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[A10] (RV-10) a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not
+    cosmetic re-proposal linked by supersedes: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    contributors without the supersedes link: ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    same cosmetic re-proposal with no supersedes link: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    version 1 had a different category: its author approves (should be allowed): ('ok', None)
+    identical receipt policy re-proposed by a colleague: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    -> OK
+
+[X01] (RV-01) a second supersession step does not release a charge that is still quarantined behind a locked origin
+    source exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    December A1Y (supersedes A1X, which supersedes locked A1): None | November A1: approve
+    heads now marked removed: ['demo_card_001:A1X', 'receipt-A1X'] | moves recorded: [('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1)]
+    -> OK
+
+[X12k] (RV-12) replacing a receipt under a new key is treated like revising it
+    receipt 39.99 against a 40.00 charge: ['RECEIPT_AMOUNT_POLICY_UNSET']
+    old receipt withdrawn, a new receipt key supplied at 40.00 -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    receipts relied on: [('receipt-A1-replacement', 1)] | revisions disclosed: [{'changed_fields': ['amount', 'content'], 'current': {'hash': 'b5dbd212d26eec3b1ce6b50dd25898850348fb78a4230bbeafa6bf4c49817f5f', 'snapshot_id': 10, 'source_key': 'receipt-A1-replacement', 'supplier': 'rv-preparer', 'version': 1}, 'earlier': {'hash': '5ae9fa6e335b78763c9506b47c3fae48f4ad226fcbb62a2d3075cab34c287ced', 'snapshot_id': 4, 'source_key': 'receipt-A1', 'supplier': 'rv-preparer', 'version': 1}, 'kind': 'replaced', 'source_key': 'receipt-A1-replacement', 'source_kind': 'receipt', 'supplier': 'rv-preparer'}, {'changed_fields': ['amount', 'content'], 'current': {'hash': 'b5dbd212d26eec3b1ce6b50dd25898850348fb78a4230bbeafa6bf4c49817f5f', 'snapshot_id': 10, 'source_key': 'receipt-A1-replacement', 'supplier': 'rv-preparer', 'version': 1}, 'earlier': {'hash': '5ae9fa6e335b78763c9506b47c3fae48f4ad226fcbb62a2d3075cab34c287ced', 'snapshot_id': 9, 'source_key': 'receipt-A1', 'supplier': 'rv-preparer', 'version': 2}, 'kind': 'replaced', 'source_key': 'receipt-A1-replacement', 'source_kind': 'receipt', 'supplier': 'rv-preparer'}]
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[X12s] (RV-12/RV-13) a statement re-supplied to agree with the population is disclosed as revised evidence
+    statement says purchases 90.00, population is 100.00: ['STATEMENT_CONTROL_MISMATCH']
+    preparer re-supplies the statement at 100.00 -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    statement version relied on: [('stmt-2026-11', 2)] | revisions disclosed on the item: [{'changed_fields': ['closing_balance', 'totals'], 'current': {'hash': '4efb075949c21456a83717c461fbb1e2b6dd9c7646ca66b78e0b44bbb76c9f7e', 'snapshot_id': 9, 'source_key': 'stmt-2026-11', 'supplier': 'rv-preparer', 'version': 2}, 'earlier': {'hash': '368e60584241b425c7b16c9205c92f50500c22a232148ebe3d36df1907a045cb', 'snapshot_id': 7, 'source_key': 'stmt-2026-11', 'supplier': 'rv-preparer', 'version': 1}, 'kind': 'revised', 'source_key': 'stmt-2026-11', 'source_kind': 'statement', 'supplier': 'rv-preparer'}] | workpaper fields: ['account_id', 'evidence', 'execution', 'external_reconciliation', 'line_identity', 'opening_continuity', 'statement_provenance', 'statement_revisions', 'unreconciled_population']
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+====================================================================================================
+A10   RV-10        OK     a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not
+X01   RV-01        OK     a second supersession step does not release a charge that is still quarantined behind a locked origin
+X12k  RV-12        OK     replacing a receipt under a new key is treated like revising it
+X12s  RV-12/RV-13  OK     a statement re-supplied to agree with the population is disclosed as revised evidence
+
+Verdict counts: {'OK': 4}
+Acceptance gate: PASS
+EXIT 0
+SHA256 dec028b06a745ba52ceca448c766893c33e863f98d5728aafd8b6edadb274e4f
+RA package verification: PASS

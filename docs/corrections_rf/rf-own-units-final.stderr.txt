@@ -1,0 +1,15 @@
+test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF02_historical_ancestor_selector_survives_descendant_retargeting (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF03_autocommit_always_recomputes_and_cache_is_local_to_one_call (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_changed_verdict_controls_even_with_matching_project_results (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_results_and_report_are_hash_pinned (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 87.544s
+
+OK

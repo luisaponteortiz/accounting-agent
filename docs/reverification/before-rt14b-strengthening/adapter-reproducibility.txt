@@ -1,0 +1,4 @@
+Adapted 3 positive mandate setups; positive duplicate evidence and revised-document acceptance; all original verdict/gate expressions preserved.
+EXIT 0
+review/fable_reverification_probes.py 477e1261cce99f5bf10bbc50530afc160d64c85438e9e28e913896b2500d54f1 identical to delivered copy
+docs/reverification/reverification-probe-adaptations.patch 8a1ebd44ca145e97c951034e263e354c5344f5a8fb993b958107840363731756 identical to delivered copy

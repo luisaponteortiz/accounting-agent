@@ -1,0 +1,7 @@
+make-test exit=0 cmd=make test
+make-check exit=0 cmd=make check
+make-batch2-gate exit=0 cmd=make batch2-gate
+make-reverification-gate exit=0 cmd=make reverification-gate
+make-acceptance-gate exit=0 cmd=make acceptance-gate
+original-full-acceptance exit=1 cmd=python3 exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py .
+original-full-reverification exit=1 cmd=python3 exports/FABLE_REVERIFICATION/fable_reverification_probes.py .

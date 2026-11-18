@@ -1,0 +1,61 @@
+{
+  "authority": "Derived exactly from five hash-pinned reviewer authorities in chronological order; latest verdict wins per record and the original seven-row order is enforced. Developer passes cannot amend verdicts.",
+  "results": [
+    {
+      "id": "AAOS-KNO-04",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
+      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
+      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+      "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+    },
+    {
+      "id": "AAOS-CTL-01",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
+      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
+      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+      "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+    },
+    {
+      "id": "AAOS-BNK-02",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
+      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
+      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+      "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+    },
+    {
+      "id": "AAOS-CTL-09",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
+      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
+      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+      "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+    },
+    {
+      "id": "AAOS-BNK-03",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
+      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
+      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+      "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+    },
+    {
+      "id": "AAOS-CTL-04",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
+      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
+      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+      "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+    },
+    {
+      "id": "AAOS-GOV-03",
+      "state": "Independently verified",
+      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
+      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
+      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+      "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+    }
+  ]
+}

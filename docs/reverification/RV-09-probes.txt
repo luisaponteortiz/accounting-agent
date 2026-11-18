@@ -1,0 +1,36 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RT14a] (T-14) dispositions: closed vocabulary, exact split, separate review, revocation, inert rule proposal, referral never clears
+    before: {'D1': ['POSSIBLE_DUPLICATE'], 'D2': ['POSSIBLE_DUPLICATE'], 'S1': ['SPLIT_REQUIRES_REVIEW'], 'F1': ['CURRENCY_MISMATCH']}
+    override a currency hold with a clearing choice: ('refused', 400, 'Unsupported disposition; this control cannot be overridden')
+    disposition by a reviewer without the grant: ('refused', 403, 'Human authority grant required: disposition')
+    split that does not sum to the charge: ('refused', 400, 'Allocation must sum exactly to charge')
+    disposition with no evidence: ('refused', 400, 'Current scoped evidence references required')
+    accepted dispositions: ['ok', 'ok', 'ok', 'ok'] | rule proposal via disposition: ('ok', 5)
+    after: {'D1': (True, [], [1]), 'D2': (True, [], [2]), 'S1': (True, [], [3]), 'F1': (False, ['CURRENCY_MISMATCH'], [4])}
+    split entry lines: [('DEMO_REPAIRS', '20.00', '0.00'), ('DEMO_OFFICE_SUPPLIES', '15.00', '0.00'), ('DEMO_CARD_LIABILITY', '0.00', '35.00')]
+    dispositioner approves the item they dispositioned: ('refused', 403, 'Independent human review required')
+    independent reviewer approves it (positive control): ('ok', None)
+    revoke the D2 disposition: ('ok', None)
+    D2 after revocation: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['POSSIBLE_DUPLICATE']}
+    -> OK
+
+[RT14b] (T-14) a distinct-purchases disposition does not cover a duplicate candidate that arrives afterwards
+    D1 after disposition: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    after a third identical charge arrives -> D1: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['POSSIBLE_DUPLICATE']} | candidates listed on D1: ['demo_card_001:D2', 'demo_card_001:D3'] | D3: ['POSSIBLE_DUPLICATE']
+    -> OK
+
+[RT14c] (T-14) after one of two charges is excluded as a duplicate, the surviving charge has a truthful path to approval
+    D2 dispositioned as duplicate_of D1: ('ok', 1)
+    excluded D2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['DUPLICATE_EXCLUDED']} | entry: None
+    surviving D1: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+    -> OK
+
+====================================================================================================
+RT14a  T-14       OK     dispositions: closed vocabulary, exact split, separate review, revocation, inert rule proposal, referral never clears
+RT14b  T-14       OK     a distinct-purchases disposition does not cover a duplicate candidate that arrives afterwards
+RT14c  T-14       OK     after one of two charges is excluded as a duplicate, the surviving charge has a truthful path to approval
+
+Verdict counts: {'OK': 3}
+Re-verification gate: PASS

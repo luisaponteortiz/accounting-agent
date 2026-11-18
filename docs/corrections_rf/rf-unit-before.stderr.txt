@@ -1,0 +1,410 @@
+test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) ... test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) ... test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) ... test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) ... FAIL
+
+======================================================================
+ERROR: test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) (phase='selected')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 121, in test_RF03_transaction_reuses_current_result_and_matches_full_computation
+    with patch.object(o,'outcome_run_current',side_effect=lambda db,actor,run,cache:original(db,actor,run)):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py", line 1405, in __enter__
+    original, local = self.get_original()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py", line 1378, in get_original
+    raise AttributeError(
+AttributeError: <accounting_agent.service.AccountingOS object at 0x10f119370> does not have the attribute 'outcome_run_current'
+
+======================================================================
+ERROR: test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) (phase='confirmed')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 121, in test_RF03_transaction_reuses_current_result_and_matches_full_computation
+    with patch.object(o,'outcome_run_current',side_effect=lambda db,actor,run,cache:original(db,actor,run)):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py", line 1405, in __enter__
+    original, local = self.get_original()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py", line 1378, in get_original
+    raise AttributeError(
+AttributeError: <accounting_agent.service.AccountingOS object at 0x10f119370> does not have the attribute 'outcome_run_current'
+
+======================================================================
+ERROR: test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) (phase='revised')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 121, in test_RF03_transaction_reuses_current_result_and_matches_full_computation
+    with patch.object(o,'outcome_run_current',side_effect=lambda db,actor,run,cache:original(db,actor,run)):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py", line 1405, in __enter__
+    original, local = self.get_original()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py", line 1378, in get_original
+    raise AttributeError(
+AttributeError: <accounting_agent.service.AccountingOS object at 0x10f119370> does not have the attribute 'outcome_run_current'
+
+======================================================================
+ERROR: test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) (phase='replacement')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 121, in test_RF03_transaction_reuses_current_result_and_matches_full_computation
+    with patch.object(o,'outcome_run_current',side_effect=lambda db,actor,run,cache:original(db,actor,run)):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py", line 1405, in __enter__
+    original, local = self.get_original()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py", line 1378, in get_original
+    raise AttributeError(
+AttributeError: <accounting_agent.service.AccountingOS object at 0x10f119370> does not have the attribute 'outcome_run_current'
+
+======================================================================
+ERROR: test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) (phase='locked')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 121, in test_RF03_transaction_reuses_current_result_and_matches_full_computation
+    with patch.object(o,'outcome_run_current',side_effect=lambda db,actor,run,cache:original(db,actor,run)):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py", line 1405, in __enter__
+    original, local = self.get_original()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py", line 1378, in get_original
+    raise AttributeError(
+AttributeError: <accounting_agent.service.AccountingOS object at 0x10f119370> does not have the attribute 'outcome_run_current'
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('target', 'head', 'old', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 78, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('target', 'old', 'head', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 78, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('head', 'target', 'old', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 78, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('head', 'old', 'target', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 78, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('head', 'old', 'claim', 'target'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 78, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('old', 'target', 'head', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 78, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('old', 'head', 'target', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 78, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('old', 'head', 'claim', 'target'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 78, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='none')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 61, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 61, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 51, in test_RF01_retained_message_matrix_and_repeated_claim
+    if replacement=='approved-before':self.approve(o,'Z')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 37, in approve
+    self.assertIsNotNone(a);self.assertTrue(a['eligible'],a['blockers']);self.assertTrue(p.approved(o,p.K(key),'2026-12'))
+AssertionError: 0 is not true : ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 61, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='approve-after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 61, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='none')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 61, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 61, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 51, in test_RF01_retained_message_matrix_and_repeated_claim
+    if replacement=='approved-before':self.approve(o,'Z')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 37, in approve
+    self.assertIsNotNone(a);self.assertTrue(a['eligible'],a['blockers']);self.assertTrue(p.approved(o,p.K(key),'2026-12'))
+AssertionError: 0 is not true : ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 61, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='approve-after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 61, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='none')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 55, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 55, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 51, in test_RF01_retained_message_matrix_and_repeated_claim
+    if replacement=='approved-before':self.approve(o,'Z')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 37, in approve
+    self.assertIsNotNone(a);self.assertTrue(a['eligible'],a['blockers']);self.assertTrue(p.approved(o,p.K(key),'2026-12'))
+AssertionError: 0 is not true : ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 55, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='approve-after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 55, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='none')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 55, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 55, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 51, in test_RF01_retained_message_matrix_and_repeated_claim
+    if replacement=='approved-before':self.approve(o,'Z')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 37, in approve
+    self.assertIsNotNone(a);self.assertTrue(a['eligible'],a['blockers']);self.assertTrue(p.approved(o,p.K(key),'2026-12'))
+AssertionError: 0 is not true : ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 55, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='approve-after')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 55, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=False, version='row')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 104, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=False, version='revision')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 104, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=False, version='replacement')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 104, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=True, version='row')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 104, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=True, version='revision')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 104, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=True, version='replacement')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 104, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) (phase='contested')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 120, in test_RF03_transaction_reuses_current_result_and_matches_full_computation
+    self.assertEqual(len(calls),len(set(calls)),calls)
+AssertionError: 2 != 1 : [2, 2]
+
+======================================================================
+FAIL: test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 134, in test_RF03_transaction_reuses_current_result_and_matches_full_computation
+    self.assertEqual(len(calls),len(set(calls)),calls)
+AssertionError: 13 != 2 : [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2]
+
+----------------------------------------------------------------------
+Ran 4 tests in 54.421s
+
+FAILED (failures=36, errors=5)

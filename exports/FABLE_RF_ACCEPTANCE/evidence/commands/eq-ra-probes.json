@@ -1,0 +1,1 @@
+{"label":"eq-ra-probes","cwd":"/private/tmp/claude-501/rf/dev","argv":"python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py","started_utc":"2026-11-17T02:08:56Z","elapsed_seconds":53,"exit_code":0}

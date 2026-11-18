@@ -1,0 +1,12 @@
+{
+  "python": "3.9.6",
+  "sqlite": "3.51.0",
+  "tests": 111,
+  "original_methods_retained": 41,
+  "reviewer": {
+    "PASS": 29,
+    "FIXED": 10,
+    "DEFERRED-OK": 21
+  },
+  "external_effects": "none"
+}

@@ -1,0 +1,25 @@
+test_current_register_has_split_states_and_all_backlog_tickets (tests.test_product_requirements.ProductRequirements) ... ok
+test_dependency_cycle_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_developer_tested_without_named_tests_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_duplicate_id_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_independent_verification_requires_review_and_checkpoint (tests.test_product_requirements.ProductRequirements) ... ok
+test_missing_backlog_ticket_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_missing_field_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_mixed_implementation_state_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_shared_criteria_cannot_impose_first_client_facts (tests.test_product_requirements.ProductRequirements) ... FAIL
+test_unknown_dependency_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+
+======================================================================
+FAIL: test_shared_criteria_cannot_impose_first_client_facts (tests.test_product_requirements.ProductRequirements)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 48, in test_shared_criteria_cannot_impose_first_client_facts
+    self.rejects(self.text.replace('- **Acceptance criteria:**','- **Acceptance criteria:** Bird Bowl-only policy; ',1),'client-specific fact')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 16, in rejects
+    with self.assertRaisesRegex(ValueError,message):validate_register(text,ROOT)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.229s
+
+FAILED (failures=1)

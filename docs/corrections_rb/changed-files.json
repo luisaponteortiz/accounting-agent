@@ -1,0 +1,464 @@
+{
+  "baseline": "Frozen combined review checkpoint: nested RA source with its separately reviewed documentation addendum and original reference material",
+  "baseline_sha256": "b154db10b8cee32066f089f0f878e7d2d3a3f33ca44e7831318f66faccaf61ea",
+  "notice": "Differences are relative to delivered checkpoint, not a claim about chronological creation of files omitted there. V2 adds the exact prompt/admin documentation only; source/test patch is byte-identical to the prior correction package. Generated inventory/patches exclude themselves and are covered by the package manifest.",
+  "scope": [
+    "accounting_agent/",
+    "tests/",
+    "scripts/",
+    "review/",
+    "docs/",
+    "ss_agent_system_handoff/",
+    "root Markdown files",
+    "Makefile",
+    ".gitignore"
+  ],
+  "excluded_generated_files": [
+    "docs/corrections_rb/changed-files.json",
+    "docs/corrections_rb/documentation.patch",
+    "docs/corrections_rb/source-and-tests.patch"
+  ],
+  "changes": [
+    {
+      "path": ".gitignore",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "273a76a500efdc0241aa0721f03b5925e8d0391615011969dfc244a18e3b3e71",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "AGENTS.md",
+      "status": "modified",
+      "before_sha256": "fc4abe81370fe0def9375d3c69f0a83ccf52de0caac656ed9e949b159761b14b",
+      "after_sha256": "64e3f44b570cfed82dc4c5dad40a7d73cfdc0a3e1ca6612c8111afbda5380f73",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "DECISIONS.md",
+      "status": "modified",
+      "before_sha256": "7d0edf86519a306e619b87afe7ce70f22f8c7b67f727d331b2ff921355d8554f",
+      "after_sha256": "f9b1d97d2c249245df27d37e3df2067a2128ad6a3746a53f5732d5793e860979",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "FABLE_ACCOUNTING_HANDOFF.md",
+      "status": "modified",
+      "before_sha256": "50ac593438e4e938d18fe9d3368f242bee1c2060a3bdc211209b4d7118447214",
+      "after_sha256": "7f8fb08a4b810184f28bec9571490a0f6a656fdf35252eb6c594e776c93856ef",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "FABLE_RB_CORRECTIONS_HANDOFF.md",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "34dafd57875344ecb6e633983388c6bed85c5ca0699335f559eb0c075a110a93",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "FABLE_RB_REVIEW_PROMPT.md",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "85d57d6c18bc492159909a9839f1384f40f2380f9c332b074593b6e3207c0808",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "Makefile",
+      "status": "modified",
+      "before_sha256": "82b3149a9cb749faa62081a7f0985eedc7bbaf3ad9cdfbc840703eb90cdf22ec",
+      "after_sha256": "9a0889625788acce67638de72a74f3a45ad06e137dff7fafa8dcfad28bdb0e89",
+      "kind": "source_or_test"
+    },
+    {
+      "path": "PROGRESS.md",
+      "status": "modified",
+      "before_sha256": "634feb525925a90c24c66f724897f7557675f1258a742b8f839b1271c599569e",
+      "after_sha256": "21503394490084dae286e9b61b8d770d2732216fff67a6569e96213bf6a3f57b",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "README.md",
+      "status": "modified",
+      "before_sha256": "075b6a27e9010f641882d1058a7e186976469136f2fa5f5ab9d72d631f618ce1",
+      "after_sha256": "996be207a1cedb2edd29c56f02f1b34610573f6fb083db404daa6b6a123876b6",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "REVIEW_FREEZE.md",
+      "status": "modified",
+      "before_sha256": "e8b1a62657c35e4ce8e7b42e9735db16660940d9be9a306aae07ea3cd15ccefb",
+      "after_sha256": "51fc946ac736d64c675074df1a0e75b06572ddd9e85cf68a081ad481c7f806c2",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "accounting_agent/controls.py",
+      "status": "modified",
+      "before_sha256": "d3a694532581c4440bf246572450e016e6b2f05e6bd3d31955c0720c17c94828",
+      "after_sha256": "9b1a876a08ab210d4df543719b714bf6d548d19880bcdf7c43a46615fb661ec2",
+      "kind": "source_or_test"
+    },
+    {
+      "path": "accounting_agent/modules.py",
+      "status": "modified",
+      "before_sha256": "7baa22574245d9d868245fbe8ddb77264cb591ce2d0a1bf5c7f3cb421b381b7c",
+      "after_sha256": "8e9316b1e2c7cecfd79c71ca99ccc2a132c3457ca584b31f34ef7194a8f0e8c9",
+      "kind": "source_or_test"
+    },
+    {
+      "path": "accounting_agent/service.py",
+      "status": "modified",
+      "before_sha256": "e12110da717a331d1cee348f6c400dbf06aaad5ba22eab64fb8454028a402a0f",
+      "after_sha256": "ae68bc5bb70d39fe45f41f324ce74b3f61174e3fb28ffb3c3478b6bbab3706b5",
+      "kind": "source_or_test"
+    },
+    {
+      "path": "accounting_agent/source_control.py",
+      "status": "modified",
+      "before_sha256": "d153bf21ca0607eefc99d115159723a97b0287891e85a7135f012727a63d0311",
+      "after_sha256": "599c4196e2ba2a52e5638a7163628862b159d51a4eabffc5edeca6e36ca61058",
+      "kind": "source_or_test"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "status": "modified",
+      "before_sha256": "4cab692c1cacb47ef9d3154a2a852be4dd92b44d9b5a71b076ff31385a2c9e52",
+      "after_sha256": "80ca9698432f6d779e8c8fc356ccff8ed634bd9f055c8f19239a159805268855",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/CAPABILITY_CONTRACTS.md",
+      "status": "modified",
+      "before_sha256": "79610f2be089b85c44865f0b3ee5ce615023f76195b0d5b8f74669b478cd85a4",
+      "after_sha256": "0bb5480e799a03d1d7678513611ac8d42714c0d8bb37e604a00d9648744b094c",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/CONNECTION_READINESS.md",
+      "status": "modified",
+      "before_sha256": "4362ab3ff417c4979c992528d9264b107ca1f27c86115fc15b1bcdc2f0dc09b6",
+      "after_sha256": "a4dc95bc54059da2d0bff76f4314ca033d870f1a29f55d9e0102bd2cf0cccfd2",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/PRODUCT_REQUIREMENTS.md",
+      "status": "modified",
+      "before_sha256": "34623afcfc7545a858cab853552c121150ec8014cdc86ba8523ef4adf21c50e2",
+      "after_sha256": "4b62c91bbee3cdfa2d3cdad899e238c1e201250cdfecf6cbe16fef7bac3b1f49",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/PR_DISPOSITION.md",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "01d15ff7d0a8f833739c805e79936803f62da9f37abf06c9ab27fe4c2b0bfcf8",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/RB-regressions.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "937d49eef1ec32f21c146c99724f0cb7c1e8ee4d0ca6cbdbe2b6d54bd7df9e9b",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/RB01-independent-probes.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "1abe05734225c785577cf437dc2fbb2e9ab75c0a5072921121fb4ee151d33f78",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/RB01-regressions-before.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "405fafaa1d42c2a7a652cd3c50a3fcbf6a504bc8e1c457c1ae4da1c01e0ca14d",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/RB01-regressions.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "93190b383b73aed1c4b399376ff1b7a1d717810a5aeeb6b13f1c2e4024107dfd",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/RB02-independent-probes.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "0b8aab4e128c9f50a9375668b82eab0b3c4c8eeda8fe3e8f9f91378d7e471aa7",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/RB02-regressions.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "ba8578fd5de9a56968dc4210579e4648c5650cc73c243d1d34a9d0db658f561c",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/RB03-independent-probes.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "3e36bbceb4879ebc64accc123b5bfaf436e9d4a98d08b28197a281f7212e090c",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/RB03-regressions.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "feed26ba09e116a2242d5e0047507c64c99ae58f912ff94142fdfad74be0c531",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/RB_CORRECTIONS_REPORT.md",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "7ca2ecd27f76a5b4a08926b6daf87b03610c9c1b5800bcc530b0cc3c40e00d1e",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/V2-packaging-check.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "9c68d9c1f86465d4ce24745304aba630fe1c7d7a517cdf1caf6e5ac84b3776c4",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/baseline-PR15.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "fd85e691b4cb336029d13e344570ecafe3b70415fe5727a035a324bc0b8d1dee",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/baseline-independent-exit.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/baseline-independent-probes.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "ffda2a31883ef5a93b4cba6db5c598c0ca7a756d30da7b02f7bdd2747f8ff729",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/execution-results.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "a2c9c0300cff15dd16903c60e6cc0688e26a2c4aadfa11490d44314ddacf6389",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/final-acceptance-gate.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "c4924ec542dd5f43ebdda26fa444e112802d27fda427fd3b826acfaa70ad2dea",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/final-batch2-gate.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "0f46b9eb540d64e2c66a87a13ec668468f7c2f7580121074255c80fa63b9d7b4",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/final-check-after-documentation.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "9c68d9c1f86465d4ce24745304aba630fe1c7d7a517cdf1caf6e5ac84b3776c4",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/final-check.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "9c68d9c1f86465d4ce24745304aba630fe1c7d7a517cdf1caf6e5ac84b3776c4",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/final-independent-probes.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "55d1c58a2f306acf678dd7a4c04d1532d8dea0bc739a8656ca774f73e253ad40",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/final-rb-gate.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "ee817222966c9e2846ad867d68f6ef9b11113b4e84eb0d281704ce72a4847f03",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/final-reverification-gate.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "797dc9912004abad2cf599890c1e7a5ab724294317a741d138e44206d8f0a0a4",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/final-tests.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "9bf39f191374a19737ecc756393cefa514310efc1ce8b845754911ecab9f4b7e",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/full-original-acceptance.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "a8480e9269a49766611f48b5be4defbda56ee91f0996f680cc71134ef86f17fb",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/full-original-reverification.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "484e09b627d5940fb1f5d7b7035b6e2ac7bc684e327f3cab882c77e9732fc1b9",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/full-tests-with-loopback.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "7f7287d843aeb5fb6b939890644bfc026942ffc85f04439e9aa3559855a06a3a",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/gate-exits.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "f882bb21d6a98faa56ef7efee1171a9a90e96ec6bfe88f810a3cf5e22008fe17",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/http-sandbox-check.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "e7a90d8fce2351e93be0ef3518416fdb839c0a3998617aab2c0a44b33341e93c",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/input-checksums.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "1fcbc114afd1a7495d9f96cc281122829baf824ee84d60bb2d3211a47f0654c8",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/method-retention.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "0af60092a8dab53cd99ccd45ed1bd85a4290df5bd16b372867562f11a578cc06",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/original-command-exits.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "18b9f5af859e5ed2fc93d539e3296b0d74445dfe081e8f73ad7bf8daa704e55f",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/prompt-bundle-addendum.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "03156028393090c2eec150a514a19bbb35e8ea15eec3657714b1cba72898409c",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/register-check.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "baa20cf4c59781755023f2649c1d1f2c0b4caec5126830dcdffa13d7a82cc59a",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/register-regressions.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "2440bc7f8ad84746bb7d405ff75507d985fcdc40fc04e13bcdbb51d878e6f2f4",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/targeted-tests.txt",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "a841c8c6a0bc0c2aac6dc99a155924ec617683c264b6cead9e54ef0e1a452075",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/test-exit.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "f2273b4c53ccde34c2314ec529d1557bdfc9730bc6d9cfdc601854fecd8add30",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/test-loopback-exit.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "ed637aaa4a361014c4c44cd58790e937252e7aa8ceecec9e81fa8c1818b180f1",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "docs/corrections_rb/validation-cases.json",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "9be33c3ca8d432beacd2eae4a48bd404dd89e81a7b441a2d1f775bcc248b97f5",
+      "kind": "documentation_or_evidence"
+    },
+    {
+      "path": "scripts/check.py",
+      "status": "modified",
+      "before_sha256": "13eee8c9aa9a47498467167c9be4503f1fc8917cf22e8e751928f94cd630d7c1",
+      "after_sha256": "a485f04a535349bf0f9196f80aa24d4f320323d316e57cd5d94c74971520831c",
+      "kind": "source_or_test"
+    },
+    {
+      "path": "scripts/check_product_requirements.py",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "fc805e7aa7667f0a3264e81c3476edea17c2a86ddd0aa683053785b95e3ed3c2",
+      "kind": "source_or_test"
+    },
+    {
+      "path": "tests/test_product_requirements.py",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "e68cc97b1abf7ed073c44a7f6ae51d061ac915a70f408dfa3d16dda6e38ebd5a",
+      "kind": "source_or_test"
+    },
+    {
+      "path": "tests/test_ra_review_gate.py",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "e186ed626ee9506f66574c32e40b64a4fff51311e9c83ff62c9b5f512f025ac0",
+      "kind": "source_or_test"
+    },
+    {
+      "path": "tests/test_review_corrections_rb.py",
+      "status": "added_relative_to_checkpoint",
+      "before_sha256": null,
+      "after_sha256": "c86371088262d0288112d5c316c26404739a2f98bed90c9caab2b1b48e2d363d",
+      "kind": "source_or_test"
+    }
+  ],
+  "source_or_test_changes": [
+    "Makefile",
+    "accounting_agent/controls.py",
+    "accounting_agent/modules.py",
+    "accounting_agent/service.py",
+    "accounting_agent/source_control.py",
+    "scripts/check.py",
+    "scripts/check_product_requirements.py",
+    "tests/test_product_requirements.py",
+    "tests/test_ra_review_gate.py",
+    "tests/test_review_corrections_rb.py"
+  ],
+  "unchanged_tracked_files": 268,
+  "fixtures_config_and_original_reference_package_unchanged": true
+}

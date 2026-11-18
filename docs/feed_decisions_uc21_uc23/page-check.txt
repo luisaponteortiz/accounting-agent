@@ -1,0 +1,11 @@
+{
+ "parses": true,
+ "no_anomaly_key": [],
+ "state_without_the_new_key": [
+  "card:A · UNASSIGNED_ACCOUNTING_PERIOD · period not configured"
+ ],
+ "with_anomaly": [
+  "card:A · SOURCE_MOVED_FROM_LOCKED_PERIOD · 2026-11",
+  "card:Q · SOURCE_ORDER_MIXED · A message with no order value was kept as evidence; it does not govern this row."
+ ]
+}

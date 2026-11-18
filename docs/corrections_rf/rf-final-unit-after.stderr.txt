@@ -1,0 +1,25 @@
+test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) ... test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF03_autocommit_always_recomputes_and_cache_is_local_to_one_call (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) ... ok
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 57, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.assertFalse(p.approved(o,p.K('Z'),'2026-12'))
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 57, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.assertFalse(p.approved(o,p.K('Z'),'2026-12'))
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 5 tests in 61.823s
+
+FAILED (failures=2)

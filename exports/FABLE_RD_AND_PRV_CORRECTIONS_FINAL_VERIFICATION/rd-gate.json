@@ -1,0 +1,10 @@
+{
+  "command": [
+    "make",
+    "rd-gate"
+  ],
+  "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-rd-final-0dvvxhvz/project",
+  "started_utc": "2026-11-16T16:34:44.256882+00:00",
+  "elapsed_seconds": 120.937,
+  "exit_code": 0
+}

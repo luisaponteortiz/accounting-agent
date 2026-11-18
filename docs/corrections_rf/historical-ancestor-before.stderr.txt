@@ -1,0 +1,17 @@
+test_RF02_historical_ancestor_selector_survives_descendant_retargeting (tests.test_review_corrections_rf.RFCorrections) ... FAIL
+
+======================================================================
+FAIL: test_RF02_historical_ancestor_selector_survives_descendant_retargeting (tests.test_review_corrections_rf.RFCorrections)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 165, in test_RF02_historical_ancestor_selector_survives_descendant_retargeting
+    self.assertEqual(p.review(o,p.DR,a,'approve')[0],'refused')
+AssertionError: 'ok' != 'refused'
+- ok
++ refused
+
+
+----------------------------------------------------------------------
+Ran 1 test in 1.996s
+
+FAILED (failures=1)

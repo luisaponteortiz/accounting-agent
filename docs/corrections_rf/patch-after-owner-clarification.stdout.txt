@@ -1,0 +1,48 @@
+patching file Makefile
+patching file 'accounting_agent/feed_contract.py'
+patching file 'accounting_agent/packages.py'
+patching file 'accounting_agent/service.py'
+patching file 'scripts/build_rf_review_bundle.py'
+patching file 'scripts/check_product_requirements.py'
+patching file 'scripts/verify_re_acceptance_review.py'
+patching file 'scripts/verify_rf_patch.py'
+patching file 'scripts/verify_rf_preservation.py'
+patching file 'tests/test_product_requirements.py'
+patching file 'tests/test_product_requirements_rf.py'
+patching file 'tests/test_review_corrections_rf.py'
+patching file 'tests/test_rf_review_gate.py'
+patching file Makefile
+patching file 'accounting_agent/feed_contract.py'
+patching file 'accounting_agent/packages.py'
+patching file 'accounting_agent/service.py'
+patching file 'scripts/build_rf_review_bundle.py'
+patching file 'scripts/check_product_requirements.py'
+patching file 'scripts/verify_re_acceptance_review.py'
+patching file 'scripts/verify_rf_patch.py'
+patching file 'scripts/verify_rf_preservation.py'
+patching file 'tests/test_product_requirements.py'
+patching file 'tests/test_product_requirements_rf.py'
+patching file 'tests/test_review_corrections_rf.py'
+patching file 'tests/test_rf_review_gate.py'
+{
+  "patch_sha256": "7bde57fe3038274cb1b195caa4c1c62d2bf995bdfbbc722a3a2f13c23da2f47b",
+  "dry_run_exit": 0,
+  "apply_exit": 0,
+  "all_changed_code_test_gate_adapter_files_reproduced_exactly": true,
+  "count": 13,
+  "files": [
+    "Makefile",
+    "accounting_agent/feed_contract.py",
+    "accounting_agent/packages.py",
+    "accounting_agent/service.py",
+    "scripts/build_rf_review_bundle.py",
+    "scripts/check_product_requirements.py",
+    "scripts/verify_re_acceptance_review.py",
+    "scripts/verify_rf_patch.py",
+    "scripts/verify_rf_preservation.py",
+    "tests/test_product_requirements.py",
+    "tests/test_product_requirements_rf.py",
+    "tests/test_review_corrections_rf.py",
+    "tests/test_rf_review_gate.py"
+  ]
+}

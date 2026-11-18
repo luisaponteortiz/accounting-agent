@@ -1,0 +1,8 @@
+# Implementation decisions
+
+- **D-001 — Product scope (November 14, 2026):** General Accounting Agent OS for the full accounting cycle. Bird Bowl is a client implementation; card preparation is the first test workflow. The user's correction supersedes any card-only product framing. No unrelated SS business-development agents.
+- **D-002 — Local execution stack:** Python standard library, SQLite, static HTML/JS for this executable slice. Observed Python 3.9.6; Node, Docker, uv and proposed Python libraries unavailable. Avoid a dependency-installation prerequisite while producing testable software. Material deviation from default stack is explicit; no PostgreSQL/production claims. M0–M5 as a whole are not complete.
+- **D-003 — Modules:** generic workflow runner and capability registry first; demonstrate card preparation, journal validation and close readiness. AP/AR/reconciliations/reporting/analysis remain explicit deferred modules.
+- **D-004 — Client facts:** unconfigured real Bird Bowl profile and a distinct fictional demo profile. No actual chart/mappings/receipt policies asserted. Demo policy may authorize internal synthetic preparation only.
+- **D-005 — Conservative review:** immutable artifacts, separate independent human demo decisions, current-generation checks; any client input/config revision invalidates prior approvals. Review only authorizes reviewed preparation export, never posting or close.
+- **D-006 — Autonomy:** scoped synthetic mandates, deduplicated simulated recurring events and durable background worker. No live schedules, credentials, network/model calls, deployments or ledger writes.

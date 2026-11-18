@@ -1,0 +1,9 @@
+{
+  "make test": 0,
+  "make check": 0,
+  "make batch2-gate": 0,
+  "make reverification-gate": 0,
+  "make acceptance-gate": 0,
+  "python3 exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py .": 1,
+  "python3 exports/FABLE_REVERIFICATION/fable_reverification_probes.py .": 1
+}

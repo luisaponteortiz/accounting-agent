@@ -1,0 +1,1 @@
+{"label":"rd-register-faults-H","cwd":"/private/tmp/claude-501/rf/run5","argv":"python3 exports/FABLE_RD_ACCEPTANCE/evidence/scripts/fable_rd_register_faults.py /private/tmp/claude-501/rf/run5","started_utc":"2026-11-17T01:52:44Z","elapsed_seconds":22,"exit_code":1}

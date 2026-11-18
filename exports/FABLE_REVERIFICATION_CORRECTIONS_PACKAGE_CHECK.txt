@@ -1,0 +1,8 @@
+/Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_REVERIFICATION_CORRECTIONS_REVIEW_BUNDLE.zip
+Verified 243 source/evidence files
+Prompt-only revision; inventories and patches refreshed.
+Gate-tested application, tests, reviewer scripts and execution evidence unchanged.
+All 29 independent input/archive hashes and all 243 manifest entries match.
+Saved prompt exactly matches bundled prompt.
+SHA256 247c1cfd31a2128573b5ae29d633c0d9e74bb076a38a5fc3d9844b6748cc1c75
+Bundle verification: PASS

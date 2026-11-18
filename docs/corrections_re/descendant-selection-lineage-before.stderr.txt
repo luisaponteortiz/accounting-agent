@@ -1,0 +1,14 @@
+test_target_selector_cannot_review_a_descendant_using_their_selection (tests.test_feed_contract.FeedContract) ... FAIL
+
+======================================================================
+FAIL: test_target_selector_cannot_review_a_descendant_using_their_selection (tests.test_feed_contract.FeedContract)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_feed_contract.py", line 217, in test_target_selector_cannot_review_a_descendant_using_their_selection
+    self.assertIn(rid,a['payload']['data']['disposition_ids'])
+AssertionError: 1 not found in [2]
+
+----------------------------------------------------------------------
+Ran 1 test in 0.978s
+
+FAILED (failures=1)

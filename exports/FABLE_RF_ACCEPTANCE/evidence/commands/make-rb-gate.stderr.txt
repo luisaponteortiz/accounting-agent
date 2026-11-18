@@ -1,0 +1,8 @@
+test_all_14_unmodified_independent_probes_report_OK (tests.test_ra_review_gate.RAReviewGate) ... ok
+test_combined_frozen_submission_cannot_be_overwritten (tests.test_ra_review_gate.RAReviewGate) ... ok
+test_returned_inputs_and_submitted_archives_remain_unchanged (tests.test_ra_review_gate.RAReviewGate) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 15.672s
+
+OK

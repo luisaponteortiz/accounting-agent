@@ -1,0 +1,14 @@
+[
+  {
+    "command": "/Library/Developer/CommandLineTools/usr/bin/python3 exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py .",
+    "exit": 1,
+    "log": "docs/corrections_rb/full-original-acceptance.txt",
+    "elapsed_seconds": 24.41
+  },
+  {
+    "command": "/Library/Developer/CommandLineTools/usr/bin/python3 exports/FABLE_REVERIFICATION/fable_reverification_probes.py .",
+    "exit": 1,
+    "log": "docs/corrections_rb/full-original-reverification.txt",
+    "elapsed_seconds": 19.68
+  }
+]

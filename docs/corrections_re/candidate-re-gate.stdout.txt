@@ -1,0 +1,606 @@
+python3 scripts/verify_rd_feed_review.py
+
+=== Y01 [RD-01] unchanged row re-sent with a claim on an unknown target: recorded once, both blockers before the target, held after; eligible and approved
+    assert [eligible] A1Y is eligible in December before any claim                        yes
+    [eligible] A1Y re-sent unchanged with supersedes=A1X (not received): ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    [eligible] row deltas after the claim: {'source_snapshots': 1, 'batch_snapshots': 1, 'bindings': 1, 'moves': 0, 'links': 0, 'events': 2, 'decisions': 0, 'heads': 0, 'artifacts': 0, 'packages': 0, 'audit': 3}
+    assert [eligible] the intake answers changed=True                                     yes
+    assert [eligible] exactly one new source version                                      yes
+    assert [eligible] exactly one SOURCE_SUPERSESSION_UNRESOLVED event for A1Y            yes
+    assert [eligible] no link yet                                                         yes
+    assert [eligible] earlier snapshots, decisions, artifacts, audit rows are an unchanged prefix yes
+    [eligible] governing A1Y straight after the claim (no new run): {'id': 7, 'eligible': True, 'status': 'stale', 'blockers': []}
+    [eligible] A1Y after re-preparing, target still unknown: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    assert [eligible] both transition blockers before the target arrives                  yes
+    assert [eligible] A1Y is not eligible and not approved                                yes
+    [eligible] independent approval attempt while unresolved: ('refused', 409, 'Unresolved controls block approval')
+    assert [eligible] approval refused while unresolved                                   yes
+    [eligible] settlement_verified attempt while unresolved: ('ok', 1)
+    assert [eligible] the unresolved blocker cannot be cleared by a disposition           yes
+    [eligible] finalize December while unresolved: ('refused', 409, 'Unreviewed/carried exceptions require acknowledgement')
+    assert [eligible] December cannot be finalized while unresolved                       yes
+    [eligible] after A1X: held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] links=[('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    assert [eligible] December has no governing artifact for A1Y                          yes
+    assert [eligible] A1Y and its receipt are held under November as MOVED                yes
+    assert [eligible] A1X and its receipt are held under November as MOVED                yes
+    assert [eligible] A1 is still approved and governing in November                      yes
+    assert [eligible] links are A1->A1X and A1X->A1Y                                      yes
+    assert [eligible] no earlier snapshot, decision, artifact, event or audit row rewritten yes
+    assert [eligible] audit chain verifies                                                yes
+    [eligible] finalize December after the hold: ('refused', 409, 'Package control remains open')
+    assert [eligible] not approved in both periods                                        yes
+    assert [approved before] A1Y is eligible in December before any claim                 yes
+    [approved before] A1Y approved in December: ('ok', None)
+    assert [approved before] A1Y approved and governing before the claim                  yes
+    [approved before] A1Y re-sent unchanged with supersedes=A1X (not received): ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    [approved before] row deltas after the claim: {'source_snapshots': 1, 'batch_snapshots': 1, 'bindings': 1, 'moves': 0, 'links': 0, 'events': 2, 'decisions': 0, 'heads': 0, 'artifacts': 0, 'packages': 0, 'audit': 3}
+    assert [approved before] the intake answers changed=True                              yes
+    assert [approved before] exactly one new source version                               yes
+    assert [approved before] exactly one SOURCE_SUPERSESSION_UNRESOLVED event for A1Y     yes
+    assert [approved before] no link yet                                                  yes
+    assert [approved before] earlier snapshots, decisions, artifacts, audit rows are an unchanged prefix yes
+    [approved before] governing A1Y straight after the claim (no new run): {'id': 7, 'eligible': True, 'status': 'stale', 'blockers': []}
+    assert [approved before] the earlier approval no longer governs, even before a new run yes
+    [approved before] finalize December before re-preparing: ('refused', 409, 'Stale/disputed items cannot be finalized')
+    assert [approved before] December cannot be finalized on the earlier approval         yes
+    [approved before] A1Y after re-preparing, target still unknown: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    assert [approved before] both transition blockers before the target arrives           yes
+    assert [approved before] A1Y is not eligible and not approved                         yes
+    [approved before] independent approval attempt while unresolved: ('refused', 409, 'Unresolved controls block approval')
+    assert [approved before] approval refused while unresolved                            yes
+    [approved before] settlement_verified attempt while unresolved: ('ok', 1)
+    assert [approved before] the unresolved blocker cannot be cleared by a disposition    yes
+    [approved before] finalize December while unresolved: ('refused', 409, 'Unreviewed/carried exceptions require acknowledgement')
+    assert [approved before] December cannot be finalized while unresolved                yes
+    [approved before] after A1X: held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] links=[('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    assert [approved before] December has no governing artifact for A1Y                   yes
+    assert [approved before] A1Y and its receipt are held under November as MOVED         yes
+    assert [approved before] A1X and its receipt are held under November as MOVED         yes
+    assert [approved before] A1 is still approved and governing in November               yes
+    assert [approved before] links are A1->A1X and A1X->A1Y                               yes
+    [approved before] approved-source events naming the December approval: [('APPROVED_SOURCE_REVISED', '2026-12', 'demo_card_001:A1Y')]
+    assert [approved before] an approved-source event names the former December approval  yes
+    assert [approved before] ITEM_LEFT_POPULATION recorded for A1Y                        yes
+    assert [approved before] the approval decision remains (1)                            yes
+    assert [approved before] no earlier snapshot, decision, artifact, event or audit row rewritten yes
+    assert [approved before] audit chain verifies                                         yes
+    [approved before] finalize December after the hold: ('refused', 409, 'Package control remains open')
+    assert [approved before] not approved in both periods                                 yes
+--- Y01: OK
+
+=== Y02 [RD-01] the same unresolved claim repeated twice in new envelopes, then an exact packet replay
+    assert first claim: changed=True                                                      yes
+    repeat y-claim-2 -> {'changed': False, 'generation': 4, 'replay': False} ; deltas {'source_snapshots': 0, 'batch_snapshots': 1, 'bindings': 0, 'moves': 0, 'links': 0, 'events': 0, 'decisions': 0, 'heads': 0, 'artifacts': 0, 'packages': 0, 'audit': 1}
+    assert y-claim-2: changed=False and not a replay                                      yes
+    assert y-claim-2: no source snapshot, binding, move, link, decision or accounting event added yes
+    assert y-claim-2: only the batch envelope (1) and its intake audit row are added      yes
+    audit rows added by y-claim-2: 1
+    repeat y-claim-3 -> {'changed': False, 'generation': 4, 'replay': False} ; deltas {'source_snapshots': 0, 'batch_snapshots': 1, 'bindings': 0, 'moves': 0, 'links': 0, 'events': 0, 'decisions': 0, 'heads': 0, 'artifacts': 0, 'packages': 0, 'audit': 1}
+    assert y-claim-3: changed=False and not a replay                                      yes
+    assert y-claim-3: no source snapshot, binding, move, link, decision or accounting event added yes
+    assert y-claim-3: only the batch envelope (1) and its intake audit row are added      yes
+    audit rows added by y-claim-3: 1
+    assert the governing December artifact is unchanged by the repeats (still blocked, still governing) yes
+    exact replay -> {'changed': False, 'generation': 4, 'replay': True}
+    assert exact packet replay: replay=True, changed=False                                yes
+    assert exact packet replay adds no snapshot of any kind and no lifecycle row          yes
+    assert exactly one unresolved event in total                                          yes
+--- Y02: OK
+
+=== Y03 [RD-02] claimant revised (amount) with and without the claim, service restarted, target arrives
+    [claim repeated=False] revised A1Y: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    assert [claim repeated=False] the revised version still carries both transition blockers yes
+    assert [claim repeated=False] unresolved events for A1Y: 1                            yes
+    [claim repeated=False] revised_evidence_accepted: ('ok', 1)
+    assert [claim repeated=False] accepting the revised evidence does not release the unresolved hold yes
+    assert [claim repeated=False] after a restart the hold is still shown                 yes
+    [claim repeated=False] after A1X: held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] links=[('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    assert [claim repeated=False] A1Y and its receipt held under November                 yes
+    assert [claim repeated=False] the link is on the CURRENT head of A1Y                  yes
+    assert [claim repeated=False] not approved in both periods                            yes
+    [claim repeated=True] revised A1Y: {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW', 'SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    assert [claim repeated=True] the revised version still carries both transition blockers yes
+    assert [claim repeated=True] unresolved events for A1Y: 2                             yes
+    [claim repeated=True] revised_evidence_accepted: ('ok', 1)
+    assert [claim repeated=True] accepting the revised evidence does not release the unresolved hold yes
+    assert [claim repeated=True] after a restart the hold is still shown                  yes
+    [claim repeated=True] after A1X: held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] links=[('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    assert [claim repeated=True] A1Y and its receipt held under November                  yes
+    assert [claim repeated=True] the link is on the CURRENT head of A1Y                   yes
+    assert [claim repeated=True] not approved in both periods                             yes
+--- Y03: OK
+
+=== Y04 [RD-02] claimant retired by its own replacement and re-sent without the claim: orders Yc Z Yp X and Z Yc Yp X
+    [Yc Z Yp X] after Yc: removed flags {'A1Y': 0}, unresolved events for A1Y: 1
+    [Yc Z Yp X] after Z: removed flags {'A1Y': 1, 'A1Z': 0}, unresolved events for A1Y: 1
+    [Yc Z Yp X] after Yp: removed flags {'A1Y': 1, 'A1Z': 0}, unresolved events for A1Y: 1
+    [Yc Z Yp X] before A1X: A1Z {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | A1Y None
+    assert [Yc Z Yp X] before the target: no member of the chain is eligible without a transition blocker yes
+    assert [Yc Z Yp X] before the target: A1Y, if in the population, shows the unresolved hold yes
+    [Yc Z Yp X] after A1X: held=['demo_card_001:A1X', 'demo_card_001:A1Z', 'receipt-A1X', 'receipt-A1Z'] links=[('demo_card_001:A1Y', 'demo_card_001:A1Z'), ('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    assert [Yc Z Yp X] the claim resolved onto A1Y (link A1X->A1Y exists)                 yes
+    assert [Yc Z Yp X] A1Z and its receipt held under November                            yes
+    assert [Yc Z Yp X] no chain member approved in December ([])                          yes
+    assert [Yc Z Yp X] audit chain verifies                                               yes
+    [Z Yc Yp X] after Z: removed flags {'A1Z': 0}, unresolved events for A1Y: 0
+    [Z Yc Yp X] after Yc: removed flags {'A1Z': 0, 'A1Y': 1}, unresolved events for A1Y: 1
+    [Z Yc Yp X] after Yp: removed flags {'A1Z': 0, 'A1Y': 1}, unresolved events for A1Y: 1
+    [Z Yc Yp X] before A1X: A1Z {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | A1Y None
+    assert [Z Yc Yp X] before the target: no member of the chain is eligible without a transition blocker yes
+    assert [Z Yc Yp X] before the target: A1Y, if in the population, shows the unresolved hold yes
+    [Z Yc Yp X] after A1X: held=['demo_card_001:A1X', 'demo_card_001:A1Z', 'receipt-A1X', 'receipt-A1Z'] links=[('demo_card_001:A1Y', 'demo_card_001:A1Z'), ('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')]
+    assert [Z Yc Yp X] the claim resolved onto A1Y (link A1X->A1Y exists)                 yes
+    assert [Z Yc Yp X] A1Z and its receipt held under November                            yes
+    assert [Z Yc Yp X] no chain member approved in December ([])                          yes
+    assert [Z Yc Yp X] audit chain verifies                                               yes
+--- Y04: OK
+
+=== Y06 [RD-01] finalized packages: November finalized and locked, December finalized with A1Y approved, then the late claim and its target
+    finalize November: ('ok', 1)
+    A1Y approved in December: ('ok', None)
+    finalize December: ('ok', 2)
+    assert both packages finalized before the claim                                       yes
+    after the claim: changed=True | package rows 2 -> 2 | POST_FINALIZATION_CHANGE (period, item): [('2026-12', 'package:2')]
+    assert the claim is recorded (changed=True, one unresolved event)                     yes
+    assert no package row is rewritten or added by the claim                              yes
+    assert a POST_FINALIZATION_CHANGE event is recorded for December before the target arrives yes
+    assert no POST_FINALIZATION_CHANGE event for locked November from the claim           yes
+    assert the December approval no longer governs                                        yes
+    after A1X: held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] | POST_FINALIZATION_CHANGE: [('2026-12', 'package:2'), ('2026-11', 'package:1'), ('2026-12', 'package:2')]
+    assert A1Y and its receipt are held under November                                    yes
+    assert A1 still approved and governing in November                                    yes
+    assert no package, snapshot, decision, artifact, event or audit row rewritten         yes
+    assert audit chain verifies                                                           yes
+    packages in export: [(1, '2026-11', None), (2, '2026-12', None)]
+--- Y06: OK
+
+=== E01 [RD-01] the unchanged row that receives the late claim sits in a LOCKED period (A1 itself claims an unknown row)
+    A1 re-sent unchanged with supersedes=A0 (not received): ('ok', {'changed': True, 'generation': 3, 'replay': False})
+    deltas: {'source_snapshots': 1, 'batch_snapshots': 1, 'bindings': 1, 'moves': 0, 'links': 0, 'events': 2, 'decisions': 0, 'heads': 0, 'artifacts': 0, 'packages': 0, 'audit': 4}
+    November A1 before: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []} | after: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []}
+    exceptions: [('demo_card_001:A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD')]
+    events: [('SOURCE_CLAIM_DECLARED', None, 'demo_card_001:A1'), ('SOURCE_SUPERSESSION_UNRESOLVED', None, 'demo_card_001:A1')]
+    A1 still approved and governing in locked November: True
+--- E01: OK
+
+=== E02 [RD-01] an identity that already has a link declares a second claim on an unknown row, repeatedly
+    repeat 0 -> {'changed': True, 'generation': 5, 'replay': False} ; deltas {'batch_snapshots': 1, 'events': 1, 'audit': 2}
+    repeat 1 -> {'changed': False, 'generation': 5, 'replay': False} ; deltas {'batch_snapshots': 1, 'audit': 1}
+    repeat 2 -> {'changed': False, 'generation': 5, 'replay': False} ; deltas {'batch_snapshots': 1, 'audit': 1}
+    A1Y in December: None | held: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] | unresolved events for A1Y: 0
+    after A1W arrives: links=[('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')] held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y']
+    repeats after the first are lifecycle no-ops: True
+    A1Y still held under November: True
+--- E02: OK
+
+=== E03 [RD-01] the claim arrives in a message ORDERED BEFORE the governing version (provider sequence), delivered late
+    [unknown-target] A1Y sequence 4 (older) delivered late with supersedes=A1X (not received): ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    [unknown-target] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1'), ('SOURCE_SUPERSESSION_UNRESOLVED', None, 'demo_card_001:A1Y')]
+    [unknown-target] links: [('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')] | held: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] | A1Y: None
+    [unknown-target] approved in both periods: False
+    [known-target] A1Y sequence 4 (older) delivered late with supersedes=A1: ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    [known-target] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')]
+    [known-target] links: [('demo_card_001:A1', 'demo_card_001:A1Y')] | held: ['demo_card_001:A1Y', 'receipt-A1Y'] | A1Y: None
+    [known-target] approved in both periods: False
+--- E03: OK
+
+=== E04 [RD-02] the claimant is withdrawn by the feed (tombstone) while its claim is unresolved, then re-sent plain; target arrives last
+    [re-sent=True] links=[('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')] held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] A1Y=None
+    [re-sent=True] approved in both periods: False
+    [re-sent=False] links=[('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')] held=['demo_card_001:A1X', 'receipt-A1X'] A1Y=None
+    [re-sent=False] approved in both periods: False
+--- E04: OK
+
+=== E05 [RD-01] the late claim on an unchanged row is declared on the RECEIPT-free path twice with a different target in between (A1X, A1W, A1X)
+    claim on A1X -> changed=True, unresolved events=1
+    claim on A1W -> changed=True, unresolved events=1
+    claim on A1X -> changed=False, unresolved events=1
+    after A1W (the superseded target) arrives: links=[]
+    after A1X arrives: links=[('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')] held=['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y']
+    approved in both periods: False
+--- E05: OK
+
+=== E03c [RD-01] control for E03: the same two messages delivered in provider order (sequence 4 with the claim, then sequence 5)
+    [unknown-target] links: [('demo_card_001:A1', 'demo_card_001:A1X'), ('demo_card_001:A1X', 'demo_card_001:A1Y')] | held: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'receipt-A1X', 'receipt-A1Y'] | A1Y: None
+    [unknown-target] approved in both periods or not held: False
+    [known-target] links: [('demo_card_001:A1', 'demo_card_001:A1Y')] | held: ['demo_card_001:A1Y', 'receipt-A1Y'] | A1Y: None
+    [known-target] approved in both periods or not held: False
+--- E03c: OK
+
+=== E06 [RD-02] an identity already linked to an open December row later declares a claim on an unknown row that turns out to replace locked A1
+    [claim-before-target] claim intake {'changed': True, 'generation': 5, 'replay': False} | links=[('demo_card_001:B9', 'demo_card_001:A1Y'), ('demo_card_001:A1', 'demo_card_001:A1X')] | held=['demo_card_001:A1X', 'receipt-A1X'] | A1Y={'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_CLAIM_CONFLICT', 'SOURCE_TRANSITION_REQUIRES_REVIEW']} | unresolved events=0
+    settlement_verified on demo_card_001:A1Y: ('ok', 1)
+    independent approval of demo_card_001:A1Y: ('refused', 409, 'Unresolved controls block approval')
+    [claim-before-target] A1 approved in November and A1Y approved in December: False
+    [target-before-claim] claim intake {'changed': True, 'generation': 6, 'replay': False} | links=[('demo_card_001:B9', 'demo_card_001:A1Y'), ('demo_card_001:A1', 'demo_card_001:A1X')] | held=['demo_card_001:A1X', 'receipt-A1X'] | A1Y={'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_CLAIM_CONFLICT', 'SOURCE_TRANSITION_REQUIRES_REVIEW']} | unresolved events=0
+    settlement_verified on demo_card_001:A1Y: ('ok', 1)
+    independent approval of demo_card_001:A1Y: ('refused', 409, 'Unresolved controls block approval')
+    [target-before-claim] A1 approved in November and A1Y approved in December: False
+    outcome depends on arrival order: False
+--- E06: OK
+
+SUMMARY
+  Y01   RD-01    OK
+  Y02   RD-01    OK
+  Y03   RD-02    OK
+  Y04   RD-02    OK
+  Y06   RD-01    OK
+  E01   RD-01    OK
+  E02   RD-01    OK
+  E03   RD-01    OK
+  E04   RD-02    OK
+  E05   RD-01    OK
+  E03c  RD-01    OK
+  E06   RD-02    OK
+  totals: {'OK': 12, 'NOTE': 0, 'WEAK': 0, 'ERROR': 0}
+
+=== Y05 [RD-02] most recent target wins; open target; cycle refusal; already linked identity; unrelated intake
+    assert (a) the second target is recorded once and changes the control state           yes
+    assert (a) the second claim changes no binding, move or link                          yes
+    assert (a) the first claim still links when its target arrives                        yes
+    assert (a) the contested target is not applied and the row stays blocked in December  yes
+    (b) A1Y {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW']} | B9 None | links [('demo_card_001:B9', 'demo_card_001:A1Y')] | held []
+    assert (b) open target: linked, the target is retired, the claimant stays in December with a review blocker and no hold yes
+    (c) A1X arrives claiming A1Y, which claims A1X: ('ok', {'changed': True, 'generation': 4, 'replay': False})
+    (c) links=[('demo_card_001:A1Y', 'demo_card_001:A1X')]
+    assert (c) at most one direction is linked                                            yes
+    (c) A1Y repeats its claim on A1X: ('refused', 400, 'Supersession cycle is not permitted')
+    assert (c) the closing claim is refused or ignored; still at most one link            yes
+    assert (d) unrelated intake adds no link, move or chain binding                       yes
+    assert (d) a second unrelated intake adds no chain event (3) and no chain binding (6) yes
+    (e) reopen November: ('ok', None)
+    (e) relock November: ('refused', 409, 'Unsettled preparation requires explicit acknowledgement')
+    (e) relock November with acknowledgement: ('ok', None)
+    assert (e) November is locked again                                                   yes
+    (e) held after relock: []
+    assert (e) after release and relock, unrelated intake adds no link, move or chain binding yes
+--- Y05: OK
+
+SUMMARY
+  Y05   RD-02    OK
+  totals: {'OK': 1, 'NOTE': 0, 'WEAK': 0, 'ERROR': 0}
+X+Yp+Yc+Yr+Z X Yp Yc Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yp Yc Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yp Yr Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yp Yr Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yp Z Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yp Z Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Yp Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Yp Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Yr Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Yr Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Z Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yc Z Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Yp Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Yp Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Yc Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Yc Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Z Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Yr Z Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yp Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yp Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yc Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yc Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yr Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z X Z Yr Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Yc Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Yc Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Yr Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Yr Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Z Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp X Z Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc X Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc X Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc Yr X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc Yr Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc Z X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yc Z Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr X Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr X Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr Yc X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr Yc Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr Z X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Yr Z Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z X Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z X Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z Yc X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z Yc Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z Yr X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yp Z Yr Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Yp Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Yp Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Yr Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Yr Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Z Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc X Z Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp X Yr Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp X Z Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp Yr X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp Yr Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp Z X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yp Z Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr X Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr X Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr Yp X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr Yp Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr Z X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Yr Z Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z X Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z X Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z Yp X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z Yp Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z Yr X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yc Z Yr Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Yp Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Yp Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Yc Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Yc Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Z Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr X Z Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp X Yc Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp X Z Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp Yc X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp Yc Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp Z X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yp Z Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc X Yp Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc X Z Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc Yp X Z     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc Yp Z X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc Z X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Yc Z Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z X Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z X Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z Yp X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z Yp Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z Yc X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Yr Z Yc Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yp Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yp Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yc Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yc Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yr Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z X Yr Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp X Yc Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp X Yr Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp Yc X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp Yc Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp Yr X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yp Yr Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc X Yp Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc X Yr Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc Yp X Yr     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc Yp Yr X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc Yr X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yc Yr Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr X Yp Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr X Yc Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr Yp X Yc     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr Yp Yc X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr Yc X Yp     single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Yr+Z Z Yr Yc Yp X     single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp Yc Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp Yc V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp Z Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp Z V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp V Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yp V Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc Yp Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc Yp V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc Z Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc Z V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc V Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Yc V Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z Yp Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z Yp V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z Yc Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z Yc V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z V Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X Z V Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Yp Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Yp Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Yc Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Yc Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Z Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  X V Z Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X Yc Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X Yc V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X Z Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X Z V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X V Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp X V Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc X Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc X V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc Z X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc Z V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc V X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Yc V Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z X Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z X V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z Yc X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z Yc V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z V X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp Z V Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V X Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V X Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V Yc X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V Yc Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V Z X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yp V Z Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X Yp Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X Yp V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X Z Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X Z V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X V Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc X V Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp X Z V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp X V Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp Z X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp Z V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp V X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Yp V Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z X Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z X V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z Yp X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z Yp V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z V X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc Z V Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V X Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V X Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V Yp X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V Yp Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V Z X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Yc V Z Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X Yp Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X Yp V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X Yc Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X Yc V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X V Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z X V Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp X Yc V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp X V Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp Yc X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp Yc V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp V X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yp V Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc X Yp V      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc X V Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc Yp X V      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc Yp V X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc V X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z Yc V Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V X Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V X Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V Yp X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V Yp Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V Yc X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  Z V Yc Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Yp Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Yp Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Yc Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Yc Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Z Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V X Z Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp X Yc Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp X Z Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp Yc X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp Yc Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp Z X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yp Z Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc X Yp Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc X Z Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc Yp X Z      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc Yp Z X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc Z X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Yc Z Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z X Yp Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z X Yc Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z Yp X Yc      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z Yp Yc X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z Yc X Yp      single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yp+Yc+Z+V  V Z Yc Yp X      single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+B+Yb+Yc    X B Yb Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    X B Yc Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    X Yb B Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    X Yb Yc B        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    X Yc B Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    X Yc Yb B        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    B X Yb Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    B X Yc Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    B Yb X Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    B Yb Yc X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    B Yc X Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    B Yc Yb X        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yb X B Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yb X Yc B        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yb B X Yc        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yb B Yc X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yb Yc X B        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yb Yc B X        single dec_approved=[] held=['A1X'] blockers={'A1Y': ['SOURCE_CLAIM_CONFLICT']}
+X+B+Yb+Yc    Yc X B Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yc X Yb B        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yc B X Yb        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yc B Yb X        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yc Yb X B        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+B+Yb+Yc    Yc Yb B X        single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Y5+Y4c+Z   X Y5 Y4c Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   X Y5 Z Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   X Y4c Y5 Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   X Y4c Z Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   X Z Y5 Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   X Z Y4c Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 X Y4c Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 X Z Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 Y4c X Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 Y4c Z X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 Z X Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y5 Z Y4c X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c X Y5 Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c X Z Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c Y5 X Z       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c Y5 Z X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c Z X Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Y4c Z Y5 X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z X Y5 Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z X Y4c Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z Y5 X Y4c       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z Y5 Y4c X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z Y4c X Y5       single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Y5+Y4c+Z   Z Y4c Y5 X       single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Yp   X Yc Yt Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   X Yc Yp Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   X Yt Yc Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   X Yt Yp Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   X Yp Yc Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   X Yp Yt Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yc X Yt Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yc X Yp Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yc Yt X Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yc Yt Yp X       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yc Yp X Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yc Yp Yt X       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yt X Yc Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yt X Yp Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yt Yc X Yp       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yt Yc Yp X       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yt Yp X Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yt Yp Yc X       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yp X Yc Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yp X Yt Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yp Yc X Yt       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yp Yc Yt X       single dec_approved=[] held=['A1X'] blockers={}
+X+Yc+Yt+Yp   Yp Yt X Yc       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Yp   Yp Yt Yc X       single dec_approved=[] held=['A1X', 'A1Y'] blockers={}
+X+Yc+Yt+Z    X Yc Yt Z        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    X Yc Z Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    X Yt Yc Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    X Yt Z Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    X Z Yc Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    X Z Yt Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc X Yt Z        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc X Z Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc Yt X Z        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc Yt Z X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc Z X Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yc Z Yt X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt X Yc Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt X Z Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt Yc X Z        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt Yc Z X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt Z X Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Yt Z Yc X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z X Yc Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z X Yt Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z Yc X Yt        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z Yc Yt X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z Yt X Yc        single dec_approved=[] held=['A1X', 'A1Y', 'A1Z'] blockers={}
+X+Yc+Yt+Z    Z Yt Yc X        single dec_approved=[] held=['A1X', 'A1Z'] blockers={}
+
+SUMMARY runs=336 double=0 finalized_silently=0
+  X+Yp+Yc+Yr+Z   double in 0 of 120 orders
+  X+Yp+Yc+Z+V    double in 0 of 120 orders
+  X+B+Yb+Yc      double in 0 of 24 orders
+  X+Y5+Y4c+Z     double in 0 of 24 orders
+  X+Yc+Yt+Yp     double in 0 of 24 orders
+  X+Yc+Yt+Z      double in 0 of 24 orders
+PASS: exact D-026 RE developer gate; independent RE acceptance pending.

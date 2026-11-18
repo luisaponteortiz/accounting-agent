@@ -1,0 +1,16 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_review_corrections_rf.RFCorrections.test_RF02_historical_ancestor_selector_survives_descendant_retargeting",
+    "-v"
+  ],
+  "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+  "started_utc": "2026-11-16T23:02:15.293499+00:00",
+  "elapsed_seconds": 2.232,
+  "exit_code": 1,
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "sqlite": "3.51.0",
+  "platform": "macOS-26.5.2-x86_64-i386-64bit"
+}

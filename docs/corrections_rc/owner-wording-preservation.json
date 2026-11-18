@@ -1,0 +1,5 @@
+{
+  "AAOS-BB-01": "All fields byte-value identical to pre-pass except assigned Dependencies correction",
+  "AAOS-BB-02": "All fields byte-value identical to pre-pass except assigned Dependencies correction",
+  "pre_pass_register_sha256": "a149f9008ca6c648df258a842f66d29c28ac66be4aed4f635090eb7fac3fb624"
+}

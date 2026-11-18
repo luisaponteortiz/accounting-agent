@@ -1,0 +1,4 @@
+retained-claim+replacement+revision       1 P Q7 Q6 Q6cP Zr Z              single no-release linked repeat-ok audit-ok early=[] held=['P', 'Q', 'Z', 'receipt-P', 'receipt-Q', 'receipt-Z'] links=['P>A1', 'Q>P', 'Z>Q']
+retained-claim+replacement+revision       3 P Q7 Q6 Z Zr Q6cP              single no-release linked repeat-ok audit-ok early=[] held=['P', 'Z', 'receipt-P', 'receipt-Z'] links=['P>A1', 'Q>P', 'Z>Q']
+retained-claim+replacement+revision       5 P Q7 Q6 Zr Z Q6cP              single no-release linked repeat-ok audit-ok early=[] held=['P', 'Z', 'receipt-P', 'receipt-Z'] links=['P>A1', 'Q>P', 'Z>Q']
+retained-claim+replacement+revision       7 P Q7 Q6cP Q6 Zr Z              single no-release linked repeat-ok audit-ok early=[] held=['P', 'Q', 'Z', 'receipt-P', 'receipt-Q', 'receipt-Z'] links=['P>A1', 'Q>P', 'Z>Q']

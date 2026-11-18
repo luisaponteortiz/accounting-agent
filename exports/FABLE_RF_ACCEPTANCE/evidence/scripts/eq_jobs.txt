@@ -1,0 +1,8 @@
+eq-demo /private/tmp/claude-501/rf/scripts/eq_demo.py
+eq-rf-probes /private/tmp/claude-501/rf/scripts/fable_rf_acceptance_probes.py
+eq-re-probes exports/FABLE_RE_ACCEPTANCE/fable_re_acceptance_probes.py
+eq-rd-probes exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py
+eq-rc-probes exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py
+eq-rb-probes exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py
+eq-ra-probes exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py
+eq-re-step-search-older-resent exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py --family older-resent-with-claim

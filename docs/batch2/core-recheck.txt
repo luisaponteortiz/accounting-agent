@@ -1,0 +1,12 @@
+======================================================================
+FAIL: test_close_readiness_never_claims_completed_close (tests.test_platform.PlatformCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_platform.py", line 108, in test_close_readiness_never_claims_completed_close
+    self.assertIn('card_statement',item['payload']['data']['missing_evidence'])
+AssertionError: 'card_statement' not found in [{'document_type': 'card_statement', 'type': 'document'}, {'document_type': 'bank_reconciliation', 'type': 'document'}, {'document_type': 'ap_tieout', 'type': 'document'}, {'document_type': 'ar_tieout', 'type': 'document'}]
+
+----------------------------------------------------------------------
+Ran 41 tests in 67.131s
+
+FAILED (failures=1)

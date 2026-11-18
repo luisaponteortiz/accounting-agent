@@ -1,0 +1,14 @@
+======================================================================
+ERROR: test_P12_close_considers_open_preparation_exceptions (tests.test_reviewer_probes.ReviewerProbes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_reviewer_probes.py", line 154, in test_P12_close_considers_open_preparation_exceptions
+    self.assertIn('OPEN_PREPARATION_EXCEPTIONS',self.item('close-checklist','close_readiness')['blockers'])
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_platform.py", line 34, in item
+    return next(a for a in state['artifacts'] if run['id'] in a['run_ids'] and a['item_key'] == key)
+StopIteration
+
+----------------------------------------------------------------------
+Ran 39 tests in 32.677s
+
+FAILED (errors=1)

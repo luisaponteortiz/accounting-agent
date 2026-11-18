@@ -1,0 +1,22 @@
+test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF) ... ERROR
+test_fourth_changed_verdict_controls_even_with_matching_project_results (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_results_and_report_are_hash_pinned (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_results_following_an_altered_and_repinned_older_authority_are_rejected (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+
+======================================================================
+ERROR: test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements_rf.py", line 45, in test_fourth_authority_wins_and_all_older_authorities_cannot_override
+    self.assertEqual(cpr.reviewer_verdicts(root)[0],original);cpr.validate_register(self.text,root)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check_product_requirements.py", line 172, in validate_register
+    require(any(v['state']=='Independently verified' and v['bundle_sha256'] in record['Evidence'] and v['report_path'] in record['Evidence'] for v in verdict['checkpoints']),identifier+': independent review entry/checkpoint differs from evidence')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check_product_requirements.py", line 34, in require
+    if not condition:raise ValueError(message)
+ValueError: AAOS-KNO-04: independent review entry/checkpoint differs from evidence
+
+----------------------------------------------------------------------
+Ran 5 tests in 17.982s
+
+FAILED (errors=1)

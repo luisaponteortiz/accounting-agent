@@ -1,0 +1,9 @@
+01_make_test exit=0
+02_make_check exit=0
+03_make_batch2_gate exit=0
+04_make_reverification_gate exit=0
+05_synthetic_month exit=0
+06_corrective_checkpoint exit=0
+07_original_supplied_probes exit=1
+08_cases exit=0
+done

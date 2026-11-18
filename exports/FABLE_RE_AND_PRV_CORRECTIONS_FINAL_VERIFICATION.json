@@ -1,0 +1,82 @@
+{
+  "bundle": "FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
+  "manifest_sha256": "2a0a2e958bcf33070108edb054301732066ddabec16c46ff68120584337413eb",
+  "payload_files": 1337,
+  "crc_and_every_payload_hash_verified": true,
+  "protected_inputs_verified_in_working_and_bundle": 719,
+  "extracted_payload_changes_after_commands": [],
+  "extra_files_after_commands": [],
+  "eight_commits_unchanged": true,
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "sqlite": "3.51.0",
+  "platform": "macOS-26.5.2-x86_64-i386-64bit",
+  "commands": [
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-re-final-rv42zn69/project",
+      "started_utc": "2026-11-16T20:34:46.825598+00:00",
+      "elapsed_seconds": 1.303,
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py",
+        "."
+      ],
+      "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-re-final-rv42zn69/project",
+      "started_utc": "2026-11-16T20:34:48.130089+00:00",
+      "elapsed_seconds": 46.714,
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "exports/FABLE_RC_ACCEPTANCE/evidence/scripts/fable_rc_register_faults.py",
+        "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-re-final-rv42zn69/project"
+      ],
+      "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-re-final-rv42zn69/project",
+      "started_utc": "2026-11-16T20:35:34.846139+00:00",
+      "elapsed_seconds": 37.69,
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-m",
+        "unittest",
+        "tests.test_re_review_gate.REReviewGate.test_rejects_nonzero_missing_duplicate_unknown_changed_or_extra_verdicts",
+        "tests.test_re_review_gate.REReviewGate.test_only_Y05_part_a_is_adapted",
+        "tests.test_re_review_gate.REReviewGate.test_all_protected_inputs_unchanged_and_contract_exact",
+        "-v"
+      ],
+      "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-re-final-rv42zn69/project",
+      "started_utc": "2026-11-16T20:36:12.538562+00:00",
+      "elapsed_seconds": 1.722,
+      "exit_code": 0
+    }
+  ],
+  "raw_evidence_sha256": {
+    "gate-faults.json": "8354c5e02107a76a55e6eee8c321b22a0d7b5b2cb992ff80fd651ae822dc872e",
+    "gate-faults.stderr.txt": "116a6a833e0c849e648e8d3f04449ac0b1decc207dcadba09748c8844915436c",
+    "gate-faults.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "make-check.json": "d5fe4aac90245e243f541a0af64faaa15cfe6d15c220eae0cdcd095a2c1d7a9c",
+    "make-check.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "make-check.stdout.txt": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+    "rb-register-faults.json": "ca66b8d64b5d533188ecaa4fe1044761d9b00f17c9e20f3d825f9b95ba4f17ae",
+    "rb-register-faults.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rb-register-faults.stdout.txt": "2dd4b1e9ea160021081a4b4e18f33dfeac354e9cb3551d38f6bf84953a05af54",
+    "rc-register-faults.json": "bed6ce21afce784e71faf8b966a38021e701f7769e47a9dd16d8674577298415",
+    "rc-register-faults.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rc-register-faults.stdout.txt": "3a1d62a7a1b5b567ebb8103af1c632d1dea884d13d24cd3d984bbab6d5ddc3e3"
+  },
+  "contract_completion": "DEVELOPER_VALIDATED_INDEPENDENT_REVIEW_PENDING",
+  "owner_clarification": "D-029",
+  "independent_acceptance": "PENDING",
+  "human_G0": "NOT_GRANTED",
+  "batch3": "CLOSED"
+}

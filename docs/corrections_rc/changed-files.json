@@ -1,0 +1,3095 @@
+{
+  "baseline": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip",
+  "baseline_sha256": "00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d",
+  "scope": "Every deliverable payload file against the V2 correction bundle, including exports/ and START_HERE.md.",
+  "coverage_rules": [
+    "All differing payload files are individually listed except the two self-artifacts named below, which are covered by REVIEW_MANIFEST.json.",
+    "REVIEW_MANIFEST.json hashes every payload file except itself; its own SHA-256 is in the adjacent PACKAGE_CHECK JSON.",
+    "The final archive and its adjacent checksum, external manifest and PACKAGE_CHECK JSON are the output envelope, excluded from the payload to prevent recursion. The checksum sidecar hashes the archive.",
+    "Git metadata, caches, virtual environments, .DS_Store and runtime databases/data are excluded; no delivered source/evidence file is excluded by that rule."
+  ],
+  "self_artifacts_covered_by_manifest": [
+    "docs/corrections_rc/changed-files.json",
+    "docs/corrections_rc/source-and-tests.patch"
+  ],
+  "output_envelope": [
+    "exports/FABLE_RC_AND_PRV_CORRECTIONS_PACKAGE_CHECK.json",
+    "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.REVIEW_MANIFEST.json",
+    "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+    "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip.sha256"
+  ],
+  "original_tests": {
+    "tests/__init__.py": {
+      "baseline_methods": 0,
+      "retained_methods": [],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_acceptance_corrections.py": {
+      "baseline_methods": 13,
+      "retained_methods": [
+        "AcceptanceCorrections.test_RA01_entire_chain_and_receipts_remain_blocked_until_reopen",
+        "AcceptanceCorrections.test_RA01_supersession_cycle_is_refused_without_mutation",
+        "AcceptanceCorrections.test_RA02_unlinked_identical_receipt_policy_retains_author",
+        "AcceptanceCorrections.test_RA02_unlinked_rule_identity_preserves_semantic_authors_without_unrelated_scope",
+        "AcceptanceCorrections.test_RA03_additional_receipt_is_multiple_support_until_the_original_is_withdrawn",
+        "AcceptanceCorrections.test_RA03_replacement_key_discloses_old_receipt_and_keeps_both_suppliers_independent",
+        "AcceptanceCorrections.test_RA04_statement_replacement_key_preserves_revision_control",
+        "AcceptanceCorrections.test_RA04_statement_revision_holds_each_item_and_requires_non_supplier_acceptance",
+        "AcceptanceCorrections.test_RA05_future_retirement_does_not_change_prior_period_authority",
+        "AcceptanceCorrections.test_RA05_preapproved_midperiod_rules_do_not_suspend_on_fresh_evidence",
+        "AcceptanceCorrections.test_RA06_transition_disposition_with_predecessor_evidence_takes_effect",
+        "AcceptanceCorrections.test_RA07_unrelated_rows_and_receipts_cannot_support_vendor_coding",
+        "AcceptanceCorrections.test_RA08_circular_duplicate_and_replay_exclusions_are_refused_before_reprepare"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_acceptance_gate.py": {
+      "baseline_methods": 5,
+      "retained_methods": [
+        "AcceptanceGate.test_all_24_independent_assertions_with_explicit_statement_acceptance",
+        "AcceptanceGate.test_independent_review_inputs_and_four_frozen_archives_unchanged",
+        "AcceptanceGate.test_original_acceptance_verdicts_and_assignments_are_preserved",
+        "AcceptanceGate.test_packager_refuses_to_overwrite_frozen_submission",
+        "AcceptanceGate.test_unmodified_compatible_independent_acceptance_probes"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_batch2.py": {
+      "baseline_methods": 11,
+      "retained_methods": [
+        "Batch2.test_T09_chart_author_cannot_erase_lineage_with_cosmetic_profile",
+        "Batch2.test_T09_effective_dated_rule_and_service_proposal",
+        "Batch2.test_T09_model_requirement_uses_item_effective_date",
+        "Batch2.test_T09_proposed_policy_never_runs_and_self_approval_denied",
+        "Batch2.test_T09_unrelated_close_rule_preserves_card_and_journal_review",
+        "Batch2.test_T10_mandate_requires_independence_freshness_and_target_period",
+        "Batch2.test_T11_client_sample_cannot_waive_missing_basis",
+        "Batch2.test_T11_explicit_demo_waivers_are_exported",
+        "Batch2.test_T12_evidence_before_period_and_boundary_receipt",
+        "Batch2.test_T12_order_removal_and_supersession",
+        "Batch2.test_T12_tombstone_without_sequence_and_older_packet_replay"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_batch2_controls.py": {
+      "baseline_methods": 14,
+      "retained_methods": [
+        "Batch2Controls.test_T13_statement_activity_identity_and_opening_controls",
+        "Batch2Controls.test_T14_contributor_is_item_scoped",
+        "Batch2Controls.test_T14_duplicate_disposition_revoke_and_independence",
+        "Batch2Controls.test_T14_empty_inventory_propagates",
+        "Batch2Controls.test_T14_rule_scope_proposes_without_resolving",
+        "Batch2Controls.test_T14_split_exact_and_service_refusal",
+        "Batch2Controls.test_T15_shared_entry_impact_and_double_recording",
+        "Batch2Controls.test_T15_transfer_direction_respects_signed_card_activity",
+        "Batch2Controls.test_T17_approved_amount_tolerance_is_bounded",
+        "Batch2Controls.test_T18_finalization_stability_changes_and_recovery",
+        "Batch2Controls.test_T18_lock_requires_ack_and_disputed_finalization_refused",
+        "Batch2Controls.test_T19_document_label_cannot_complete_deferred_reconciliation",
+        "Batch2Controls.test_T19_period_and_typed_workflow_outcome",
+        "Batch2Controls.test_T19_waits_for_inflight_preparation_before_readiness"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_corrections.py": {
+      "baseline_methods": 8,
+      "retained_methods": [
+        "Corrections.test_N01_all_decisions_refused_under_lock",
+        "Corrections.test_N02_locked_source_move_cannot_govern_two_periods",
+        "Corrections.test_N03_other_enqueuer_does_not_displace_rejection",
+        "Corrections.test_N04_historical_evidence_supplier_cannot_review",
+        "Corrections.test_N05_historical_profile_author_cannot_review",
+        "Corrections.test_N06_combining_marks_are_semantic",
+        "Corrections.test_N07_actor_kind_is_required",
+        "Corrections.test_later_contributor_loses_further_review_rights"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_corrective_gate.py": {
+      "baseline_methods": 1,
+      "retained_methods": [
+        "CorrectiveGate.test_independent_N01_through_N07"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_http.py": {
+      "baseline_methods": 11,
+      "retained_methods": [
+        "HTTPCase.test_approval_and_export_black_box",
+        "HTTPCase.test_blocked_artifact_approval_fails",
+        "HTTPCase.test_health_and_real_worker_results",
+        "HTTPCase.test_host_origin_and_scope_override_defenses",
+        "HTTPCase.test_invalid_api_requests_have_no_side_effects",
+        "HTTPCase.test_loopback_only_and_static_assets_with_csp",
+        "HTTPCase.test_mandate_proposal_requires_independent_activation",
+        "HTTPCase.test_package_and_disposition_routes_enforce_controls",
+        "HTTPCase.test_period_operations_require_independent_human_and_preserve_scope",
+        "HTTPCase.test_reviewer_cannot_intake_or_prepare",
+        "HTTPCase.test_session_is_explicitly_synthetic_and_authorization_required"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_periods.py": {
+      "baseline_methods": 5,
+      "retained_methods": [
+        "PeriodTests.test_concurrent_database_migration_is_idempotent",
+        "PeriodTests.test_dated_sources_route_once_to_their_own_period",
+        "PeriodTests.test_late_locked_evidence_preserves_approval_until_reopen",
+        "PeriodTests.test_legacy_migration_keeps_immutable_bytes_and_relationships",
+        "PeriodTests.test_period_authority_overlap_and_scope_denied"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_platform.py": {
+      "baseline_methods": 32,
+      "retained_methods": [
+        "PlatformCase.test_ambiguous_alias_does_not_choose_arbitrarily",
+        "PlatformCase.test_backup_restore_and_portable_export_preserve_scope_and_evidence",
+        "PlatformCase.test_change_during_execution_discards_uncommitted_result",
+        "PlatformCase.test_changed_inputs_during_export_are_rejected",
+        "PlatformCase.test_close_readiness_never_claims_completed_close",
+        "PlatformCase.test_concurrent_workers_do_not_duplicate_artifacts",
+        "PlatformCase.test_crash_recovery_expired_lease_and_lost_worker_rejected",
+        "PlatformCase.test_idempotent_intake_and_manual_runs",
+        "PlatformCase.test_instruction_injection_stays_source_data",
+        "PlatformCase.test_invalid_scope_components_and_unsafe_backup_destination_rejected",
+        "PlatformCase.test_journal_balance_exact_account_period_and_support_controls",
+        "PlatformCase.test_late_duplicate_also_invalidates_earlier_review",
+        "PlatformCase.test_late_evidence_invalidates_approval_and_new_run_resumes",
+        "PlatformCase.test_malformed_module_result_rolls_back_whole_checkpoint",
+        "PlatformCase.test_mandate_expiry_rechecked_before_dispatch",
+        "PlatformCase.test_mandate_revocation_holds_only_dependent_work",
+        "PlatformCase.test_module_dependencies_receive_only_committed_scoped_outputs",
+        "PlatformCase.test_money_rejects_float_nonfinite_precision_and_oversize",
+        "PlatformCase.test_profile_change_requires_version_and_invalidates_approvals",
+        "PlatformCase.test_recurring_occurrence_dedup_caps_and_no_response_not_approval",
+        "PlatformCase.test_required_model_review_remains_blocked_without_model",
+        "PlatformCase.test_retry_limit_is_persistent",
+        "PlatformCase.test_review_role_exact_hash_and_append_only_revoke",
+        "PlatformCase.test_scope_denial_and_second_client_uses_same_engine",
+        "PlatformCase.test_simulated_recurring_clock_persists_and_worker_uses_it",
+        "PlatformCase.test_statement_population_mismatch_blocks_clean_items",
+        "PlatformCase.test_teaching_results_are_not_client_policy",
+        "PlatformCase.test_unconfigured_and_non_synthetic_profiles_fail_closed",
+        "PlatformCase.test_unimplemented_capabilities_are_honest_and_unavailable",
+        "PlatformCase.test_workflows_complete_with_application_outbound_calls_denied",
+        "PlatformCase.test_workflows_use_shared_runner_and_checkpoint",
+        "PlatformCase.test_wrong_company_rejected_before_intake"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_product_requirements.py": {
+      "baseline_methods": 11,
+      "retained_methods": [
+        "ProductRequirements.test_current_register_has_split_states_and_all_backlog_tickets",
+        "ProductRequirements.test_dependency_cycle_is_rejected",
+        "ProductRequirements.test_developer_tested_without_named_tests_is_rejected",
+        "ProductRequirements.test_duplicate_id_is_rejected",
+        "ProductRequirements.test_established_id_cannot_be_silently_renamed",
+        "ProductRequirements.test_independent_verification_requires_review_and_checkpoint",
+        "ProductRequirements.test_missing_backlog_ticket_is_rejected",
+        "ProductRequirements.test_missing_field_is_rejected",
+        "ProductRequirements.test_mixed_implementation_state_is_rejected",
+        "ProductRequirements.test_shared_criteria_cannot_impose_first_client_facts",
+        "ProductRequirements.test_unknown_dependency_is_rejected"
+      ],
+      "new_methods": [
+        "ProductRequirements.test_PRV02_nonexistent_test_ticket_and_arbitrary_token_are_rejected",
+        "ProductRequirements.test_PRV03_failed_verdict_cannot_be_promoted",
+        "ProductRequirements.test_PRV03_self_asserted_independent_verification_is_rejected",
+        "ProductRequirements.test_PRV04_shared_web_and_python_are_checked_but_fixtures_are_exempt",
+        "ProductRequirements.test_PRV05_approved_cannot_depend_unconditionally_on_proposed",
+        "ProductRequirements.test_PRV06_unstarted_or_deferred_dependency_needs_local_condition",
+        "ProductRequirements.test_PRV07_scope_disposition_must_match_table",
+        "ProductRequirements.test_PRV08_stray_dependency_punctuation_is_rejected",
+        "ProductRequirements.test_PRV10_every_shared_field_except_trace_uses_client_section_terms"
+      ],
+      "byte_identical": false
+    },
+    "tests/test_ra_review_gate.py": {
+      "baseline_methods": 3,
+      "retained_methods": [
+        "RAReviewGate.test_all_14_unmodified_independent_probes_report_OK",
+        "RAReviewGate.test_combined_frozen_submission_cannot_be_overwritten",
+        "RAReviewGate.test_returned_inputs_and_submitted_archives_remain_unchanged"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_reverification_controls.py": {
+      "baseline_methods": 20,
+      "retained_methods": [
+        "ReverificationControls.test_RV01_superseding_identity_respects_lock_then_releases_and_records_history",
+        "ReverificationControls.test_RV02_origin_identity_survives_revision_and_current_reference_still_collides",
+        "ReverificationControls.test_RV03_removed_quarantine_leaves_active_queue_but_preserves_history",
+        "ReverificationControls.test_RV03_tombstone_removes_governing_item_and_supersedes_exceptions",
+        "ReverificationControls.test_RV04_locked_receipts_are_not_rebound_by_unrelated_intake",
+        "ReverificationControls.test_RV05_profile_withdrawal_is_effective_dated_and_can_be_reintroduced",
+        "ReverificationControls.test_RV06_untyped_new_knowledge_refused_and_legacy_requirement_unsatisfied",
+        "ReverificationControls.test_RV07_activity_and_account_types_constrain_treatment",
+        "ReverificationControls.test_RV08_new_candidate_invalidates_distinct_decision_without_statement_dependency",
+        "ReverificationControls.test_RV09_restoring_population_keeps_the_original_rejection",
+        "ReverificationControls.test_RV09_survivor_cites_exclusion_and_dispositioner_cannot_review",
+        "ReverificationControls.test_RV10_semantic_rule_authors_retained_but_different_category_author_not_barred",
+        "ReverificationControls.test_RV11_freshness_schema_and_explicit_no_evidence_approval_are_audited",
+        "ReverificationControls.test_RV12_revised_receipt_requires_independent_acceptance_and_discloses_history",
+        "ReverificationControls.test_RV13_quarantined_prior_statement_cannot_replace_frozen_continuity",
+        "ReverificationControls.test_RV13_statement_limits_are_visible_and_waiver_requires_approved_rule",
+        "ReverificationControls.test_RV14_alias_preview_contains_normalization_and_collision_ids",
+        "ReverificationControls.test_RV15_distinct_purchases_requires_document_for_every_candidate",
+        "ReverificationControls.test_RV16_inventory_and_patch_cover_every_changed_runtime_file",
+        "ReverificationControls.test_RV17_finalized_packages_have_supersession_and_one_governing_version"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_reverification_gate.py": {
+      "baseline_methods": 5,
+      "retained_methods": [
+        "ReverificationGate.test_RT14b_fails_when_either_initial_disposition_is_refused",
+        "ReverificationGate.test_RT14b_fails_when_initial_D1_is_ineligible",
+        "ReverificationGate.test_all_independent_control_assertions_with_explicit_current_setup",
+        "ReverificationGate.test_original_inputs_and_archives_unchanged",
+        "ReverificationGate.test_unmodified_independent_probes_with_unchanged_setup"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_review_corrections_rb.py": {
+      "baseline_methods": 6,
+      "retained_methods": [
+        "ReviewCorrectionsRB.test_PR15_second_client_state_has_no_first_client_name",
+        "ReviewCorrectionsRB.test_RB01_late_link_quarantines_previously_admitted_or_approved_destination",
+        "ReviewCorrectionsRB.test_RB01_unresolved_link_then_predecessor_then_resolution_keeps_entire_quarantine",
+        "ReviewCorrectionsRB.test_RB02_repointed_receipt_and_statement_replacements_need_independent_acceptance",
+        "ReviewCorrectionsRB.test_RB03_equivalent_vendor_and_receipt_rules_keep_authors_across_scope_and_key",
+        "ReviewCorrectionsRB.test_RB04_prior_restatement_waits_for_all_own_period_acceptances_and_revocation_reblocks"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_reviewer_cases.py": {
+      "baseline_methods": 1,
+      "retained_methods": [
+        "ReviewerCases.test_independent_validation_runner"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_reviewer_probes.py": {
+      "baseline_methods": 26,
+      "retained_methods": [
+        "ReviewerProbes.test_P01_contributor_cannot_review_colleague_run",
+        "ReviewerProbes.test_P02_identity_kind_not_name_controls_review",
+        "ReviewerProbes.test_P03_stale_occurrence_redispatched",
+        "ReviewerProbes.test_P04_unfit_mandate_does_not_stop_others",
+        "ReviewerProbes.test_P05_one_governing_artifact_across_occurrences",
+        "ReviewerProbes.test_P06_unicode_vendor_never_collapses_to_another",
+        "ReviewerProbes.test_P07_stale_source_revision_cannot_replace_newer",
+        "ReviewerProbes.test_P08_duplicate_journals",
+        "ReviewerProbes.test_P08_no_effect_journal",
+        "ReviewerProbes.test_P08_unbound_journal_support",
+        "ReviewerProbes.test_P09_lock_preserves_review_and_blocks_new_dispatch",
+        "ReviewerProbes.test_P10_second_period_does_not_strand_first",
+        "ReviewerProbes.test_P11_transport_change_does_not_invalidate_accounting",
+        "ReviewerProbes.test_P12_close_considers_open_preparation_exceptions",
+        "ReviewerProbes.test_P13_statement_population_swap_detected",
+        "ReviewerProbes.test_P14_decisions_cannot_be_repeated_or_overwritten",
+        "ReviewerProbes.test_P15_receipt_tolerance_is_explicit_client_policy",
+        "ReviewerProbes.test_P16_unrelated_receipt_keeps_approved_journal",
+        "ReviewerProbes.test_concurrent_duplicate_approvals_commit_one_decision",
+        "ReviewerProbes.test_concurrent_ticks_and_skipped_occurrences",
+        "ReviewerProbes.test_expired_partial_slot_is_recorded_as_skipped",
+        "ReviewerProbes.test_handlers_only_receive_declared_sources_and_accounting_code_changes_stale",
+        "ReviewerProbes.test_journal_document_does_not_invalidate_card_review",
+        "ReviewerProbes.test_mandate_issuer_is_recorded_contributor",
+        "ReviewerProbes.test_reused_artifact_keeps_review_and_dispute_requires_third_reviewer",
+        "ReviewerProbes.test_unicode_alias_validation_and_accents"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_synthetic_month.py": {
+      "baseline_methods": 1,
+      "retained_methods": [
+        "SyntheticMonth.test_full_teaching_month_and_isolated_second_client"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_validation.py": {
+      "baseline_methods": 1,
+      "retained_methods": [
+        "ValidationCase.test_separate_regression_cases"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    }
+  },
+  "files": [
+    {
+      "file": "AGENTS.md",
+      "status": "modified",
+      "baseline_sha256": "64e3f44b570cfed82dc4c5dad40a7d73cfdc0a3e1ca6612c8111afbda5380f73",
+      "initial_working_sha256": "6031efbffcd6f044a3efe9795eeb0c4d917c3071552ded386d4cec1bf602e6cc",
+      "sha256": "025830e9ab69bcd25ff22223146dff7a071c661379ba39121318d13022ccbd4c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "CODEX_RC_CORRECTIONS_PROMPT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "0de52eb5bc1fe09600b32c9a359302576322791f1a739ee0bf39da3a78e33ec6",
+      "sha256": "0de52eb5bc1fe09600b32c9a359302576322791f1a739ee0bf39da3a78e33ec6",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "DECISIONS.md",
+      "status": "modified",
+      "baseline_sha256": "f9b1d97d2c249245df27d37e3df2067a2128ad6a3746a53f5732d5793e860979",
+      "initial_working_sha256": "d30e14453ad01c251947b0d8a4b6397c6c582ef1593d826cd23cafb68513924b",
+      "sha256": "c8f64874c7251f22bbdf262f9f5d042caa0bd3314d0ec3301aee148616e795d4",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "FABLE_ACCOUNTING_HANDOFF.md",
+      "status": "modified",
+      "baseline_sha256": "7f8fb08a4b810184f28bec9571490a0f6a656fdf35252eb6c594e776c93856ef",
+      "initial_working_sha256": "7f8fb08a4b810184f28bec9571490a0f6a656fdf35252eb6c594e776c93856ef",
+      "sha256": "aeb961b634f6de60f2428a68ad4eb86715218a23cb6281b715d8f3a727acbffc",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "FABLE_RC_CORRECTIONS_HANDOFF.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "957cd3bbd2562d2e6b5c7a67271ae801b69b17db8c192f42228ee1c507fdbd06",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "FABLE_RC_REVIEW_PROMPT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "3004c37696504fe6d8ff5b8de6a93eeb2f06df70bafd71634690ffe4bb531b6e",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "Makefile",
+      "status": "modified",
+      "baseline_sha256": "9a0889625788acce67638de72a74f3a45ad06e137dff7fafa8dcfad28bdb0e89",
+      "initial_working_sha256": "9a0889625788acce67638de72a74f3a45ad06e137dff7fafa8dcfad28bdb0e89",
+      "sha256": "c1d0764477db8ba43e851c925f92edca3f93214abecb0ea4201a7f97af6df3c9",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "PROGRESS.md",
+      "status": "modified",
+      "baseline_sha256": "21503394490084dae286e9b61b8d770d2732216fff67a6569e96213bf6a3f57b",
+      "initial_working_sha256": "058731ee9a8ab5572c71dea55c95bc9ffecedd137c0426a273e55893aef674eb",
+      "sha256": "007f45e0e134cd60e6811b55c6caefe3907586bd5e5d7133cc7c124f88f2ee42",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "REVIEW_FREEZE.md",
+      "status": "modified",
+      "baseline_sha256": "51fc946ac736d64c675074df1a0e75b06572ddd9e85cf68a081ad481c7f806c2",
+      "initial_working_sha256": "413d0e7eb51e9385c32c40d6e77e16114c7443177b459ad52a7b26cff06f9534",
+      "sha256": "0199d6f38ee32d4fe2caabc929da4a1fc96e43c08a06ebb758140b359ab7263f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "START_HERE.md",
+      "status": "modified",
+      "baseline_sha256": "619da4d50cda90aa53c5ca59e3e634b222b79eb301f068f859d841972eed37e8",
+      "initial_working_sha256": null,
+      "sha256": "f4b725be77c9685501fc2c3cb342bfe27e527d27c4705f5187b91eb9d7eb7f85",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "accounting_agent/exceptions.py",
+      "status": "modified",
+      "baseline_sha256": "747ea3056fbc1bc9d9b411fd44a0f3920f9a742477af3ece14ce83a98c81f14e",
+      "initial_working_sha256": "747ea3056fbc1bc9d9b411fd44a0f3920f9a742477af3ece14ce83a98c81f14e",
+      "sha256": "f8458010a1e441a3b0e5204d3cc0c2c849f53b37c64743dd120565f6a09b1897",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "accounting_agent/service.py",
+      "status": "modified",
+      "baseline_sha256": "ae68bc5bb70d39fe45f41f324ce74b3f61174e3fb28ffb3c3478b6bbab3706b5",
+      "initial_working_sha256": "ae68bc5bb70d39fe45f41f324ce74b3f61174e3fb28ffb3c3478b6bbab3706b5",
+      "sha256": "a2ce2e5f020b71d6a9ff31b8869dacc4193a961ea905bdf74ffae07bc52a8309",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "accounting_agent/source_control.py",
+      "status": "modified",
+      "baseline_sha256": "599c4196e2ba2a52e5638a7163628862b159d51a4eabffc5edeca6e36ca61058",
+      "initial_working_sha256": "599c4196e2ba2a52e5638a7163628862b159d51a4eabffc5edeca6e36ca61058",
+      "sha256": "c3d96afd0f0348866fcd15c05091df01fbdcb49ebbae3fe0a4b07ba08115b6b9",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "accounting_agent/web/index.html",
+      "status": "modified",
+      "baseline_sha256": "31a93c0a06d220d26870228e90ae30a09ff4ff9fa604569ac9adf3d933b50ceb",
+      "initial_working_sha256": "31a93c0a06d220d26870228e90ae30a09ff4ff9fa604569ac9adf3d933b50ceb",
+      "sha256": "b7fb0102e7b6769d76afceefbdac1fad4553f413bca6ab403ad99791cbf8ccc5",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "data/.gitkeep",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "docs/CONNECTION_READINESS.md",
+      "status": "modified",
+      "baseline_sha256": "a4dc95bc54059da2d0bff76f4314ca033d870f1a29f55d9e0102bd2cf0cccfd2",
+      "initial_working_sha256": "a4dc95bc54059da2d0bff76f4314ca033d870f1a29f55d9e0102bd2cf0cccfd2",
+      "sha256": "3b214fca273290d34e414b59d0f5dd091de9f1f7b3def1fb75655836a279ede5",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/INDEPENDENT_VERIFICATION_RESULTS.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "b68b12f7f19aef0e69cb259b92967c01453d23756df1ed05d515cec2af2a5a77",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/PRODUCT_REQUIREMENTS.md",
+      "status": "modified",
+      "baseline_sha256": "4b62c91bbee3cdfa2d3cdad899e238c1e201250cdfecf6cbe16fef7bac3b1f49",
+      "initial_working_sha256": "a149f9008ca6c648df258a842f66d29c28ac66be4aed4f635090eb7fac3fb624",
+      "sha256": "d55063e25857b2a66606f8e2a255ccf68e427b330d6cba97bde79ad014a663f9",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/RC_CORRECTIONS_REPORT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "5d4163924e0709e3f39e838e78a766afe96c1186b4d6da8551cba288490c8bbf",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/environment.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a3236ea04dc163ee6013dd30ae6e3f7dcefe678b0bd562e69f5833e9146055fa",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/environment.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "fd0fd4290ad100adc37e4a82e45f821faeacbecae70f4d3eba08e85be138c632",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/excluded-os-metadata.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "69741eb29667c19686601e36be460a58d55902e748c2480af9bcabccaf594ed0",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/execution-results.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "84019b8837a6c47a2629b917e1cfbbc2655c25e088f314e324c3b3dede3b8de2",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/exit-codes.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "baedc263288f1546e46ec22e75f759056388e3c01294337ab3722c9e2a745760",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/fable-register-faults.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "5bf2f5d3087f9a18bfcd7d060708f1ba5f54d958e591bf37e4796d23a953897c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/fable-register-faults.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "2dd4b1e9ea160021081a4b4e18f33dfeac354e9cb3551d38f6bf84953a05af54",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-acceptance-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "9c8d42fe8c7e83e74f46b1951dc41cab64f39cc8f2f8facfb22a5ada3510757d",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-acceptance-gate.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "6bc56b2f400cd352a1535f8a570388f7aa9f714e089f76a311fb1f5525398a8b",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-authorization-doc-check.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "fd9eeb90af823746144b662d214c32922a542077d45e593f6a0228752242ccd3",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-authorization-doc-check.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-batch2-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "997b493a1a35eb9788da27750a2515697d9e1a81804ff9fa14bb42ff8126c087",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-batch2-gate.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e95aeb2af19086164e11e4b1caf96bbf8d4e1a587710b89511129eec0e1a4ec1",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-check.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "313ba38d8767ef961ba96f64f1ab082a457256363505be9ccdbfd23fc705717c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-check.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-current-check.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "93593d5127eede82ed070260246eb9b77ef00deea491db47bed2abddc8b8a41e",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-current-check.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-full-tests.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e554a100dc56472f0ceac3ede92218dec14a16b10f6ae018c1924c4d2bda69de",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-full-tests.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "80aee562263cc43b12231db70120809a344e6c7c8e56a81cf19d0780cdaf7de2",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-rb-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "54288f4ee178ccf6db883178f55eb9aabcd4ba254bdf52cb59e9b77301e88f87",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-rb-gate.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "99e75105a57de329f131d7690839ea0ca58ba92127d478bd3c1ed4c469132b5a",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-rc-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "cae65bf5e58b60f140ef327825a3b4dcfb75ee0f6d45cb305bf5a34919346f2c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-rc-gate.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a1ad2c8112bb75645143a35b794903fcf2c59d19f88a7163002f3404298d54b5",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-register-counts.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3de06deece2600f1861df1b020a54e27d13a40f42914c9bcf5dd7a1b541f228",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-register-counts.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "f705e3c13876cc1182b9cf600cdbd766c0b53c0d83f6b8376f7499cbcf578776",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-register-release-check.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "7ef3685127a53c645637e055926f3f8985013c196817c50e21550124f19be221",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-register-release-check.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-reverification-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "28376669449ce854d21f935182ef63b2a8122657aecc6ba370e5ba0b5a2393e5",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/final-reverification-gate.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a4233de8204963d8840688239d36a2efa56b0662babf97beab94fb4636da57d7",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/full-tests-sandbox.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "1e29cda8e6669d9dd2a0e4a70861611f2824452b781ec5d178e97fde10f4bd18",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/full-tests-sandbox.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a1bdb14a9c3722cae1c20a919990252be7be28504d45836def6c625a6147e338",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/git-history-final.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "600da06387da55b78983fd804f2f0675e8d53d0cf4740693e9cc2ce636f966ef",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/git-history.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "600da06387da55b78983fd804f2f0675e8d53d0cf4740693e9cc2ce636f966ef",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/initial-files.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a236fe4e134cdee37027b9e70c045d60ee1f2ac6d7a543fe6f4557d1dab05719",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/input-checksums.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "c1475c1f7b6aa7adb68894e167e4b58c80d7d67d2bf4cced8f3622cd393b6684",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/inventory-final-preparation.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "b4f2ad9267c1e9eb22522bcea05f32c776a2fbeb48ad8d98a9d111c99aae9476",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/inventory-final-preparation.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "cae7f2fe16b896e2180fe2137c61022de2414be2edfabe05d47e177cb8cc9df7",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/inventory-prepare-after-metadata-fix.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "f9ffe12c5117a1270a4cf92a7196f08070a8ac5ed5b1d546a4fad68388d25a2b",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/inventory-prepare-after-metadata-fix.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "bfee2644d5a96b736322009550a383217cdef66deba063cdf108cd13ede1d7da",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/inventory-prepare-portable.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a03475b9a48a420e74ffd8e98f37296dd2eb9d88e9957688829ddaa882874a58",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/inventory-prepare-portable.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "1aad2161fcb5074f0bc001971ed0e02638f523f1331b7b91082956ae57391de6",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/inventory-prepare.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "81b8f6420ad4472ef64b02fac876fa558b81235899b4f50bb6f3e90415426b71",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/inventory-prepare.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "434a6ed76acb501fb1f978422ed79d790832d40f50727c5eb881c0376150ea60",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/loopback-sandbox-probe.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "fe985069cd250930a2e7ce5412c45e1f71970ce733da1476767ebe8ebf5e728b",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/loopback-sandbox-probe.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "cf90342966815d2b77e370e2c1085d459440bf5f83df3cbea9086ded6a55d8d2",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/make-version.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a016391a1d6319276db894666203e6f0a008e257a0c58616d779951ed943054d",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/owner-wording-preservation.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "588c7a947db1cb71c1a99e3c71060c7de57c324e7a5a88c12431296ae3204ed5",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/pre-correction-probes.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "f8c11c03e26a0cd5383ea970d3124489d924009d12d1883208739497bc1d34be",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/pre-correction-probes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "50b45b9317c74916a6511c3813abb15fa771cdb75846d426e21775a2d7a13910",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/pre-existing-owner-changes.patch",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e6ba8178ce62e8d2dd6d9bb7ca2d38c6eae6897e2b1d3cd0bb3e6bf1666040e3",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/preflight-hashes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "65bcb03b335ed283719885cedf46f20fc88e903b5d1160e003279c7de1ca6572",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/preserved-archive-hashes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "794f9429073b6e909c5757aa99fd1b2a0146153b3618e928ef2e2ec3ce97f8d3",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/prv-check-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "aa21cefaebc6ed6037642a116760a41538088b227918971afcfd4ff953ac8119",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/prv-check-after.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "981d9b4e334210767c003a3323f8804930466d5c9ac0352f5cf30cf7c9e0dfa2",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/prv-check-final.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "b78f1ab4dcaf93beb01197d82bcaf0eb50c7f375c540b3b5c31fa27207789fae",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/prv-check-final.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/prv-unit-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "9e64a83ba6b6d909310a3c3f70de981db38c244d465f04bbb8ae2b257a565a25",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/prv-unit-after.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "6d606e988ab688be4f3527c496211e21ff3a69edb1880d979ed98a0db4310dd1",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/prv01-check.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "b714ff48b66ac077abce7fcf138b4d46cd3b051a0062082f105e031cd1050817",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/prv01-check.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "9c68d9c1f86465d4ce24745304aba630fe1c7d7a517cdf1caf6e5ac84b3776c4",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc-probes-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "48b5f1c21eaa6232dd689a08af90b9e7c2d078c847674554d66fc196642489c5",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc-probes-after.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "59b0ff3563fb6438815c352116ae8f1bc15b81c816e84db5ff8af9dd8bb01806",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc-unit-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "0ddbfd8921ff52ba3e7d783690d5ea11be69e50bbcd69916903bd2d1cf87e281",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc-unit-after.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e6ca5b253910b7d4be936ae18c9f0e43584f195e1068f85a1aea46305b5edbff",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc-unit-before.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "aeadb6c48938bac55f34badeff5d1e4f0423d9bc6a7e2306916f90d72361193c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc-unit-before.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "436e5e7e10027a408176998ba433e946a46c68f1031a53e38914e9c641dc6050",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc-unit-final.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "1ba3293fdb6a0dc4e51beccd1c4391ba12421cfb5f63f372615adf4d49ce933c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc-unit-final.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "9353b4007290f82d77104fa940b5fcc0b7d71940d8e97078d28bf9b8b990ddf2",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc01-unit-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "22f5713f5f8767fb3a8b7e3f1352c198c631605d052c1713f789fadad0d4a2a8",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc01-unit-after.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "0d801c0e7b7b6914a03e3bbc5b4f844fa76a89641432b946afacdfb4bec7c99e",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc02-unit-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "21b13a33072a71ebf73cf8f2bb79f5ff1b6b149b1332ce637b41f1f28778050e",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/rc02-unit-after.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "2fbf5475b92e8a4573dfc76a90e9701d8d0154a35d44c4d094f4838957840aa1",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/register-docs-final-check.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "6e7b2ef31dffd27b181fcaac88be03eb51cb86b5f0070328883c841f8f744ac8",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/register-docs-final-check.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/retained14-direct.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "dcbf9b20eeaf6f1ff9c184dc53c6aae0c8a229884d171a8c7dc24ceca2847028",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/retained14-direct.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "199ab894a3f441b68667cec7c6d5ac7b1041548e1d2c02f38621217515c65e06",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/returned-input-integrity.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "99f4fe600a293b6280f7305218d44b145c8c3a85d9b5270234fc4dfb17cc6a83",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/run.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "49dd93610b8d5c1beb22a480e7c0563e31ad9eca7f3dc5a61760dd939f1c6823",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/source-patch-dry-run.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "ecf8544cf742364a37eff48490bc377271cc922afabffd6d1f3317d39f455bca",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/source-patch-dry-run.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "12e42c2f7cbad311cf8d433c685fb56758329e9f35451c7bf730e3c4b08c8546",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/test-methods.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "0e57719f33d12eb4cb3853139e7088a0d09cc8128b9d1fd1ca5bf9e7acd78910",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rc/tested-source-sha256.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "fe52dcb24475f7952e25994994f0af7b8bd729b2afb9f16df7e374657b8d81db",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "exports/.gitkeep",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/AGENTS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "2371a2eb46aa36baa4b0b0f49c614ac8eb0e34a34c60335d3bb4208e067855d7",
+      "sha256": "2371a2eb46aa36baa4b0b0f49c614ac8eb0e34a34c60335d3bb4208e067855d7",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/DECISIONS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "858fa7c6e903ed9eed31d5e70b720c30316a510dfff13e92acde9de0e51a4adf",
+      "sha256": "858fa7c6e903ed9eed31d5e70b720c30316a510dfff13e92acde9de0e51a4adf",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/FABLE_ACCOUNTING_HANDOFF.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "9150a3ddd29ed7ee1876e116c95a830556b0c152fb70a065c9a68751f7de19ae",
+      "sha256": "9150a3ddd29ed7ee1876e116c95a830556b0c152fb70a065c9a68751f7de19ae",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/FABLE_REVIEW_MANIFEST.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d894daa9f2658309d8b174faca06cae35559a00dd02aa3163a98fde948524a9c",
+      "sha256": "d894daa9f2658309d8b174faca06cae35559a00dd02aa3163a98fde948524a9c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/FABLE_REVIEW_PROMPT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "acde5496cc5f5cc8ee56869f9baafb68fc3c6f8494da8a149940b4f8530ca641",
+      "sha256": "acde5496cc5f5cc8ee56869f9baafb68fc3c6f8494da8a149940b4f8530ca641",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/Makefile",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "8de3a405b8d6a638514f367721f427fd792d42cf8f003107e6d66cf6c74e7089",
+      "sha256": "8de3a405b8d6a638514f367721f427fd792d42cf8f003107e6d66cf6c74e7089",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/PROGRESS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "5ef4afb0b9e105db263b7afae0fb2ad861d2840413dd9efb5f17fd05a951d9fe",
+      "sha256": "5ef4afb0b9e105db263b7afae0fb2ad861d2840413dd9efb5f17fd05a951d9fe",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/README.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "675379c2d2639a235459209c7079734ab193f6d522120891973fa9da3ab25079",
+      "sha256": "675379c2d2639a235459209c7079734ab193f6d522120891973fa9da3ab25079",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/__init__.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "92a5982154edc4f5594a2618ec2776e46c92450305cc4d220ceba8ab33a6ac37",
+      "sha256": "92a5982154edc4f5594a2618ec2776e46c92450305cc4d220ceba8ab33a6ac37",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/__main__.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "454092dcf0f85aec3e12d6eaa36263fce9ab4e8c991df813bbc312ca92f74d52",
+      "sha256": "454092dcf0f85aec3e12d6eaa36263fce9ab4e8c991df813bbc312ca92f74d52",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/config/bird_bowl.demo.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "04088b573483fbb546ef80595c8c14bea4a0769b769dae6f26afb2b791afb516",
+      "sha256": "04088b573483fbb546ef80595c8c14bea4a0769b769dae6f26afb2b791afb516",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/config/bird_bowl.unconfigured.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "0fddfeb3ebd5cc7f5d500b1f2491ccc6b5f8c74db47f9f0624088df67045119c",
+      "sha256": "0fddfeb3ebd5cc7f5d500b1f2491ccc6b5f8c74db47f9f0624088df67045119c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/core.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "38adfccbb8e78fda410278527028fa6fb69228a193828c0636d91b900c2db827",
+      "sha256": "38adfccbb8e78fda410278527028fa6fb69228a193828c0636d91b900c2db827",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/demo.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "fadd8601d1dcf62b2b06eea9eadfac09e31b4e4ca64e05ffa4c1c3f3ffdf6e1f",
+      "sha256": "fadd8601d1dcf62b2b06eea9eadfac09e31b4e4ca64e05ffa4c1c3f3ffdf6e1f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/fixtures/build_fixtures.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "c8ec3b37f06a9dee0a4a20087045bc7c01b3ed4647edc565d4cc3e21f216fba9",
+      "sha256": "c8ec3b37f06a9dee0a4a20087045bc7c01b3ed4647edc565d4cc3e21f216fba9",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/fixtures/late_receipt.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "601ed2fad532455d02d7fa0e009b35429879fdb36d83f8ef6aff0904fbdb4354",
+      "sha256": "601ed2fad532455d02d7fa0e009b35429879fdb36d83f8ef6aff0904fbdb4354",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/fixtures/teaching.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "fcd2167c9d7a7b4154b9ab60b669a80b8e3f3c42084c28955390f259680e705a",
+      "sha256": "fcd2167c9d7a7b4154b9ab60b669a80b8e3f3c42084c28955390f259680e705a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/fixtures/validation.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "c847814834ae48849ff3020eeca752433366c7628ce35ef0ad191f9b922845d6",
+      "sha256": "c847814834ae48849ff3020eeca752433366c7628ce35ef0ad191f9b922845d6",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/http.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "ccdd72d97642d2ee403b18f25586d52c12243f14032fe9081df7cd91afae08d0",
+      "sha256": "ccdd72d97642d2ee403b18f25586d52c12243f14032fe9081df7cd91afae08d0",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/modules.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d1b1aa59ead4ace3c9c3b284d822d4757038429489f97b18473b07e66a14dee2",
+      "sha256": "d1b1aa59ead4ace3c9c3b284d822d4757038429489f97b18473b07e66a14dee2",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/service.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e71c53cf5c8fce10d9542708be48b6b1c6950ae4f3e62143115e9d2fe257b71f",
+      "sha256": "e71c53cf5c8fce10d9542708be48b6b1c6950ae4f3e62143115e9d2fe257b71f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/storage.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "ee7f476a7f938f8827adb21ba6afd978a9c6f214696bb14d086f4d35dbd33aaa",
+      "sha256": "ee7f476a7f938f8827adb21ba6afd978a9c6f214696bb14d086f4d35dbd33aaa",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/web/app.js",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "102d2fbe5cbcb62f7978bd785590759c380d2cc4a21a848ae88c9bf0d6ea3e3f",
+      "sha256": "102d2fbe5cbcb62f7978bd785590759c380d2cc4a21a848ae88c9bf0d6ea3e3f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/web/index.html",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "ef3e82f78998c87169f1fc78f04cf12e9344ef85fe0b08cb54da97acb4f11128",
+      "sha256": "ef3e82f78998c87169f1fc78f04cf12e9344ef85fe0b08cb54da97acb4f11128",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/accounting_agent/web/style.css",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "5d3cb11bcebe8a1d7745c30db768a7b77435ea59bc48bbc396a071a8d9dd9afe",
+      "sha256": "5d3cb11bcebe8a1d7745c30db768a7b77435ea59bc48bbc396a071a8d9dd9afe",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/docs/ARCHITECTURE.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "2e4f0f4711d9afd907ecf8011bcb4b7b5aea7cb25e45a76c4fce82687c22d072",
+      "sha256": "2e4f0f4711d9afd907ecf8011bcb4b7b5aea7cb25e45a76c4fce82687c22d072",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/docs/CAPABILITY_CONTRACTS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "992f32e7573e5d31801b1257bd4135002dbc54cc5a6d7a133e470b0a084ca5f2",
+      "sha256": "992f32e7573e5d31801b1257bd4135002dbc54cc5a6d7a133e470b0a084ca5f2",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/docs/CONNECTION_READINESS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "1b41938df9ef80e5af40fa304364eecddb43fcd3aa2422a0d2dec5b96b13269f",
+      "sha256": "1b41938df9ef80e5af40fa304364eecddb43fcd3aa2422a0d2dec5b96b13269f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/docs/SOURCES.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f12e5a65267d0e5281fe100bf079d54855fda059cbba06a5d31bb7fe42fd52e6",
+      "sha256": "f12e5a65267d0e5281fe100bf079d54855fda059cbba06a5d31bb7fe42fd52e6",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/docs/VERIFICATION.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d67232ac00021970e4de10bd8c9a1811d51264877dcc0fe8eedf05b1f7427f4c",
+      "sha256": "d67232ac00021970e4de10bd8c9a1811d51264877dcc0fe8eedf05b1f7427f4c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/scripts/check.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "edc7f356f742384566a6e98ca0bea3177e1208372d074b4b8baa95433b8047cd",
+      "sha256": "edc7f356f742384566a6e98ca0bea3177e1208372d074b4b8baa95433b8047cd",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/ss_agent_system_handoff/ACCEPTANCE_TESTS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "b9d547864f3dd34f171c029a9219de2f105c4fb84c777ce35a411b68389210b6",
+      "sha256": "b9d547864f3dd34f171c029a9219de2f105c4fb84c777ce35a411b68389210b6",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/ss_agent_system_handoff/AGENTS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d692b36506f6752b5b9bf66e36ae337b74384a1530c5bfe95209e9372562c626",
+      "sha256": "d692b36506f6752b5b9bf66e36ae337b74384a1530c5bfe95209e9372562c626",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/ss_agent_system_handoff/BIRD_BOWL_ACCOUNTING_PILOT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "28fefadcc294fb7073cabdbea4a1cdd2ae1438de00e70e2c321d376a94633adf",
+      "sha256": "28fefadcc294fb7073cabdbea4a1cdd2ae1438de00e70e2c321d376a94633adf",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/ss_agent_system_handoff/BUILD_PLAN.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f90cca9bd72fa34c7fd6daae91cca6b54fa7f4644cb5cb7841aad03a6c64bed1",
+      "sha256": "f90cca9bd72fa34c7fd6daae91cca6b54fa7f4644cb5cb7841aad03a6c64bed1",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/tests/__init__.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/tests/test_http.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "abe930a587617f2bdc74cd5c85b02e4efd753ed5be4681a131ddf3818a564f8e",
+      "sha256": "abe930a587617f2bdc74cd5c85b02e4efd753ed5be4681a131ddf3818a564f8e",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/tests/test_platform.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "b9eaf535085fba2461f5ce2dd9b83d8f192f74694432f2c69f38726a8cf1fdda",
+      "sha256": "b9eaf535085fba2461f5ce2dd9b83d8f192f74694432f2c69f38726a8cf1fdda",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_ACCOUNTING_REVIEW_BUNDLE/tests/test_validation.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d5683e701680973a81fb43d4971ee579b6720ca78cbd0545ac33070dec507347",
+      "sha256": "d5683e701680973a81fb43d4971ee579b6720ca78cbd0545ac33070dec507347",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_MANIFEST.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f9e1f539ebfed8d6df29f31df78a78f811531642daa2c32a544d48a3484db56d",
+      "sha256": "f9e1f539ebfed8d6df29f31df78a78f811531642daa2c32a544d48a3484db56d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/AGENTS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "3f2e7d3de76f6d54131f6236763d439240a321c6c393f623a3d072d803f41ba9",
+      "sha256": "3f2e7d3de76f6d54131f6236763d439240a321c6c393f623a3d072d803f41ba9",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/DECISIONS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "2b75e382773baa3bd1de1e97bc561a4ea8cd4eedb988595e629ab32784674a6f",
+      "sha256": "2b75e382773baa3bd1de1e97bc561a4ea8cd4eedb988595e629ab32784674a6f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/FABLE_ACCOUNTING_HANDOFF.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "c2c6c270a06224d455d0cd662d8d4a9598e527eac36a3ae08dcc5658bb893411",
+      "sha256": "c2c6c270a06224d455d0cd662d8d4a9598e527eac36a3ae08dcc5658bb893411",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/FABLE_BATCH_1_MANIFEST.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f9e1f539ebfed8d6df29f31df78a78f811531642daa2c32a544d48a3484db56d",
+      "sha256": "f9e1f539ebfed8d6df29f31df78a78f811531642daa2c32a544d48a3484db56d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/FABLE_REVIEW_PROMPT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "acde5496cc5f5cc8ee56869f9baafb68fc3c6f8494da8a149940b4f8530ca641",
+      "sha256": "acde5496cc5f5cc8ee56869f9baafb68fc3c6f8494da8a149940b4f8530ca641",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/Makefile",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "740a6113fd21c1eef86b86d3e77383f64cdade080c50559778038fd5bb31101b",
+      "sha256": "740a6113fd21c1eef86b86d3e77383f64cdade080c50559778038fd5bb31101b",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/PROGRESS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f9418c3896571801a71d5980889dc8ae0109890d41b8f7dd0f3f0bbb9af6130d",
+      "sha256": "f9418c3896571801a71d5980889dc8ae0109890d41b8f7dd0f3f0bbb9af6130d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/README.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "0b62b2d9956ca344f2e65f39e14295edc70c18a36a3c710818e48e03f0b621d8",
+      "sha256": "0b62b2d9956ca344f2e65f39e14295edc70c18a36a3c710818e48e03f0b621d8",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/__init__.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "92a5982154edc4f5594a2618ec2776e46c92450305cc4d220ceba8ab33a6ac37",
+      "sha256": "92a5982154edc4f5594a2618ec2776e46c92450305cc4d220ceba8ab33a6ac37",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/__main__.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "454092dcf0f85aec3e12d6eaa36263fce9ab4e8c991df813bbc312ca92f74d52",
+      "sha256": "454092dcf0f85aec3e12d6eaa36263fce9ab4e8c991df813bbc312ca92f74d52",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/config/bird_bowl.demo.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "8d63330a7d03ffb6b20570ac4ac0278c88a94ce6f01e1bf227060beedff74fbe",
+      "sha256": "8d63330a7d03ffb6b20570ac4ac0278c88a94ce6f01e1bf227060beedff74fbe",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/config/bird_bowl.unconfigured.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "0fddfeb3ebd5cc7f5d500b1f2491ccc6b5f8c74db47f9f0624088df67045119c",
+      "sha256": "0fddfeb3ebd5cc7f5d500b1f2491ccc6b5f8c74db47f9f0624088df67045119c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/core.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "608bb07cd173bbaddc10d066284c69132a58c4f5492c28406299f83ec97a8d65",
+      "sha256": "608bb07cd173bbaddc10d066284c69132a58c4f5492c28406299f83ec97a8d65",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/demo.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4713e0d885704bc1e75fc335aad30c5ccbbd9735e4da8e1ca6105194f5e53241",
+      "sha256": "4713e0d885704bc1e75fc335aad30c5ccbbd9735e4da8e1ca6105194f5e53241",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/fixtures/build_fixtures.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "c8ec3b37f06a9dee0a4a20087045bc7c01b3ed4647edc565d4cc3e21f216fba9",
+      "sha256": "c8ec3b37f06a9dee0a4a20087045bc7c01b3ed4647edc565d4cc3e21f216fba9",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/fixtures/late_receipt.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "601ed2fad532455d02d7fa0e009b35429879fdb36d83f8ef6aff0904fbdb4354",
+      "sha256": "601ed2fad532455d02d7fa0e009b35429879fdb36d83f8ef6aff0904fbdb4354",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/fixtures/teaching.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "fcd2167c9d7a7b4154b9ab60b669a80b8e3f3c42084c28955390f259680e705a",
+      "sha256": "fcd2167c9d7a7b4154b9ab60b669a80b8e3f3c42084c28955390f259680e705a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/fixtures/validation.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "851184896d72886ee5f1642b19310f4c11cbd95cdfbed1c29a7935c86fc0e04d",
+      "sha256": "851184896d72886ee5f1642b19310f4c11cbd95cdfbed1c29a7935c86fc0e04d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/http.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "44122f4db1bbd8d04adca35345ab494a48f9dae0ef61fb51e0df0aceb27c394e",
+      "sha256": "44122f4db1bbd8d04adca35345ab494a48f9dae0ef61fb51e0df0aceb27c394e",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/modules.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "420884e6daaa5426da4cbadd5e334a0bcca4e23e57995c3f299c94f8e7e783c6",
+      "sha256": "420884e6daaa5426da4cbadd5e334a0bcca4e23e57995c3f299c94f8e7e783c6",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/service.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "2e015119b98955bc522e013d0c5fc15c5525ea7d3898ec5be0a4d937df519b86",
+      "sha256": "2e015119b98955bc522e013d0c5fc15c5525ea7d3898ec5be0a4d937df519b86",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/storage.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "cdc5f7308858347cb65b28a77800ee6d1adb4a820c40b8a4a1bd1b486fc94c19",
+      "sha256": "cdc5f7308858347cb65b28a77800ee6d1adb4a820c40b8a4a1bd1b486fc94c19",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/web/app.js",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f0008067509cdae952adf500fe24865873082d4a7c4443e0382265c9af66b814",
+      "sha256": "f0008067509cdae952adf500fe24865873082d4a7c4443e0382265c9af66b814",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/web/index.html",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "6ee1eb196ed84a9b7bae6b31aabf1e468971cdae2e9a23c7436abe13b54956b0",
+      "sha256": "6ee1eb196ed84a9b7bae6b31aabf1e468971cdae2e9a23c7436abe13b54956b0",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/accounting_agent/web/style.css",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "5d3cb11bcebe8a1d7745c30db768a7b77435ea59bc48bbc396a071a8d9dd9afe",
+      "sha256": "5d3cb11bcebe8a1d7745c30db768a7b77435ea59bc48bbc396a071a8d9dd9afe",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/ARCHITECTURE.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "c7f750896f435cd59a070e1f574276aeac4793b57d1adc5c40d0ce50f047ff83",
+      "sha256": "c7f750896f435cd59a070e1f574276aeac4793b57d1adc5c40d0ce50f047ff83",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/BATCH_1_REPORT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "bc7356a886b57d54ea67e64442f209ed8c6341e040a63fd4c9c280b5d66b09a3",
+      "sha256": "bc7356a886b57d54ea67e64442f209ed8c6341e040a63fd4c9c280b5d66b09a3",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/CAPABILITY_CONTRACTS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "3f5fd538ae227957df74ede0b684eb442d3856abed5c5a1191a74f5242db7412",
+      "sha256": "3f5fd538ae227957df74ede0b684eb442d3856abed5c5a1191a74f5242db7412",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/CONNECTION_READINESS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "1b41938df9ef80e5af40fa304364eecddb43fcd3aa2422a0d2dec5b96b13269f",
+      "sha256": "1b41938df9ef80e5af40fa304364eecddb43fcd3aa2422a0d2dec5b96b13269f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/SOURCES.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f12e5a65267d0e5281fe100bf079d54855fda059cbba06a5d31bb7fe42fd52e6",
+      "sha256": "f12e5a65267d0e5281fe100bf079d54855fda059cbba06a5d31bb7fe42fd52e6",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/VERIFICATION.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f4d9b30ca28db97b737b21949c9d2103adc576467938440dac7095c862a61dd3",
+      "sha256": "f4d9b30ca28db97b737b21949c9d2103adc576467938440dac7095c862a61dd3",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/accounting-agent-os-demo.jpg",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "8b8bf3e3eab2de60b4497604774fd3bc81ed9fe57e66764c1381352e0aa66e27",
+      "sha256": "8b8bf3e3eab2de60b4497604774fd3bc81ed9fe57e66764c1381352e0aa66e27",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-01-reviewer.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "27e5d301896de0eec501a100b459bb265ec693bd123fe2b4e31b85a239cee430",
+      "sha256": "27e5d301896de0eec501a100b459bb265ec693bd123fe2b4e31b85a239cee430",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-01-tests.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "eb4d15ec72028f27312b165a0a86cdc550c0fef5ac446f15a388ebf26eb2801c",
+      "sha256": "eb4d15ec72028f27312b165a0a86cdc550c0fef5ac446f15a388ebf26eb2801c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-02-reviewer.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "53eb2dc841bf8be1ec429edc21ea238281091db624afcbf3c16e5c9367df2d2c",
+      "sha256": "53eb2dc841bf8be1ec429edc21ea238281091db624afcbf3c16e5c9367df2d2c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-02-tests.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "0029babad2ad740bfc71a84730295f21f01d0e539538cce722c5386129d18d37",
+      "sha256": "0029babad2ad740bfc71a84730295f21f01d0e539538cce722c5386129d18d37",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-03-reviewer.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "b85fefb3905d4227bbd40ed47f9fe6f5ed46cc45ffdc408d37d936b134a39b79",
+      "sha256": "b85fefb3905d4227bbd40ed47f9fe6f5ed46cc45ffdc408d37d936b134a39b79",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-03-tests.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "74f147f64e295db0374465d5dce3a6bae3b4118f12c0c1c07c244c6198fcbb93",
+      "sha256": "74f147f64e295db0374465d5dce3a6bae3b4118f12c0c1c07c244c6198fcbb93",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-04-reviewer.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "fd79c47017dea2445dde22c4f905612d97829d3762bd8d19ad5646685cfcc12a",
+      "sha256": "fd79c47017dea2445dde22c4f905612d97829d3762bd8d19ad5646685cfcc12a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-04-tests.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "001c7cd7362b21fe028206f7146de259fec7cbec603ab1bebc6c9bbb1e5b5ded",
+      "sha256": "001c7cd7362b21fe028206f7146de259fec7cbec603ab1bebc6c9bbb1e5b5ded",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-05-core-initial.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "3101c93d3079eab532cd1a17e564ba877dd80ed760289c866af6950e3b7a9fce",
+      "sha256": "3101c93d3079eab532cd1a17e564ba877dd80ed760289c866af6950e3b7a9fce",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-05-reviewer-initial.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "bd4b91971736ea95427de9ebeaa2fde5f6f81d1997b59298b3d0d45533dcea3c",
+      "sha256": "bd4b91971736ea95427de9ebeaa2fde5f6f81d1997b59298b3d0d45533dcea3c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-05-reviewer.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "bd4b91971736ea95427de9ebeaa2fde5f6f81d1997b59298b3d0d45533dcea3c",
+      "sha256": "bd4b91971736ea95427de9ebeaa2fde5f6f81d1997b59298b3d0d45533dcea3c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-05-tests.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "42c332ef50855c82651b446cbf497827e7b5c949832fad80adc3fb4046ecfed7",
+      "sha256": "42c332ef50855c82651b446cbf497827e7b5c949832fad80adc3fb4046ecfed7",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-06-reviewer.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "bd4b91971736ea95427de9ebeaa2fde5f6f81d1997b59298b3d0d45533dcea3c",
+      "sha256": "bd4b91971736ea95427de9ebeaa2fde5f6f81d1997b59298b3d0d45533dcea3c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-06-tests.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "58744c1533b02a36175d8bc8bd8e3b15a475420ae76ae0692e95774cf0d20818",
+      "sha256": "58744c1533b02a36175d8bc8bd8e3b15a475420ae76ae0692e95774cf0d20818",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-07-check.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d378fb01129cd9d9836a8cbb00634a201fc4bb76a8a501e38f2265990a17929a",
+      "sha256": "d378fb01129cd9d9836a8cbb00634a201fc4bb76a8a501e38f2265990a17929a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-07-reviewer.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "185f72df77e79ceb39526d004efc5f9c4dfa451d141f5be08a472c48df154e04",
+      "sha256": "185f72df77e79ceb39526d004efc5f9c4dfa451d141f5be08a472c48df154e04",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/T-07-tests.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d69169c7307c80d1b62a7ba0a5ca60f1d3489b96c44ab528f97ab16af1284ce0",
+      "sha256": "d69169c7307c80d1b62a7ba0a5ca60f1d3489b96c44ab528f97ab16af1284ce0",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/baseline-original-tests.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f4b5b896ed3f8f22d80ede514651cf7509d2705a846842cef99b7308cc57d4e2",
+      "sha256": "f4b5b896ed3f8f22d80ede514651cf7509d2705a846842cef99b7308cc57d4e2",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/baseline-probes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "99b1d5420b74e2333f45f79508254afa0299f7506a9ea65d508adfe91583f2a4",
+      "sha256": "99b1d5420b74e2333f45f79508254afa0299f7506a9ea65d508adfe91583f2a4",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/baseline-validation.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "27e5d301896de0eec501a100b459bb265ec693bd123fe2b4e31b85a239cee430",
+      "sha256": "27e5d301896de0eec501a100b459bb265ec693bd123fe2b4e31b85a239cee430",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/changed-files.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "926ca637df8039c8299f03f80cac752f08b351ccd2361c9dbf270732ba0c40ce",
+      "sha256": "926ca637df8039c8299f03f80cac752f08b351ccd2361c9dbf270732ba0c40ce",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/final-check.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d378fb01129cd9d9836a8cbb00634a201fc4bb76a8a501e38f2265990a17929a",
+      "sha256": "d378fb01129cd9d9836a8cbb00634a201fc4bb76a8a501e38f2265990a17929a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/final-delivered-runner.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "185f72df77e79ceb39526d004efc5f9c4dfa451d141f5be08a472c48df154e04",
+      "sha256": "185f72df77e79ceb39526d004efc5f9c4dfa451d141f5be08a472c48df154e04",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/final-probes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "3a5671c83c9eba2581ef56c9ca6a116177ebc215b4a770288594fa003da389db",
+      "sha256": "3a5671c83c9eba2581ef56c9ca6a116177ebc215b4a770288594fa003da389db",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/final-tests.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "1c40dbb60cb4565be7247f3b81d099e24a7ffc8fde4a29fbb98c461fdf720635",
+      "sha256": "1c40dbb60cb4565be7247f3b81d099e24a7ffc8fde4a29fbb98c461fdf720635",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/final-validation.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "dda657ae349a5a4189f79618dc23c5f9dc7b7340598f532aa3737a93cde61b85",
+      "sha256": "dda657ae349a5a4189f79618dc23c5f9dc7b7340598f532aa3737a93cde61b85",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/final-validation.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "04b52d1dffba747dcc401327309226ff52c309517e244b2d95aec04fc66ede6a",
+      "sha256": "04b52d1dffba747dcc401327309226ff52c309517e244b2d95aec04fc66ede6a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/docs/batch1/period-lock-preserves-approval.jpg",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "a856056b520dfcd3446f18dc42aa06061b658ce03cfecf5dd0eab46536c2fd31",
+      "sha256": "a856056b520dfcd3446f18dc42aa06061b658ce03cfecf5dd0eab46536c2fd31",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/review/FABLE_ARCHITECTURE_REVIEW.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "720060f97cf6eabf2520d2b5dd6a9ccd44a9d86c20f552030fbffb5054f0b938",
+      "sha256": "720060f97cf6eabf2520d2b5dd6a9ccd44a9d86c20f552030fbffb5054f0b938",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/review/FABLE_IMPLEMENTATION_BACKLOG.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "3f4706b9a41a53a362e66f8e09d14c183da4d5b757e0d1ef8a6f857b99f98adf",
+      "sha256": "3f4706b9a41a53a362e66f8e09d14c183da4d5b757e0d1ef8a6f857b99f98adf",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/review/FABLE_VALIDATION_CASES.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "cfc4f3b080e737dc0743963803ab60cf17b53e5f852993a890497610b812b40c",
+      "sha256": "cfc4f3b080e737dc0743963803ab60cf17b53e5f852993a890497610b812b40c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/review/original/reviewer_probes.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "7a51e540cfb8fae007da8e1dcae9f4451dc3fa30dc453bc197e6a61e6d334344",
+      "sha256": "7a51e540cfb8fae007da8e1dcae9f4451dc3fa30dc453bc197e6a61e6d334344",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/review/original/run_fable_validation_cases.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "8dd14361f57196a6afffcdae7fca17c1c570b9a4d08f8571f6d6ba8fc51c093f",
+      "sha256": "8dd14361f57196a6afffcdae7fca17c1c570b9a4d08f8571f6d6ba8fc51c093f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/review/reviewer_probes.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "3e3d086eee9ce77ff654d89b28969c2b36dc9fc6bf041e9b85fd2c18f1fb2552",
+      "sha256": "3e3d086eee9ce77ff654d89b28969c2b36dc9fc6bf041e9b85fd2c18f1fb2552",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/review/run_fable_validation_cases.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "ac20d11ad0c3b9b9fc70120454726023f0face33b44486ebba5b1702cce00ab4",
+      "sha256": "ac20d11ad0c3b9b9fc70120454726023f0face33b44486ebba5b1702cce00ab4",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/scripts/check.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d863128bf0635c9ca63aa57f052e74e5cb55f8fb02799a32183cc4ad5b022a2d",
+      "sha256": "d863128bf0635c9ca63aa57f052e74e5cb55f8fb02799a32183cc4ad5b022a2d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/ss_agent_system_handoff/ACCEPTANCE_TESTS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "b9d547864f3dd34f171c029a9219de2f105c4fb84c777ce35a411b68389210b6",
+      "sha256": "b9d547864f3dd34f171c029a9219de2f105c4fb84c777ce35a411b68389210b6",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/ss_agent_system_handoff/AGENTS.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d692b36506f6752b5b9bf66e36ae337b74384a1530c5bfe95209e9372562c626",
+      "sha256": "d692b36506f6752b5b9bf66e36ae337b74384a1530c5bfe95209e9372562c626",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/ss_agent_system_handoff/BIRD_BOWL_ACCOUNTING_PILOT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "28fefadcc294fb7073cabdbea4a1cdd2ae1438de00e70e2c321d376a94633adf",
+      "sha256": "28fefadcc294fb7073cabdbea4a1cdd2ae1438de00e70e2c321d376a94633adf",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/ss_agent_system_handoff/BUILD_PLAN.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f90cca9bd72fa34c7fd6daae91cca6b54fa7f4644cb5cb7841aad03a6c64bed1",
+      "sha256": "f90cca9bd72fa34c7fd6daae91cca6b54fa7f4644cb5cb7841aad03a6c64bed1",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/tests/__init__.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/tests/schema_v1.sql",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d4901784985c45c7f7c2f82f52bc23c9bf849d1a8b4a1c4afc1a702f7ff1ed49",
+      "sha256": "d4901784985c45c7f7c2f82f52bc23c9bf849d1a8b4a1c4afc1a702f7ff1ed49",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/tests/test_http.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "850012658f176f67fb6f6b6ddb9f373b7034292b09e8c21d152fabbb2bbad6be",
+      "sha256": "850012658f176f67fb6f6b6ddb9f373b7034292b09e8c21d152fabbb2bbad6be",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/tests/test_periods.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d7b19c35751d7cb1a295919d8d816badc9ca370c0eae278417a964a340d173ae",
+      "sha256": "d7b19c35751d7cb1a295919d8d816badc9ca370c0eae278417a964a340d173ae",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/tests/test_platform.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f2f84e61488e31a7601128c4b8bfbc101eb9cdb63e23a392a45bde1e0853f17c",
+      "sha256": "f2f84e61488e31a7601128c4b8bfbc101eb9cdb63e23a392a45bde1e0853f17c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/tests/test_reviewer_cases.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "30914573d7e45d75d72971a2da432cbc28216de70734a3acfe68912d82abac49",
+      "sha256": "30914573d7e45d75d72971a2da432cbc28216de70734a3acfe68912d82abac49",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/tests/test_reviewer_probes.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "1264240861da78ed3a478c4187128eee3c70c7da03f9caba742099f4999e9026",
+      "sha256": "1264240861da78ed3a478c4187128eee3c70c7da03f9caba742099f4999e9026",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_BATCH_1_REVIEW_BUNDLE/tests/test_validation.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "60dd47485680ba4076d56421baf9f24a1290b24ec9e117177e04c0265356485a",
+      "sha256": "60dd47485680ba4076d56421baf9f24a1290b24ec9e117177e04c0265356485a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_CORRECTIONS.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "04fe3acc4cbd2e6bae79b5435391652b96a7c71a8dcd4b1aedd38076f17a0fd8",
+      "sha256": "04fe3acc4cbd2e6bae79b5435391652b96a7c71a8dcd4b1aedd38076f17a0fd8",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_REPORT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "b925b388aa2d49a7c0e6f8d520e5d0b95d29dae23bf5b606bff5b0dcfa8dd794",
+      "sha256": "b925b388aa2d49a7c0e6f8d520e5d0b95d29dae23bf5b606bff5b0dcfa8dd794",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RA_CORRECTIONS_PACKAGE_CHECK.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "aa7d55b20702b7596a54523449e453e72f59493cea2167427b0980c897774957",
+      "sha256": "aa7d55b20702b7596a54523449e453e72f59493cea2167427b0980c897774957",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "528c94e49a951e7a1fca1869e2f3b57d13584a3157682772189344e8ee57fd9c",
+      "sha256": "528c94e49a951e7a1fca1869e2f3b57d13584a3157682772189344e8ee57fd9c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_RESULTS.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "b3a27cef50f7298aa7380c8514d3f2636a52973e6619dc8d9dc425d2d5ca2b80",
+      "sha256": "b3a27cef50f7298aa7380c8514d3f2636a52973e6619dc8d9dc425d2d5ca2b80",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/FABLE_RB_CORRECTIONS.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f6b2583f751f20b9612f45e9ea25b38692732f7ac2c5b17eaddee1ca00620667",
+      "sha256": "f6b2583f751f20b9612f45e9ea25b38692732f7ac2c5b17eaddee1ca00620667",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/baseline-frozen-ra-comparison.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "eb4f416c00d0c5fe9bfb2d12534e9d824e07f4b0b6d50ffd8fdc7194955444f0",
+      "sha256": "eb4f416c00d0c5fe9bfb2d12534e9d824e07f4b0b6d50ffd8fdc7194955444f0",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/check-product-requirements-json.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/check-product-requirements-json.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "baa20cf4c59781755023f2649c1d1f2c0b4caec5126830dcdffa13d7a82cc59a",
+      "sha256": "baa20cf4c59781755023f2649c1d1f2c0b4caec5126830dcdffa13d7a82cc59a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/exit-codes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "348ab434eda1879df85b985d91e1a3f7711290332a374dc31361a6e5eb46b52e",
+      "sha256": "348ab434eda1879df85b985d91e1a3f7711290332a374dc31361a6e5eb46b52e",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exit-codes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "8dce2c5a76aeef18d723b08e133ce983b02e7179951a8855e8f6733378c60f2b",
+      "sha256": "8dce2c5a76aeef18d723b08e133ce983b02e7179951a8855e8f6733378c60f2b",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-make-acceptance-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-make-acceptance-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "144fabf90726cdedaa41f832ba40d8e8b5bfa59c4bae2f15a3c1da1d1cb8d303",
+      "sha256": "144fabf90726cdedaa41f832ba40d8e8b5bfa59c4bae2f15a3c1da1d1cb8d303",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-make-batch2-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-make-batch2-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "5b8b54dda40a72c04eeaac14eeb389aa2f99695fa4ca420ece4ff66a295f6e12",
+      "sha256": "5b8b54dda40a72c04eeaac14eeb389aa2f99695fa4ca420ece4ff66a295f6e12",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-make-rb-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "223c687c8838318d19a2d5d459bfe2cf275222a8ab126b33aec0af83a5407fa1",
+      "sha256": "223c687c8838318d19a2d5d459bfe2cf275222a8ab126b33aec0af83a5407fa1",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-make-rb-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "c099fda1ede39874c14ad95941783c53aafc0b99bcbc22f900031a002c5d8ec4",
+      "sha256": "c099fda1ede39874c14ad95941783c53aafc0b99bcbc22f900031a002c5d8ec4",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-make-reverification-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-make-reverification-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4ad59134369c41806b820c7ae7ae8799d58bd0f1bde42b4e6fd04faa1016e6ec",
+      "sha256": "4ad59134369c41806b820c7ae7ae8799d58bd0f1bde42b4e6fd04faa1016e6ec",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-make-test.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "21103379b58fcdedc1020cbddeffb5a405a5ad7d1269e55365a95efde444abd6",
+      "sha256": "21103379b58fcdedc1020cbddeffb5a405a5ad7d1269e55365a95efde444abd6",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-make-test.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4cee8569de82dc754e80a1041a8f83299201efd21f53a26aa32353bc553eb0ee",
+      "sha256": "4cee8569de82dc754e80a1041a8f83299201efd21f53a26aa32353bc553eb0ee",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-new-probes.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experiment/exp-new-probes.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "069293ae2377c52fcaf12d47d17e6a58e33f39f98b44324684200b2a11895736",
+      "sha256": "069293ae2377c52fcaf12d47d17e6a58e33f39f98b44324684200b2a11895736",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/experimental-correction.patch",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "20ded370601f78f6dc1c90f3c8e019eec275ef5b89fc6eaae3830fdcf2e6533c",
+      "sha256": "20ded370601f78f6dc1c90f3c8e019eec275ef5b89fc6eaae3830fdcf2e6533c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/fable-rb-probes-exit.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22",
+      "sha256": "cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/integrity-manifest.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "99ee30ebf9eda19af4496d78a2fb9743cb23f88213f39ce436d3f40dec89f29e",
+      "sha256": "99ee30ebf9eda19af4496d78a2fb9743cb23f88213f39ce436d3f40dec89f29e",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/inventory_checks_output.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "8481ad35e2a18a6ac90002e2b6863e0e345469a87e9d905e24b338bb4561949c",
+      "sha256": "8481ad35e2a18a6ac90002e2b6863e0e345469a87e9d905e24b338bb4561949c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-acceptance-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-acceptance-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "19e93df69fe8a6212be80952659a18936af3094220c0deb2a403360728313572",
+      "sha256": "19e93df69fe8a6212be80952659a18936af3094220c0deb2a403360728313572",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-batch2-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-batch2-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "5658b40942fa3669ac6ab60102cfc24715af6602d4e0af50a84200592e8d8c50",
+      "sha256": "5658b40942fa3669ac6ab60102cfc24715af6602d4e0af50a84200592e8d8c50",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-check.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-check.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "9c68d9c1f86465d4ce24745304aba630fe1c7d7a517cdf1caf6e5ac84b3776c4",
+      "sha256": "9c68d9c1f86465d4ce24745304aba630fe1c7d7a517cdf1caf6e5ac84b3776c4",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-rb-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "c6241c176eb8cbf162611da2dfd91d03dcb2ba89df265cf9098a663a24dd2c10",
+      "sha256": "c6241c176eb8cbf162611da2dfd91d03dcb2ba89df265cf9098a663a24dd2c10",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-rb-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "87b110783c278afb282991f364aeb6e8af2b3aeceee47ae8410bbcc2d3b0aeb3",
+      "sha256": "87b110783c278afb282991f364aeb6e8af2b3aeceee47ae8410bbcc2d3b0aeb3",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-reverification-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-reverification-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "60a5483a9567b39533f86f2afcb0761470198858da2bd9c338d7a71194de8c44",
+      "sha256": "60a5483a9567b39533f86f2afcb0761470198858da2bd9c338d7a71194de8c44",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-test.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "12d426fbe12d123b76e78ed24ecd5edef0ec29a758db39fe81376efeb663a296",
+      "sha256": "12d426fbe12d123b76e78ed24ecd5edef0ec29a758db39fe81376efeb663a296",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/make-test.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4cee8569de82dc754e80a1041a8f83299201efd21f53a26aa32353bc553eb0ee",
+      "sha256": "4cee8569de82dc754e80a1041a8f83299201efd21f53a26aa32353bc553eb0ee",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/original-full-acceptance.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/original-full-acceptance.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f04ed7e25f1099ba10006ff81cc57321599d1ed81590fce0b95f1c97d9d805ed",
+      "sha256": "f04ed7e25f1099ba10006ff81cc57321599d1ed81590fce0b95f1c97d9d805ed",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/original-full-reverification.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/original-full-reverification.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "cd6386023288bbb2bf81d07556a00a133bc47a1db7c8f76a5504c8006566fad1",
+      "sha256": "cd6386023288bbb2bf81d07556a00a133bc47a1db7c8f76a5504c8006566fad1",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/parsed-gate-results.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "2aa2849ed42381c088a43f496a4b397fed6b53e1c0568ed19c16c2e31575323e",
+      "sha256": "2aa2849ed42381c088a43f496a4b397fed6b53e1c0568ed19c16c2e31575323e",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/ra-probes-direct.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/ra-probes-direct.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "c5b8d0a689bf65d9caf536a54a271a986c801761a6657b22dc9541be0ec25f2e",
+      "sha256": "c5b8d0a689bf65d9caf536a54a271a986c801761a6657b22dc9541be0ec25f2e",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/register_checks_output.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e6dd2d4321974d68ffb73755ef50f46b5141295ea7a49d248ecac583158ae07b",
+      "sha256": "e6dd2d4321974d68ffb73755ef50f46b5141295ea7a49d248ecac583158ae07b",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/register_fault_tests_output.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f6caa532c73f4a40b76791ffc7e7d9844051d0e3f142de42b07140429f9bf3f5",
+      "sha256": "f6caa532c73f4a40b76791ffc7e7d9844051d0e3f142de42b07140429f9bf3f5",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/build_results.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "8e6a054c7706ac723bf097a2f4136c865a42d32341793fec19202ed000c06091",
+      "sha256": "8e6a054c7706ac723bf097a2f4136c865a42d32341793fec19202ed000c06091",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/integrity.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "b3f207f733ca1a583f820a9fee12577bb2ae99a228e75d8154bc0d60fd6c8e19",
+      "sha256": "b3f207f733ca1a583f820a9fee12577bb2ae99a228e75d8154bc0d60fd6c8e19",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/inventory.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "daff4a12c555eb3476046b1db06d2279fe3c5b6a43edea131a90cf19b249cd57",
+      "sha256": "daff4a12c555eb3476046b1db06d2279fe3c5b6a43edea131a90cf19b249cd57",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/parse_logs.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "5798c66ae3f9e2daa72fa93621eca25946083a5774f13f2f92b97031c276a69b",
+      "sha256": "5798c66ae3f9e2daa72fa93621eca25946083a5774f13f2f92b97031c276a69b",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_checks.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "8aa51551574c6e0c914357420bf4f05ed4dc538cac96f4ceb6a0a3828fcf8e03",
+      "sha256": "8aa51551574c6e0c914357420bf4f05ed4dc538cac96f4ceb6a0a3828fcf8e03",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "664e717ef868564c7e17d1d21046892030b57738e2ebe5e34df11dc7d1c8575e",
+      "sha256": "664e717ef868564c7e17d1d21046892030b57738e2ebe5e34df11dc7d1c8575e",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_parse.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "16c4e4bbc6e554cee663ac5395bcf42d3ecb4309fc5b8bf3381bc46507cdc69a",
+      "sha256": "16c4e4bbc6e554cee663ac5395bcf42d3ecb4309fc5b8bf3381bc46507cdc69a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/run_cmd.sh",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "20a1fa52ecc4db5bfbe83b2c3d4f72d96930c830052ecb6a6bc0f71086f16353",
+      "sha256": "20a1fa52ecc4db5bfbe83b2c3d4f72d96930c830052ecb6a6bc0f71086f16353",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/evidence/versions.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "0b8bd1628253ecfb0a021b705a10070185db36437fea11cc8309b282d558506f",
+      "sha256": "0b8bd1628253ecfb0a021b705a10070185db36437fea11cc8309b282d558506f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_output.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "50b45b9317c74916a6511c3813abb15fa771cdb75846d426e21775a2d7a13910",
+      "sha256": "50b45b9317c74916a6511c3813abb15fa771cdb75846d426e21775a2d7a13910",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "37f67ad6477095dffb46b4acd184e67ef96549bd23af5a073b99538d9b5848c1",
+      "sha256": "37f67ad6477095dffb46b4acd184e67ef96549bd23af5a073b99538d9b5848c1",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_MANIFEST.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "7544ce4a0358e66a9d1f8094057d17c3d1152c5c36c7f90907621a505e31847d",
+      "sha256": "7544ce4a0358e66a9d1f8094057d17c3d1152c5c36c7f90907621a505e31847d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_PACKAGE_CHECK.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "95c0272c167e1b016605854ba43714f5dd28ce011b4b681fd5767f691a83e531",
+      "sha256": "95c0272c167e1b016605854ba43714f5dd28ce011b4b681fd5767f691a83e531",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "2b47c3f47d5a20461e5a78f67317c1707269d0b4d85998a3ddb795292f26014d",
+      "sha256": "2b47c3f47d5a20461e5a78f67317c1707269d0b4d85998a3ddb795292f26014d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip.sha256",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "2e4ac2283a894c0ad2d426538d9459226e9edf4482b0af759c028091117a6fc8",
+      "sha256": "2e4ac2283a894c0ad2d426538d9459226e9edf4482b0af759c028091117a6fc8",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_MANIFEST.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "c85cc6e5c5dba9f09df2d603359858112a9885c92398e656c6bf7826fd88c204",
+      "sha256": "c85cc6e5c5dba9f09df2d603359858112a9885c92398e656c6bf7826fd88c204",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_PACKAGE_CHECK.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "ff7c994c89e32897783889c0b05d7b5abfc2a34db1c5973ef70a8b0645b35a2f",
+      "sha256": "ff7c994c89e32897783889c0b05d7b5abfc2a34db1c5973ef70a8b0645b35a2f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.FROZEN.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f49bbc5cd2195ecafa4f1719fb20020ba535779b6324fab36eb12f113264e15d",
+      "sha256": "f49bbc5cd2195ecafa4f1719fb20020ba535779b6324fab36eb12f113264e15d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d",
+      "sha256": "00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip.sha256",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "95c465804b1f8a6387fb68f72b5cbea7532d83344ca01a3bab5ebd7a04e7ff2b",
+      "sha256": "95c465804b1f8a6387fb68f72b5cbea7532d83344ca01a3bab5ebd7a04e7ff2b",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE.zip",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "0562869ad210b4b3b8653b4600bc7f3b863f283e8087029c6b19719497a5f399",
+      "sha256": "0562869ad210b4b3b8653b4600bc7f3b863f283e8087029c6b19719497a5f399",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE.zip.sha256",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "36e241a97a012cbb5ecf1e645cd5fa49f818aa7b04d0e319960940145fec71c9",
+      "sha256": "36e241a97a012cbb5ecf1e645cd5fa49f818aa7b04d0e319960940145fec71c9",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE_V2.zip",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d4c5795dfce0ab9584c53c874efb4693e3473d3dadfa37a0d3b1be89bf03d826",
+      "sha256": "d4c5795dfce0ab9584c53c874efb4693e3473d3dadfa37a0d3b1be89bf03d826",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE_V2.zip.sha256",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4bf879c337e8828580ea68db2a2c7a45677cfec3940b37653dbbf74297a7eb82",
+      "sha256": "4bf879c337e8828580ea68db2a2c7a45677cfec3940b37653dbbf74297a7eb82",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE_V2_MANIFEST.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4007f2a340b63f13e3807ca5d1021bba89f9533cc2a8e2931abe5d57411c4495",
+      "sha256": "4007f2a340b63f13e3807ca5d1021bba89f9533cc2a8e2931abe5d57411c4495",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_REVERIFICATION_CORRECTIONS_PACKAGE_CHECK.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "2462e0c1f3b2793d1738f9fecb475d5d16247fbc6362eab14b6af07ca866ea1f",
+      "sha256": "2462e0c1f3b2793d1738f9fecb475d5d16247fbc6362eab14b6af07ca866ea1f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_REVIEW_MANIFEST.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d894daa9f2658309d8b174faca06cae35559a00dd02aa3163a98fde948524a9c",
+      "sha256": "d894daa9f2658309d8b174faca06cae35559a00dd02aa3163a98fde948524a9c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/synthetic-review-package.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "05a7b8cc84d14518efda50c1de80940531b8263a1244043512403d27232578db",
+      "sha256": "05a7b8cc84d14518efda50c1de80940531b8263a1244043512403d27232578db",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "scripts/build_rc_review_bundle.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "96028d0f687c3eaa9564cf7eab1a5cb9da29e5143626ecb1c42ac7f418f454b2",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "scripts/check.py",
+      "status": "modified",
+      "baseline_sha256": "a485f04a535349bf0f9196f80aa24d4f320323d316e57cd5d94c74971520831c",
+      "initial_working_sha256": "a485f04a535349bf0f9196f80aa24d4f320323d316e57cd5d94c74971520831c",
+      "sha256": "e692e850191aa63a42f4ceb92565bfd205f1e063479390a59f28ca9c4c4523d2",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "scripts/check_product_requirements.py",
+      "status": "modified",
+      "baseline_sha256": "fc805e7aa7667f0a3264e81c3476edea17c2a86ddd0aa683053785b95e3ed3c2",
+      "initial_working_sha256": "fc805e7aa7667f0a3264e81c3476edea17c2a86ddd0aa683053785b95e3ed3c2",
+      "sha256": "7fe22379d0e38585f63365bdf304e8e86d2a06455ad40cb15f0513deb98ec79f",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "scripts/collect_rc_results.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "af74d8cee4148501b25ee489bb6ff6686905be0d4c925ed29078ecd0deb07221",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "scripts/verify_rb_review.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "f05088163b88a4b1c4d3ef850ac88d77a084129101bbdd83a3d3e7f78d270c10",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "tests/test_product_requirements.py",
+      "status": "modified",
+      "baseline_sha256": "e68cc97b1abf7ed073c44a7f6ae51d061ac915a70f408dfa3d16dda6e38ebd5a",
+      "initial_working_sha256": "e68cc97b1abf7ed073c44a7f6ae51d061ac915a70f408dfa3d16dda6e38ebd5a",
+      "sha256": "a39a87876e565a773ae97ee259ece4c9a341ce0ed82eabff9dd2a1dbe68e6381",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "tests/test_rc_review_gate.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "866bddc1ae16acac560934a44d993c40f3a1c9dd2e2179b61e36159a875bfac7",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "tests/test_review_corrections_rc.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "1437cc546d01d4421d919af5c9b7626181dc01bdfa85b134bda4e746b0b27a75",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+Fable RV acceptance probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[A12] (RV-12) a revised receipt is disclosed and held; suppliers cannot accept it; acceptance lapses on a further change; referral never clears
+    refer the receipt mismatch externally: ('ok', 1)
+    after referral: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['RECEIPT_AMOUNT_POLICY_UNSET']}
+    receipt re-supplied by a colleague -> {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    disclosed revisions: [('receipt-A1', 1, 'rv-preparer', 2, 'rv-preparer-2', ['amount'])]
+    acceptance by supplier of version 1: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    acceptance by supplier of version 2: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    acceptance by reviewer without the disposition grant: ('refused', 403, 'Human authority grant required: disposition')
+    acceptance by acceptance that does not cite the revised receipt: ('refused', 400, 'Cite all revised supporting documents')
+    acceptance by a granted human who supplied neither version: ('ok', 2)
+    after acceptance: {'id': 17, 'eligible': True, 'status': 'pending', 'blockers': []} | revisions still disclosed: True
+    the accepter gives final review: ('refused', 403, 'Independent human review required')
+    independent final review: ('ok', None)
+    receipt changed again -> A1: {'id': 22, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} | events: [('APPROVED_SOURCE_REVISED', 'demo_card_001:A1')]
+    journal support revised -> before: True | after: ['EVIDENCE_REVISED_REQUIRES_REVIEW']
+    -> OK
+
+[X12k] (RV-12) replacing a receipt under a new key is treated like revising it
+    receipt 39.99 against a 40.00 charge: ['RECEIPT_AMOUNT_POLICY_UNSET']
+    old receipt withdrawn, a new receipt key supplied at 40.00 -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    receipts relied on: [('receipt-A1-replacement', 1)] | revisions disclosed: [{'changed_fields': ['amount', 'content'], 'current': {'hash': 'b5dbd212d26eec3b1ce6b50dd25898850348fb78a4230bbeafa6bf4c49817f5f', 'snapshot_id': 10, 'source_key': 'receipt-A1-replacement', 'supplier': 'rv-preparer', 'version': 1}, 'earlier': {'hash': '5ae9fa6e335b78763c9506b47c3fae48f4ad226fcbb62a2d3075cab34c287ced', 'snapshot_id': 4, 'source_key': 'receipt-A1', 'supplier': 'rv-preparer', 'version': 1}, 'kind': 'replaced', 'source_key': 'receipt-A1-replacement', 'source_kind': 'receipt', 'supplier': 'rv-preparer'}, {'changed_fields': ['amount', 'content'], 'current': {'hash': 'b5dbd212d26eec3b1ce6b50dd25898850348fb78a4230bbeafa6bf4c49817f5f', 'snapshot_id': 10, 'source_key': 'receipt-A1-replacement', 'supplier': 'rv-preparer', 'version': 1}, 'earlier': {'hash': '5ae9fa6e335b78763c9506b47c3fae48f4ad226fcbb62a2d3075cab34c287ced', 'snapshot_id': 9, 'source_key': 'receipt-A1', 'supplier': 'rv-preparer', 'version': 2}, 'kind': 'replaced', 'source_key': 'receipt-A1-replacement', 'source_kind': 'receipt', 'supplier': 'rv-preparer'}]
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+====================================================================================================
+A12   RV-12        OK     a revised receipt is disclosed and held; suppliers cannot accept it; acceptance lapses on a further change; referral never clears
+X12k  RV-12        OK     replacing a receipt under a new key is treated like revising it
+
+Verdict counts: {'OK': 2}
+Acceptance gate: PASS

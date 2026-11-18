@@ -1,0 +1,31 @@
+test_PRV02_nonexistent_test_ticket_and_arbitrary_token_are_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV03_failed_verdict_cannot_be_promoted (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV03_self_asserted_independent_verification_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV04_shared_web_and_python_are_checked_but_fixtures_are_exempt (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV05_approved_cannot_depend_unconditionally_on_proposed (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV06_unstarted_or_deferred_dependency_needs_local_condition (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV07_scope_disposition_must_match_table (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV08_stray_dependency_punctuation_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV10_every_shared_field_except_trace_uses_client_section_terms (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV12_both_reviewer_authority_files_are_hash_pinned (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV12_omitted_changed_and_invented_results_cannot_promote_records (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV12_stale_checkpoint_metadata_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV13_terms_must_include_the_display_name_in_the_client_heading (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV15_result_row_swaps_and_reversal_are_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_current_register_has_split_states_and_all_backlog_tickets (tests.test_product_requirements.ProductRequirements) ... ok
+test_dependency_cycle_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_developer_tested_without_named_tests_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_duplicate_id_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_established_id_cannot_be_silently_renamed (tests.test_product_requirements.ProductRequirements) ... ok
+test_independent_verification_requires_review_and_checkpoint (tests.test_product_requirements.ProductRequirements) ... ok
+test_missing_backlog_ticket_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_missing_field_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_mixed_implementation_state_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_shared_criteria_cannot_impose_first_client_facts (tests.test_product_requirements.ProductRequirements) ... ok
+test_unknown_dependency_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 35.761s
+
+OK

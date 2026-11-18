@@ -1,0 +1,57 @@
+.............................................................................................................................................
+======================================================================
+FAIL: test_RD02_retired_claimant_resent_unchanged_without_claim (tests.test_review_corrections_rd.ReviewCorrectionsRD) (order=('claim', 'terminal'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rd.py", line 144, in test_RD02_retired_claimant_resent_unchanged_without_claim
+    self.assertTrue(o.intake(f.PREP2, f.packet('resend', [f.tx('Y', '2026-12-03', '40.00'), f.rc('Y', '2026-12-03', '40.00')]))['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RD02_retired_claimant_resent_unchanged_without_claim (tests.test_review_corrections_rd.ReviewCorrectionsRD) (order=('terminal', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rd.py", line 144, in test_RD02_retired_claimant_resent_unchanged_without_claim
+    self.assertTrue(o.intake(f.PREP2, f.packet('resend', [f.tx('Y', '2026-12-03', '40.00'), f.rc('Y', '2026-12-03', '40.00')]))['changed'])
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 142 tests in 218.069s
+
+FAILED (failures=2)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    settlement_verified on Z: ('ok', 2)
+    independent approval of Z: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)
+    independent approval of Q: ('ok', None)

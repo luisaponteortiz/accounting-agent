@@ -1,0 +1,6 @@
+test_target_selector_cannot_review_a_descendant_using_their_selection (tests.test_feed_contract.FeedContract) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.076s
+
+OK

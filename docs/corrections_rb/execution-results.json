@@ -1,0 +1,548 @@
+{
+  "checkpoint": "RB-01 through RB-04 and required PR-01 through PR-17 corrections",
+  "date": "2026-11-16",
+  "environment": {
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "data": "temporary fictional records only"
+  },
+  "baseline": {
+    "new_independent_script": {
+      "exit": 1,
+      "counts": {
+        "OK": 8,
+        "WEAK": 5,
+        "NOTE": 1
+      },
+      "log": "docs/corrections_rb/baseline-independent-probes.txt"
+    },
+    "PR15": "docs/corrections_rb/baseline-PR15.json"
+  },
+  "implementation_order": [
+    "RB-01",
+    "RB-02",
+    "RB-03",
+    "RB-04"
+  ],
+  "complete_test_run": {
+    "command": "make test",
+    "environment": "loopback-enabled execution for temporary HTTP acceptance server",
+    "exit": 0,
+    "elapsed_seconds": 407.41,
+    "log": "docs/corrections_rb/full-tests-with-loopback.txt"
+  },
+  "initial_sandbox_run": {
+    "command": "make test",
+    "exit": 2,
+    "elapsed_seconds": 402.42,
+    "log": "docs/corrections_rb/final-tests.txt",
+    "reason": "HTTP setUpClass could not bind 127.0.0.1 in restricted sandbox; no source fix, complete loopback-enabled rerun passed"
+  },
+  "method_retention": {
+    "original_methods_retained": 154,
+    "current_methods": 174,
+    "new_methods": 20,
+    "removed_methods": [],
+    "original_test_files_byte_identical": 16
+  },
+  "gates": [
+    {
+      "command": "make check",
+      "exit": 0,
+      "elapsed_seconds": 0.75,
+      "log": "docs/corrections_rb/final-check.txt"
+    },
+    {
+      "command": "make batch2-gate",
+      "exit": 0,
+      "elapsed_seconds": 84.12,
+      "log": "docs/corrections_rb/final-batch2-gate.txt"
+    },
+    {
+      "command": "make reverification-gate",
+      "exit": 0,
+      "elapsed_seconds": 50.83,
+      "log": "docs/corrections_rb/final-reverification-gate.txt"
+    },
+    {
+      "command": "make acceptance-gate",
+      "exit": 0,
+      "elapsed_seconds": 46.44,
+      "log": "docs/corrections_rb/final-acceptance-gate.txt"
+    },
+    {
+      "command": "make rb-gate",
+      "exit": 0,
+      "elapsed_seconds": 28.68,
+      "log": "docs/corrections_rb/final-rb-gate.txt"
+    }
+  ],
+  "new_independent_probes": {
+    "R01a": "OK",
+    "R01b": "OK",
+    "R01c": "OK",
+    "R01d": "OK",
+    "R03a": "OK",
+    "R03b": "OK",
+    "R04a": "OK",
+    "R04b": "OK",
+    "R04c": "OK",
+    "R02a": "OK",
+    "R02b": "OK",
+    "R05": "OK",
+    "R07": "OK",
+    "R08": "OK"
+  },
+  "new_independent_script_modified": false,
+  "all_60_validation_cases": {
+    "summary": {
+      "PASS": 29,
+      "FIXED": 10,
+      "DEFERRED-OK": 21
+    },
+    "cases": [
+      {
+        "id": "FV-C01",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C02",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C03",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C04",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C05",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C06",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C07",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C08",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C09",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C10",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C11",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C12",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C13",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C14",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C15",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-C16",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C17",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C18",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C19",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J01",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J02",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J03",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J04",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J05",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J06",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J07",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J08",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-J09",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-J10",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-CL01",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-CL02",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-R01",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-R02",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-R03",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-R04",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-RC01",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-RC02",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-RC03",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-AP01",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AP02",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AP03",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AP04",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AP05",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AR01",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AR02",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AR03",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AR04",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-BK01",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-BK02",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-BK03",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-BK04",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-BK05",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-CL03",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-CL04",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-GL01",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-RP01",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-RP02",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-RP03",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-RP04",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-RP05",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      }
+    ]
+  },
+  "older_literal_full_commands": [
+    {
+      "command": "/Library/Developer/CommandLineTools/usr/bin/python3 exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py .",
+      "exit": 1,
+      "log": "docs/corrections_rb/full-original-acceptance.txt",
+      "elapsed_seconds": 24.41
+    },
+    {
+      "command": "/Library/Developer/CommandLineTools/usr/bin/python3 exports/FABLE_REVERIFICATION/fable_reverification_probes.py .",
+      "exit": 1,
+      "log": "docs/corrections_rb/full-original-reverification.txt",
+      "elapsed_seconds": 19.68
+    }
+  ],
+  "older_literal_full_acceptance_counts": {
+    "OK": 19,
+    "WEAK": 3,
+    "ERROR": 1,
+    "NOTE": 1
+  },
+  "older_literal_full_reverification_counts": {
+    "OK": 28,
+    "WEAK": 4,
+    "ERROR": 3
+  },
+  "older_setup_adaptations": "All five additional statement setups were accepted by Fable; earlier seven and strengthened RT14b remain accepted. Literal full incompatibilities are retained/disclosed, not relabeled passing.",
+  "register_check": {
+    "requirements": 88,
+    "backlog_tickets": 27,
+    "product_decision_counts": {
+      "Approved": 77,
+      "Proposed": 9,
+      "Rejected": 2
+    },
+    "implementation_state_counts": {
+      "Deferred": 36,
+      "Developer-tested": 20,
+      "Not started": 25,
+      "Verification failed": 7
+    },
+    "needed_for_counts": {
+      "G0 controls": 16,
+      "G1 approved samples": 19,
+      "G2 hosted reads": 11,
+      "G3 specified writes": 1,
+      "G4 operating handoff": 11,
+      "Platform maturity": 20,
+      "Product decision": 5,
+      "Second client": 5
+    },
+    "priority_counts": {
+      "Could": 1,
+      "Must": 79,
+      "Should": 8
+    },
+    "structure_dependencies_crosswalk_links_client_boundaries": "PASS"
+  },
+  "PR_dispositions": "docs/corrections_rb/PR_DISPOSITION.md; proposed/shared scope and client decisions remain unratified where stated",
+  "preservation": {
+    "new_input_archive_hashes": 50,
+    "prior_input_archive_hashes": 57,
+    "unique_hashes_verified": 103,
+    "changed": [],
+    "frozen_combined_sha256": "b154db10b8cee32066f089f0f878e7d2d3a3f33ca44e7831318f66faccaf61ea"
+  },
+  "unresolved": [
+    "Independent RB and register re-verification, human G0",
+    "Actual client facts/policies/authority and support/hosting arrangements",
+    "Ratification/ranking of proposed shared additions and reserved payroll/tax scope",
+    "U4 and UC-5 through UC-9 with limits described in the response; no newly claimed fixes",
+    "No item acceptance path for revised zero-activity prior statement; remains unverified/manual",
+    "Existing deferred capabilities and Batch 3 remain unimplemented/unassigned"
+  ],
+  "Batch3": "CLOSED",
+  "live_actions": "NONE",
+  "independent_acceptance": "PENDING: failed requirement states retained",
+  "final_documentation_check": {
+    "command": "make check",
+    "exit": 0,
+    "log": "docs/corrections_rb/final-check-after-documentation.txt"
+  }
+}

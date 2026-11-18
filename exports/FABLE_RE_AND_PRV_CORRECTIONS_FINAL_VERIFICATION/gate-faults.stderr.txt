@@ -1,0 +1,8 @@
+test_rejects_nonzero_missing_duplicate_unknown_changed_or_extra_verdicts (tests.test_re_review_gate.REReviewGate) ... ok
+test_only_Y05_part_a_is_adapted (tests.test_re_review_gate.REReviewGate) ... ok
+test_all_protected_inputs_unchanged_and_contract_exact (tests.test_re_review_gate.REReviewGate) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.547s
+
+OK

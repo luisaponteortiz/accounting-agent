@@ -1,0 +1,15 @@
+# RF/PRV developer correction handoff
+
+**Developer validated; independent acceptance pending.** New label: `FABLE_RF_AND_PRV_CORRECTIONS`. Provide its review ZIP together with the adjacent `.zip.sha256`, external manifest/package check and final-verification JSON. Earlier archives and sidecars remain immutable.
+
+Read the [RF correction report](docs/corrections_rf/RF_CORRECTIONS_REPORT.md), [exact commands/raw logs](docs/corrections_rf/COMMAND_RESULTS.md), [completion record](docs/corrections_rf/completion.json), [full inventory](docs/corrections_rf/changed-files.json), [source/tests patch](docs/corrections_rf/source-and-tests.patch), and [next independent prompt](FABLE_RF_REVIEW_PROMPT.md).
+
+RF-01 applies the first claim on an already retained older/conflicting message; RF-02 preserves every selector through revisions, confirming/replacing selections and historical ancestry; RF-03 reuses identical run-currentness checks only within one transaction/report calculation, with full-computation equivalence; PRV-16 pins four reviewer authorities, latest wins per record in the original seven-row order. D-026/D-029 remain unchanged.
+
+Five consecutive complete suites passed **241 methods each**, with all eleven HTTP methods each time and worker setup **2.12–2.44 seconds** under the unchanged five-second deadline. All nine required targets pass. The unmodified RE probes give **19 OK/C9c+C9g NOTE**; all **480 orders** have zero double/released/audit failures. Retained 336/120 orders and probe/case contracts hold. Original faults give **37/37**, **44/44**, **34/37** and **29/35**; the last two disagree only on specifically documented obsolete-authority expectations.
+
+D-031 is quoted verbatim in DECISIONS.md. All 227 retained methods are present: **226 unchanged**, with only `test_PRV14_third_authority_is_pinned_and_latest_verdict_controls` rewritten. Its first half tests real four-authority pins; its second uses only pinned-input data to form a three-authority fixture, with unchanged validation/assertions. The report shows complete before/after text and diff. The shipped checker always reads all four authorities. Every original probe/fault case remains unchanged.
+
+All 1,198 protected inputs, specified archives/sidecars, schema, HTTP file/deadline, Y05, every register criterion/state/product decision, four verified records, BB-01/02 and six Proposed records remain protected. Branch review/fable-rc-acceptance, ten commits and HEAD 5af9a6194bc39e2f303cc6b43b0b59094118b8e4 remain unchanged; no commit added.
+
+RE-02/RE-03/PRV-14/15 were independently accepted at 4890b297…98ae. **Three affected requirements remain Verification failed pending independent RF review.** U4, UC-14, UC-17/18/20 and expected NOTE behavior remain open/unchanged. All data is fictional. No human G0, G1–G4, Batch 3, client processing, paid/model service, live connection, sending, posting, payment, hosting or deployment is authorized. After delivery await independent results and a new assignment.

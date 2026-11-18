@@ -1,0 +1,32 @@
+{
+  "requirements": 88,
+  "backlog_tickets": 27,
+  "product_decision_counts": {
+    "Approved": 77,
+    "Proposed": 9,
+    "Rejected": 2
+  },
+  "implementation_state_counts": {
+    "Deferred": 36,
+    "Developer-tested": 20,
+    "Independently verified": 4,
+    "Not started": 25,
+    "Verification failed": 3
+  },
+  "needed_for_counts": {
+    "G0 controls": 16,
+    "G1 approved samples": 19,
+    "G2 hosted reads": 11,
+    "G3 specified writes": 1,
+    "G4 operating handoff": 11,
+    "Platform maturity": 20,
+    "Product decision": 5,
+    "Second client": 5
+  },
+  "priority_counts": {
+    "Could": 1,
+    "Must": 79,
+    "Should": 8
+  },
+  "structure_dependencies_crosswalk_links_client_boundaries": "PASS"
+}

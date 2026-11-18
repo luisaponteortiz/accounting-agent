@@ -1,0 +1,9 @@
+N01e [RB-01] three-deep chain delivered newest first with every link later resolved by re-sending: nothing is released while the root is locked; reopen admits only the terminal source
+    newest first, nothing re-sent -> December governing: []
+    A1Y then A1Z re-sent -> December governing: [] | held under November: ['demo_card_001:A1X', 'demo_card_001:A1Y', 'demo_card_001:A1Z', 'receipt-A1X', 'receipt-A1Z']
+    after reopen -> November: ['demo_card_001:A2'] | December: ['demo_card_001:A1Z'] | A1 or A1X ever admitted to December: []
+    => OK
+
+SUMMARY
+N01e   RB-01        OK
+{"counts": {"OK": 1, "WEAK": 0, "NOTE": 0, "ERROR": 0}}

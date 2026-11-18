@@ -1,0 +1,47 @@
+{
+ "recorded": "final state after the RF result registration, 17 November 2026",
+ "changed": {
+  "AGENTS.md": {
+   "before": "dd9b6cc1bce82e99546f5c54ec313acecea4d3fca916c8bf76040ee632fbe56d",
+   "after": "26955740533be88a825a638eb7c36c2e61007f0c5bbaa1214ee59ac4d249a07f"
+  },
+  "DECISIONS.md": {
+   "before": "4f13572e610d5a6a9616ca38fad7115d41b92917bfb3baf2ca7fe66eb8651e87",
+   "after": "f98e5c8043d09e880b84ef9d09c4b90298f97be57d5391a2ddd76f605c4b5574"
+  },
+  "PROGRESS.md": {
+   "before": "0917c85d5d3c016a28f72116852c171166b3729ef3ab6d8672a456902a709e0a",
+   "after": "c760a1775ddb3c7041cfa2782c407a177d7b1fc02af2dbf81f730bd2b3931136"
+  },
+  "docs/CONNECTION_READINESS.md": {
+   "before": "ef85a764fccbd1ccf2fbeda2663f623f0aa086fc452438ed220ea5118b60d382",
+   "after": "f4b43d0932011106513195397725d23f0cc9bc01baff74f3ed14d3e3aace5314"
+  },
+  "docs/PRODUCT_REQUIREMENTS.md": {
+   "before": "8a91c6ff07c512479b5c25d7b371164ed991998ec5e501401f5e1222349b680f",
+   "after": "fdf9adf4c5f8d169e9030552011fbfcb61a15a7e948808bdc0658e1d9adf3485"
+  },
+  "docs/INDEPENDENT_VERIFICATION_RESULTS.json": {
+   "before": "4371242db8cb93155e5fbfb8003efc66b8437e036a5a5f3665852d7eaff8d515",
+   "after": "0f3ed3248bc36a8de2a84470ee1c220c2c19b0004fe7a988307fd67b53789a6e"
+  },
+  "scripts/check_product_requirements.py": {
+   "before": "c37e0a775a5966fe8516cb7186892172179d4b207403f914a439e0e0d937c8a0",
+   "after": "4f8610461ff8cd91568f3cfe9817cd2f7406abf2019398a41ddfaae952c6af8a"
+  },
+  "tests/test_product_requirements.py": {
+   "before": "5fdc443d751688900e128c2f96c1cfbc8657a9b832c79b8f2601f49baea7040a",
+   "after": "39529c57f10aa110745a10ae0ddac6d6ac8022cb9a473a2c38f6e91896172730"
+  },
+  "tests/test_product_requirements_rf.py": {
+   "before": "dfa6c51948b0a31afb47fd6dd0851ebd24af8bb31d668779141ee8ac3b345031",
+   "after": "4693fe961a0250d5caea8872cf72e3a28f8ec11037a7c98a7bf5312e1921d9e2"
+  }
+ },
+ "added": {
+  "tests/rf_checkpoint_fixture.py": "d141ec150b5b5d68faa2ee746d4da77da8020944580c655afc5f9f58aed569d6",
+  "tests/test_product_requirements_rf_registration.py": "16c79c1e17b9e8b9990d99281af6f4d9fe1d5a6f8c815916ca5ab4608ab92e68",
+  "HANDOFF_RF_REGISTRATION_2026-11-17.md": "d58040252df8c5b378aa771783e78d026bd0934295e70f98242a3be5663067f3"
+ },
+ "added_folder": "docs/registration_rf/ (this evidence folder; its own files are not self-listed)"
+}

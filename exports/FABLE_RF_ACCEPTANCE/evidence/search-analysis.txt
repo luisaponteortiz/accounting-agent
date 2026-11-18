@@ -1,0 +1,18 @@
+withdrawal+resend (720 orders): orders in which a key left the hold listing: 60
+  step that caused it and keys: {('Qdel', ('Q',)): 60, ('Q7', ('Q',)): 12, ('Q6', ('Q',)): 12}
+  afterwards: {'re-sent later: held again at that step': 84} | orders where a key was admitted to an open period: 0 | orders where Q is approved in December at or after a step at which it was held: 0
+all families: steps 14640 | steps at which Q, Z or P is approved in December although Q>P is declared, P is on file and no person selected B: 36
+selection of the open row B by a person with disposition authority only, at every position (120 orders):
+     ('accepted', 'Q not held before', 'two targets declared') 25
+     ('refused', 'Q held before', 'fewer than two targets declared') 10
+     ('refused', 'Q held before', 'two targets declared') 15
+     ('refused', 'Q not held before', 'fewer than two targets declared') 70
+  final state (held under November | approved in December | selection):
+     (('P', 'Q', 'receipt-P', 'receipt-Q'), (), ()) 55
+     (('P', 'receipt-P'), (), ()) 40
+     (('P', 'receipt-P'), ('Q',), (('Q', 'B'),)) 25
+selection of the locked-chain target P, at every position (120 orders): {'accepted': 40, 'refused': 80}
+     (('P', 'Q', 'receipt-P', 'receipt-Q'), (), (('Q', 'P'),)) 40
+     (('P', 'Q', 'receipt-P', 'receipt-Q'), (), ()) 40
+     (('P', 'receipt-P'), (), ()) 40
+orders 2640 | deliveries refused by intake: {}

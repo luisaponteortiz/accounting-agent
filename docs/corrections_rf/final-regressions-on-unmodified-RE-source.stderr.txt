@@ -1,0 +1,542 @@
+test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) ... test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) ... test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) ... test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) ... FAIL
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='none', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='none', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='before', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='before', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='approved-before', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='approved-before', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='after', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='after', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='approve-after', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='approve-after', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='none', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='none', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='before', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='before', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='approved-before', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='approved-before', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='after', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='after', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='approve-after', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='approve-after', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 68, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o);p.prep(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='none', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='none', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='before', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='before', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='approved-before', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 60, in test_RF01_retained_message_matrix_and_repeated_claim
+    if known or replacement!='approved-before':self.assertFalse(p.approved(o,p.K('Z'),'2026-12'))
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='approved-before', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 60, in test_RF01_retained_message_matrix_and_repeated_claim
+    if known or replacement!='approved-before':self.assertFalse(p.approved(o,p.K('Z'),'2026-12'))
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='after', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='after', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='approve-after', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=False, replacement='approve-after', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='none', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='none', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='before', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='before', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='approved-before', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 60, in test_RF01_retained_message_matrix_and_repeated_claim
+    if known or replacement!='approved-before':self.assertFalse(p.approved(o,p.K('Z'),'2026-12'))
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='approved-before', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 60, in test_RF01_retained_message_matrix_and_repeated_claim
+    if known or replacement!='approved-before':self.assertFalse(p.approved(o,p.K('Z'),'2026-12'))
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='after', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='after', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='approve-after', conflicting=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=True, approved=True, replacement='approve-after', conflicting=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 62, in test_RF01_retained_message_matrix_and_repeated_claim
+    self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('target', 'head', 'old', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 86, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('target', 'old', 'head', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 86, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('head', 'target', 'old', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 86, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('head', 'old', 'target', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 86, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('head', 'old', 'claim', 'target'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 86, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('old', 'target', 'head', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 86, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('old', 'head', 'target', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 86, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) (order=('old', 'head', 'claim', 'target'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 86, in test_RF01_first_claim_link_invariant_across_delivery_matrices
+    self.send(o,'matrix-%d-%s'%(i,name),deliveries[name]());self.invariant(o)
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 33, in invariant
+    self.assertIsNotNone(link,(row['source_key'],target))
+AssertionError: unexpectedly None : ('demo_card_001:Q', 'demo_card_001:P')
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=False, version='row')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 112, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=False, version='revision')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 112, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=False, version='replacement')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 112, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=True, version='row')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 112, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=True, version='revision')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 112, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) (confirm=True, version='replacement')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 112, in test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant
+    self.assertTrue({p.DR.id,p.DR2.id}<=set(contributors),contributors)
+AssertionError: False is not true : ['re-disposition-and-review-2', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+
+======================================================================
+FAIL: test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) (phase='contested')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 129, in test_RF03_transaction_reuses_current_result_and_matches_full_computation
+    self.assertEqual(len(calls),len(set(calls)),calls)
+AssertionError: 2 != 1 : [3, 3]
+
+======================================================================
+FAIL: test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-baseline/tests/test_review_corrections_rf.py", line 143, in test_RF03_transaction_reuses_current_result_and_matches_full_computation
+    self.assertEqual(len(calls),len(set(calls)),calls)
+AssertionError: 13 != 2 : [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2]
+
+----------------------------------------------------------------------
+Ran 4 tests in 78.241s
+
+FAILED (failures=56)

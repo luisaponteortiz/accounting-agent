@@ -1,0 +1,36 @@
+Final checks in the working project after the last document edit (D-034, report, handoff).
+Started 2026-11-17T18:45:02Z
+
+$ make check
+python3 scripts/check.py
+PASS: Python syntax, JSON parsing, executable profile validation, workflow DAG/tool registration, DOM text rendering checks.
+No external linter/typechecker/JS compiler installed; these checks are not a claim of those tools passing.
+PASS: capability IDs named in implementation documentation exist in the registry.
+PASS: product requirements schema/evidence/dependencies/crosswalk/client boundaries; 88 records, 27 tickets.
+PASS: shared application/web files contain no client-specific names/choices from the client section; demo/config/fixtures remain isolated.
+exit 0
+
+$ python3 -m unittest tests.test_product_requirements tests.test_product_requirements_rf tests.test_product_requirements_rf_registration
+----------------------------------------------------------------------
+Ran 40 tests in 117.565s
+
+OK
+exit 0
+
+$ python3 -m unittest tests.test_re_review_gate.REReviewGate.test_all_protected_inputs_unchanged_and_contract_exact
+----------------------------------------------------------------------
+Ran 1 test in 1.606s
+
+OK
+exit 0
+
+$ python3 docs/registration_rf/verify_preservation.py .   (summary; full output in preservation.json)
+protected inputs unchanged: 1198 of 1198
+earlier archives unchanged: 16 of 16
+RF and RE bundles/responses unchanged: True
+returned RF response files identical: 298 of 298
+delivered RF bundle members: 1791; identical 1781; changed ['AGENTS.md', 'DECISIONS.md', 'PROGRESS.md', 'docs/CONNECTION_READINESS.md', 'docs/INDEPENDENT_VERIFICATION_RESULTS.json', 'docs/PRODUCT_REQUIREMENTS.md', 'scripts/check_product_requirements.py', 'tests/test_product_requirements.py', 'tests/test_product_requirements_rf.py']; absent from working project ['REVIEW_MANIFEST.json']
+git: {'branch': 'review/fable-rc-acceptance', 'head': '5af9a6194bc39e2f303cc6b43b0b59094118b8e4', 'commits': 10, 'staged': [], 'tracked_modified': ['DECISIONS.md', 'docs/PRODUCT_REQUIREMENTS.md'], 'history_identical_to_rf_preflight': True}
+register: {'ids_and_order_retained': True, 'records': 88, 'records_changed': ['AAOS-BNK-03', 'AAOS-CTL-04', 'AAOS-GOV-02', 'AAOS-GOV-03'], 'every_product_decision_and_acceptance_criterion_unchanged': True, 'implementation_states_changed': {'AAOS-GOV-03': ['Verification failed', 'Independently verified'], 'AAOS-BNK-03': ['Verification failed', 'Independently verified'], 'AAOS-CTL-04': ['Verification failed', 'Independently verified']}, 'four_earlier_verified_BB01_BB02_and_six_proposed_identical': True}
+decision log prefix preserved: True
+new protected inventory: {'file': 'docs/registration_rf/input-checksums.json', 'entries': 1506, 'carried_from_rf_pass': 1198, 'added_for_the_returned_rf_review_and_delivery': 308}

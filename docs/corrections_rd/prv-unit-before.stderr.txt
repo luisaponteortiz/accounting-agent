@@ -1,0 +1,56 @@
+test_PRV12_omitted_changed_and_invented_results_cannot_promote_records (tests.test_product_requirements.ProductRequirements) ... test_PRV12_both_reviewer_authority_files_are_hash_pinned (tests.test_product_requirements.ProductRequirements) ... test_PRV13_terms_must_include_the_display_name_in_the_client_heading (tests.test_product_requirements.ProductRequirements) ... FAIL
+
+======================================================================
+FAIL: test_PRV12_omitted_changed_and_invented_results_cannot_promote_records (tests.test_product_requirements.ProductRequirements) (identifier='AAOS-BNK-03', state='Developer-tested')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 150, in test_PRV12_omitted_changed_and_invented_results_cannot_promote_records
+    validate_register(text,root)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_PRV12_omitted_changed_and_invented_results_cannot_promote_records (tests.test_product_requirements.ProductRequirements) (identifier='AAOS-BNK-03', state='Independently verified')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 150, in test_PRV12_omitted_changed_and_invented_results_cannot_promote_records
+    validate_register(text,root)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_PRV12_omitted_changed_and_invented_results_cannot_promote_records (tests.test_product_requirements.ProductRequirements) (identifier='AAOS-ARC-02', state='Independently verified')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 150, in test_PRV12_omitted_changed_and_invented_results_cannot_promote_records
+    validate_register(text,root)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_PRV12_both_reviewer_authority_files_are_hash_pinned (tests.test_product_requirements.ProductRequirements) (name='exports/FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_CORRECTIONS.json')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 161, in test_PRV12_both_reviewer_authority_files_are_hash_pinned
+    validate_register(self.text,root)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_PRV12_both_reviewer_authority_files_are_hash_pinned (tests.test_product_requirements.ProductRequirements) (name='exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_RESULTS.json')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 161, in test_PRV12_both_reviewer_authority_files_are_hash_pinned
+    validate_register(self.text,root)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_PRV13_terms_must_include_the_display_name_in_the_client_heading (tests.test_product_requirements.ProductRequirements)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 181, in test_PRV13_terms_must_include_the_display_name_in_the_client_heading
+    self.rejects(missing,'client display name')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 17, in rejects
+    with self.assertRaisesRegex(ValueError,message):validate_register(text,ROOT)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 3 tests in 5.828s
+
+FAILED (failures=6)

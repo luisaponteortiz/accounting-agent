@@ -1,0 +1,7 @@
+{
+  "command": "make test",
+  "environment": "loopback-enabled execution for temporary HTTP acceptance server",
+  "exit": 0,
+  "elapsed_seconds": 407.41,
+  "log": "docs/corrections_rb/full-tests-with-loopback.txt"
+}

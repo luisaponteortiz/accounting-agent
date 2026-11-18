@@ -1,0 +1,110 @@
+{
+  "schema_version": "1",
+  "version": "fictional-demo-reverification-v1",
+  "synthetic": true,
+  "organization_id": "demo_org",
+  "client_id": "bird_bowl_demo",
+  "name": "Bird Bowl \u2014 fictional sandbox",
+  "approval_status": "approved_demo_only",
+  "notice": "All accounts, vendors, policies and financial amounts are fictional. No actual Bird Bowl accounting policy is configured.",
+  "legal_entity": null,
+  "accounting_framework": null,
+  "accounting_basis": null,
+  "external_company_id": "fixture_realm_001",
+  "currency": "USD",
+  "accounts": [
+    {
+      "id": "DEMO_OFFICE_SUPPLIES",
+      "type": "expense",
+      "active": true
+    },
+    {
+      "id": "DEMO_REPAIRS",
+      "type": "expense",
+      "active": true
+    },
+    {
+      "id": "DEMO_CARD_LIABILITY",
+      "type": "liability",
+      "active": true
+    },
+    {
+      "id": "DEMO_CASH",
+      "type": "asset",
+      "active": true
+    }
+  ],
+  "card_accounts": [
+    "demo_card_001"
+  ],
+  "vendors": [
+    {
+      "id": "demo_acme",
+      "name": "Acme Paper Demo",
+      "aliases": [
+        "ACME PAPER DEMO",
+        "ACME PAPER DEMO 001"
+      ],
+      "category": "DEMO_OFFICE_SUPPLIES"
+    },
+    {
+      "id": "demo_metro",
+      "name": "Metro Repair Demo",
+      "aliases": [
+        "METRO REPAIR DEMO"
+      ],
+      "category": "DEMO_REPAIRS"
+    }
+  ],
+  "customers": [],
+  "dimensions": [],
+  "policies": {
+    "receipt_required": true,
+    "review": "independent_human",
+    "model_review_required": false
+  },
+  "procedures": [
+    "card_preparation",
+    "journal_preparation",
+    "close_readiness"
+  ],
+  "historical_decisions": [],
+  "credentials_reference": null,
+  "systems": {
+    "ledger": "unconnected",
+    "intake": "fixture"
+  },
+  "required_close_evidence": [
+    {
+      "type": "document",
+      "document_type": "trial_balance"
+    },
+    {
+      "type": "document",
+      "document_type": "card_statement"
+    },
+    {
+      "type": "reconciliation",
+      "document_type": "bank_reconciliation"
+    },
+    {
+      "type": "tieout",
+      "document_type": "ap_tieout"
+    },
+    {
+      "type": "tieout",
+      "document_type": "ar_tieout"
+    }
+  ],
+  "profile_class": "synthetic_demo",
+  "entity_id": "fictional-demo-entity",
+  "book_id": "fictional-demo-book",
+  "fact_waivers": {
+    "legal_entity": "Explicit fictional demonstration waiver; no actual client policy/fact validated.",
+    "accounting_framework": "Explicit fictional demonstration waiver; no actual client policy/fact validated.",
+    "accounting_basis": "Explicit fictional demonstration waiver; no actual client policy/fact validated."
+  },
+  "card_liabilities": {
+    "demo_card_001": "DEMO_CARD_LIABILITY"
+  }
+}

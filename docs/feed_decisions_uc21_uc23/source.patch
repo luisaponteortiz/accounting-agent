@@ -1,0 +1,132 @@
+--- a/accounting_agent/feed_contract.py
++++ b/accounting_agent/feed_contract.py
+@@ -3,6 +3,7 @@
+ from .core import ControlError, canonical, digest, instant, text_field, utcnow
+ 
+ CONFLICT='SOURCE_CLAIM_CONFLICT'
++ORDER_MIXED='SOURCE_ORDER_MIXED'
+ SELECT_TARGET='select_supersession_target'
+ 
+ 
+@@ -69,7 +70,11 @@
+             elif order_type=='timestamp' and order_value<meta['as_of']:accepted=False
+             elif order_value==meta['as_of'] and digest(value)!=old['hash']:accepted=False
+         same_order=as_of is None or bool(meta and meta['order_type']==order_type and meta['as_of']==order_value)
+-        same_row=bool(old and old['hash']==digest(value) and old['removed']==int(removed))
++        # D-038 / UC-21: a row retired by a live replacement is the same row when its
++        # message is re-sent unchanged, claim included. A re-send that omits a claim
++        # the row has is a later omission (clause 6) and keeps its earlier handling.
++        retired=bool(old and old['removed'] and not removed and bool(target)==bool(state) and self.retired_by_live_replacement(db,actor.scope,key))
++        same_row=bool(old and old['hash']==digest(value) and (old['removed']==int(removed) or retired))
+         # A repeated claim changes no source lifecycle row. Batch evidence is
+         # retained by intake, including its supplier, before this call.
+         if same_row and same_order and (not target or state):
+@@ -79,8 +84,13 @@
+                 if binding and binding['reason']=='UNASSIGNED_ACCOUNTING_PERIOD':self.bind_source(db,actor,old['id'],value,packet.get('period_id'))
+             return old['id'],changed
+         if old and not accepted:
+-            retained=db.execute('SELECT s.id FROM snapshots s JOIN source_metadata m ON m.snapshot_id=s.id WHERE s.scope=? AND s.kind=? AND s.source_key=? AND s.hash=? AND m.order_type=? AND m.as_of=? AND m.tombstone=? ORDER BY s.id DESC LIMIT 1',(actor.scope,kind,key,digest(value),order_type,order_value,int(removed))).fetchone()
++            # D-038 / UC-22: a message with no order value has only its arrival time,
++            # so it is recognised on file by its content and kept once.
++            unordered=order_type=='legacy_arrival'
++            if unordered:retained=db.execute("SELECT s.id FROM snapshots s JOIN source_metadata m ON m.snapshot_id=s.id WHERE s.scope=? AND s.kind=? AND s.source_key=? AND s.hash=? AND m.order_type='legacy_arrival' AND m.tombstone=? ORDER BY s.id DESC LIMIT 1",(actor.scope,kind,key,digest(value),int(removed))).fetchone()
++            else:retained=db.execute('SELECT s.id FROM snapshots s JOIN source_metadata m ON m.snapshot_id=s.id WHERE s.scope=? AND s.kind=? AND s.source_key=? AND s.hash=? AND m.order_type=? AND m.as_of=? AND m.tombstone=? ORDER BY s.id DESC LIMIT 1',(actor.scope,kind,key,digest(value),order_type,order_value,int(removed))).fetchone()
+             if retained:
++                if unordered:self.record_order_mixed(db,actor,key,old['id'],retained['id'],digest(value),meta['order_type'])
+                 changed=self.record_card_claim(db,actor,key,target,old['id'],retained['id']) if target else False
+                 if changed and not state:self.apply_first_card_claim(db,actor,key,old['id'],target,predecessor,packet)
+                 return old['id'],changed
+@@ -90,6 +100,7 @@
+         db.execute('INSERT INTO source_metadata VALUES(?,?,?,?,?,?,?,?)',(sid,actor.scope,system,order_type,order_value,int(removed),reason,packet.get('period_id') or value.get('period_id')))
+         if not accepted:
+             self.store.audit(db,actor.scope,actor.id,'older_or_conflicting_source_retained',{'snapshot_id':sid,'governing_snapshot_id':old['id']})
++            if order_type=='legacy_arrival':self.record_order_mixed(db,actor,key,old['id'],sid,digest(value),meta['order_type'])
+             changed=self.record_card_claim(db,actor,key,target,old['id'],sid) if target else False
+             if changed and not state:self.apply_first_card_claim(db,actor,key,old['id'],target,predecessor,packet)
+             return sid,changed
+@@ -104,6 +115,25 @@
+         self.store.audit(db,actor.scope,actor.id,'source_revision_accepted',{'snapshot_id':sid,'source_key':key,'as_of':order_value,'ordering':order_type,'removed':removed,'reason':reason})
+         return sid,True
+ 
++    def record_order_mixed(self,db,actor,key,governing_id,message_id,message_hash,governing_order):
++        """D-038 / UC-22: flag, once per distinct content, a message with no order value for a row governed by one."""
++        for event in db.execute('SELECT payload FROM accounting_events WHERE scope=? AND item_key=? AND code=?',(actor.scope,key,ORDER_MIXED)):
++            if json.loads(event['payload']).get('message_hash')==message_hash:return False
++        self.accounting_event(db,actor,None,key,ORDER_MIXED,{'snapshot_id':governing_id,'message_snapshot_id':message_id,'message_hash':message_hash,'governing_order_type':governing_order})
++        self.store.audit(db,actor.scope,actor.id,'card_source_order_mixed',{'source_key':key,'message_snapshot_id':message_id,'governing_snapshot_id':governing_id,'governing_order_type':governing_order})
++        return True
++
++    def card_feed_anomalies(self,db,scope):
++        """Unordered messages retained against ordered card rows, for display and export."""
++        result=[]
++        for event in db.execute('SELECT * FROM accounting_events WHERE scope=? AND code=? ORDER BY id',(scope,ORDER_MIXED)):
++            value=json.loads(event['payload'])
++            binding=db.execute('SELECT period_id FROM source_periods WHERE snapshot_id=? ORDER BY id DESC LIMIT 1',(value['snapshot_id'],)).fetchone()
++            result.append({'source_key':event['item_key'],'reason':ORDER_MIXED,'period_id':binding['period_id'] if binding else None,'message_snapshot_id':value['message_snapshot_id'],
++                           'governing_snapshot_id':value['snapshot_id'],'governing_order_type':value['governing_order_type'],'event_id':event['id'],'created':event['created'],
++                           'meaning':'A message with no order value was kept as evidence; it does not govern this row.'})
++        return result
++
+     def apply_first_card_claim(self,db,actor,key,sid,target,predecessor,packet):
+         if not predecessor:
+             self.accounting_event(db,actor,None,key,'SOURCE_SUPERSESSION_UNRESOLVED',{'snapshot_id':sid,'target_key':target})
+--- a/accounting_agent/source_control.py
++++ b/accounting_agent/source_control.py
+@@ -29,6 +29,12 @@
+             if predecessor and any(ref['source_key']==key for ref in self.supersession_refs(db,actor.scope,predecessor['snapshot_id'])):
+                 raise ControlError('Supersession cycle is not permitted')
+         oldmeta=db.execute('SELECT * FROM source_metadata WHERE snapshot_id=?',(old['id'],)).fetchone() if old else None
++        # D-038 / UC-21: an identical repeat of a receipt that was retired with its
++        # replaced charge changes nothing while that replacement is live.
++        if (kind=='receipt' and old and old['removed'] and not removed and old['hash']==digest(value) and oldmeta and not oldmeta['tombstone']
++                and (as_of is None or (oldmeta['order_type']==order_type and oldmeta['as_of']==order_value))
++                and self.retired_by_live_replacement(db,actor.scope,value['account_id']+':'+value['transaction_source_id'])):
++            return old['id'],False
+         force=bool(old and int(removed)!=old['removed']) or bool(oldmeta and (oldmeta['order_type']!=order_type or oldmeta['as_of']!=order_value) and as_of is not None)
+         if predecessor and not db.execute('SELECT 1 FROM source_links l JOIN snapshots n ON n.id=l.new_snapshot_id WHERE l.scope=? AND n.kind=? AND n.source_key=? AND l.old_snapshot_id=?',(actor.scope,kind,key,predecessor['snapshot_id'])).fetchone():force=True
+         if supersedes and not predecessor and old and (self.pending_claim(db,actor.scope,kind,key) or {}).get('target_key')!=old_key:force=True
+@@ -59,6 +65,23 @@
+         self.store.audit(db,actor.scope,actor.id,'source_revision_accepted',{'snapshot_id':sid,'source_key':key,'as_of':order_value,'ordering':order_type,'removed':removed,'reason':reason})
+         return sid,True
+ 
++    def retired_by_live_replacement(self,db,scope,key):
++        """D-038 / UC-21: this card row's head was retired by a replacement that still governs and is admitted.
++
++        A row the provider itself withdrew, a row whose replacement the provider
++        withdrew, and a row no live row's governing chain reaches keep their
++        earlier behaviour: restoration is not decided here (U4, UC-17). So does
++        a row whose live replacement is held, for instance under a locked
++        period: its re-send is still recorded and takes the hold with its chain.
++        """
++        head=db.execute("SELECT h.removed,m.tombstone FROM source_heads h LEFT JOIN source_metadata m ON m.snapshot_id=h.snapshot_id WHERE h.scope=? AND h.kind='transaction' AND h.source_key=?",(scope,key)).fetchone()
++        if not head or not head['removed'] or head['tombstone']:return False
++        for live in self.store.latest(db,scope,'transaction'):
++            if any(ref['source_key']==key for ref in self.supersession_refs(db,scope,live['id'])):
++                binding=db.execute('SELECT admitted FROM source_periods WHERE snapshot_id=? ORDER BY id DESC LIMIT 1',(live['id'],)).fetchone()
++                return bool(binding and binding['admitted'])
++        return False
++
+     def supersession_link(self,db,scope,snapshot_id):
+         source=db.execute('SELECT kind,source_key FROM snapshots WHERE scope=? AND id=?',(scope,snapshot_id)).fetchone()
+         if source and source['kind']=='transaction':
+--- a/accounting_agent/service.py
++++ b/accounting_agent/service.py
+@@ -849,6 +849,7 @@
+                     "periods": [dict(p) for p in db.execute("SELECT * FROM periods WHERE scope=? ORDER BY start",(actor.scope,))],
+                     "source_claim_conflicts": {row['source_key']:state for row in db.execute("SELECT source_key FROM source_heads WHERE scope=? AND kind='transaction'",(actor.scope,)) for state in [self.card_claim_state(db,actor.scope,row['source_key'])] if state and state['conflicted']},
+                     "source_exceptions": [dict(b) for b in db.execute("SELECT b.*,s.source_key FROM source_periods b JOIN snapshots s ON s.id=b.snapshot_id WHERE b.scope=? AND b.reason IS NOT NULL AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=b.snapshot_id) AND EXISTS(SELECT 1 FROM source_heads h WHERE h.scope=b.scope AND h.snapshot_id=b.snapshot_id AND (h.removed=0 OR (b.admitted=0 AND b.reason='LATE_ACTIVITY_IN_LOCKED_PERIOD' AND EXISTS(SELECT 1 FROM periods p WHERE p.scope=b.scope AND p.period_id=b.period_id AND p.status='locked'))))",(actor.scope,))],
++                    "feed_anomalies": self.card_feed_anomalies(db,actor.scope),
+                     "profile": ctx["profile"], "fingerprint": ctx["fingerprint"], "generation": ctx["generation"],
+                     "capabilities": [{k: v for k, v in asdict(c).items() if k != "handler"} for c in CAPABILITIES.values()],
+                     "workflows": [asdict(w) for w in WORKFLOWS.values()],
+--- a/accounting_agent/web/app.js
++++ b/accounting_agent/web/app.js
+@@ -52,7 +52,7 @@
+   $('audit-events').replaceChildren(...state.audit.map(a=>{const n=el('div',undefined,'audit-row');n.append(el('strong',human(a.event)),el('small',' · '+a.actor+' · '+a.created),el('pre',a.payload));return n;}));
+   $('mandates').replaceChildren(...state.occurrences.map(o=>{const n=el('div',undefined,'source-row');n.append(el('strong','Occurrence '+o.id+' · '+human(o.status)),el('p',o.workflow+' · '+o.occurrence_key+(o.reason?' · '+o.reason:'')));return n;}),...state.mandates.map(m=>{const n=el('div',undefined,'source-row');n.append(el('strong','Mandate '+m.id+' · '+human(m.status)),el('p',m.workflows+' · max '+m.max_occurrences+' occurrences'),el('pre',JSON.stringify({period_rule:JSON.parse(m.period_rule),freshness:JSON.parse(m.freshness)},null,2)));const b=el('button','Revoke','secondary');b.disabled=!m.active||$('role').value!=='preparer';b.onclick=()=>act('/api/mandates/revoke',{mandate_id:m.id},'Mandate revoked. Dependent work will be held.');if(m.status==='proposed'){const approve=el('button','Approve mandate');approve.disabled=$('role').value!=='reviewer';approve.onclick=()=>act('/api/mandates/approve',{mandate_id:m.id,reason:'Independent fictional mandate approval'},'Standing authority approved.');n.append(approve);}n.append(b);return n;}));
+   ['lock-period','reopen-period','open-period'].forEach(id=>{$(id).disabled=$('role').value!=='reviewer';});
+-  $('source-exceptions').replaceChildren(...state.source_exceptions.map(e=>el('p',e.source_key+' · '+e.reason+' · '+(e.period_id||'period not configured'),'blocker')));
++  $('source-exceptions').replaceChildren(...state.source_exceptions.map(e=>el('p',e.source_key+' · '+e.reason+' · '+(e.period_id||'period not configured'),'blocker')),...(state.feed_anomalies||[]).map(e=>el('p',e.source_key+' · '+e.reason+' · '+e.meaning,'blocker')));
+   ['run','late','mandate','tick'].forEach(id=>{$(id).disabled=$('role').value!=='preparer';});
+ }
+ function renderDetail(a) {

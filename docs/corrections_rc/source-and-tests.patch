@@ -1,0 +1,860 @@
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+ PYTHON ?= python3
+-.PHONY: setup demo test core-test api-test check verify-no-egress export-demo backup reviewer-test batch1-gate batch2-gate reverification-gate acceptance-gate rb-gate
++.PHONY: setup demo test core-test api-test check verify-no-egress export-demo backup reviewer-test batch1-gate batch2-gate reverification-gate acceptance-gate rb-gate rc-gate
+ setup:
+ 	$(PYTHON) -m accounting_agent setup
+ demo:
+@@ -41,3 +41,6 @@
+ rb-gate:
+ 	$(PYTHON) exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py .
+ 	$(PYTHON) -m unittest tests.test_ra_review_gate -v
++
++rc-gate:
++	$(PYTHON) scripts/verify_rb_review.py
+--- a/accounting_agent/exceptions.py
++++ b/accounting_agent/exceptions.py
+@@ -40,6 +40,7 @@
+             allowed=self.disposition_references(db,actor.scope,source,sources) if source else {}
+             if source and source['hash']==row['source_hash'] and all(allowed.get(e['snapshot_id'])==e['hash'] for e in evidence):
+                 row['payload']=json.loads(row['payload']);row['evidence']=evidence
++                if row['choice']=='settlement_verified' and row['payload'].get('transition_refs')!=self.supersession_refs(db,actor.scope,source['id']):continue
+                 if row['choice']=='revised_evidence_accepted':
+                     current=sorted({r['current']['snapshot_id'] for r in supporting_revisions(source,sources,evidence_revisions)})
+                     if row['payload'].get('revision_snapshot_ids')!=current:continue
+@@ -115,6 +116,8 @@
+                 lines=payload.get('allocations',[])
+                 if not lines or len(lines)>99 or any(l.get('account_id') not in accounts or money(l['amount'])<=0 for l in lines) or sum((money(l['amount']) for l in lines),Decimal('0.00'))!=money(source['value']['amount']):raise ControlError('Allocation must sum exactly to charge')
+             payload=dict(payload)
++            if choice=='settlement_verified':
++                payload['transition_refs']=self.supersession_refs(db,actor.scope,source['id'])
+             if choice=='revised_evidence_accepted':
+                 revisions=json.loads(a['payload'])['data'].get('evidence_revisions',[])
+                 if not revisions:raise ControlError('No revised supporting evidence to accept')
+--- a/accounting_agent/service.py
++++ b/accounting_agent/service.py
+@@ -176,14 +176,15 @@
+                 db.execute("DELETE FROM frozen_runs WHERE scope=? AND period_id=?",(actor.scope,period_id))
+                 db.execute("UPDATE periods SET status='open' WHERE scope=? AND period_id=?",(actor.scope,period_id))
+                 # Re-evaluate quarantined moves only after the original lock is lifted.
+-                candidates=self.store.latest(db,actor.scope)
++                candidates=self.store.latest(db,actor.scope,include_removed=True)
+                 # Admit terminal replacements first; their ancestors never enter the
+                 # destination population, even transiently in the binding history.
+                 candidates.sort(key=lambda s:(s['kind']!='transaction',-len(self.supersession_refs(db,actor.scope,s['id'])),-s['id']))
+                 for s in candidates:
+                     if s['kind'] in ('profile','batch'):continue
+-                    if not db.execute('SELECT 1 FROM source_heads WHERE scope=? AND snapshot_id=? AND removed=0',(actor.scope,s['id'])).fetchone():continue
+                     b=db.execute("SELECT * FROM source_periods WHERE snapshot_id=? ORDER BY id DESC LIMIT 1",(s['id'],)).fetchone()
++                    live=db.execute('SELECT 1 FROM source_heads WHERE scope=? AND snapshot_id=? AND removed=0',(actor.scope,s['id'])).fetchone()
++                    if not live and not (b and b['reason']=='LATE_ACTIVITY_IN_LOCKED_PERIOD'):continue
+                     if b and b['period_id']==period_id and not b['admitted']:
+                         move=db.execute("SELECT * FROM source_moves WHERE scope=? AND snapshot_id=? AND blocked=1 ORDER BY id DESC LIMIT 1",(actor.scope,s['id'])).fetchone()
+                         self.bind_source(db,actor,s['id'],s['value'],move['to_period_id'] if move else period_id)
+@@ -258,7 +259,7 @@
+         unresolved_transitions={}
+         for event in db.execute("SELECT item_key,payload FROM accounting_events WHERE scope=? AND code='SOURCE_SUPERSESSION_UNRESOLVED' ORDER BY id",(actor.scope,)):
+             value=json.loads(event['payload'])
+-            if any(src['id']==value['snapshot_id'] for src in sources):unresolved_transitions[event['item_key']]=value
++            if any(src['id']==value['snapshot_id'] for src in sources) and not self.supersession_link(db,actor.scope,value['snapshot_id']):unresolved_transitions[event['item_key']]=value
+         claims=[];owners={};heads={};stale_origins={}
+         for src in sources:
+             identity=self.source_identity(db,actor.scope,src['id']);heads[identity]=src
+@@ -378,6 +379,8 @@
+                 sid,is_new=self.source_revision(db,actor,source,packet)
+                 changed = changed or is_new
+             if changed:
++                self.resolve_pending_supersessions(db,actor)
++                self.rebind_chained_sources(db,actor,packet.get('period_id'))
+                 for receipt in self.store.latest(db,actor.scope,'receipt'):
+                     self.bind_source(db,actor,receipt['id'],receipt['value'],packet.get('period_id'))
+                 db.execute("UPDATE clients SET generation=generation+1 WHERE scope=?", (actor.scope,))
+@@ -830,7 +833,7 @@
+             return {"synthetic": True, "environment": "local", "mode": "demo", "scope": actor.scope,
+                     "notice": "Fictional sandbox; actual client accounting policies remain unconfigured.",
+                     "periods": [dict(p) for p in db.execute("SELECT * FROM periods WHERE scope=? ORDER BY start",(actor.scope,))],
+-                    "source_exceptions": [dict(b) for b in db.execute("SELECT b.*,s.source_key FROM source_periods b JOIN snapshots s ON s.id=b.snapshot_id WHERE b.scope=? AND b.reason IS NOT NULL AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=b.snapshot_id) AND EXISTS(SELECT 1 FROM source_heads h WHERE h.scope=b.scope AND h.snapshot_id=b.snapshot_id AND h.removed=0)",(actor.scope,))],
++                    "source_exceptions": [dict(b) for b in db.execute("SELECT b.*,s.source_key FROM source_periods b JOIN snapshots s ON s.id=b.snapshot_id WHERE b.scope=? AND b.reason IS NOT NULL AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=b.snapshot_id) AND EXISTS(SELECT 1 FROM source_heads h WHERE h.scope=b.scope AND h.snapshot_id=b.snapshot_id AND (h.removed=0 OR (b.admitted=0 AND b.reason='LATE_ACTIVITY_IN_LOCKED_PERIOD' AND EXISTS(SELECT 1 FROM periods p WHERE p.scope=b.scope AND p.period_id=b.period_id AND p.status='locked'))))",(actor.scope,))],
+                     "profile": ctx["profile"], "fingerprint": ctx["fingerprint"], "generation": ctx["generation"],
+                     "capabilities": [{k: v for k, v in asdict(c).items() if k != "handler"} for c in CAPABILITIES.values()],
+                     "workflows": [asdict(w) for w in WORKFLOWS.values()],
+--- a/accounting_agent/source_control.py
++++ b/accounting_agent/source_control.py
+@@ -109,6 +109,25 @@
+             result[statement['source_key']]={'period_id':period['period_id'],'statement_snapshot_id':statement['id'],'accepted':bool(items) and items<=covered,'relying_item_keys':sorted(items),'accepted_item_keys':sorted(covered),'acceptances':[{'id':d['id'],'actor':d['actor'],'item_key':d['item_key']} for d in decisions]}
+         return result
+ 
++    def resolve_pending_supersessions(self,db,actor):
++        """Resolve event-backed claims without editing their historical evidence."""
++        events=db.execute("SELECT payload FROM accounting_events WHERE scope=? AND code='SOURCE_SUPERSESSION_UNRESOLVED' ORDER BY id",(actor.scope,)).fetchall()
++        for event in events:
++            claim=json.loads(event['payload'])
++            claimant=db.execute('SELECT s.* FROM source_heads h JOIN snapshots s ON s.id=h.snapshot_id WHERE h.scope=? AND h.snapshot_id=?',(actor.scope,claim['snapshot_id'])).fetchone()
++            if not claimant or self.supersession_link(db,actor.scope,claimant['id']):continue
++            target=db.execute('SELECT snapshot_id FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(actor.scope,claimant['kind'],claim['target_key'])).fetchone()
++            if not target or any(ref['source_key']==claimant['source_key'] for ref in self.supersession_refs(db,actor.scope,target['snapshot_id'])):continue
++            db.execute("INSERT INTO source_links(scope,old_snapshot_id,new_snapshot_id,reason,created) VALUES(?,?,?,'superseded',?)",(actor.scope,target['snapshot_id'],claimant['id'],utcnow()))
++            for ancestor_key in {ref['source_key'] for ref in self.supersession_refs(db,actor.scope,claimant['id'])}:
++                self.source_approval_events(db,actor,ancestor_key,claimant['id'],'APPROVED_SOURCE_SUPERSEDED')
++
++    def rebind_chained_sources(self,db,actor,requested_period):
++        """Re-evaluate live descendants after intake changes their ancestry."""
++        chained=[(len(self.supersession_refs(db,actor.scope,s['id'])),s) for s in self.store.latest(db,actor.scope,'transaction')]
++        for depth,source in sorted(chained,key=lambda item:(item[0],item[1]['id'])):
++            if depth:self.bind_source(db,actor,source['id'],source['value'],requested_period)
++
+     def source_origin(self,db,scope,snapshot_id):
+         """Resolve admitted or quarantined origins across the entire identity chain."""
+         owners=[]
+@@ -119,12 +138,15 @@
+             admitted=db.execute('SELECT b.period_id,p.status FROM snapshots s JOIN source_periods b ON b.snapshot_id=s.id JOIN periods p ON p.scope=b.scope AND p.period_id=b.period_id WHERE s.scope=? AND s.kind=? AND s.source_key=? AND b.admitted=1 ORDER BY s.version DESC,b.id DESC LIMIT 1',(scope,source['kind'],source['source_key'])).fetchone()
+             owners.append((source,head,blocked,admitted))
+         # A late link must not hide a still-live locked ancestor behind this
+-        # identity's earlier destination admission. Removed ancestors have already
+-        # been released, and must not resurrect a former origin after relocking.
++        # identity's earlier destination admission. A quarantined withdrawal has
++        # not released its locked population; an admitted withdrawal has.
+         for source,head,blocked,admitted in owners[1:]:
+             if head and not head['removed']:
+                 if blocked:return dict(blocked,source_key=source['source_key'])
+                 if admitted and admitted['status']=='locked':return dict(admitted,source_key=source['source_key'])
++            elif head:
++                withdrawal=db.execute("SELECT b.period_id FROM source_heads h JOIN source_periods b ON b.snapshot_id=h.snapshot_id JOIN periods p ON p.scope=b.scope AND p.period_id=b.period_id WHERE h.scope=? AND h.kind=? AND h.source_key=? AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=h.snapshot_id) AND b.admitted=0 AND b.reason='LATE_ACTIVITY_IN_LOCKED_PERIOD' AND p.status='locked'",(scope,source['kind'],source['source_key'])).fetchone()
++                if withdrawal:return dict(withdrawal,source_key=source['source_key'])
+         for source,head,blocked,admitted in owners:
+             if blocked:return dict(blocked,source_key=source['source_key'])
+             if admitted:return dict(admitted,source_key=source['source_key'])
+--- a/accounting_agent/web/index.html
++++ b/accounting_agent/web/index.html
+@@ -9,7 +9,7 @@
+ <header><div><p class="eyebrow">GENERAL ACCOUNTING EXECUTION PLATFORM</p><h1 id="view-title">Work & review</h1><p class="subtitle">Bounded preparation. Inspectable evidence. Independent review.</p></div><div class="identity"><label for="period">Accounting period</label><select id="period"></select><label for="role">Synthetic session</label><select id="role"><option value="preparer">Demo preparer</option><option value="reviewer">Demo independent reviewer</option></select><button id="export" class="secondary">Export review package</button></div></header>
+ <div id="message" role="status" aria-live="polite"></div>
+ <section id="work" class="view">
+-<div class="notice"><strong>Bird Bowl — fictional sandbox</strong><span>Actual client accounts, mappings and policies remain unconfigured. This demonstration does not establish operating readiness.</span></div>
++<div class="notice"><strong>Accounting client — fictional sandbox</strong><span>Actual client accounts, mappings and policies remain unconfigured. This demonstration does not establish operating readiness.</span></div>
+ <div id="metrics" class="metrics"></div>
+ <div class="section-head"><div><h2>Execution queue</h2><p>The worker continues authorized preparation without another prompt.</p></div><div class="actions"><select id="workflow" aria-label="Workflow"><option value="card_preparation">Card preparation</option><option value="journal_preparation">Journal validation</option><option value="close_readiness">Close readiness</option></select><button id="run">Prepare workflow</button></div></div>
+ <div id="runs" class="run-grid"></div>
+@@ -17,7 +17,7 @@
+ <div class="panel"><h3>Preparation handover</h3><label for="handover-reason">Reason</label><input id="handover-reason"><label for="handover-ack">Carried item exceptions acknowledgement (when needed)</label><input id="handover-ack"><button id="finalize">Finalize selected workflow package</button><div id="packages"></div></div><div class="review-layout"><div id="items" class="item-list"></div><article id="detail" class="detail"><p>Select a preparation item.</p></article></div>
+ </section>
+ <section id="capabilities" class="view hidden"><div class="notice"><strong>One platform, six accounting areas</strong><span>Executable coverage grows module by module. A planned capability is not a validated function.</span></div><div id="areas" class="area-grid"></div><h2>Registered tools</h2><div id="catalog" class="table-wrap"></div><p class="footnote">The runner permits registered internal preparation tools only. Models, live system connections, ledger writes, payments and final-close sign-off are disabled.</p></section>
+-<section id="client" class="view hidden"><h2>Accounting periods</h2><div class="panel"><p>Period administration requires a human reviewer who did not prepare the period’s work. A lock preserves reviewed work and holds late activity.</p><label for="period-reason">Reason</label><input id="period-reason" value="Synthetic period administration"><label for="lock-ack">Unsettled work acknowledgement (when needed)</label><input id="lock-ack"><div class="actions"><button id="lock-period">Lock selected period</button><button id="reopen-period" class="secondary">Reopen selected period</button></div><div class="field"><label for="new-period">New period ID</label><input id="new-period" value="2026-12"><label for="period-start">Start date</label><input id="period-start" type="date" value="2026-12-01"><label for="period-end">End date</label><input id="period-end" type="date" value="2026-12-31"><button id="open-period">Open fictional period</button></div></div><h2>Separate client knowledge</h2><p>Shared controls stay in the core. Accounts, vendors, policies, procedures and system identities belong to a versioned client profile. Additional clients use the same engine with a different backend scope.</p><div class="columns"><article class="panel"><h3>Known Bird Bowl context</h3><p>First accounting implementation. November–December procedure capture is planned. Current accounting system, conversion, chart of accounts, hosting and operating authority remain unverified.</p><p>Theresa’s independent operation is an intended outcome. Jeff’s technical support and potential SS accounting co-management remain proposed.</p><p>No real client profile has been activated.</p></article><article class="panel"><h3>Active fictional profile</h3><pre id="profile"></pre><h3>Proposed and approved rule records</h3><pre id="rules"></pre></article></div></section>
++<section id="client" class="view hidden"><h2>Accounting periods</h2><div class="panel"><p>Period administration requires a human reviewer who did not prepare the period’s work. A lock preserves reviewed work and holds late activity.</p><label for="period-reason">Reason</label><input id="period-reason" value="Synthetic period administration"><label for="lock-ack">Unsettled work acknowledgement (when needed)</label><input id="lock-ack"><div class="actions"><button id="lock-period">Lock selected period</button><button id="reopen-period" class="secondary">Reopen selected period</button></div><div class="field"><label for="new-period">New period ID</label><input id="new-period" value="2026-12"><label for="period-start">Start date</label><input id="period-start" type="date" value="2026-12-01"><label for="period-end">End date</label><input id="period-end" type="date" value="2026-12-31"><button id="open-period">Open fictional period</button></div></div><h2>Separate client knowledge</h2><p>Shared controls stay in the core. Accounts, vendors, policies, procedures and system identities belong to a versioned client profile. Additional clients use the same engine with a different backend scope.</p><div class="columns"><article class="panel"><h3>Client onboarding context</h3><p>Each client needs its own verified accounting system, chart of accounts, procedures and operating authority.</p><p>Operator, technical support and accounting oversight roles require explicit assignment and validation.</p><p>No real client profile has been activated.</p></article><article class="panel"><h3>Active fictional profile</h3><pre id="profile"></pre><h3>Proposed and approved rule records</h3><pre id="rules"></pre></article></div></section>
+ <section id="autonomy" class="view hidden"><div class="notice"><strong>Durable work, bounded authority</strong><span>Simulated recurring events exercise the scheduler. Live schedules remain disabled.</span></div><div class="columns"><article class="panel"><h2>Synthetic standing mandate</h2><p>Proposes internal journal preparation for three daily occurrences. A separate human approval activates it. Every result still requires independent review.</p><label for="mandate-freshness">Required freshness predicate</label><input id="mandate-freshness" value='{"journal":"occurrence_start"}'><button id="mandate">Propose fictional mandate</button><div class="field"><label for="sim-time">Simulated event time (UTC)</label><input id="sim-time" value="2026-11-15T12:00:00+00:00"></div><button id="tick" class="secondary">Advance simulated event</button><p class="footnote">Window: November 15–19, 2026 UTC. The current occurrence is considered once; repeated delivery returns the existing run. No automatic catch-up.</p></article><article class="panel"><h2>Mandates</h2><div id="mandates"></div></article></div></section>
+ <section id="audit" class="view hidden"><h2>Source evidence</h2><p>Immutable source versions are stored with hashes. Source text is data and cannot grant authority.</p><div id="source-exceptions"></div><div id="sources"></div><h2>Recent audit events</h2><div id="audit-events"></div></section>
+ <footer>Preparation and review are separate from posting, reconciliation and final close. <span id="connection-state">External systems unconnected.</span></footer>
+--- /dev/null
++++ b/scripts/build_rc_review_bundle.py
+@@ -0,0 +1,126 @@
++"""Create the RC/PRV handoff without overwriting any earlier review envelope."""
++import argparse
++import ast
++import difflib
++import hashlib
++import json
++from pathlib import Path
++import zipfile
++
++ROOT = Path(__file__).resolve().parents[1]
++LABEL = 'FABLE_RC_AND_PRV_CORRECTIONS'
++BASELINE = 'exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip'
++BASELINE_HASH = '00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d'
++OUT = ROOT/'docs/corrections_rc'
++BUNDLE = ROOT/'exports'/(LABEL+'_REVIEW_BUNDLE.zip')
++ENVELOPE = {str(p.relative_to(ROOT)) for p in (
++    BUNDLE, BUNDLE.with_suffix('.zip.sha256'), BUNDLE.with_suffix('.REVIEW_MANIFEST.json'),
++    ROOT/'exports'/(LABEL+'_PACKAGE_CHECK.json'))}
++SELF_ARTIFACTS = {'docs/corrections_rc/changed-files.json', 'docs/corrections_rc/source-and-tests.patch'}
++
++
++def sha(raw):
++    return hashlib.sha256(raw).hexdigest()
++
++
++def payload_files():
++    files = {}
++    for path in ROOT.rglob('*'):
++        relative = path.relative_to(ROOT)
++        name = relative.as_posix()
++        if any(p in {'.git', '__pycache__', '.venv', '.agents', '.codex'} for p in relative.parts):continue
++        if not path.is_file() or path.name == '.DS_Store' or path.suffix in {'.pyc', '.sqlite3', '.db'} or path.name.endswith(('-wal', '-shm')):continue
++        if relative.parts[0] == 'data' and name != 'data/.gitkeep':continue
++        if name in ENVELOPE or name == 'REVIEW_MANIFEST.json':continue
++        if path.is_symlink():raise ValueError('Unexpected symlink in payload: '+name)
++        files[name] = path.read_bytes()
++    return files
++
++
++def test_methods(raw):
++    tree = ast.parse(raw)
++    return {cls.name+'.'+node.name for cls in ast.walk(tree) if isinstance(cls, ast.ClassDef)
++            for node in cls.body if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name.startswith('test_')}
++
++
++def prepare():
++    assert sha((ROOT/BASELINE).read_bytes()) == BASELINE_HASH
++    initial = json.loads((OUT/'initial-files.json').read_text())
++    current = payload_files()
++    with zipfile.ZipFile(ROOT/BASELINE) as archive:
++        baseline = {n: archive.read(n) for n in archive.namelist() if n != 'REVIEW_MANIFEST.json' and not n.endswith('/')}
++    retained = {}
++    for name, raw in baseline.items():
++        if not name.startswith('tests/') or not name.endswith('.py'):continue
++        assert name in current, 'Missing prior test file: '+name
++        before = test_methods(raw); after = test_methods(current[name])
++        assert before <= after, 'Lost prior methods: '+name
++        # Only the explicitly assigned register-test extension changes a V2 test file.
++        assert name == 'tests/test_product_requirements.py' or raw == current[name], 'Modified original test file: '+name
++        retained[name] = {'baseline_methods': len(before), 'retained_methods': sorted(before),
++                          'new_methods': sorted(after-before), 'byte_identical': raw == current[name]}
++    protected = json.loads((OUT/'input-checksums.json').read_text())
++    for name, expected in protected.items():assert name in current and sha(current[name]) == expected, 'Changed immutable input: '+name
++    changes = []; patch = []
++    for name in sorted(set(baseline) | set(current)):
++        if name in SELF_ARTIFACTS:continue
++        old = baseline.get(name); new = current.get(name)
++        if old == new:continue
++        changes.append({'file': name, 'status': 'added' if old is None else 'deleted' if new is None else 'modified',
++                        'baseline_sha256': sha(old) if old is not None else None,
++                        'initial_working_sha256': initial.get(name), 'sha256': sha(new) if new is not None else None,
++                        'pre_existing_difference': initial.get(name) != (sha(old) if old is not None else None),
++                        'changed_in_this_pass': initial.get(name) != (sha(new) if new is not None else None)})
++        if name == 'Makefile' or name.startswith(('accounting_agent/', 'tests/', 'scripts/')):
++            patch.extend(difflib.unified_diff((old or b'').decode().splitlines(True), (new or b'').decode().splitlines(True),
++                         fromfile='a/'+name if old is not None else '/dev/null', tofile='b/'+name if new is not None else '/dev/null'))
++    inventory = {'baseline': BASELINE, 'baseline_sha256': BASELINE_HASH,
++                 'scope': 'Every deliverable payload file against the V2 correction bundle, including exports/ and START_HERE.md.',
++                 'coverage_rules': [
++                     'All differing payload files are individually listed except the two self-artifacts named below, which are covered by REVIEW_MANIFEST.json.',
++                     'REVIEW_MANIFEST.json hashes every payload file except itself; its own SHA-256 is in the adjacent PACKAGE_CHECK JSON.',
++                     'The final archive and its adjacent checksum, external manifest and PACKAGE_CHECK JSON are the output envelope, excluded from the payload to prevent recursion. The checksum sidecar hashes the archive.',
++                     'Git metadata, caches, virtual environments, .DS_Store and runtime databases/data are excluded; no delivered source/evidence file is excluded by that rule.'
++                 ], 'self_artifacts_covered_by_manifest': sorted(SELF_ARTIFACTS),
++                 'output_envelope': sorted(ENVELOPE), 'original_tests': retained, 'files': changes}
++    (OUT/'source-and-tests.patch').write_text(''.join(patch))
++    (OUT/'changed-files.json').write_text(json.dumps(inventory, indent=2)+'\n')
++    return inventory
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--prepare', action='store_true', help='Refresh only the new inventory/patch before packaging')
++    args = parser.parse_args()
++    if not args.prepare and any((ROOT/n).exists() for n in ENVELOPE):
++        raise SystemExit('Review envelope already exists; never overwrite an earlier archive, sidecar or manifest.')
++    inventory = prepare()
++    if args.prepare:
++        print('Prepared comprehensive inventory:', len(inventory['files']), 'differences; prior methods retained:', sum(r['baseline_methods'] for r in inventory['original_tests'].values()))
++        return
++    files = payload_files()
++    manifest = {'label': LABEL, 'scope': 'Local fictional RC/PRV developer corrections; independent acceptance pending; no release or live authority.',
++                'hash_rule': 'Every payload file except this manifest itself. Its hash is anchored in the adjacent package-check JSON.',
++                'files': {n: sha(raw) for n, raw in sorted(files.items())}}
++    manifest_raw = (json.dumps(manifest, indent=2)+'\n').encode()
++    with zipfile.ZipFile(BUNDLE, 'x', zipfile.ZIP_DEFLATED) as archive:
++        for name, raw in sorted(files.items()):archive.writestr(name, raw)
++        archive.writestr('REVIEW_MANIFEST.json', manifest_raw)
++    with zipfile.ZipFile(BUNDLE) as archive:
++        assert archive.testzip() is None
++        assert len(archive.namelist()) == len(set(archive.namelist()))
++        for name, expected in manifest['files'].items():assert sha(archive.read(name)) == expected
++    bundle_hash = sha(BUNDLE.read_bytes())
++    BUNDLE.with_suffix('.zip.sha256').write_text(bundle_hash+'  '+BUNDLE.name+'\n')
++    BUNDLE.with_suffix('.REVIEW_MANIFEST.json').write_bytes(manifest_raw)
++    check = {'bundle': BUNDLE.name, 'bundle_sha256': bundle_hash, 'manifest_sha256': sha(manifest_raw),
++             'payload_files': len(files), 'all_payload_hashes_and_crc_verified': True,
++             'protected_inputs_verified': len(json.loads((OUT/'input-checksums.json').read_text())),
++             'baseline_test_methods_retained': sum(r['baseline_methods'] for r in inventory['original_tests'].values()),
++             'independent_acceptance': 'PENDING', 'human_G0': 'NOT_GRANTED', 'batch3': 'CLOSED'}
++    (ROOT/'exports'/(LABEL+'_PACKAGE_CHECK.json')).write_text(json.dumps(check, indent=2)+'\n')
++    print(json.dumps(check, indent=2))
++
++
++if __name__ == '__main__':
++    main()
+--- a/scripts/check.py
++++ b/scripts/check.py
+@@ -34,10 +34,9 @@
+         assert name in CAPABILITIES, (str(doc),name)
+ print('PASS: capability IDs named in implementation documentation exist in the registry.')
+ 
+-from scripts.check_product_requirements import validate_register
+-register=validate_register((ROOT/'docs/PRODUCT_REQUIREMENTS.md').read_text(),ROOT)
++from scripts.check_product_requirements import validate_register, client_terms, validate_shared_sources
++register_text=(ROOT/'docs/PRODUCT_REQUIREMENTS.md').read_text()
++register=validate_register(register_text,ROOT)
+ print('PASS: product requirements schema/evidence/dependencies/crosswalk/client boundaries; %d records, %d tickets.'%(register['requirements'],register['backlog_tickets']))
+-for path in (ROOT/'accounting_agent').glob('*.py'):
+-    if path.name=='demo.py':continue
+-    assert not re.search(r'bird[\W_]*bowl',path.read_text(),re.I),('Client name in shared module',str(path))
+-print('PASS: shared Python modules contain no pilot client name; demo/config/fixtures remain isolated.')
++validate_shared_sources(ROOT,client_terms(register_text))
++print('PASS: shared application/web files contain no client-specific names/choices from the client section; demo/config/fixtures remain isolated.')
+--- a/scripts/check_product_requirements.py
++++ b/scripts/check_product_requirements.py
+@@ -1,6 +1,8 @@
+ """Repeatable product-register schema, traceability and client-boundary checks."""
+ import argparse
++import ast
+ from collections import Counter
++import hashlib
+ import json
+ from pathlib import Path
+ import re
+@@ -15,7 +17,7 @@
+             'G4 operating handoff','Second client','Platform maturity','Product decision'}
+ HEADER=re.compile(r'^### (AAOS-[A-Z]+-\d{2}) — ([^\n]+)',re.M)
+ REFERENCE=re.compile(r'AAOS-[A-Z]+-\d{2}')
+-CONDITIONAL=re.compile(r'\b(for real|for (?:later|hosted|live)|before G[12]|only|where applicable|when authorized)\b',re.I)
++CONDITIONAL=re.compile(r'^\s*(?:\(\s*)?(?:if ratified\b|for (?:real|later|hosted|live)\b|before G[12]\b|where applicable\b|when authorized\b)',re.I)
+ 
+ 
+ def require(condition,message):
+@@ -38,6 +40,57 @@
+     return records
+ 
+ 
++def client_terms(text):
++    """Read client-only names/choices from the client's own section."""
++    first=text.index('### AAOS-BB-01 —')
++    start=text.rfind('\n## ',0,first);end=text.find('\n## ',first)
++    section=text[start:end if end>=0 else len(text)]
++    lists=re.findall(r'^- \*\*Client-specific terms:\*\*\s*([^\n]+)',section,re.M)
++    require(len(lists)==1,'Client section requires one client-specific terms list')
++    terms=[term.strip() for term in lists[0].split(';')]
++    require(all(terms) and len(terms)==len(set(t.lower() for t in terms)),'Invalid client-specific terms list')
++    client_records=' '.join(str(r) for k,r in parse_register(text).items() if k.startswith('AAOS-BB-'))
++    require(all(re.search(re.escape(term),client_records,re.I) for term in terms),'Client-specific term missing from client records')
++    return terms
++
++
++def client_pattern(terms):
++    variants=[r'[\W_]*'.join(re.escape(word) for word in re.split(r'[\W_]+',term)) for term in terms]
++    return re.compile(r'(?<![a-z0-9])(?:'+'|'.join(variants)+r')(?![a-z0-9])',re.I)
++
++
++def validate_shared_sources(root,terms):
++    pattern=client_pattern(terms)
++    for path in (Path(root)/'accounting_agent').rglob('*'):
++        relative=path.relative_to(Path(root)/'accounting_agent')
++        if not path.is_file() or '__pycache__' in relative.parts or relative.parts[0] in ('config','fixtures') or str(relative)=='demo.py':continue
++        require(not pattern.search(path.read_text()),'Client-specific fact in shared source: '+str(relative))
++
++
++def named_probe_ids(root):
++    ids=set()
++    for directory in ('exports','review'):
++        for path in (root/directory).rglob('*probe*.py'):
++            for node in ast.walk(ast.parse(path.read_text())):
++                if isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and node.func.id=='probe' and node.args and isinstance(node.args[0],ast.Constant) and isinstance(node.args[0].value,str):
++                    ids.add(node.args[0].value)
++    return ids
++
++
++def independent_results(root,records):
++    rows=json.loads((root/'docs/INDEPENDENT_VERIFICATION_RESULTS.json').read_text())['results'];result={}
++    for row in rows:
++        identifier=row['id']
++        require(identifier in records and identifier not in result,'Unknown/duplicate independent result: '+identifier)
++        require(row['state'] in {'Verification failed','Independently verified'},'Invalid independent result state: '+identifier)
++        report=root/row['report_path']
++        require(report.is_file() and report.resolve().is_relative_to(root.resolve()),'Independent report missing or outside project: '+identifier)
++        require(hashlib.sha256(report.read_bytes()).hexdigest()==row['report_sha256'],'Independent report hash differs: '+identifier)
++        require(bool(re.fullmatch(r'[a-f0-9]{64}',row['bundle_sha256'])),'Invalid independent bundle hash: '+identifier)
++        result[identifier]=row
++    return result
++
++
+ def validate_register(text,root=ROOT):
+     root=Path(root);records=parse_register(text)
+     all_ids=set(records)
+@@ -46,6 +99,8 @@
+     require(original_ids<=all_ids,'Previously established requirement IDs removed or renamed: '+', '.join(sorted(original_ids-all_ids)))
+     unknown=set(REFERENCE.findall(text))-all_ids
+     require(not unknown,'Unknown requirement dependency/reference: '+', '.join(sorted(unknown)))
++    terms=client_pattern(client_terms(text));probes=named_probe_ids(root)
++    independent=independent_results(root,records)
+     graph={}
+     for identifier,record in records.items():
+         require(record['Priority'] in {'Must','Should','Could'},identifier+': invalid priority')
+@@ -55,16 +110,37 @@
+         require(record['Needed for'] in NEEDED_FOR,identifier+': invalid needed-for value')
+         graph[identifier]=REFERENCE.findall(record['Dependencies'])
+         if state in {'Implemented','Developer-tested','Independently verified','Verification failed'}:
+-            require(bool(re.search(r'(?:tests/test_[\w]+\.py|\bR[B0-9][\w-]*|\bPR-\d+)',record['Evidence'])),identifier+': named test/probe evidence required')
++            tests=re.findall(r'\btests/test_[\w]+\.py\b',record['Evidence'])
++            real_test=any((root/name).is_file() for name in tests)
++            real_probe=any(re.search(r'(?<![\w-])'+re.escape(pid)+r'(?![\w-])',record['Evidence']) for pid in probes)
++            require(real_test or real_probe,identifier+': named test/probe evidence required (existing file or declared probe id)')
++        verdict=independent.get(identifier)
++        if verdict and verdict['state']=='Verification failed':
++            require(state=='Verification failed',identifier+': independent Verification failed cannot be promoted by developer evidence')
+         if state=='Independently verified':
+             require('independent review' in record['Evidence'].lower() and re.search(r'\b[a-f0-9]{64}\b',record['Evidence']),identifier+': independent review and checkpoint evidence required')
+-        if state in {'Developer-tested','Independently verified'}:
+-            for clause in record['Dependencies'].split(';'):
+-                for dep in REFERENCE.findall(clause):
+-                    require(records[dep]['Implementation state']!='Deferred' or CONDITIONAL.search(clause),identifier+': unconditional deferred dependency '+dep)
++            require(verdict and verdict['state']=='Independently verified',identifier+': independent review result entry required')
++            require(verdict['bundle_sha256'] in record['Evidence'] and verdict['report_path'] in record['Evidence'],identifier+': independent review entry/checkpoint differs from evidence')
++        for clause in record['Dependencies'].split(';'):
++            refs=list(REFERENCE.finditer(clause))
++            for index,ref in enumerate(refs):
++                dep=ref[0];tail=clause[ref.end():refs[index+1].start() if index+1<len(refs) else len(clause)]
++                conditional=bool(CONDITIONAL.match(tail))
++                if state in {'Implemented','Developer-tested','Independently verified'}:
++                    require(records[dep]['Implementation state'] not in {'Deferred','Not started'} or conditional,identifier+': unconditional deferred/not-started dependency '+dep)
++                if record['Product decision']=='Approved':
++                    require(records[dep]['Product decision']!='Proposed' or conditional,identifier+': unconditional Proposed dependency '+dep)
++        require(not re.search(r'\.\s*;',record['Dependencies']),identifier+': stray dependency punctuation')
+         if not identifier.startswith('AAOS-BB-') and identifier not in {'AAOS-GOV-01','AAOS-ARC-04','AAOS-KNO-01'}:
+-            for field in ('Acceptance criteria','Scope note','Target stage'):
+-                require(not re.search(r'bird[\W_]*bowl|\bexpensify\b|\bdesktop\b',record[field],re.I),identifier+': client-specific fact in shared '+field)
++            for field,value in record.items():
++                if field!='Trace':require(not terms.search(value),identifier+': client-specific fact in shared '+field)
++        if identifier.startswith('AAOS-EXC-'):
++            disposition=re.match(r'^(Rejected scope|Reserved action)\.',record['Scope note'])
++            require(disposition is not None,identifier+': fixed scope disposition prefix required')
++            expected='Rejected' if disposition[1]=='Rejected scope' else 'Reserved'
++            table=re.findall(r'^\| '+re.escape(identifier)+r' \| (Rejected|Reserved) \|',text,re.M)
++            require(table==[expected],identifier+': scope table disposition differs from scope note')
++            require((record['Product decision']=='Rejected')==(expected=='Rejected'),identifier+': product decision conflicts with scope disposition')
+     visited=set();active=[]
+     def visit(identifier):
+         require(identifier not in active,'Dependency cycle: '+' -> '.join(active+[identifier]))
+--- /dev/null
++++ b/scripts/collect_rc_results.py
+@@ -0,0 +1,129 @@
++"""Collect this correction pass's command evidence without altering prior evidence."""
++import json
++from pathlib import Path
++import re
++import shutil
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT/'docs/corrections_rc'
++LOGS = Path('/tmp/aaos-rc-pass')
++
++
++def main():
++    for path in LOGS.iterdir():
++        if path.is_file() and (path.suffix in {'.txt', '.json'} or path.name == 'run.py'):
++            shutil.copy2(path, OUT/path.name)
++    commands = []
++    for path in sorted(OUT.glob('*.json')):
++        data = json.loads(path.read_text())
++        if not isinstance(data, dict) or 'command' not in data or 'exit_code' not in data:continue
++        commands.append(dict(data, evidence=path.name, raw_log=path.stem+'.txt'))
++    named = {Path(row['evidence']).stem: row for row in commands}
++    required = ('final-full-tests', 'final-current-check', 'final-batch2-gate', 'final-reverification-gate',
++                'final-acceptance-gate', 'final-rb-gate', 'final-rc-gate', 'retained14-direct',
++                'rc-probes-after', 'fable-register-faults', 'prv-unit-after', 'rc-unit-final')
++    for name in required:
++        assert name in named and named[name]['exit_code'] == 0, 'Required command not passing: '+name
++    faults = (OUT/'fable-register-faults.txt').read_text()
++    assert 'cases 37 | agree 37 | gaps 0' in faults
++    for case in ('F21', 'F22', 'F23', 'F25', 'F26', 'F30', 'F31', 'F33b', 'F33c', 'F35'):
++        assert re.search(r'^'+case+r' .*want=REJECTED got=REJECTED', faults, re.M), case
++    assert 'client name added to accounting_agent/web/app.js' in faults
++    tests = (OUT/'final-full-tests.txt').read_text()
++    assert re.search(r'Ran 192 tests .*\n\nOK\s*$', tests), 'Final full suite does not report 192 OK'
++    batch = (OUT/'final-batch2-gate.txt').read_text()
++    assert 'Summary: DEFERRED-OK=21, FIXED=10, PASS=29' in batch
++    not_run = [
++        {'command': 'Full literal exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py . (all IDs)', 'status': 'NOT_RUN',
++         'reason': 'Not assigned for this pass; historical incompatibilities and nonzero logs are preserved. The maintained original-compatible subset and all reviewed setups ran via acceptance-gate and make test.'},
++        {'command': 'Full literal exports/FABLE_REVERIFICATION/fable_reverification_probes.py . (all IDs)', 'status': 'NOT_RUN',
++         'reason': 'Not assigned for this pass; preserved historical nonzero results are not relabeled. Maintained original-compatible and reviewed setups ran via reverification-gate and make test.'},
++        {'command': 'Additional bespoke UC-6, UC-8 and UC-9 independent probes', 'status': 'NOT_RUN',
++         'reason': 'Outside RC/PRV assignment; existing developer regression coverage does not establish independent verification.'},
++        {'command': 'External linter, type checker and JavaScript compiler', 'status': 'NOT_RUN', 'reason': 'Not installed; no unrelated toolchain added. Offline repository syntax/registry/DOM checks ran.'},
++        {'command': 'Next Fable independent verification', 'status': 'NOT_RUN', 'reason': 'Awaiting independent reviewer of this new bundle; developer executions do not provide independent acceptance.'}
++    ]
++    result = {'executed_by': 'Codex developer, not independent acceptance',
++              'commands': commands, 'not_run': not_run,
++              'current_results': {'tests': 192, 'new_probes': {'OK': 16, 'NOTE': ['N02c', 'N04e'], 'WEAK': 0, 'ERROR': 0},
++                                  'retained_probes': {'OK': 14}, 'fault_cases': {'agree': 37, 'gaps': 0},
++                                  'reviewer_cases': {'PASS': 29, 'FIXED': 10, 'DEFERRED-OK': 21}},
++              'independent_state': {'Verification failed': ['AAOS-BNK-03', 'AAOS-CTL-04', 'AAOS-GOV-03'],
++                                    'Independently verified at prior V2 only': ['AAOS-KNO-04', 'AAOS-CTL-01', 'AAOS-BNK-02', 'AAOS-CTL-09']},
++              'no_schema_or_probe_adaptation': True, 'batch3': 'CLOSED', 'live_actions': 'CLOSED'}
++    (OUT/'execution-results.json').write_text(json.dumps(result, indent=2)+'\n')
++    (OUT/'exit-codes.json').write_text(json.dumps({Path(row['evidence']).stem: row['exit_code'] for row in commands}, indent=2)+'\n')
++    rows = [
++        ('RC-01', 'Removed ancestor remains blocking only while its withdrawal is quarantined under a still-locked period; reopen admits that withdrawal. Expose it in state.source_exceptions.', 'accounting_agent/source_control.py; service.py', 'test_RC01_withdrawal_then_fresh_or_late_claim_and_relock; N01b, R01a, N01a; retained R01b/R01c/A01/X01'),
++        ('RC-02', 'Rebind live transaction chains shortest-first after changed intake, before receipts. Bind transition acceptance to exact resolved ancestry so expanded chains need fresh acceptance after reopen.', 'source_control.py; service.py; exceptions.py', 'test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal; test_RC02_unchanged_chain_adds_no_bindings_moves_or_accounting_events; N01c, N01f, N01a/N01e/R01a–R01d'),
++        ('RC-03', 'Resolve current-head pending claims when targets arrive, including removed claimants; refuse cycles; stop reporting linked claims unresolved.', 'source_control.py; service.py', 'test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced; test_RC03_open_target_clears_unresolved_without_quarantine; test_RC03_pending_cycle_is_not_linked; N01d/N01e/R01c/R01d'),
++        ('PRV-01', 'Record seven actual independent conclusions; retain three failures and precise RC delivery orders; four prior-V2 verified scopes retain UC-10/UC-11. Update Current evidence and T-12/RA-01/RB-01 crosswalk.', 'docs/PRODUCT_REQUIREMENTS.md; INDEPENDENT_VERIFICATION_RESULTS.json', 'make check; register counts; seven report-backed entries; owner-wording-preservation.json'),
++        ('PRV-02', 'Require existing tests/test_*.py or an exact probe ID declared in a probe script; ticket IDs and arbitrary tokens are insufficient.', 'scripts/check_product_requirements.py', 'test_PRV02_nonexistent_test_ticket_and_arbitrary_token_are_rejected; F21/F22/F23 rejected; real R01a positive'),
++        ('PRV-03', 'Use independent-report conclusions, report hashes and bundle checkpoints; block promotion of failed verdicts and unbacked independent claims.', 'docs/INDEPENDENT_VERIFICATION_RESULTS.json; register checker', 'test_PRV03_failed_verdict_cannot_be_promoted; test_PRV03_self_asserted_independent_verification_is_rejected; F25/F26 rejected'),
++        ('PRV-04', 'Neutralize both header and client panel; extend shared-source guard recursively through web assets, retaining demo/config/fixture exemptions.', 'accounting_agent/web/index.html; scripts/check.py; register checker', 'test_PRV04_shared_web_and_python_are_checked_but_fixtures_are_exempt; unchanged Fable make-check web/person injections rejected, exempt demo accepted'),
++        ('PRV-05', 'Mark Proposed dependency references if ratified and retain shared instantiation citations. No product proposal is ratified.', 'docs/PRODUCT_REQUIREMENTS.md; register checker', 'test_PRV05_approved_cannot_depend_unconditionally_on_proposed; 77 Approved/9 Proposed/2 Rejected unchanged'),
++        ('PRV-06', 'Enforce adjacent conditional phrases after each own dependency ID, for Deferred and Not started dependencies of implemented/tested states. GOV-02/ARC-01 depend conditionally on GOV-01; GOV-01 stays Not started.', 'register checker; docs/PRODUCT_REQUIREMENTS.md', 'test_PRV06_unstarted_or_deferred_dependency_needs_local_condition; F33b/F33c rejected, F33 accepted'),
++        ('PRV-07', 'Start all EXC scope notes with Rejected scope. or Reserved action. and require agreement with the disposition table/product decision.', 'register checker; docs/PRODUCT_REQUIREMENTS.md', 'test_PRV07_scope_disposition_must_match_table; F35 rejected'),
++        ('PRV-08', 'Clean dot-semicolon punctuation from the thirteen Dependencies fields and reject recurrence.', 'docs/PRODUCT_REQUIREMENTS.md; register checker', 'test_PRV08_stray_dependency_punctuation_is_rejected; make check'),
++        ('PRV-09', 'Inventory every payload difference versus V2, including START_HERE and exports, with explicit self-artifact/manifest/envelope rules. Preserve original tests and pre-existing owner changes.', 'scripts/build_rc_review_bundle.py; changed-files.json; source-and-tests.patch', 'inventory preparation/preservation assertions; final manifest/CRC/hash and extracted-copy checks'),
++        ('PRV-10', 'Read names/client-only choices from the client section; apply boundaries to all shared fields except Trace, retaining three allowed boundary records. Shared source guard uses the same list.', 'register checker; client terms in docs/PRODUCT_REQUIREMENTS.md', 'test_PRV10_every_shared_field_except_trace_uses_client_section_terms; F30/F31 rejected; dynamic added-term and Trace positives')
++    ]
++    report = '''# RC/PRV developer correction report
++
++16 November 2026. One authorized correction pass: RC-01, RC-02, RC-03, then PRV-01–PRV-10. All data and databases were fictional/local. No schema, stack, deferred/Proposed capability, live integration or operating authority changed. All results below were executed by Codex as developer validation; independent acceptance of this checkpoint is pending.
++
++The three required preflight hashes matched before project edits. The unchanged probe script reproduced exit 1 with 13 OK / 3 WEAK / 2 NOTE (N01b/N01c/N01d failed). Final developer results: **192 tests OK; 16 OK / 2 expected NOTE in the exact 18-probe set; 14 retained probes OK; all required gates exit 0; reviewer cases 29 PASS / 10 FIXED / 21 DEFERRED-OK; all 37 register fault cases agree, zero gaps.** The ten specified GAP cases and shared-web injection are rejected.
++
++## Corrections and coverage
++
++| Ticket | Change | Files | Tests / probes / fault cases |
++| --- | --- | --- | --- |
++'''
++    for row in rows:report += '| '+' | '.join(row)+' |\n'
++    report += '''
++## Design and before/after evidence
++
++The fix follows the experiment's narrow use of existing append-only links, bindings and events; a schema redesign offered no benefit for this assignment. The pending-claim lookup directly selects the current claimant head, including a removed head. The experiment was a worked reference, not accepted fix evidence. Two required additions are explicit: withdrawal disclosure in source_exceptions, and exact-chain transition-acceptance binding. No historical snapshot, decision, package or audit row is rewritten.
++
++The six new RC methods were run against unmodified source first: seven subtest failures across the ticket variants, with idempotence and cycle positives retained (rc-unit-before.*). RC-01 then passed its fresh/late and relock regression. RC-02's first rebind fix held descendants, but its stronger reopen assertion still failed in both terminal-approval variants: prior settlement_verified acceptance suppressed the fresh transition hold (rc02-unit-after.* and rc-unit-after.*). The existing disposition payload now records transition_refs and activation compares it with the resolved chain. Changed ancestry, or a legacy decision without that binding, requires a new acceptance; the old decision remains immutable. All six methods pass in rc-unit-final.*, and the unchanged probes pass in rc-probes-after.*. This extra exceptions.py change is within RC-02's exact reopen assertion and is shown in the patch and D-019.
++
++The restricted full run could not bind the HTTP server to 127.0.0.1 (also isolated in loopback-sandbox-probe.*). Its nonzero output is preserved. A complete rerun with temporary local-port access passed all 192 methods, including all eleven HTTP methods; no skip or expected failure hides a defect. Early inventory attempts also caught nonportable Finder metadata and two local synthetic backup databases in the new preservation list. Those are retained unchanged in the working tree and explicitly excluded from the portable input list/payload; no review file or prior archive was removed. All attempts remain in the raw evidence.
++
++## Command evidence
++
++Each command's combined stdout/stderr is in the linked .txt; adjacent JSON records exit code, working directory, elapsed time and environment where captured. Common environment: Python 3.9.6, SQLite 3.51.0, GNU Make 3.81, macOS 26.5.2 (x86_64). Gates ran in disposable copies because batch2-gate regenerates a historical report; the working historical evidence was preserved. tested-source-sha256.json confirms current runtime/test/gate sources match the complete-test copy.
++
++| Command / stage | Exit | Raw output |
++| --- | --- | --- |
++'''
++    for row in commands:
++        command=row['command'] if isinstance(row['command'],str) else ' '.join(row['command'])
++        report += '| '+Path(row['evidence']).stem+': `'+command+'` | '+str(row['exit_code'])+' | ['+row['raw_log']+']('+row['raw_log']+') |\n'
++    report += '''
++No supplied probe was adapted. The new rc-gate and normal test suite require exit 0, exactly eighteen IDs, sixteen OK and only N02c/N04e NOTE. The older acceptance gate retains U4 as its sole NOTE identity. Historical supplementary observations in retained corrective scripts remain visible; passing gate labels do not relabel those observations.
++
++## Preservation and inventory
++
++Both review folders contain 58 files identical to each response ZIP. All twelve pre-existing ZIPs retain their initial hashes, including b154db10…f61ea, d38e0e27…30f84, 00a13d93…be001d, 0562869a…5f399 and d4c5795d…3d826. Original sidecars, original reviewer inputs, review/, fixtures/config and ss_agent_system_handoff/ remain unchanged. The three commits on review/fable-rb-acceptance retain their hashes. No Git commit was added, rewritten or staged by this pass.
++
++All 174 V2 test methods remain. Every earlier test file is byte-identical except the explicitly requested additive extension of tests/test_product_requirements.py (eleven earlier methods retained, nine added). Six new RC methods and three strict-gate/preservation methods bring the total to 192. The sixteen test files of the original RA baseline remain untouched. No new skip/expected-failure marker was introduced.
++
++changed-files.json covers every delivered payload difference against V2, including START_HERE.md and exports/. Its two self-artifacts are covered by REVIEW_MANIFEST.json; the manifest's own hash is in the adjacent package-check JSON, and the archive is hashed by its checksum sidecar. Runtime databases/data, OS metadata and Git/caches are explicitly excluded. source-and-tests.patch is generated against the immutable V2 source. pre-existing-owner-changes.patch and initial-files.json separate prior changes from this pass. AAOS-BB-01/02 preserve D-016/D-017 wording in every field except assigned Dependencies corrections; confirmation does not change state or a gate.
++
++## Independent verdicts and remaining boundaries
++
++AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 remain **Verification failed**, naming RC-01–03 and requiring independent re-verification of this checkpoint. The four prior-V2 verified records are raised solely from Fable's actual returned report/probes and checkpoint hash, not these developer tests. UC-10/N02c remains the later contradicting receipt policy observation; UC-11/N04e remains the zero-activity prior-statement acceptance limitation. U4, receipt had_approval metadata, synthetic grant lifecycle and other previously deferred matters remain disclosed; no unrelated fix or policy decision is assigned.
++
++The six unratified shared requirements ONB-01/02, INT-07, GL-06, BNK-07 and RPT-03 remain Proposed; all nine Proposed decisions and all deferred capability states remain. Human G0 acceptance, G1–G4, Batch 3, actual client processing, live connections, paid models/services, sending, posting, payments, hosting and deployment remain closed.
++
++## NOT_RUN this pass
++
++'''
++    for row in not_run:report += '- **NOT_RUN:** '+row['command']+'. '+row['reason']+'\n'
++    report += '\nUse FABLE_RC_REVIEW_PROMPT.md for the exact next independent assignment. The adjacent archive checksum identifies the new checkpoint; passing developer results do not supply independent acceptance.\n'
++    (OUT/'RC_CORRECTIONS_REPORT.md').write_text(report)
++    print('Collected', len(commands), 'command records; required developer checks pass; independent acceptance pending.')
++
++
++if __name__ == '__main__':
++    main()
+--- /dev/null
++++ b/scripts/verify_rb_review.py
+@@ -0,0 +1,32 @@
++"""Require the exact unchanged RB acceptance probe set and its two policy notes."""
++from pathlib import Path
++import re
++import subprocess
++import sys
++
++ROOT = Path(__file__).resolve().parents[1]
++EXPECTED = {pid: 'OK' for pid in (
++    'N01a', 'N01b', 'N01c', 'N01d', 'N01e', 'N01f', 'N01g',
++    'N02a', 'N02b', 'N03a', 'N03b', 'N03c', 'N04a', 'N04b', 'N04c', 'N04d')}
++EXPECTED.update(N02c='NOTE', N04e='NOTE')
++
++
++def validate_result(returncode, stdout):
++    rows = re.findall(r'(?m)^(N\d+[a-z]?)\s+\S+\s+(OK|WEAK|ERROR|NOTE)\s*$', stdout)
++    if returncode != 0 or len(rows) != 18 or dict(rows) != EXPECTED:
++        raise ValueError('RB review gate requires exit 0, exact 18 ids, 16 OK and N02c/N04e NOTE only')
++
++
++def main():
++    result = subprocess.run([sys.executable, str(ROOT/'exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py'), str(ROOT)], capture_output=True, text=True)
++    print(result.stdout, end='')
++    print(result.stderr, end='', file=sys.stderr)
++    try:
++        validate_result(result.returncode, result.stdout)
++    except ValueError as exc:
++        raise SystemExit(str(exc))
++    print('PASS: exact RB acceptance probe contract (developer execution; independent acceptance pending).')
++
++
++if __name__ == '__main__':
++    main()
+--- a/tests/test_product_requirements.py
++++ b/tests/test_product_requirements.py
+@@ -1,9 +1,10 @@
+ """Fault injection for the product register gate, not copies of document prose."""
+ from pathlib import Path
+ import re
++import tempfile
+ import unittest
+ 
+-from scripts.check_product_requirements import validate_register
++from scripts.check_product_requirements import validate_register, client_terms, validate_shared_sources
+ 
+ ROOT=Path(__file__).resolve().parents[1]
+ 
+@@ -54,3 +55,68 @@
+ 
+     def test_independent_verification_requires_review_and_checkpoint(self):
+         self.rejects(self.text.replace('- **Implementation state:** Developer-tested','- **Implementation state:** Independently verified',1),'independent review and checkpoint')
++
++    def changed_field(self,identifier,field,value,text=None):
++        text=text or self.text
++        start=text.index('### '+identifier+' —')
++        end=text.find('\n### ',start+5)
++        end=end if end>=0 else len(text)
++        body=re.sub(r'^- \*\*'+re.escape(field)+r':\*\*[^\n]*',lambda m:'- **'+field+':** '+value,text[start:end],count=1,flags=re.M)
++        return text[:start]+body+text[end:]
++
++    def test_PRV02_nonexistent_test_ticket_and_arbitrary_token_are_rejected(self):
++        for evidence in ('tests/test_does_not_exist.py','See PR-04','R2D2 says so'):
++            with self.subTest(evidence=evidence):
++                self.rejects(self.changed_field('AAOS-ARC-02','Evidence',evidence),'named test/probe evidence')
++        validate_register(self.changed_field('AAOS-ARC-02','Evidence','R01a'),ROOT)
++
++    def test_PRV03_self_asserted_independent_verification_is_rejected(self):
++        changed=self.changed_field('AAOS-ARC-02','Implementation state','Independently verified')
++        changed=self.changed_field('AAOS-ARC-02','Evidence','independent review '+'ab'*32+' tests/test_platform.py',changed)
++        self.rejects(changed,'independent review result entry required')
++
++    def test_PRV03_failed_verdict_cannot_be_promoted(self):
++        for state in ('Developer-tested','Independently verified','Implemented'):
++            with self.subTest(state=state):
++                self.rejects(self.changed_field('AAOS-BNK-03','Implementation state',state),'independent Verification failed cannot be promoted')
++
++    def test_PRV04_shared_web_and_python_are_checked_but_fixtures_are_exempt(self):
++        with tempfile.TemporaryDirectory() as tmp:
++            root=Path(tmp);base=root/'accounting_agent'
++            for rel in ('web/app.js','core.py','config/demo.json','fixtures/demo.json','demo.py'):
++                path=base/rel;path.parent.mkdir(parents=True,exist_ok=True);path.write_text('')
++            for rel in ('web/app.js','core.py'):
++                path=base/rel;path.write_text('bird_bowl_default')
++                with self.assertRaisesRegex(ValueError,'Client-specific fact in shared source'):
++                    validate_shared_sources(root,client_terms(self.text))
++                path.write_text('')
++            for rel in ('config/demo.json','fixtures/demo.json','demo.py'):(base/rel).write_text('Bird Bowl')
++            validate_shared_sources(root,client_terms(self.text))
++
++    def test_PRV05_approved_cannot_depend_unconditionally_on_proposed(self):
++        self.rejects(self.changed_field('AAOS-ARC-04','Dependencies','AAOS-ONB-01'),'unconditional Proposed dependency')
++        validate_register(self.changed_field('AAOS-ARC-04','Dependencies','AAOS-ONB-01 if ratified'),ROOT)
++
++    def test_PRV06_unstarted_or_deferred_dependency_needs_local_condition(self):
++        for dependencies in ('AAOS-KNO-01','AAOS-CTL-13','AAOS-CTL-13, the only prerequisite','only AAOS-CTL-13'):
++            with self.subTest(dependencies=dependencies):
++                self.rejects(self.changed_field('AAOS-GL-02','Dependencies',dependencies),'unconditional deferred/not-started dependency')
++        validate_register(self.changed_field('AAOS-GL-02','Dependencies','AAOS-CTL-13 for real data only'),ROOT)
++
++    def test_PRV07_scope_disposition_must_match_table(self):
++        self.rejects(self.text.replace('| AAOS-EXC-05 | Reserved |','| AAOS-EXC-05 | Rejected |'),'scope table disposition differs')
++        self.rejects(self.changed_field('AAOS-EXC-05','Scope note','Payment remains reserved.'),'fixed scope disposition prefix')
++
++    def test_PRV08_stray_dependency_punctuation_is_rejected(self):
++        self.rejects(self.changed_field('AAOS-BNK-02','Dependencies','AAOS-BNK-03. ; AAOS-CTL-04'),'stray dependency punctuation')
++
++    def test_PRV10_every_shared_field_except_trace_uses_client_section_terms(self):
++        for field in ('Description','Business purpose','Scope note','Evidence','Target stage','Acceptance criteria'):
++            with self.subTest(field=field):
++                value='Theresa '+('tests/test_platform.py' if field=='Evidence' else 'client-specific fact')
++                self.rejects(self.changed_field('AAOS-ARC-01',field,value),'client-specific fact in shared')
++        validate_register(self.changed_field('AAOS-ARC-01','Trace','Theresa reference only'),ROOT)
++        changed=self.text.replace('Expensify; Desktop','Expensify; Desktop; Camila')
++        changed=self.changed_field('AAOS-BB-08','Description','Camila owns the fictional client context.',changed)
++        changed=self.changed_field('AAOS-ARC-01','Description','Camila controls the shared core.',changed)
++        self.rejects(changed,'client-specific fact in shared Description')
+--- /dev/null
++++ b/tests/test_rc_review_gate.py
+@@ -0,0 +1,30 @@
++"""Strict RC checkpoint gate and immutable independent-input checks."""
++import hashlib
++import json
++from pathlib import Path
++import subprocess
++import sys
++import unittest
++
++from scripts.verify_rb_review import EXPECTED, validate_result
++
++ROOT = Path(__file__).resolve().parents[1]
++
++
++class RCReviewGate(unittest.TestCase):
++    def test_all_18_unmodified_probes_meet_exact_contract(self):
++        result = subprocess.run([sys.executable, str(ROOT/'scripts/verify_rb_review.py')], capture_output=True, text=True)
++        self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
++
++    def test_gate_refuses_nonzero_missing_duplicate_or_changed_verdicts(self):
++        good = '\n'.join('%s RB %s' % row for row in EXPECTED.items())+'\n'
++        validate_result(0, good)
++        for code, output in ((1, good), (0, good.replace('N01b RB OK\n', '')),
++                             (0, good+'N01a RB OK\n'), (0, good.replace('N01b RB OK', 'N01b RB NOTE')),
++                             (0, good.replace('N02c RB NOTE', 'N02c RB OK'))):
++            with self.subTest(code=code, output=output), self.assertRaises(ValueError):
++                validate_result(code, output)
++
++    def test_supplied_inputs_and_prior_archives_are_byte_identical(self):
++        for name, expected in json.loads((ROOT/'docs/corrections_rc/input-checksums.json').read_text()).items():
++            self.assertEqual(hashlib.sha256((ROOT/name).read_bytes()).hexdigest(), expected, name)
+--- /dev/null
++++ b/tests/test_review_corrections_rc.py
+@@ -0,0 +1,147 @@
++"""RC arrival-order regressions; disposable fiction, service mutations only."""
++import importlib.util
++from pathlib import Path
++import sys
++import unittest
++from unittest.mock import patch
++
++ROOT = Path(__file__).resolve().parents[1]
++
++
++class ReviewCorrectionsRC(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls):
++        path = ROOT/'exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py'
++        spec = importlib.util.spec_from_file_location('rc_fixtures', path)
++        cls.f = importlib.util.module_from_spec(spec)
++        with patch.object(sys, 'argv', [str(path), str(ROOT)]):
++            spec.loader.exec_module(cls.f)
++
++    @classmethod
++    def tearDownClass(cls):
++        cls.f.TMP.cleanup()
++
++    def held(self, os_, *keys):
++        f = self.f
++        state = os_.export(f.PREP)
++        held = {e['source_key'] for e in state['source_exceptions']
++                if e['period_id'] == '2026-11' and e['reason'] == 'SOURCE_MOVED_FROM_LOCKED_PERIOD'}
++        self.assertTrue(set(keys) <= held, (keys, held))
++        for key in keys:
++            if key.startswith(f.CARD+':'):
++                self.assertIsNone(f.gov(os_, key, '2026-12'))
++        return state
++
++    def released(self, os_, terminal):
++        f = self.f
++        os_.reopen_period(f.PADMIN, '2026-11', 'Fictional RC release')
++        f.run(os_, 'card_preparation')
++        f.run(os_, 'card_preparation', '2026-12', f.PREP2)
++        self.assertIsNone(f.gov(os_, f.CARD+':A1'))
++        keys = [a['item_key'] for a in f.arts(os_, None, '2026-12')
++                if a['governing'] and a['kind'] == 'card_proposal']
++        self.assertEqual(keys, [f.CARD+':'+terminal])
++        self.assertIn('SOURCE_TRANSITION_REQUIRES_REVIEW', f.gov(os_, keys[0], '2026-12')['blockers'])
++
++    def test_RC01_withdrawal_then_fresh_or_late_claim_and_relock(self):
++        f = self.f
++        for late in (True, False):
++            with self.subTest(late_claim=late):
++                o = f.approved_locked_november()
++                plain = [f.tx('B1', '2026-12-02', '40.00'), f.rc('B1', '2026-12-02', '40.00')]
++                if late:
++                    o.intake(f.PREP2, f.packet('plain', plain+[f.stmt(plain, f.DEC, opening='100.00')]))
++                gone = dict(f.tx('A1', '2026-11-03', '40.00'), tombstone=True, removal_reason='voided')
++                o.intake(f.PREP2, f.packet('withdraw', [gone]))
++                self.assertTrue(any(e['source_key'] == f.CARD+':A1' and e['reason'] == 'LATE_ACTIVITY_IN_LOCKED_PERIOD'
++                                    for e in o.state(f.PREP)['source_exceptions']))
++                claim = [f.sup('B1', '2026-12-02', '40.00', 'A1')]
++                if not late:
++                    claim += [plain[1], f.stmt(plain, f.DEC, opening='100.00')]
++                o.intake(f.PREP2, f.packet('claim', claim))
++                f.run(o, 'card_preparation', '2026-12', f.PREP2)
++                state = self.held(o, f.CARD+':B1', 'receipt-B1')
++                self.assertTrue(any(m['blocked'] and m['had_approval'] for m in state['source_move_history']))
++                self.released(o, 'B1')
++                o.lock_period(f.PADMIN, '2026-11', 'Fictional relock', 'Known unsettled items')
++                o.intake(f.PREP2, f.packet('revision', [f.sup('B1', '2026-12-02', '42.00', 'A1')]))
++                f.run(o, 'card_preparation', '2026-12', f.PREP2)
++                self.assertIsNotNone(f.gov(o, f.CARD+':B1', '2026-12'))
++                self.assertTrue(o.verify_audit(f.PREP))
++
++    def test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal(self):
++        f = self.f
++        for approved in (False, True):
++            with self.subTest(terminal_approved=approved):
++                o = f.approved_locked_november()
++                b = [f.tx('B1', '2026-12-02', '40.00'), f.rc('B1', '2026-12-02', '40.00')]
++                c = [f.sup('C1', '2026-12-03', '40.00', 'B1'), f.rc('C1', '2026-12-03', '40.00')]
++                o.intake(f.PREP2, f.packet('middle', b+[f.stmt(c, f.DEC, opening='100.00')]))
++                o.intake(f.PREP2, f.packet('terminal', c))
++                f.run(o, 'card_preparation', '2026-12', f.PREP2)
++                self.assertEqual(f.dispose(o, f.CARD+':C1', 'SOURCE_TRANSITION_REQUIRES_REVIEW', 'settlement_verified', period='2026-12')[0], 'ok')
++                f.run(o, 'card_preparation', '2026-12', f.PREP2)
++                self.assertTrue(f.gov(o, f.CARD+':C1', '2026-12')['eligible'])
++                if approved:
++                    self.assertEqual(f.review(o, f.REV2, f.gov(o, f.CARD+':C1', '2026-12'), 'approve')[0], 'ok')
++                o.intake(f.PREP2, f.packet('late', [f.sup('B1', '2026-12-02', '40.00', 'A1')]))
++                f.run(o, 'card_preparation', '2026-12', f.PREP2)
++                state = self.held(o, f.CARD+':B1', f.CARD+':C1', 'receipt-C1')
++                if approved:
++                    self.assertTrue(any(e['item_key'] == f.CARD+':C1' and e['code'].startswith('APPROVED_SOURCE_')
++                                        for e in state['accounting_events']))
++                self.released(o, 'C1')
++
++    def test_RC02_unchanged_chain_adds_no_bindings_moves_or_accounting_events(self):
++        f = self.f
++        o = f.new_os(periods=(f.NOV, f.DEC))
++        f.clean_november(o)
++        o.intake(f.PREP2, f.packet('replacement', [f.sup('B1', '2026-12-02', '40.00', 'A1')]))
++        before = o.export(f.PREP)
++        o.intake(f.PREP2, f.packet('unrelated', [f.tx('D1', '2026-12-05', '15.00')]))
++        after = o.export(f.PREP)
++        self.assertEqual(before['source_move_history'], after['source_move_history'])
++        self.assertEqual(before['accounting_events'], after['accounting_events'])
++        prior_ids = {s['id'] for s in before['evidence_history']}
++        self.assertEqual(before['source_period_history'], [b for b in after['source_period_history'] if b['snapshot_id'] in prior_ids])
++
++    def test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced(self):
++        f = self.f
++        for replaced_first in (False, True):
++            with self.subTest(replaced_first=replaced_first):
++                o = f.approved_locked_november()
++                y = [f.sup('Y', '2026-12-03', '40.00', 'X'), f.rc('Y', '2026-12-03', '40.00')]
++                z = [f.sup('Z', '2026-12-04', '40.00', 'Y'), f.rc('Z', '2026-12-04', '40.00')]
++                o.intake(f.PREP2, f.packet('claimant', y+[f.stmt(z, f.DEC, opening='100.00')]))
++                if replaced_first:
++                    o.intake(f.PREP2, f.packet('terminal', z))
++                o.intake(f.PREP2, f.packet('target', [f.sup('X', '2026-12-02', '40.00', 'A1'), f.rc('X', '2026-12-02', '40.00')]))
++                if not replaced_first:
++                    f.run(o, 'card_preparation', '2026-12', f.PREP2)
++                    self.held(o, f.CARD+':Y')
++                    o.intake(f.PREP2, f.packet('terminal', z))
++                f.run(o, 'card_preparation', '2026-12', f.PREP2)
++                self.held(o, f.CARD+':X', f.CARD+':Z', 'receipt-Z')
++                self.released(o, 'Z')
++
++    def test_RC03_open_target_clears_unresolved_without_quarantine(self):
++        f = self.f
++        o = f.new_os(periods=(f.NOV, f.DEC))
++        f.clean_november(o)
++        o.intake(f.PREP2, f.packet('claim', [f.sup('Y', '2026-12-03', '40.00', 'X')]))
++        o.intake(f.PREP2, f.packet('target', [f.tx('X', '2026-12-02', '40.00')]))
++        with o.store.connect() as db:
++            ctx = o.context(db, f.PREP2, '2026-12', 'card_preparation')
++        self.assertEqual(ctx['unresolved_transitions'], {})
++        self.assertEqual(o.export(f.PREP)['source_move_history'], [])
++
++    def test_RC03_pending_cycle_is_not_linked(self):
++        f = self.f
++        o = f.new_os(periods=(f.NOV, f.DEC))
++        f.clean_november(o)
++        o.intake(f.PREP2, f.packet('y', [f.sup('Y', '2026-12-03', '40.00', 'X')]))
++        o.intake(f.PREP2, f.packet('x', [f.sup('X', '2026-12-02', '40.00', 'Y')]))
++        with o.store.connect() as db:
++            y = db.execute('SELECT snapshot_id FROM source_heads WHERE scope=? AND source_key=?', (f.SCOPE, f.CARD+':Y')).fetchone()
++            self.assertIsNone(o.supersession_link(db, f.SCOPE, y['snapshot_id']))
++        self.assertTrue(o.verify_audit(f.PREP))

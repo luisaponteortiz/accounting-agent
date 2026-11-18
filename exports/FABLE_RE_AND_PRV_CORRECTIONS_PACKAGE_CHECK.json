@@ -1,0 +1,14 @@
+{
+  "bundle": "FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
+  "manifest_sha256": "2a0a2e958bcf33070108edb054301732066ddabec16c46ff68120584337413eb",
+  "payload_files": 1337,
+  "all_payload_hashes_and_crc_verified": true,
+  "protected_inputs_verified": 719,
+  "baseline_test_methods_retained": 205,
+  "contract_completion": "DEVELOPER_VALIDATED_INDEPENDENT_REVIEW_PENDING",
+  "owner_clarification": "D-029: preserve frozen approval; block incoming version until authorized reopen",
+  "independent_acceptance": "PENDING",
+  "human_G0": "NOT_GRANTED",
+  "batch3": "CLOSED"
+}

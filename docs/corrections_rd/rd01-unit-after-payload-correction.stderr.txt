@@ -1,0 +1,7 @@
+test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 2.112s
+
+OK

@@ -1,0 +1,78 @@
+{
+ "title": "Corrective tickets and observations from Fable's independent verification of RF-01 to RF-03 and PRV-16",
+ "date": "2026-11-17",
+ "reviewed_bundle": "exports/FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+ "reviewed_bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+ "authority": "D-026 (owner feed contract) with D-029 (owner clarification), both unchanged; CODEX_RF_CORRECTIONS_PROMPT.md; D-031 (owner clarification for the one rewritten test method)",
+ "scope_of_every_conclusion": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close, readiness, human G0, G1-G4 or Batch 3 authority.",
+ "tickets": [],
+ "tickets_note": "No corrective ticket is raised at this checkpoint. RF-01, RF-02, RF-03 and PRV-16 are accepted as delivered.",
+ "observations_for_the_owner": [
+  {
+   "id": "UC-21",
+   "new": true,
+   "same_at_the_re_checkpoint": true,
+   "probe": "G5a; extended search flag repeat-of-retired-row",
+   "contract_clause": "5 (identical repeat)",
+   "observation": "When a row has been retired by its replacement (both in open December), an identical repeat of that row's message in a new envelope is not a no-op: it answers changed=True, stores a new source version of the row and of its receipt, and the row is retired again inside the same intake. With the chain held under locked November the same repeat is a no-op, because the held row is not retired.",
+   "effect": "Nothing is approved twice, nothing leaves a hold, the audit chain verifies. The cost is extra source versions and a generation step for a message that carries nothing new.",
+   "reproduction": "Q (sequence 7) with its receipt; Z replacing Q with its receipt and a tying statement; prepare December; then Q (sequence 7) again under a new batch id. Expected under a strict reading of clause 5: changed=False and no new source version. Actual: changed=True, two source versions added (row and receipt), Q retired again.",
+   "decision_needed": "Whether clause 5 should cover a repeat of a retired row. Clause 5 as written speaks of repeating a claim, so this is recorded as an observation, not a failure."
+  },
+  {
+   "id": "UC-22",
+   "new": true,
+   "same_at_the_re_checkpoint": true,
+   "probe": "G1g",
+   "contract_clause": "1 and 5",
+   "observation": "A message that carries no sequence number or timestamp, for a row that is governed by one, is kept as evidence and never replaces the governing row (clause 1 holds). If its data differs from the governing row, each identical repeat is kept again as one more source version (changed=False each time). With the first claim on it, the claim is applied once and repeats change no binding, link, event, decision or head.",
+   "effect": "Evidence grows by one version per repeat. No accounting effect.",
+   "decision_needed": "Whether a provider may mix ordered and unordered messages for one row at all; if so, whether an unordered repeat should be recognised as the same message."
+  },
+  {
+   "id": "UC-23",
+   "new": true,
+   "probe": "G2d and the contributor listing in the report",
+   "contract_clause": "9",
+   "observation": "RF-02 as delivered makes every selector a contributor of the row, its revisions and its live replacements, as decided. It also makes every selector of any row in a card run a contributor of that run's period-level artifacts: the statement workpaper, the inventory and the package manifest. The selector is not made a contributor of unrelated rows in the same period (U in probe G2d) or of rows in other periods.",
+   "effect": "Stricter than the decision asked for, in the safe direction: a selector cannot review the period-level artifacts of a period in which they selected a target.",
+   "decision_needed": "Accept as is, or narrow to the row and its replacements."
+  },
+  {
+   "id": "UC-24",
+   "new": true,
+   "same_kind_of_effect_as_earlier_passes": true,
+   "probe": "evidence/cross-version-fingerprint.txt",
+   "observation": "The correction adds one entry (selection history) to the preparation fingerprint, also when it is empty. A database prepared by the RE checkpoint and opened by this one therefore shows open-period approvals as stale until the period is prepared and reviewed again. Locked periods are unaffected (frozen approvals are preserved).",
+   "effect": "Fail-safe. It matters only if a database is carried from one checkpoint to the next; every test, probe and gate uses a temporary database.",
+   "decision_needed": "None now. Worth a line in the upgrade notes before any database is kept across versions."
+  },
+  {
+   "id": "UC-25",
+   "new": true,
+   "probe": "fault case K60 in evidence/fable-rf-register-faults.txt; test method diff in the developer's report",
+   "observation": "Two notes on the register checker and its tests. (a) The checker does not compare the citation text of a record that is Verification failed with the latest review; a failed record that cites an older review passes. This is unchanged from the RE checkpoint and is covered in this review by byte comparison of the register. (b) In the one method rewritten under D-031, the three-authority fixture now takes its expected results rows from the checker itself instead of editing one row by hand. The two assertions are unchanged, the first half runs against the real four pins, and nothing is stubbed, so it is within the owner's conditions; it does make that half of the method less independent than it was. The five new methods and my 62 fault cases test the real four-authority configuration with hand-built faults.",
+   "decision_needed": "None required."
+  },
+  {
+   "id": "UC-17",
+   "new": false,
+   "probe": "C9c (NOTE, unchanged)",
+   "observation": "When a person selects the second target, the first target that the automatic first claim had already retired stays retired."
+  },
+  {
+   "id": "UC-18",
+   "new": false,
+   "probe": "C9g (NOTE, unchanged)",
+   "observation": "An exact replay of a claim batch by another person leaves no delivery record of that person, so that person is not treated as a supplier."
+  },
+  {
+   "id": "UC-20",
+   "new": false,
+   "probe": "G1c (NOTE); counted apart in the first search as approved_before_target_known (40 orders) and, for the extended search, from the kept trails (evidence/uc20-from-trails.txt: 450 orders, the approval stopped and the row held when the target arrived in all 450)",
+   "observation": "While a claimant waits for its target, a live row that replaces the claimant carries only the ordinary transition blocker and can be approved. When the target arrives, that approval stops governing at once and the row is held with its receipt. Verified again at this checkpoint on the RF-01 path, with the replacement approved before and after the claim."
+  }
+ ],
+ "unchanged_open_items": ["U4", "UC-14", "X08", "N02c", "N04e", "UC-9 (reading only; journals excluded)"],
+ "not_authorized_by_this_review": "Implementation, Batch 3, any Proposed record, live connections, readiness or operating authority."
+}

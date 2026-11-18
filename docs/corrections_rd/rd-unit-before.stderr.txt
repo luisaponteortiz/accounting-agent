@@ -1,0 +1,55 @@
+test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... FAIL
+test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... test_RD02_amount_revision_keeps_claim_with_or_without_repeat_and_restart (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD02_retired_claimant_resent_unchanged_without_claim (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... 
+======================================================================
+FAIL: test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop (tests.test_review_corrections_rd.ReviewCorrectionsRD)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rd.py", line 97, in test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop
+    self.assertTrue(o.intake(f.PREP2, claim)['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (tests.test_review_corrections_rd.ReviewCorrectionsRD) (approved=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rd.py", line 68, in test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target
+    self.assertTrue(result['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (tests.test_review_corrections_rd.ReviewCorrectionsRD) (approved=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rd.py", line 68, in test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target
+    self.assertTrue(result['changed'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RD02_amount_revision_keeps_claim_with_or_without_repeat_and_restart (tests.test_review_corrections_rd.ReviewCorrectionsRD) (claim_repeated=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rd.py", line 120, in test_RD02_amount_revision_keeps_claim_with_or_without_repeat_and_restart
+    self.assertTrue({TRANSITION, UNRESOLVED} <= set(f.gov(o, f.CARD+':Y', '2026-12')['blockers']))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RD02_retired_claimant_resent_unchanged_without_claim (tests.test_review_corrections_rd.ReviewCorrectionsRD) (order=('claim', 'terminal'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rd.py", line 146, in test_RD02_retired_claimant_resent_unchanged_without_claim
+    self.assertIn(f.CARD+':Y', ctx['unresolved_transitions'])
+AssertionError: 'demo_card_001:Y' not found in {}
+
+======================================================================
+FAIL: test_RD02_retired_claimant_resent_unchanged_without_claim (tests.test_review_corrections_rd.ReviewCorrectionsRD) (order=('terminal', 'claim'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rd.py", line 146, in test_RD02_retired_claimant_resent_unchanged_without_claim
+    self.assertIn(f.CARD+':Y', ctx['unresolved_transitions'])
+AssertionError: 'demo_card_001:Y' not found in {}
+
+----------------------------------------------------------------------
+Ran 5 tests in 3.570s
+
+FAILED (failures=6)

@@ -1,0 +1,53 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RN02] (C-01) a source re-dated out of a locked period enters no other period until the origin is reopened
+    November A1 approve: ok | A2 approve: ok
+    lock November: ('ok', None)
+    replay result: {'changed': False, 'generation': 3, 'replay': True} | source exceptions: [('demo_card_001:A1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    while November is locked -> December A1: None | November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []}
+    move history (from, to, blocked, had_approval): [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 1)]
+    after a recurring December run -> December A1: None
+    after reopen -> November governing A1: None | old approved artifact status: stale | December A1: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    current governing A1 artifacts across periods: [('2026-12', 15, 'pending')]
+    supporting receipt followed the transaction to December: True
+    -> OK
+
+[RN02b] (C-01) a locked, approved item cannot be re-entered in another period through supersession under a new key
+    November A1 approve: ok | A2: ok
+    intake of superseding source dated December: ('ok', {'changed': True, 'generation': 3, 'replay': False})
+    December A1X: None | November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []}
+    source exceptions: [('demo_card_001:A1X', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')] | events: [('APPROVED_SOURCE_SUPERSEDED', 'demo_card_001:A1')]
+    same charge approved in locked November and in December: False
+    -> OK
+
+[RT12b] (T-12/T-18) unrelated later intake leaves a locked, finalized period untouched (no new quarantine, no change event)
+    finalize November card package: ('ok', 1)
+    source exceptions before: 0 | after December-only intake: []
+    accounting events after December-only intake: []
+    November statuses: ['approve', 'approve'] | package hash unchanged: True
+    -> OK
+
+[RT12c] (T-12) evidence received before its period opens is adopted; a receipt follows its charge across a month boundary in either arrival order
+    before opening: 5 quarantined | after opening November: [] | A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []}
+    receipt first -> December B1 blockers: ['RECEIPT_DATE_POLICY_UNSET'] | evidence listed: ['demo_card_001:B1', 'receipt-B1', 'stmt-2026-12']
+    charge first -> December B1 blockers: ['RECEIPT_DATE_POLICY_UNSET'] | evidence listed: ['demo_card_001:B1', 'receipt-B1', 'stmt-2026-12']
+    -> OK
+
+[RT12d] (T-12/T-18) a removed or superseded source leaves no open item behind and raises an event when it had been approved
+    pending P1 before removal: {'id': 4, 'eligible': False, 'status': 'pending', 'blockers': ['MISSING_RECEIPT', 'PENDING_TRANSACTION']}
+    after tombstone -> P1 in current sources: False | P1 governing artifact: None | A1: pending
+    finalize the card package after every remaining item is approved (['ok', 'ok']): ('ok', 1)
+    events after removing approved A2 and superseding approved A1: [('ITEM_LEFT_POPULATION', 'demo_card_001:P1'), ('APPROVED_SOURCE_REMOVED', 'demo_card_001:A2'), ('APPROVED_SOURCE_REMOVED', 'demo_card_001:A2'), ('POST_FINALIZATION_CHANGE', 'package:1'), ('APPROVED_SOURCE_SUPERSEDED', 'demo_card_001:A1'), ('APPROVED_SOURCE_SUPERSEDED', 'demo_card_001:A1'), ('POST_FINALIZATION_CHANGE', 'package:1')]
+    removal event raised: True | supersession event raised: True | finalization blocked by the removed pending row: False
+    -> OK
+
+====================================================================================================
+RN02   C-01       OK     a source re-dated out of a locked period enters no other period until the origin is reopened
+RN02b  C-01       OK     a locked, approved item cannot be re-entered in another period through supersession under a new key
+RT12b  T-12/T-18  OK     unrelated later intake leaves a locked, finalized period untouched (no new quarantine, no change event)
+RT12c  T-12       OK     evidence received before its period opens is adopted; a receipt follows its charge across a month boundary in either arrival order
+RT12d  T-12/T-18  OK     a removed or superseded source leaves no open item behind and raises an event when it had been approved
+
+Verdict counts: {'OK': 5}
+Re-verification gate: PASS

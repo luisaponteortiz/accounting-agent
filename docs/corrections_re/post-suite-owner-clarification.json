@@ -1,0 +1,18 @@
+{
+  "owner_decision": "D-029",
+  "application_and_test_and_gate_assertions_unchanged": true,
+  "package_tool_metadata_changes_only": {
+    "scripts/build_re_review_bundle.py": {
+      "suite_sha256": "608b54f057b7b3def7df75c255e5c422e9a835d3b616202a71dd3865f8502e94",
+      "delivery_sha256": "79c05d5eee520afab4b868fd2a26e23d90915e9476f7a97566735a6ce8afa16c"
+    },
+    "scripts/verify_re_bundle.py": {
+      "suite_sha256": "716356b5ed8fb5acf84d0efae4915d849d780f5c97f7e6da1c916c154f653fa2",
+      "delivery_sha256": "0e64dce6ada5009cd857d3597c79cc8bd83889783970c308066c10c93d65e448"
+    }
+  },
+  "clarification_probe_exit": 0,
+  "clarified_register_tests": 26,
+  "clarified_register_test_exit": 0,
+  "independent_acceptance": "PENDING"
+}

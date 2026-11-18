@@ -1,0 +1,29 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RN02] (C-01) a source re-dated out of a locked period enters no other period until the origin is reopened
+    November A1 approve: ok | A2 approve: ok
+    lock November: ('ok', None)
+    replay result: {'changed': False, 'generation': 3, 'replay': True} | source exceptions: [('demo_card_001:A1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    while November is locked -> December A1: None | November A1: {'id': 2, 'eligible': True, 'status': 'approve', 'blockers': []}
+    move history (from, to, blocked, had_approval): [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 1)]
+    after a recurring December run -> December A1: None
+    after reopen -> November governing A1: None | old approved artifact status: stale | December A1: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    current governing A1 artifacts across periods: [('2026-12', 15, 'pending')]
+    supporting receipt followed the transaction to December: True
+    -> OK
+
+[RT12d] (T-12/T-18) a removed or superseded source leaves no open item behind and raises an event when it had been approved
+    pending P1 before removal: {'id': 4, 'eligible': False, 'status': 'pending', 'blockers': ['MISSING_RECEIPT', 'PENDING_TRANSACTION']}
+    after tombstone -> P1 in current sources: False | P1 governing artifact: None | A1: pending
+    finalize the card package after every remaining item is approved (['ok', 'ok']): ('ok', 1)
+    events after removing approved A2 and superseding approved A1: [('ITEM_LEFT_POPULATION', 'demo_card_001:P1'), ('APPROVED_SOURCE_REMOVED', 'demo_card_001:A2'), ('APPROVED_SOURCE_REMOVED', 'demo_card_001:A2'), ('POST_FINALIZATION_CHANGE', 'package:1'), ('POST_FINALIZATION_CHANGE', 'package:1')]
+    removal event raised: True | supersession event raised: False | finalization blocked by the removed pending row: False
+    -> WEAK
+
+====================================================================================================
+RN02   C-01       OK     a source re-dated out of a locked period enters no other period until the origin is reopened
+RT12d  T-12/T-18  WEAK   a removed or superseded source leaves no open item behind and raises an event when it had been approved
+
+Verdict counts: {'OK': 1, 'WEAK': 1}
+Re-verification gate: FAIL RT12d

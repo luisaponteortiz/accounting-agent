@@ -1,0 +1,18 @@
+--- before-rt14b-strengthening/fable_reverification_probes.py
++++ review/fable_reverification_probes.py
+@@ -807,8 +807,13 @@
+     os_, rows = duplicate_pair()
+     for k in ('D1', 'D2'):
+         own = [e for e in gov(os_, CARD + ':' + k)['payload']['data']['evidence'] if e['source_key'] in (CARD + ':' + k, 'receipt-' + k)]+gov(os_,CARD+':'+k)['payload']['data'].get('duplicate_evidence',[])
+-        dispose(os_, CARD + ':' + k, 'POSSIBLE_DUPLICATE', 'distinct_purchases', evidence=own)      # charge and its own receipt only
+-    run(os_, 'card_preparation'); print('    D1 after disposition:', brief(gov(os_, CARD + ':D1')))
++        initial_result = dispose(os_, CARD + ':' + k, 'POSSIBLE_DUPLICATE', 'distinct_purchases', evidence=own)  # own and candidate receipts; no statement
++        print('    initial distinct-purchases disposition', k + ':', initial_result)
++        assert initial_result[0] == 'ok', ('Initial distinct-purchases disposition must succeed', k, initial_result)
++    run(os_, 'card_preparation')
++    initial_d1 = gov(os_, CARD + ':D1')
++    assert initial_d1 is not None and initial_d1['eligible'], ('D1 must be eligible before D3 arrives', brief(initial_d1))
++    print('    D1 after disposition:', brief(initial_d1))
+     third = [tx('D3', '2026-11-06', '90.00'), rc('D3', '2026-11-06', '90.00', content='Fictional receipt three')]
+     os_.intake(PREP, packet('third', third + [stmt(rows + third)])); run(os_, 'card_preparation')
+     d1, d3 = gov(os_, CARD + ':D1'), gov(os_, CARD + ':D3')

@@ -1,0 +1,11 @@
+test_RA01_entire_chain_and_receipts_remain_blocked_until_reopen (tests.test_acceptance_corrections.AcceptanceCorrections) ... ok
+test_RA01_supersession_cycle_is_refused_without_mutation (tests.test_acceptance_corrections.AcceptanceCorrections) ... ok
+test_RA03_additional_receipt_is_multiple_support_until_the_original_is_withdrawn (tests.test_acceptance_corrections.AcceptanceCorrections) ... ok
+test_RA03_replacement_key_discloses_old_receipt_and_keeps_both_suppliers_independent (tests.test_acceptance_corrections.AcceptanceCorrections) ... ok
+test_RA04_statement_replacement_key_preserves_revision_control (tests.test_acceptance_corrections.AcceptanceCorrections) ... ok
+test_RA04_statement_revision_holds_each_item_and_requires_non_supplier_acceptance (tests.test_acceptance_corrections.AcceptanceCorrections) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 5.047s
+
+OK

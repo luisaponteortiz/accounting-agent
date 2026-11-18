@@ -1,0 +1,82 @@
+records: 76 | duplicate ids: []
+records with a missing field: {}
+dependencies naming unknown ids: {}
+self-dependencies: []
+dependency cycles: []
+leading status word: {'Approved': 26, 'Implemented': 1, 'Tested': 26, 'Deferred': 22, 'Proposed': 1}
+priority: {'Must': 74, 'Should': 2} | not Must: ['AAOS-ARC-04', 'AAOS-BNK-06']
+compound statuses (a second status word appears):
+    AAOS-ARC-01 ['deferred', 'tested'] | Tested for the local runner and registered card/journal/readiness workflows; full module coverage deferred.
+    AAOS-ARC-02 ['deferred', 'tested'] | Tested for synthetic backend scoping; real-client storage and authentication remain deferred.
+    AAOS-ARC-03 ['approved', 'implemented'] | Approved product architecture; no hosted deployment implemented.
+    AAOS-EXE-04 ['approved', 'implemented'] | Approved product outcome; hosted runtime, schedules and monitoring are not implemented/activated.
+    AAOS-EXE-07 ['deferred', 'tested'] | Tested for the current zero-model/no-egress path; model adapters and model evaluation deferred.
+    AAOS-KNO-02 ['approved', 'implemented'] | Approved; no operational standards-reference verification service implemented.
+    AAOS-KNO-03 ['deferred', 'proposed', 'tested'] | Tested for scoped proposed profiles/required-fact gates and fictional chart/entity/book; full master-data onbo
+    AAOS-KNO-05 ['proposed', 'tested'] | Tested for local immutable decisions/dispositions and proposed-rule separation; complete client playbook captu
+    AAOS-GL-01 ['proposed', 'tested'] | Tested for synthetic card/journal proposed entries; no live ledger state or posting.
+    AAOS-GL-05 ['deferred', 'tested'] | Deferred for general currency support; tested decimal-string/two-decimal USD fixtures do not meet the universa
+    AAOS-AP-01 ['deferred', 'implemented'] | Deferred; card expense preparation is not an implemented AP subledger.
+    AAOS-CLS-01 ['deferred', 'tested'] | Tested for typed local readiness and preserved external/final-signoff holds; full accounting completion valida
+    AAOS-RPT-01 ['deferred', 'proposed'] | Deferred; no statement-generation handler; consolidation/intercompany reporting scope remains proposed until c
+    AAOS-INT-04 ['approved', 'implemented'] | Approved product integration; no Drive adapter or live document synchronization implemented.
+    AAOS-CTL-05 ['deferred', 'tested'] | Tested for current Unicode/ambiguity, idempotent replay and same-period economic-source/disposition controls; 
+    AAOS-CTL-07 ['deferred', 'tested'] | Tested at workflow/period population granularity; per-item invalidation optimization deferred.
+    AAOS-CTL-10 ['implemented', 'tested'] | Tested for local append-only history, package bytes, restart/migrations and inspection; administrator-proof ex
+    AAOS-BRF-01 ['approved', 'implemented'] | Approved product requirement; no implemented Morning Briefing.
+    AAOS-BRF-02 ['approved', 'implemented'] | Approved; management-wide briefing and real permissions not implemented.
+    AAOS-BRF-03 ['approved', 'tested'] | Approved full inbox; local item review/exception UI and evidence-bound dispositions are tested subsets.
+    AAOS-OBS-02 ['approved', 'implemented'] | Approved; estimator/time-capture capability not implemented.
+    AAOS-OBS-04 ['deferred', 'tested'] | Tested for current synthetic regression/reviewer/control suites; real-client/model/operational evaluation defe
+    AAOS-COM-01 ['approved', 'implemented'] | Approved future capability; no automated communication workflow implemented or authorized to send.
+    AAOS-COM-02 ['approved', 'deferred'] | Approved product direction; sending remains deferred and prohibited in the current build.
+Tested records depending on Deferred/Approved-unbuilt records:
+    AAOS-ARC-01 -> ['AAOS-GOV-01(Approved)']
+    AAOS-EXE-03 -> ['AAOS-CTL-03(Deferred)']
+    AAOS-EXE-07 -> ['AAOS-CTL-12(Deferred)']
+    AAOS-CTL-01 -> ['AAOS-CTL-03(Deferred)']
+    AAOS-CTL-04 -> ['AAOS-CTL-03(Deferred)']
+target stage lead: {'Current / G0': 29, 'Future / unassigned': 28, 'Before ...': 5, 'Existing Batch 3': 8, 'G1': 6}
+client-specific names outside the BB section:
+    AAOS-GOV-01 Business purpose ['Bird Bowl']
+    AAOS-GOV-01 Acceptance criteria ['Bird Bowl']
+    AAOS-ARC-03 Business purpose ['SS']
+    AAOS-ARC-04 Description ['Bird Bowl']
+    AAOS-ARC-04 Status ['Bird Bowl']
+    AAOS-ARC-04 Acceptance criteria ['SS']
+    AAOS-KNO-01 Acceptance criteria ['Bird Bowl']
+    AAOS-KNO-06 Target stage ['Bird Bowl']
+    AAOS-AP-01 Acceptance criteria ['Bird Bowl']
+    AAOS-AR-01 Acceptance criteria ['Bird Bowl']
+    AAOS-INT-01 Status ['Desktop']
+    AAOS-INT-05 Acceptance criteria ['Expensify']
+crosswalk tickets: 27 | unknown ids in crosswalk: {}
+requirements with no T-ticket in the crosswalk: 39
+tickets in Fable backlog: 27 | missing from crosswalk: [] | extra: []
+    T-01 | batch_1 | Adopt the reviewer suite and exact assertions before changing behaviour | deps [] | -> AAOS-GOV-03, AAOS-OBS-04
+    T-02 | batch_1 | Fix vendor normalisation so non-Latin and punctuation-only text cannot match | deps ['T-01'] | -> AAOS-CTL-05, AAOS-BNK-01
+    T-03 | batch_1 | Enforce review independence with actor kind and artifact contributors | deps ['T-01'] | -> AAOS-CTL-01, AAOS-CTL-02
+    T-04 | batch_1 | Separate occurrences from runs; re-dispatch held occurrences; isolate unfit ma | deps ['T-01'] | -> AAOS-EXE-01, AAOS-EXE-02
+    T-05 | batch_1 | Introduce accounting periods as records with status; bind runs and sources to  | deps ['T-01', 'T-03'] | -> AAOS-CTL-04
+    T-06 | batch_1 | Scope the input manifest to what each capability reads; narrow the code hash | deps ['T-05'] | -> AAOS-ARC-01, AAOS-CTL-07
+    T-07 | batch_1 | One governing artifact per item and a decision state machine | deps ['T-03', 'T-06'] | -> AAOS-CTL-06, AAOS-CTL-10
+    T-08 | batch_1 | Bring the documents into line with the code | deps ['T-02', 'T-03', 'T-04', 'T-05', 'T-06', 'T-07'] | -> AAOS-GOV-02, AAOS-GOV-03
+    T-09 | batch_2 | Policy approval lifecycle: proposed versions, second-person approval, effectiv | deps ['T-03', 'T-05'] | -> AAOS-KNO-04, AAOS-CTL-01
+    T-10 | batch_2 | Bind standing mandates to an approver, a period rule, policy versions and evid | deps ['T-04', 'T-05', 'T-09', 'T-12'] | -> AAOS-EXE-03
+    T-11 | batch_2 | Required client facts per capability | deps ['T-09'] | -> AAOS-KNO-03
+    T-12 | batch_2 | Source lifecycle: ordering, removal and supersession | deps ['T-06'] | -> AAOS-BNK-03, AAOS-CTL-04
+    T-13 | batch_2 | Statement-based completeness control | deps ['T-05', 'T-12'] | -> AAOS-BNK-02
+    T-14 | batch_2 | Exceptions and dispositions as records; blocker propagation between steps | deps ['T-03', 'T-07', 'T-09'] | -> AAOS-BRF-03, AAOS-CTL-08, AAOS-CTL-09, AAOS-CTL-05
+    T-15 | batch_2 | Shared proposed-entry contract and validator | deps ['T-05', 'T-11'] | -> AAOS-GL-01
+    T-16 | batch_2 | Journal controls: bound support, duplicate detection, no-effect entries | deps ['T-15'] | -> AAOS-GL-02
+    T-17 | batch_2 | Receipt-matching policy as an approved client rule with explicit unset values | deps ['T-09'] | -> AAOS-KNO-04, AAOS-CTL-08, AAOS-BNK-06
+    T-18 | batch_2 | Finalize a reviewed period package | deps ['T-05', 'T-06', 'T-07', 'T-14'] | -> AAOS-CLS-02
+    T-19 | batch_2 | Close readiness over workflow outcomes, with period-bound evidence | deps ['T-05', 'T-07', 'T-14', 'T-18'] | -> AAOS-CLS-01
+    T-20 | batch_3 | Card statement reconciliation workpaper | deps ['T-13', 'T-15', 'T-18'] | -> AAOS-BNK-04
+    T-21 | batch_3 | Settlement and transfer pairing | deps ['T-14', 'T-15', 'T-20'] | -> AAOS-BNK-05, AAOS-CTL-05
+    T-22 | batch_3 | Trial-balance snapshot intake with tie checks | deps ['T-15'] | -> AAOS-GL-04, AAOS-RPT-01
+    T-23 | batch_3 | AP bill preparation with duplicate control and control-account tie (synthetic  | deps ['T-14', 'T-15', 'T-22'] | -> AAOS-AP-01, AAOS-AP-02
+    T-24 | batch_3 | Failure classification, backoff, lease heartbeat and a worker that survives er | deps ['T-04'] | -> AAOS-EXE-05
+    T-25 | batch_3 | Export consistency and audit anchoring | deps ['T-18'] | -> AAOS-CTL-11
+    T-26 | batch_3 | Currency contract: validated codes and minor units | deps [] | -> AAOS-GL-05
+    T-27 | batch_3 | Identity interface and bounded reads, ahead of any hosted use | deps ['T-03', 'T-06', 'T-09'] | -> AAOS-CTL-02, AAOS-ARC-02

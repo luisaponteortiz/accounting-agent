@@ -1,0 +1,13 @@
+patching file Makefile
+patching file 'accounting_agent/exceptions.py'
+patching file 'accounting_agent/service.py'
+patching file 'accounting_agent/source_control.py'
+patching file 'accounting_agent/web/index.html'
+patching file 'scripts/build_rc_review_bundle.py'
+patching file 'scripts/check.py'
+patching file 'scripts/check_product_requirements.py'
+patching file 'scripts/collect_rc_results.py'
+patching file 'scripts/verify_rb_review.py'
+patching file 'tests/test_product_requirements.py'
+patching file 'tests/test_rc_review_gate.py'
+patching file 'tests/test_review_corrections_rc.py'

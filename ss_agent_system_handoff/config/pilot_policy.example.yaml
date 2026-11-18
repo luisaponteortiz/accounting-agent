@@ -1,0 +1,210 @@
+# Illustrative configuration schema for implementation, not a live configuration.
+# External actions and spending remain disabled until separately authorized.
+policy_version: "1.4"
+mode: demo
+environment_id: local
+organization_id: synthetic_ss
+timezone: America/New_York
+
+accounting_execution:
+  adapter_owner: application
+  deterministic_steps_require_model: false
+  model_assistance_enabled: false
+  ambiguous_input_without_model: human_exception
+  validate_model_proposals_before_action: true
+  preserve_required_review_policy: true
+
+client_accounting_pilot:
+  candidate_name: Bird Bowl
+  live_enabled: false
+  deployment_profile: accounting_only
+  client_host_provider: null
+  hosting_capabilities_verified: false
+  current_accounting_system_verified: false
+  allowed_functions: [accounting_preparation, accounting_review]
+  expose_company_executive_or_director_functions: false
+  expose_company_crm_or_other_client_data: false
+  copy_shared_company_credentials: false
+  knowledge_handoff:
+    planned_accounting_periods: ["2026-11", "2026-12"]
+    capture_status: planned
+    approved_version_required: true
+    separate_validation_cases_required: true
+    activate_logic_from_raw_chat: false
+    calendar_date_triggers_deployment: false
+  operating_readiness:
+    theresa_independent_operation_verified: false
+    unattended_execution_verified: false
+    measure_avoidable_interruptions: true
+    support_responsibilities_confirmed: false
+    co_management_engagement_confirmed: false
+  transaction_intake:
+    provider: null
+    actual_account_coverage_verified: false
+    one_posting_route_per_transaction: true
+    pending_posted_and_duplicate_controls_required: true
+
+identity:
+  provider: local_demo
+  localhost_only: true
+  synthetic_identities_only: true
+  production_reject_demo_identity: true
+  staging_reject_demo_identity: true
+
+governance:
+  target_account_control: company
+  executive_role_id: strategy_lead
+  executive_display_name: Executive Director (CEO function)
+  company_sponsorship_confirmed: false
+  legal_entity_verified: false
+  initial_cohort: pilot_team
+  wider_rollout_enabled: false
+  preexisting_ip_transfer_authorized: false
+
+autonomy:
+  target_human_role: approvals_exceptions_and_client_communication
+  ratified_vision_required_for_live_operating_mandates: true
+  material_strategy_changes_require_human_decision: true
+  standing_mandates_live_enabled: false
+  standing_mandates_have_scope_limits_expiry_and_revocation: true
+  no_response_is_approval: false
+  repeat_approval_for_already_authorized_internal_step: false
+  proactive_live_work_enabled: false
+  simulated_triggers_allowed_in_local_demo: true
+  deduplicate_occurrences_and_exception_cases: true
+  critic_findings_suppressible_by_executive: false
+  exception_inbox: in_app
+  outbound_internal_notifications_enabled: false
+  claim_only_approvals_needed_without_live_evaluation: false
+
+environments:
+  separate_credentials_and_data: true
+  approval_scope_includes_environment: true
+  copy_test_approvals_to_production: false
+  copy_pending_jobs_to_production: false
+  release_requires_company_approval: true
+  automatic_deployment_enabled: false
+
+models:
+  provider: fixture
+  live_calls_enabled: false
+  lead_model: null
+  specialist_model: null
+  critic_model: null
+  max_output_tokens_per_call: 4000
+  request_timeout_seconds: 120
+  fallback_to_fixture_on_live_error: false
+
+limits:
+  concurrent_model_calls: 2
+  concurrency_scope: application_global
+  concurrency_environment_boundary: per_environment_deployment
+  delegation_depth: 2
+  unique_delegated_tasks_per_root: 8
+  model_calls_per_root: 30
+  active_work_seconds_per_root: 1800
+  review_attempts_per_artifact_lineage: 3
+  transient_retry_attempts_total: 3
+  counters_survive_resume_and_retry: true
+  wait_for_human_counts_as_active_work: false
+  wait_for_evidence_counts_as_active_work: false
+  auto_create_root_to_evade_limits: false
+
+budget:
+  external_spend_enabled: false
+  currency: USD
+  per_root_usage_limit: null
+  monthly_usage_limit: null
+  credit_balance_verified: false
+  use_company_credits_first: true
+  personal_contribution_limit: null
+  record_gross_usage_and_cash_cost: true
+  reserve_cost_before_dispatch: true
+  allocation_estimate_is_exact_billing_cap: false
+  company_monthly_limit: null
+  environment_allocated_limit: null
+  allocation_register_verified: false
+  duplicate_company_allowance_per_environment: false
+
+approvals:
+  human_only: true
+  bind_artifact_version_and_payload: true
+  invalidate_on_relevant_edit: true
+  recheck_before_action: true
+  strategy_approval_allows_sending: false
+  critic_pass_is_authorization: false
+  communication_workflow: human_review_and_manual_send
+  critical_review_findings_block_action_readiness: true
+  legal_review_is_signing_authority: false
+
+legal_review:
+  targeted_review_triggers: true
+  primary_authority_for_law_claims: true
+  jurisdiction_and_applicability_required: true
+  extracted_deadlines_require_human_verification: true
+  confidential_counsel_packet_requires_scoped_access: true
+  unresolved_issues_block_only_affected_actions: true
+
+capabilities:
+  scoped_evidence_read: true
+  deterministic_calculations: true
+  internal_task_creation: true
+  internal_draft_creation: true
+  independent_review: true
+  draft_export: true
+  live_connectors: false
+  email_send: false
+  campaign_enrollment: false
+  publish_content: false
+  live_crm_write: false
+  accounting_write: false
+  payment_execution: false
+  production_deployment: false
+  staging_deployment: false
+  contract_signature: false
+  vendor_terms_acceptance: false
+  rights_waiver: false
+  dispute_settlement: false
+  subscription_purchase: false
+  arbitrary_shell: false
+  arbitrary_sql: false
+  arbitrary_http: false
+  self_grant_permissions: false
+
+data:
+  filter_scope_before_retrieval: true
+  immutable_source_snapshots: true
+  preserve_artifact_source_mode: true
+  company_to_ledger_bridge_transfer: false
+  confidential_text_to_public_search_by_default: false
+  treat_imported_instructions_as_authority: false
+  secret_values_in_prompts_or_logs: false
+
+storage:
+  artifact_backend: postgres_bytea
+  max_file_bytes: 10485760
+  max_organization_artifact_bytes: 104857600
+  production_use_ephemeral_files_for_evidence: false
+
+schedules:
+  enabled: false
+  create_live_automations_during_build: false
+  occurrence_deduplication: true
+
+recovery:
+  checkpoint_before_wait: true
+  stable_business_operation_id: true
+  reconcile_ambiguous_external_write: true
+  blindly_retry_unknown_write: false
+  unknown_write_state: outcome_unknown
+
+role_catalog:
+  - strategy_lead
+  - marketing_director
+  - sales_director
+  - client_success_director
+  - coo
+  - finance_director
+  - people_development
+  - legal_compliance_director
+  - independent_critic

@@ -1,0 +1,10 @@
+{
+  "command": [
+    "make",
+    "check"
+  ],
+  "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-re-final-rv42zn69/project",
+  "started_utc": "2026-11-16T20:34:46.825598+00:00",
+  "elapsed_seconds": 1.303,
+  "exit_code": 0
+}

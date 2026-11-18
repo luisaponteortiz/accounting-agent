@@ -1,0 +1,167 @@
+{
+  "title": "Fable corrective tickets after Batch 1 verification (Accounting Agent OS 0.1.0-batch1)",
+  "authored": "2026-11-14",
+  "notice": "Review output only. Authorises no connection, posting, payment, model call, hosting or policy activation. Synthetic data only.",
+  "companion_files": ["FABLE_BATCH_1_VERIFICATION.md", "batch1_verification_probes.py", "batch1_probe_output.txt"],
+  "recommendation": "Batch 2 may proceed, on condition that C-01 to C-06 are implemented first. T-12, T-14 and T-18 must not start until C-01, C-02 and C-03 are complete.",
+  "implementation_order": ["C-05", "C-06", "C-02", "C-04", "C-03", "C-01"],
+  "completion_gate": [
+    "python3 batch1_verification_probes.py <project-root> reports OK for N01, N02, N03, N04, N05, N06 and N07.",
+    "Probes P01 to P06, P09 to P11, P14, P16, N11, N12 and N13 still report OK.",
+    "Probes P07, P08, P12, P13, P15 and N17 still report DEFERRED (they belong to later Batch 2 tickets).",
+    "Existing suite: no unexpected failure; maintained runner: PASS=28, FIXED=6, KNOWN-FAIL=4, DEFERRED-OK=22.",
+    "batch1_verification_probes.py is part of make test, with any WEAK verdict for N01 to N07 failing the run.",
+    "Each contract change is recorded in DECISIONS.md."
+  ],
+  "tickets": [
+    {
+      "id": "C-01",
+      "priority": "P0",
+      "title": "A source that moves out of a locked period must not enter another period until the lock is lifted",
+      "finding_ids": ["V-01", "F-04", "F-13"],
+      "rationale": "bind_source assigns each new source version by its own date and looks only at the destination period. A transaction approved in a locked November, then re-dated to December, is prepared and approved in December while the November copy stays approved and current. No exception is raised.",
+      "affected_files_or_modules": ["accounting_agent/service.py (bind_source, intake, change_period_status reopen branch, state)", "tests/test_periods.py"],
+      "required_behavior": [
+        "When a new version of an existing (kind, source_key) is taken in, find the latest admitted binding of any earlier version.",
+        "If that earlier binding is in a different period and that period is locked, bind the new version with admitted=0 and reason SOURCE_MOVED_FROM_LOCKED_PERIOD, recording both period ids in the audit event. The new version enters no period population.",
+        "On reopen of the original period, re-evaluate such quarantined versions: admit the new version to the period its date selects. The original period's population then no longer contains the source and any approval of it becomes stale.",
+        "If the earlier binding is in an open period, the move proceeds as today and an audit event records the move and whether the earlier item had a recorded approval.",
+        "The same rule applies to supporting evidence that follows its transaction."
+      ],
+      "acceptance_criteria": [
+        "Probe N02 reports OK: the December item does not exist or is not approvable while November is locked.",
+        "state.source_exceptions lists the moved source with reason SOURCE_MOVED_FROM_LOCKED_PERIOD.",
+        "After November is reopened, the November item is stale and December receives the source.",
+        "Invariant test: at no point does one source key have a current governing artifact in more than one period."
+      ],
+      "tests": ["probe N02", "new invariant test across lock, move, reopen", "existing test_late_locked_evidence_preserves_approval_until_reopen and test_dated_sources_route_once_to_their_own_period"],
+      "dependencies": [],
+      "human_decision_required": "None for synthetic implementation. For a real client: how prior-period changes are handled after close (client question 9)."
+    },
+    {
+      "id": "C-02",
+      "priority": "P1",
+      "title": "Refuse every review decision while the period is locked",
+      "finding_ids": ["V-02", "F-04"],
+      "rationale": "review() never checks period status, and frozen runs count as current. Under lock an approval can be revoked and a pending item approved, so the lock does not protect the reviewed state.",
+      "affected_files_or_modules": ["accounting_agent/service.py (review)", "accounting_agent/web/app.js (disable decision buttons for a locked period)", "docs/ARCHITECTURE.md"],
+      "required_behavior": [
+        "review() returns 409 PERIOD_LOCKED for approve, reject, revoke, resolve_approve and resolve_reject when the artifact's period is locked.",
+        "A decision requires an audited reopen by an authorised human first.",
+        "State and export are unchanged for a locked period."
+      ],
+      "acceptance_criteria": [
+        "Probe N01 reports OK: both decisions refused with 409 and both statuses unchanged.",
+        "Probe P09 and probe N10 results are unchanged.",
+        "After reopen, the same decisions are accepted."
+      ],
+      "tests": ["probe N01", "new unit test for each decision type under lock", "existing lock tests"],
+      "dependencies": [],
+      "human_decision_required": "None."
+    },
+    {
+      "id": "C-03",
+      "priority": "P1",
+      "title": "Separate provenance from content identity so identical work keeps its decisions",
+      "finding_ids": ["V-03", "F-02", "F-01"],
+      "rationale": "The artifact hash includes contributors. The same accounting content prepared by a run with a different enqueuer or mandate issuer becomes a new governing artifact with no decisions, which displaces an earlier rejection or approval.",
+      "affected_files_or_modules": ["accounting_agent/storage.py (new append-only artifact_contributors table; migration 6)", "accounting_agent/service.py (commit, review, state, export)", "tests/test_reviewer_probes.py"],
+      "required_behavior": [
+        "New table artifact_contributors(scope, artifact_id, actor, lineage_role, run_id), append-only, with the same immutability triggers as decisions.",
+        "The hashed envelope no longer contains contributors. Identical inputs, versions and module output give the same hash whoever enqueues or issues the mandate.",
+        "At commit, contributor rows are written for the artifact for every linked run, including when an existing artifact is reused.",
+        "review() uses the union of contributor rows for the artifact, plus any contributors recorded inside a legacy envelope. If neither exists, fail closed as today.",
+        "State and export list the full contributor set per artifact."
+      ],
+      "acceptance_criteria": [
+        "Probe N03 reports OK: no new artifact is created, the rejection remains the item's state, and the colleague appears as a contributor.",
+        "A recurring run by a different actor leaves an existing approval in place and adds that actor to the contributors.",
+        "A reviewer who becomes a contributor through a later linked run can make no further decision on that artifact.",
+        "FV-R01 and FV-R03 still report FIXED; probes P01, P05 and P14 still report OK.",
+        "Migration leaves existing artifact bytes unchanged."
+      ],
+      "tests": ["probe N03", "FV-R01", "FV-R03", "new migration test for artifact_contributors", "existing test_reused_artifact_keeps_review_and_dispute_requires_third_reviewer"],
+      "dependencies": ["C-04"],
+      "human_decision_required": "None."
+    },
+    {
+      "id": "C-04",
+      "priority": "P1",
+      "title": "Contributor lineage covers every version of each input and every profile registrant",
+      "finding_ids": ["V-04", "V-05", "F-01"],
+      "rationale": "Contributors are the suppliers of the latest version of each source and the registrant of the latest profile version. The author of an entry or of the mapping rules regains review rights as soon as a colleague makes any revision.",
+      "affected_files_or_modules": ["accounting_agent/service.py (commit: contributor computation)"],
+      "required_behavior": [
+        "For every (kind, source_key) in the run's manifest, include the actor of every stored version of that source, not only the current one.",
+        "Include the registrant of every profile version for the client. This is an interim rule until T-09 records a proposer and approver per rule.",
+        "No change to who else is included (enqueuer, worker, mandate issuer)."
+      ],
+      "acceptance_criteria": [
+        "Probes N04 and N05 report OK: both approvals refused with 403.",
+        "Probe P01 still reports OK; a reviewer who supplied nothing can still approve.",
+        "Probe N14 is unchanged for now (population-level barring remains until T-14)."
+      ],
+      "tests": ["probe N04", "probe N05", "probe P01", "existing test_mandate_issuer_is_hashed_contributor (rename once contributors leave the hash)"],
+      "dependencies": [],
+      "human_decision_required": "None to implement. For a real client: whether a rule's approver may review transactions prepared under it (authority matrix)."
+    },
+    {
+      "id": "C-05",
+      "priority": "P0",
+      "title": "Keep combining marks when normalising vendor text",
+      "finding_ids": ["V-06", "F-03"],
+      "rationale": "normalize() keeps only characters for which str.isalnum() is true. Combining vowel signs and points are dropped, so different words in Thai, Devanagari and pointed Hebrew or Arabic normalise to the same string and match one alias cleanly. The isalnum rule came from the original T-02 specification.",
+      "affected_files_or_modules": ["accounting_agent/core.py (normalize)", "tests/test_reviewer_probes.py"],
+      "required_behavior": [
+        "After NFKC and casefold, keep every character whose Unicode general category starts with L, N or M. Replace all others with a single space and trim.",
+        "No accent folding and no mark stripping.",
+        "Alias validation continues to refuse an alias whose normalised form is empty."
+      ],
+      "acceptance_criteria": [
+        "Probe N06 reports OK: all three pairs normalise to different strings and the end-to-end item is held with UNKNOWN_VENDOR.",
+        "FV-C15 still reports FIXED; FV-C01 and the accent tests still pass.",
+        "Handler lineage changes as expected: existing approvals become stale because core.py changed. Record this in DECISIONS.md."
+      ],
+      "tests": ["probe N06", "FV-C15", "FV-C01", "existing test_unicode_alias_validation_and_accents"],
+      "dependencies": [],
+      "human_decision_required": "None."
+    },
+    {
+      "id": "C-06",
+      "priority": "P1",
+      "title": "Actor kind must be stated explicitly",
+      "finding_ids": ["V-07", "F-01"],
+      "rationale": "Actor.kind defaults to 'human'. Any transport, script or test that omits the field creates a human, so the human-versus-service control fails open.",
+      "affected_files_or_modules": ["accounting_agent/core.py (Actor)", "accounting_agent/demo.py", "accounting_agent/http.py", "scripts/check.py", "review/run_fable_validation_cases.py", "tests/"],
+      "required_behavior": [
+        "Remove the default. Constructing an Actor without kind raises.",
+        "Every call site passes kind. The demo worker is 'service'; demo preparer and reviewer are 'human'.",
+        "The reviewer runner and probe scripts set kind on every actor they build."
+      ],
+      "acceptance_criteria": [
+        "Probe N07 reports OK: an actor cannot be built without a kind.",
+        "The original unmodified probe P02 can no longer obtain an approval for 'automation-agent-7'.",
+        "All existing tests pass after their actors are given an explicit kind."
+      ],
+      "tests": ["probe N07", "probe P02", "full suite"],
+      "dependencies": [],
+      "human_decision_required": "None."
+    }
+  ],
+  "test_corrections_at_start_of_batch_2": [
+    "Rewrite tests/test_reviewer_probes.py::test_P15 to assert receipt-matching behaviour under an approved rule and under an unset rule; it currently asserts only that a profile key is accepted.",
+    "Split test_P08 into three tests: unbound support, duplicate journal, no-effect journal.",
+    "Replace --batch1-gate in tests/test_reviewer_cases.py with a Batch 2 gate; the Batch 1 gate requires FV-J08, FV-J09, FV-J10 and FV-CL02 to remain KNOWN-FAIL.",
+    "State the period contract in the text of FV-J05 and FV-J07 in FABLE_VALIDATION_CASES.json and remove the runner special cases keyed on blocker names."
+  ],
+  "additions_to_batch_2_acceptance_criteria": [
+    {"ticket": "T-09", "add": ["Independence uses the proposer and approver of each rule applied to the item, replacing the interim rule in C-04; probe N05 stays refused.", "A rule effective in a later period leaves approvals in earlier periods intact, whether those periods are open or reopened; probe N17 reports OK.", "Alias approval shows the normalised form so that punctuation-only differences are visible (probe N18)."]},
+    {"ticket": "T-10", "add": ["Each occurrence prepares the period named by the mandate's period rule, not the calendar date of the slot."]},
+    {"ticket": "T-12", "add": ["Supporting evidence is assigned to the period of the item it references and is listed on the artifact even when it does not match; probe N09 reports OK.", "Opening a period adopts every quarantined source that belongs to it, including statement controls and undated documents, and re-supplying identical content re-evaluates a quarantined binding; probe N08 reports OK.", "Quarantined sources are included in the period status passed to close readiness."]},
+    {"ticket": "T-14", "add": ["Contributors are computed per item lineage: supplying one receipt bars review of that item only (probe N14 flips), while every version supplier of that item's inputs remains barred (probe N04 stays refused)."]},
+    {"ticket": "T-16", "add": ["Separate unit tests for unbound support, duplicate journal and no-effect journal."]},
+    {"ticket": "T-17", "add": ["test_P15 asserts behaviour, as described under test corrections."]},
+    {"ticket": "T-18", "add": ["Locking or finalizing is refused, or requires a recorded acknowledgement, while any governing item is stale, disputed or unreviewed (probe N10).", "Invariant test: no source key has a current governing artifact in more than one period."]},
+    {"ticket": "T-07 follow-up", "add": ["A defined recovery path for a mistaken revoke.", "A bound on re-opening a resolved dispute (probe N15)."]}
+  ]
+}

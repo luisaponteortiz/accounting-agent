@@ -1,0 +1,4 @@
+retained-claim+withdrawal+resend          0 P Q7 Q6 Q6cP Qdel Q9           single no-release linked repeat-n/a audit-ok early=[] held=['P', 'Q', 'receipt-P', 'receipt-Q'] links=['P>A1', 'Q>P']
+retained-claim+withdrawal+resend          2 P Q7 Q6 Qdel Q6cP Q9           single no-release linked repeat-n/a audit-ok early=[] held=['P', 'Q', 'receipt-P', 'receipt-Q'] links=['P>A1', 'Q>P']
+retained-claim+withdrawal+resend          4 P Q7 Q6 Q9 Q6cP Qdel           single no-release linked repeat-n/a audit-ok early=[] held=['P', 'Q', 'receipt-P', 'receipt-Q'] links=['P>A1', 'Q>P']
+retained-claim+withdrawal+resend          6 P Q7 Q6cP Q6 Qdel Q9           single no-release linked repeat-n/a audit-ok early=[] held=['P', 'Q', 'receipt-P', 'receipt-Q'] links=['P>A1', 'Q>P']

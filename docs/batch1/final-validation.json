@@ -1,0 +1,370 @@
+{
+  "summary": {
+    "PASS": 28,
+    "FIXED": 6,
+    "KNOWN-FAIL": 4,
+    "DEFERRED-OK": 22
+  },
+  "cases": [
+    {
+      "id": "FV-C01",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C02",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C03",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C04",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C05",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C06",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C07",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C08",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C09",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C10",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C11",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C12",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C13",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C14",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C15",
+      "stage": "executable_now_fails_until_fix",
+      "status": "FIXED",
+      "detail": "meets required outcome"
+    },
+    {
+      "id": "FV-C16",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C17",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C18",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-C19",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-J01",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-J02",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-J03",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-J04",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-J05",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-J06",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-J07",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-J08",
+      "stage": "executable_now_fails_until_fix",
+      "status": "KNOWN-FAIL",
+      "detail": "blockers [] != expected ['POSSIBLE_DUPLICATE_JOURNAL']; eligible True != expected False; VJ-08B: blockers [] != expected ['POSSIBLE_DUPLICATE_JOURNAL']; VJ-08B: eligible True != expected False; approval attempt accepted but eligibility expected False"
+    },
+    {
+      "id": "FV-J09",
+      "stage": "executable_now_fails_until_fix",
+      "status": "KNOWN-FAIL",
+      "detail": "blockers [] != expected ['NO_NET_LEDGER_EFFECT']; eligible True != expected False; approval attempt accepted but eligibility expected False"
+    },
+    {
+      "id": "FV-J10",
+      "stage": "executable_now_fails_until_fix",
+      "status": "KNOWN-FAIL",
+      "detail": "blockers [] != expected ['JOURNAL_SUPPORT_NOT_BOUND']; eligible True != expected False; approval attempt accepted but eligibility expected False"
+    },
+    {
+      "id": "FV-CL01",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-CL02",
+      "stage": "executable_now_fails_until_fix",
+      "status": "KNOWN-FAIL",
+      "detail": "blockers ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED'] != expected ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'OPEN_PREPARATION_EXCEPTIONS']"
+    },
+    {
+      "id": "FV-R01",
+      "stage": "executable_now_fails_until_fix",
+      "status": "FIXED",
+      "detail": "meets required outcome"
+    },
+    {
+      "id": "FV-R02",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-R03",
+      "stage": "executable_now_fails_until_fix",
+      "status": "FIXED",
+      "detail": "meets required outcome"
+    },
+    {
+      "id": "FV-R04",
+      "stage": "executable_now_fails_until_fix",
+      "status": "FIXED",
+      "detail": "meets required outcome"
+    },
+    {
+      "id": "FV-RC01",
+      "stage": "executable_now_fails_until_fix",
+      "status": "FIXED",
+      "detail": "meets required outcome"
+    },
+    {
+      "id": "FV-RC02",
+      "stage": "executable_now_fails_until_fix",
+      "status": "FIXED",
+      "detail": "meets required outcome"
+    },
+    {
+      "id": "FV-RC03",
+      "stage": "executable_now",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "FV-AP01",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-AP02",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-AP03",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-AP04",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-AP05",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-AR01",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-AR02",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-AR03",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-AR04",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-BK01",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-BK02",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-BK03",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-BK04",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-BK05",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-CL03",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-CL04",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-GL01",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-RP01",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-RP02",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-RP03",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-RP04",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    },
+    {
+      "id": "FV-RP05",
+      "stage": "future_module_specification",
+      "status": "DEFERRED-OK",
+      "detail": "refused (403)"
+    }
+  ]
+}

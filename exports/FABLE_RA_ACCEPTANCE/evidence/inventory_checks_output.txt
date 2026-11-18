@@ -1,0 +1,12 @@
+input-checksums.json entries: 57 | mismatches: []
+source/test/script/review files differing from the frozen RV baseline: 15
+   ['Makefile', 'accounting_agent/controls.py', 'accounting_agent/exceptions.py', 'accounting_agent/modules.py', 'accounting_agent/service.py', 'accounting_agent/source_control.py', 'review/fable_reverification_probes.py', 'review/fable_rv_acceptance_probes.py', 'scripts/build_acceptance_adapter.py', 'scripts/build_change_report.py', 'scripts/build_reverification_adapter.py', 'scripts/build_review_bundle.py', 'tests/test_acceptance_corrections.py', 'tests/test_acceptance_gate.py', 'tests/test_reverification_gate.py']
+each differing file named in changed-files.json: True | not named: []
+test methods now: 154 | in frozen RV baseline: 136 | baseline methods no longer present: [] | new: 18
+   tests/test_acceptance_corrections.py 13 methods
+   tests/test_acceptance_gate.py 5 methods
+   FABLE_BATCH_1_REVIEW_BUNDLE.zip platform/HTTP methods: 41 | missing now: []
+   FABLE_CORRECTIVE_C01_C06_REVIEW_BUNDLE.zip platform/HTTP methods: 41 | missing now: []
+   FABLE_CORRECTIONS_AND_BATCH_2_REVIEW_BUNDLE.zip platform/HTTP methods: 43 | missing now: []
+expectedFailure/skip markers in tests: []
+60-case report from my run: cases 60 | by status {'PASS': 29, 'FIXED': 10, 'DEFERRED-OK': 21}

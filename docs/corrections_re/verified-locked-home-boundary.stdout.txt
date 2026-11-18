@@ -1,0 +1,10 @@
+Initial locked November approval: True
+Claim UNKNOWN0 intake {'changed': True, 'generation': 3, 'replay': False}
+Frozen approval remains governing: True
+Current conflict: None
+Claim UNKNOWN1 intake {'changed': True, 'generation': 4, 'replay': False}
+Frozen approval remains governing: True
+Current conflict: {'targets': ['demo_card_001:UNKNOWN0', 'demo_card_001:UNKNOWN1'], 'target_key': 'demo_card_001:UNKNOWN0', 'conflicted': True, 'disposition_id': None}
+Source exceptions: [('demo_card_001:A1', '2026-11', 'LATE_ACTIVITY_IN_LOCKED_PERIOD')]
+Audit verifies: True
+Literal clause 7: CONFLICT — frozen approval still governs; owner clarification pending

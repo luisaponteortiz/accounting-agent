@@ -1,0 +1,21 @@
+1. the 22 supplied re-verification files
+   identical to reviewer originals: 22 | different or missing: 0 | files in bundle folder: 22
+2. nested archives
+   previous outer bundle nested == delivered previous bundle: True
+   FABLE_BATCH_1_REVIEW_BUNDLE.zip unchanged from the previous extraction: True
+   FABLE_CORRECTIVE_C01_C06_REVIEW_BUNDLE.zip unchanged from the previous extraction: True
+   Batch 1 verification input FABLE_BATCH_1_1_CORRECTIONS.json unchanged: True
+   Batch 1 verification input FABLE_BATCH_1_VERIFICATION.md unchanged: True
+   Batch 1 verification input batch1_probe_output.txt unchanged: True
+   Batch 1 verification input batch1_verification_probes.py unchanged: True
+   review/FABLE_ARCHITECTURE_REVIEW.md unchanged: True
+   review/FABLE_IMPLEMENTATION_BACKLOG.json unchanged: True
+   review/original/reviewer_probes.py unchanged: True
+   review/original/run_fable_validation_cases.py unchanged: True
+   review/FABLE_VALIDATION_CASES.json unchanged from the previous bundle: False
+   input-checksums.json entries: 29 | not matching any current file: []
+3. adapter: original versus review/fable_reverification_probes.py, per probe
+   probes: original 35, adapted 35 | bodies changed: ['RG0', 'RN02', 'RN03', 'RN07', 'RT12a', 'RT14b']
+   return statements identical in every probe: True | verdict-condition assignments identical: True
+   helper functions changed: ['dispose'] | added: ['accept_revised_evidence'] | removed: []
+   module-level statements changed: 0 | count 38 38

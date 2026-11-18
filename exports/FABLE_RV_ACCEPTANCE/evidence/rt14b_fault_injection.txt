@@ -1,0 +1,10 @@
+initial D1 disposition refused     runner verdict=ERROR exit=1 third charge constructed=False
+       AssertionError: ('Initial distinct-purchases disposition must succeed', 'D1', ('refused', 400, 'Deliberate refusal injected by the reviewer'))
+initial D2 disposition refused     runner verdict=ERROR exit=1 third charge constructed=False
+       AssertionError: ('Initial distinct-purchases disposition must succeed', 'D2', ('refused', 400, 'Deliberate refusal injected by the reviewer'))
+D1 ineligible before third charge  runner verdict=ERROR exit=1 third charge constructed=False
+       AssertionError: ('D1 must be eligible before D3 arrives', {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': []})
+no fault (valid path)              runner verdict=OK    exit=0 third charge constructed=True
+       D1 after disposition: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []}
+       after a third identical charge arrives -> D1: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['POSSIBLE_DUPLICATE']} | candidates listed on D1: ['demo_card_001:D2', 'demo_card_001:D3'] | D3: ['POSSIBLE_DUPLICATE']
+fault injection result: PASS

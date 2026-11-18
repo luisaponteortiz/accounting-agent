@@ -1,0 +1,120 @@
+RE checkpoint test methods 227 | RF test methods 241
+missing from RF: []
+retained methods whose text changed: [('test_product_requirements.py', 'ProductRequirements', 'test_PRV14_third_authority_is_pinned_and_latest_verdict_controls')]
+added methods by file: {'test_product_requirements_rf.py': 5, 'test_review_corrections_rf.py': 6, 'test_rf_review_gate.py': 3} | total added 14
+changed earlier test file: test_product_requirements.py | hunks: [('replace', 202, 212, 202, 219)]
+earlier test files whose non-test code (imports, fixtures, setUp, helpers) changed: []
+skip/expectedFailure mentions in RF tests: [('test_reviewer_probes.py', 48, 'def test_expired_partial_slot_is_recorded_as_skipped(self):'), ('test_reviewer_probes.py', 52, "self.assertTrue(all(o['status']=='skipped_no_catch_up' for o in self.os.state(actor())['occurrences']))"), ('test_reviewer_probes.py', 54, 'def test_concurrent_ticks_and_skipped_occurrences(self):'), ('test_reviewer_probes.py', 61, "self.assertEqual([o['status'] for o in occ],['skipped_no_catch_up','skipped_no_catch_up','completed'])")]
+report "before" equals RE method: True | report "after" equals RF method: True
+report diff body equals my diff of the two files: True
+authorized-method-before.py equals RE method
+authorized-method-after.py equals RF method
+tests/test_http.py                               RE==RF: True
+tests/schema_v1.sql                              RE==RF: True
+accounting_agent/storage.py                      RE==RF: True
+accounting_agent/http.py                         RE==RF: True
+review/fable_rd_feed_contract_probes.py          RE==RF: True
+accounting_agent/source_control.py               RE==RF: True
+accounting_agent/exceptions.py                   RE==RF: True
+accounting_agent/controls.py                     RE==RF: True
+accounting_agent/modules.py                      RE==RF: True
+accounting_agent/core.py                         RE==RF: True
+CODEX_RE_CORRECTIONS_PROMPT.md                   RE==RF: True
+deadline line in tests/test_http.py: ['deadline=time.monotonic()+5', 'while time.monotonic()<deadline:']
+DECISIONS.md: RE text is an unchanged prefix: True | RE sha cef283d29597 | appended bytes 6579
+appended headings: ['## D-031 — Owner clarification: sole retained PRV-14 method adaptation — 16 November 2026']
+D-016 entries opened in RE text: 1 | in RF text: 1
+D-017 entries opened in RE text: 1 | in RF text: 1
+D-026 entries opened in RE text: 1 | in RF text: 1
+D-029 entries opened in RE text: 1 | in RF text: 1
+D-030 entries opened in RE text: 0 | in RF text: 1
+D-031 entries opened in RE text: 0 | in RF text: 1
+D-032 entries opened in RE text: 0 | in RF text: 1
+register records: RE 88 RF 88 | same ids in same order: True
+records whose text changed: ['AAOS-GOV-02', 'AAOS-GOV-03', 'AAOS-BNK-03', 'AAOS-CTL-04']
+   AAOS-GOV-02 Implementation state | RE: ** Developer-tested | RF: ** Developer-tested
+   AAOS-GOV-02 Product decision | RE: ** Approved | RF: ** Approved
+   AAOS-GOV-02 has Acceptance criteria field: True
+      -- **Scope note:** The permanent register and executable checks enforce actual evidence, report-backed independent verdicts, adjacent conditional dependencies, disposition consistency and client boundaries; this is documentation governance, not operational accounting acceptance. Independent verdicts are derived from three hash-pinned reviewer machine-readable files, with later conclusions taking p
+      +- **Scope note:** The permanent register and executable checks enforce actual evidence, report-backed independent verdicts, adjacent conditional dependencies, disposition consistency and client boundaries; this is documentation governance, not operational accounting acceptance. Independent verdicts are derived from four hash-pinned reviewer machine-readable files, with later conclusions taking pr
+   AAOS-GOV-03 Implementation state | RE: ** Verification failed | RF: ** Verification failed
+   AAOS-GOV-03 Product decision | RE: ** Approved | RF: ** Approved
+   AAOS-GOV-03 has Acceptance criteria field: True
+      -- **Scope note:** Independent Fable RD review accepted RD-01/RD-02 and PRV-11–PRV-13 at checkpoint 0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9; RB-01 remains not accepted for RE-01/RE-02 (E03/E06). The owner subsequently approved D-026, superseding latest-target-wins and adding RE-03 no-release/authorized-selection controls. This record stays Verification failed for RE-01 to 
+      -- **Evidence:** [independent review](../exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9; Y01–Y06, X01/X01d/X02 and 120 orders accepted RD-01/RD-02; E03/E06 WEAK and 24/336 double in the independent run. RE-03 is the subsequent owner contract assignment (D-026), not an independently reviewed correc
+      +- **Scope note:** Independent Fable RE review accepted RE-02, RE-03, PRV-14 and PRV-15 at checkpoint 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae under unchanged D-026/D-029. RE-01/RB-01 remains not accepted for RF-01: C2d/C2f WEAK and 40/480 stepwise orders double-approved. RF-01–RF-03 and PRV-16 developer corrections require independent re-verification at the new checkpoint;
+      +- **Evidence:** [independent review](../exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae; RE-02/RE-03 and PRV-14/PRV-15 accepted; RF-01 C2d/C2f WEAK, 40/480 double. [tests/test_review_corrections_rf.py](../tests/test_review_corrections_rf.py), [tests/test_rf_review_gate.py](../tests/test_rf_review_
+   AAOS-BNK-03 Implementation state | RE: ** Verification failed | RF: ** Verification failed
+   AAOS-BNK-03 Product decision | RE: ** Approved | RF: ** Approved
+   AAOS-BNK-03 has Acceptance criteria field: True
+      -- **Scope note:** Independent Fable RD review accepted RD-01/RD-02 and PRV-11–PRV-13 at checkpoint 0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9; RB-01 remains not accepted for RE-01/RE-02 (E03/E06). The owner subsequently approved D-026, superseding latest-target-wins and adding RE-03 no-release/authorized-selection controls. This record stays Verification failed for RE-01 to 
+      -- **Evidence:** [independent review](../exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9; Y01–Y06, X01/X01d/X02 and 120 orders accepted RD-01/RD-02; E03/E06 WEAK and 24/336 double in the independent run. RE-03 is the subsequent owner contract assignment (D-026), not an independently reviewed correc
+      +- **Scope note:** Independent Fable RE review accepted RE-02, RE-03, PRV-14 and PRV-15 at checkpoint 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae under unchanged D-026/D-029. RE-01/RB-01 remains not accepted for RF-01: C2d/C2f WEAK and 40/480 stepwise orders double-approved. RF-01–RF-03 and PRV-16 developer corrections require independent re-verification at the new checkpoint;
+      +- **Evidence:** [independent review](../exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae; RE-02/RE-03 and PRV-14/PRV-15 accepted; RF-01 C2d/C2f WEAK, 40/480 double. [tests/test_review_corrections_rf.py](../tests/test_review_corrections_rf.py), [tests/test_rf_review_gate.py](../tests/test_rf_review_
+   AAOS-CTL-04 Implementation state | RE: ** Verification failed | RF: ** Verification failed
+   AAOS-CTL-04 Product decision | RE: ** Approved | RF: ** Approved
+   AAOS-CTL-04 has Acceptance criteria field: True
+      -- **Scope note:** Independent Fable RD review accepted RD-01/RD-02 and PRV-11–PRV-13 at checkpoint 0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9; RB-01 remains not accepted for RE-01/RE-02 (E03/E06). The owner subsequently approved D-026, superseding latest-target-wins and adding RE-03 no-release/authorized-selection controls. This record stays Verification failed for RE-01 to 
+      -- **Evidence:** [independent review](../exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9; Y01–Y06, X01/X01d/X02 and 120 orders accepted RD-01/RD-02; E03/E06 WEAK and 24/336 double in the independent run. RE-03 is the subsequent owner contract assignment (D-026), not an independently reviewed correc
+      +- **Scope note:** Independent Fable RE review accepted RE-02, RE-03, PRV-14 and PRV-15 at checkpoint 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae under unchanged D-026/D-029. RE-01/RB-01 remains not accepted for RF-01: C2d/C2f WEAK and 40/480 stepwise orders double-approved. RF-01–RF-03 and PRV-16 developer corrections require independent re-verification at the new checkpoint;
+      +- **Evidence:** [independent review](../exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae; RE-02/RE-03 and PRV-14/PRV-15 accepted; RF-01 C2d/C2f WEAK, 40/480 double. [tests/test_review_corrections_rf.py](../tests/test_review_corrections_rf.py), [tests/test_rf_review_gate.py](../tests/test_rf_review_
+text outside the 88 records (evidence section, crosswalk, change log) changed: True
+      -**RD-01/RD-02 and PRV-11–PRV-13 independently accepted; RB-01 not accepted; Batch 3 closed.** Fable's immutable RD review at checkpoint SHA-256 0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9 accepted the assigned RD/PRV assertions, all 120 earlier orders and two deeper five-delivery families. E03/E06 still fai
+      -
+      -AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 remain Verification failed until independent verification of the new checkpoint under D-026, including the 12 unmodified RD probes, the sole Y05(a) adaptation, all 336 orders and retained gates. Four verified scopes retain their existing bounded citations. [Independent results](INDEPENDE
+      -
+      -D-026 is recorded word for word as the owner's decision and supersedes the open questions of D-023 only within its stated fictional card-feed scope. U4 and UC-14 remain open; N02c/UC-10, N04e/UC-11 and journal UC-9 remain unchanged. No real client fact, provider behavior or accounting treatment is inferred. D-016/D-017 and ever
+      +**RE-02, RE-03, PRV-14 and PRV-15 independently accepted; RE-01/RB-01 not accepted; Batch 3 closed.** Fable's immutable RE review at checkpoint SHA-256 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae accepted those bounded assertions under the unchanged owner contract D-026/D-029. RF-01 (C2d/C2f) records an una
+      +
+      +AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 stay Verification failed for RF-01 until independent verification of the RF checkpoint, including all 21 RE probes (19 OK/C9c+C9g NOTE), all 480 stepwise orders, retained 336/120 orders and all retained gates. Four previously verified scopes retain their bounded citations. [Independent r
+      +
+      +D-026/D-029 are unchanged. U4 and UC-14 remain open. UC-17 (a de-selected first target stays retired), UC-18 (exact batch replay adds no supplier record), and UC-20 (a live replacement of a waiting claimant has only the ordinary transition blocker until the target arrives) are open observations for the owner, outside this pass.
+      -| T-12 | AAOS-BNK-03, AAOS-CTL-04 | RD-01/RD-02 accepted independently at 0d188fa6…7ea9; RB-01 remains unaccepted for RE-01/RE-02. Owner D-026 now bounds the feed contract; RE-01–RE-03 developer corrections follow D-029 for frozen approvals and require independent contract-clause, 12-probe/adapted-Y05 and 336-order verification
+      +| T-12 | AAOS-BNK-03, AAOS-CTL-04 | RE-02/RE-03 and PRV-14/15 accepted independently at 4890b297…98ae; RE-01/RB-01 stays unaccepted for RF-01 (C2d/C2f, 40/480 double). D-026/D-029 unchanged. RF-01–RF-03/PRV-16 developer repairs require independent 21-probe/480-order and retained-gate verification; no readiness authority. |
+      -| RA-01 | AAOS-BNK-03, AAOS-CTL-04: RD-01/RD-02 accepted at 0d188fa6…7ea9; RE-01/RE-02 remain independently failed. Owner D-026 supersedes retargeting semantics and adds RE-03 authorized no-release/selection controls; D-029 preserves frozen approvals while blocking incoming versions until reopen; independent verification of the
+      +| RA-01 | AAOS-BNK-03, AAOS-CTL-04: RE-02/RE-03 and PRV-14/15 accepted independently at 4890b297…98ae; RE-01/RB-01 stays unaccepted for RF-01 (C2d/C2f, 40/480 double). D-026/D-029 unchanged. RF-01–RF-03/PRV-16 developer repairs require independent 21-probe/480-order and retained-gate verification; no readiness authority. |
+      -| RB-01 | AAOS-BNK-03, AAOS-CTL-04: RD-01/RD-02 accepted at 0d188fa6…7ea9; RE-01/RE-02 remain independently failed. Owner D-026 supersedes retargeting semantics and adds RE-03 authorized no-release/selection controls; D-029 preserves frozen approvals while blocking incoming versions until reopen; independent verification of the
+      +| RB-01 | AAOS-BNK-03, AAOS-CTL-04: RE-02/RE-03 and PRV-14/15 accepted independently at 4890b297…98ae; RE-01/RB-01 stays unaccepted for RF-01 (C2d/C2f, 40/480 double). D-026/D-029 unchanged. RF-01–RF-03/PRV-16 developer repairs require independent 21-probe/480-order and retained-gate verification; no readiness authority. |
+      -| Whether Fable accepts this RE/PRV response; whether the accounting owner accepts G0. RB-02–04 and all five additional statement setups were accepted at their named checkpoints. | Independent reviewer then human gate owner, current priority; AAOS-GOV-03. Until recorded, Batch 3 and later readiness gates remain closed. |
+      +| Whether Fable accepts this RF/PRV response; whether the accounting owner accepts G0. RB-02–04 and all five additional statement setups were accepted at their named checkpoints. | Independent reviewer then human gate owner, current priority; AAOS-GOV-03. Until recorded, Batch 3 and later readiness gates remain closed. |
+      +
+      +| 2026-11-16 | PRV-16 records RE-02/RE-03/PRV-14/15 acceptance and RF-01 continued failure, pins the fourth reviewer authority with latest-wins derivation and preserves seven-row order. Scope/evidence and crosswalk updated; every acceptance criterion, state, product decision and BB-01/02 field unchanged. | CODEX_RF_CORRECTIONS_
+states: {'** Not started': 25, '** Developer-tested': 20, '** Verification failed': 3, '** Deferred': 36, '** Independently verified': 4}
+   AAOS-BB-01 byte-identical: True | product decision: ** Approved | state: ** Not started
+   AAOS-BB-02 byte-identical: True | product decision: ** Approved | state: ** Not started
+   AAOS-ONB-01 byte-identical: True | product decision: ** Proposed | state: ** Deferred
+   AAOS-ONB-02 byte-identical: True | product decision: ** Proposed | state: ** Deferred
+   AAOS-INT-07 byte-identical: True | product decision: ** Proposed | state: ** Deferred
+   AAOS-GL-06 byte-identical: True | product decision: ** Proposed | state: ** Deferred
+   AAOS-BNK-07 byte-identical: True | product decision: ** Proposed | state: ** Deferred
+   AAOS-RPT-03 byte-identical: True | product decision: ** Proposed | state: ** Deferred
+   AAOS-KNO-04 byte-identical: True | product decision: ** Approved | state: ** Independently verified
+   AAOS-CTL-01 byte-identical: True | product decision: ** Approved | state: ** Independently verified
+   AAOS-BNK-02 byte-identical: True | product decision: ** Approved | state: ** Independently verified
+   AAOS-CTL-09 byte-identical: True | product decision: ** Approved | state: ** Independently verified
+working register sha 8a91c6ff07c512479b5c25d7b371164ed991998ec5e501401f5e1222349b680f == bundle: True
+prior archives listed in archive-integrity.json 16 | problems: []
+archive-integrity.json RE==RF: True
+exports/FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip | bundle copy ok: True | working copy ok: True
+exports/FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_RESPONSE.zip | bundle copy ok: True | working copy ok: True
+exports/ files of the RE bundle unchanged in the RF bundle: 495 of 495
+FABLE_RE_ACCEPTANCE files in working project 167 | differing or missing in bundle: []
+response ZIP entries 167 | not byte-identical in bundle: []
+docs/corrections_rf/protected-inputs.json exists: False
+docs/corrections_rf/preservation.json exists: False
+git branch: review/fable-rc-acceptance | HEAD: 5af9a6194bc39e2f303cc6b43b0b59094118b8e4 | commits: 10
+git log:
+5af9a6194bc39e2f303cc6b43b0b59094118b8e4 Add Fable RE/PRV independent review and Codex RF correction prompt
+86dfec19133cf42dbacb0c77bafe9f9fcffc77d6 Record Codex RE/PRV developer corrections in the register and decision log
+542688b57ece08ea55082d68b713ccf6433fd8ce Correct the branch-head sentence in the Codex RE correction prompt
+d8b93b10c9eda041328348e40d49eabb6913195f Record Codex RD/PRV developer corrections in the register and decision log
+1942b193883bfcf2274c315ebbd68ada30ee13bb Add Fable RD/PRV independent review and Codex RE correction prompt
+5a12ab0f49ff60cf1434e27b08d2866214333931 Record Codex RC/PRV developer corrections in the register and decision log
+963006a8dcc663b684f3e979f910d90707b344c2 Add Fable RC/PRV independent review and Codex RD correction prompt
+db5d1ed4c12ea940fb00fff6872ff1ab83444f7f Record PR-11 confirmation in the register (D-016, D-017)
+83b58932174a9b3ff6f76104083a4a8944b9e37e Add decision log with PR-11 owner confirmation (D-016)
+e51b0d7abe7bb7beccc1a0a6d757ffe07afa9f4d Add Fable RB/PR independent review and Codex correction prompt
+tracked files modified in working tree: ['DECISIONS.md', 'docs/PRODUCT_REQUIREMENTS.md']
+staged: []
+reflog entries since 2026-11-16 17:00: 5af9a61 commit: Add Fable RE/PRV independent review and Codex RF correction prompt
+86dfec1 commit: Record Codex RE/PRV developer corrections in the register and decision log

@@ -1,0 +1,18 @@
+{
+  "FABLE_BATCH_1_1_CORRECTIONS.json": {
+    "sha256": "2cd217db7385398d66a0bc29c09a35e6b0cd93162722c299c57d000e9fe7ba6e",
+    "unchanged_from_corrective_checkpoint": true
+  },
+  "FABLE_BATCH_1_VERIFICATION.md": {
+    "sha256": "e5ff23ded073f497cb06615af8e0181b5b7e4c0dcc628f874ae0f3106c34374f",
+    "unchanged_from_corrective_checkpoint": true
+  },
+  "batch1_probe_output.txt": {
+    "sha256": "663f359ac7ef4a05e9fec76f0729fc43a361500d7e8e84556924e13c79d0b8e6",
+    "unchanged_from_corrective_checkpoint": true
+  },
+  "batch1_verification_probes.py": {
+    "sha256": "3753adc9e11073ce60794272e935bbb41654d7062daa4d8596aee6027f490c83",
+    "unchanged_from_corrective_checkpoint": true
+  }
+}

@@ -1,0 +1,35 @@
+{
+ "captured": "before any registration edit, 17 November 2026",
+ "files": {
+  "AGENTS.md": "dd9b6cc1bce82e99546f5c54ec313acecea4d3fca916c8bf76040ee632fbe56d",
+  "DECISIONS.md": "4f13572e610d5a6a9616ca38fad7115d41b92917bfb3baf2ca7fe66eb8651e87",
+  "PROGRESS.md": "0917c85d5d3c016a28f72116852c171166b3729ef3ab6d8672a456902a709e0a",
+  "docs/CONNECTION_READINESS.md": "ef85a764fccbd1ccf2fbeda2663f623f0aa086fc452438ed220ea5118b60d382",
+  "docs/PRODUCT_REQUIREMENTS.md": "8a91c6ff07c512479b5c25d7b371164ed991998ec5e501401f5e1222349b680f",
+  "docs/INDEPENDENT_VERIFICATION_RESULTS.json": "4371242db8cb93155e5fbfb8003efc66b8437e036a5a5f3665852d7eaff8d515",
+  "scripts/check_product_requirements.py": "c37e0a775a5966fe8516cb7186892172179d4b207403f914a439e0e0d937c8a0",
+  "tests/test_product_requirements.py": "5fdc443d751688900e128c2f96c1cfbc8657a9b832c79b8f2601f49baea7040a",
+  "tests/test_product_requirements_rf.py": "dfa6c51948b0a31afb47fd6dd0851ebd24af8bb31d668779141ee8ac3b345031"
+ },
+ "absent_before": [
+  "tests/rf_checkpoint_fixture.py",
+  "tests/test_product_requirements_rf_registration.py"
+ ],
+ "git": {
+  "branch": "review/fable-rc-acceptance",
+  "head": "5af9a6194bc39e2f303cc6b43b0b59094118b8e4",
+  "commits": 10
+ },
+ "note": "Each listed file was byte-identical to its copy in exports/FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip (SHA-256 c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd), which preserves the complete before-state.",
+ "byte_identical_to_rf_bundle": {
+  "AGENTS.md": true,
+  "DECISIONS.md": true,
+  "PROGRESS.md": true,
+  "docs/CONNECTION_READINESS.md": true,
+  "docs/PRODUCT_REQUIREMENTS.md": true,
+  "docs/INDEPENDENT_VERIFICATION_RESULTS.json": true,
+  "scripts/check_product_requirements.py": true,
+  "tests/test_product_requirements.py": true,
+  "tests/test_product_requirements_rf.py": true
+ }
+}

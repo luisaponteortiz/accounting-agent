@@ -1,0 +1,11 @@
+{
+  "FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE.zip": {
+    "review_files_identical_to_archive": 58,
+    "archive_sha256": "0562869ad210b4b3b8653b4600bc7f3b863f283e8087029c6b19719497a5f399"
+  },
+  "FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_RESPONSE_V2.zip": {
+    "review_files_identical_to_archive": 58,
+    "archive_sha256": "d4c5795dfce0ab9584c53c874efb4693e3473d3dadfa37a0d3b1be89bf03d826"
+  },
+  "three_git_commits": "unchanged"
+}

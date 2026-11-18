@@ -1,0 +1,18 @@
+{
+  "bundle": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip",
+  "sha256": "00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d",
+  "bytes": 26652157,
+  "manifest_payload_files": 448,
+  "prompt_file": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/FABLE_RB_REVIEW_PROMPT.md",
+  "prompt_sha256": "85d57d6c18bc492159909a9839f1384f40f2380f9c332b074593b6e3207c0808",
+  "exact_saved_prompt_archived": true,
+  "crc_manifest_paths_and_inventory_checks": "PASS",
+  "source_test_gate_assertion_and_fixture_changes": [],
+  "prior_correction_and_frozen_submission_unchanged": true,
+  "preserved_input_archive_sidecar_hashes": 103,
+  "prior_runtime_result": "174 passed; retained, not rerun for V2",
+  "new_validation": "make check, manifest/CRC, inventory, prompt equality and preservation checks",
+  "independent_reverification": "PENDING",
+  "Batch3": "CLOSED",
+  "checksum_file": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip.sha256"
+}

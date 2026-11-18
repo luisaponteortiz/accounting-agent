@@ -1,0 +1,22 @@
+Final checks in the working project for D-037; the working project is byte-identical to the clone on which the full suite ran.
+Started 2026-11-17T20:03:40Z
+
+$ make check
+python3 scripts/check.py
+PASS: Python syntax, JSON parsing, executable profile validation, workflow DAG/tool registration, DOM text rendering checks.
+No external linter/typechecker/JS compiler installed; these checks are not a claim of those tools passing.
+PASS: capability IDs named in implementation documentation exist in the registry.
+PASS: product requirements schema/evidence/dependencies/crosswalk/client boundaries; 88 records, 27 tickets.
+PASS: shared application/web files contain no client-specific names/choices from the client section; demo/config/fixtures remain isolated.
+exit 0
+
+$ python3 scripts/check_documentation.py
+PASS: documentation review — 10 current documents agree with the code, the register, the readiness checklist and each other.
+exit 0
+
+$ python3 -m unittest tests.test_documentation_review tests.test_product_requirements tests.test_product_requirements_rf tests.test_product_requirements_rf_registration tests.test_re_review_gate.REReviewGate.test_all_protected_inputs_unchanged_and_contract_exact
+----------------------------------------------------------------------
+Ran 53 tests in 126.947s
+
+OK
+exit 0

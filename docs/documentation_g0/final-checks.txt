@@ -1,0 +1,18 @@
+Final checks in the working project after the last edit of the documentation pass (D-035 appended).
+Started 2026-11-17T19:22:49Z
+
+$ make check
+python3 scripts/check.py
+PASS: Python syntax, JSON parsing, executable profile validation, workflow DAG/tool registration, DOM text rendering checks.
+No external linter/typechecker/JS compiler installed; these checks are not a claim of those tools passing.
+PASS: capability IDs named in implementation documentation exist in the registry.
+PASS: product requirements schema/evidence/dependencies/crosswalk/client boundaries; 88 records, 27 tickets.
+PASS: shared application/web files contain no client-specific names/choices from the client section; demo/config/fixtures remain isolated.
+exit 0
+
+$ python3 -m unittest tests.test_product_requirements tests.test_product_requirements_rf tests.test_product_requirements_rf_registration tests.test_re_review_gate.REReviewGate.test_all_protected_inputs_unchanged_and_contract_exact
+----------------------------------------------------------------------
+Ran 41 tests in 117.096s
+
+OK
+exit 0

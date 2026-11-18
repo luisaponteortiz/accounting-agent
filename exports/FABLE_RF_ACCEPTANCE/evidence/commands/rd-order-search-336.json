@@ -1,0 +1,1 @@
+{"label":"rd-order-search-336","cwd":"/private/tmp/claude-501/rf/run1","argv":"python3 exports/FABLE_RD_ACCEPTANCE/fable_rd_order_search.py . --json /private/tmp/claude-501/rf/out/rd-order-search-336.results.json","started_utc":"2026-11-17T01:53:29Z","elapsed_seconds":436,"exit_code":0}

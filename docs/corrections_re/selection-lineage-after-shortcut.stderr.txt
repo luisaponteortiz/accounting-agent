@@ -1,0 +1,7 @@
+test_target_selector_cannot_review_a_descendant_using_their_selection (tests.test_feed_contract.FeedContract) ... ok
+test_target_decision_persists_through_revision_and_retains_review_contributor (tests.test_feed_contract.FeedContract) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 2.340s
+
+OK

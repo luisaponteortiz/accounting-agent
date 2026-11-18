@@ -1,0 +1,51 @@
+test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF) ... FAIL
+test_fourth_changed_verdict_controls_even_with_matching_project_results (tests.test_product_requirements_rf.ProductRequirementsRF) ... FAIL
+test_fourth_results_and_report_are_hash_pinned (tests.test_product_requirements_rf.ProductRequirementsRF) ... test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused (tests.test_product_requirements_rf.ProductRequirementsRF) ... 
+======================================================================
+FAIL: test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements_rf.py", line 33, in test_fourth_authority_wins_and_all_older_authorities_cannot_override
+    self.assertTrue(all(r['report_path']==REPORT for r in original.values()))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_fourth_changed_verdict_controls_even_with_matching_project_results (tests.test_product_requirements_rf.ProductRequirementsRF)
+----------------------------------------------------------------------
+ValueError: Independent results disagree with reviewer verdict: AAOS-KNO-04
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements_rf.py", line 54, in test_fourth_changed_verdict_controls_even_with_matching_project_results
+    with self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):cpr.validate_register(self.text,root)
+AssertionError: "independent Verification failed cannot be promoted" does not match "Independent results disagree with reviewer verdict: AAOS-KNO-04"
+
+======================================================================
+FAIL: test_fourth_results_and_report_are_hash_pinned (tests.test_product_requirements_rf.ProductRequirementsRF) (name='exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_RESULTS.json')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements_rf.py", line 25, in test_fourth_results_and_report_are_hash_pinned
+    self.assertIn(name,cpr.REVIEW_INPUT_HASHES)
+AssertionError: 'exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_RESULTS.json' not found in {'exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json': 'b4c07743d54b1a69c86a728c432e8291269f1ba17ece6195ea780bfa5851806c', 'exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md': 'e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0', 'exports/FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_CORRECTIONS.json': '04fe3acc4cbd2e6bae79b5435391652b96a7c71a8dcd4b1aedd38076f17a0fd8', 'exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_RESULTS.json': 'f5f4ea014b692253ceb7c2b7cc9a43830d81301436c0beae055dc30206e89f76', 'exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md': '528c94e49a951e7a1fca1869e2f3b57d13584a3157682772189344e8ee57fd9c', 'exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_REPORT.md': '73dabfb8294e66fe143109a6c58378a02c597097ea63cf67a1ed06de1c3983a0'}
+
+======================================================================
+FAIL: test_fourth_results_and_report_are_hash_pinned (tests.test_product_requirements_rf.ProductRequirementsRF) (name='exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements_rf.py", line 25, in test_fourth_results_and_report_are_hash_pinned
+    self.assertIn(name,cpr.REVIEW_INPUT_HASHES)
+AssertionError: 'exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md' not found in {'exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json': 'b4c07743d54b1a69c86a728c432e8291269f1ba17ece6195ea780bfa5851806c', 'exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md': 'e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0', 'exports/FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_CORRECTIONS.json': '04fe3acc4cbd2e6bae79b5435391652b96a7c71a8dcd4b1aedd38076f17a0fd8', 'exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_RESULTS.json': 'f5f4ea014b692253ceb7c2b7cc9a43830d81301436c0beae055dc30206e89f76', 'exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md': '528c94e49a951e7a1fca1869e2f3b57d13584a3157682772189344e8ee57fd9c', 'exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_REPORT.md': '73dabfb8294e66fe143109a6c58378a02c597097ea63cf67a1ed06de1c3983a0'}
+
+======================================================================
+FAIL: test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused (tests.test_product_requirements_rf.ProductRequirementsRF) (fault='stale')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements_rf.py", line 70, in test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused
+    with self.subTest(fault=fault),self.assertRaisesRegex(ValueError,'reviewer|Independent'):cpr.validate_register(self.text,root)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 13.271s
+
+FAILED (failures=5)

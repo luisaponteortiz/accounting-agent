@@ -1,0 +1,25 @@
+test_current_register_has_split_states_and_all_backlog_tickets (tests.test_product_requirements.ProductRequirements) ... ok
+test_dependency_cycle_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_developer_tested_without_named_tests_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_duplicate_id_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_established_id_cannot_be_silently_renamed (tests.test_product_requirements.ProductRequirements) ... ok
+test_independent_verification_requires_review_and_checkpoint (tests.test_product_requirements.ProductRequirements) ... ok
+test_missing_backlog_ticket_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_missing_field_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_mixed_implementation_state_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_shared_criteria_cannot_impose_first_client_facts (tests.test_product_requirements.ProductRequirements) ... ok
+test_unknown_dependency_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PR15_second_client_state_has_no_first_client_name (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+test_RB01_late_link_quarantines_previously_admitted_or_approved_destination (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+test_RB01_unresolved_link_then_predecessor_then_resolution_keeps_entire_quarantine (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+test_RB02_repointed_receipt_and_statement_replacements_need_independent_acceptance (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+test_RB03_equivalent_vendor_and_receipt_rules_keep_authors_across_scope_and_key (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+test_RB04_prior_restatement_waits_for_all_own_period_acceptances_and_revocation_reblocks (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+test_all_14_unmodified_independent_probes_report_OK (tests.test_ra_review_gate.RAReviewGate) ... ok
+test_combined_frozen_submission_cannot_be_overwritten (tests.test_ra_review_gate.RAReviewGate) ... ok
+test_returned_inputs_and_submitted_archives_remain_unchanged (tests.test_ra_review_gate.RAReviewGate) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 20.392s
+
+OK

@@ -1,0 +1,30 @@
+Fable RV acceptance probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[A01] (RV-01) new-key supersession out of a locked period, by envelope or by data, is quarantined until reopen and never double-approved
+    [envelope] replay: True | exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [envelope] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')] | moves: [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 0)]
+    [envelope] while locked -> December A1X: None | November A1: approve | unrelated December D1 eligible: True
+    [envelope] after reopen -> November A1: None | removed from November: ['demo_card_001:A1'] | December A1X: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    [envelope] current governing artifacts for the charge: [('2026-12', 'demo_card_001:A1X', 'pending')] | A1 history kept: 1
+    [data] replay: True | exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    [data] events: [('APPROVED_SOURCE_SUPERSEDED', '2026-11', 'demo_card_001:A1')] | moves: [('2026-11', '2026-12', 1, 1), ('2026-11', '2026-12', 1, 0)]
+    [data] while locked -> December A1X: None | November A1: approve | unrelated December D1 eligible: True
+    [data] after reopen -> November A1: None | removed from November: ['demo_card_001:A1'] | December A1X: {'id': 15, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'STATEMENT_CONTROL_MISMATCH', 'STATEMENT_LINE_POPULATION_MISMATCH']}
+    [data] current governing artifacts for the charge: [('2026-12', 'demo_card_001:A1X', 'pending')] | A1 history kept: 1
+    supersedes an unknown key: {'id': 9, 'eligible': False, 'status': 'pending', 'blockers': ['SOURCE_TRANSITION_REQUIRES_REVIEW', 'SOURCE_TRANSITION_UNRESOLVED']}
+    disposition on the unresolved transition: ('refused', 400, 'Unsupported disposition; this control cannot be overridden')
+    -> OK
+
+[X01] (RV-01) a second supersession step does not release a charge that is still quarantined behind a locked origin
+    source exceptions: [('demo_card_001:A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('demo_card_001:A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1X', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD'), ('receipt-A1Y', '2026-11', 'SOURCE_MOVED_FROM_LOCKED_PERIOD')]
+    December A1Y (supersedes A1X, which supersedes locked A1): None | November A1: approve
+    heads now marked removed: ['demo_card_001:A1X', 'receipt-A1X'] | moves recorded: [('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1), ('2026-11', '2026-12', 1)]
+    -> OK
+
+====================================================================================================
+A01   RV-01        OK     new-key supersession out of a locked period, by envelope or by data, is quarantined until reopen and never double-approved
+X01   RV-01        OK     a second supersession step does not release a charge that is still quarantined behind a locked origin
+
+Verdict counts: {'OK': 2}
+Acceptance gate: PASS

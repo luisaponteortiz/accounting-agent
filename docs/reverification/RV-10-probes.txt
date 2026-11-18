@@ -1,0 +1,44 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RN04] (C-04) a supplier of any version of an item input stays barred; a supplier of another item evidence does not
+    A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []} | contributors: ['rv-policy-approver', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    supplier of the superseded A1 version approves A1: ('refused', 403, 'Independent human review required')
+    supplier of the A2 receipt approves A1 (should be allowed): ('ok', None)
+    supplier of the A2 receipt approves A2 (should be refused): ('refused', 403, 'Independent human review required')
+    -> OK
+
+[RN05] (C-04) the author of the chart and policy stays barred after a colleague re-registers the profile
+    colleague re-registration approved by a second policy approver: ('ok', None)
+    A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []} | profile ref: {'accounting_profile_hash': '1b12877be36ca979ba78b54fec13d3373085e539a417182f0e01e108727cd3d5', 'rule_versions': [{'id': 1, 'version': 1}, {'id': 2, 'version': 1}, {'id': 3, 'version': 1}]}
+    contributors: ['rv-policy-approver', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    author of profile v1 approves A1: ('refused', 403, 'Independent human review required')
+    approver of profile v1 approves A1: ('refused', 403, 'Independent human review required')
+    uninvolved reviewer approves A1 (positive control): ('ok', None)
+    -> OK
+
+[RN05b] (C-04/T-09) the author of a vendor mapping stays barred after a colleague re-proposes the rule with a cosmetic change
+    A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []} | vendor: {'id': 'demo_acme', 'name': 'Acme Paper Demo.'} | applied rules: [{'id': 1, 'version': 1}, {'id': 2, 'version': 1}, {'id': 5, 'version': 2}]
+    contributors: ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    author of mapping v1 (alias and category unchanged in v2) approves A1: ('refused', 403, 'Independent human review required')
+    -> OK
+
+[RT09b] (T-09) rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive
+    rule proposed only -> M1 (Nov): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] | M2 (Dec): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    approve A1 (Nov): ok
+    rule proposer approves own rule: ('refused', 403, 'Rule proposer cannot approve/reject')
+    rule approved, effective December -> A1 status: approve | M1 (Nov): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] | M2 (Dec): {'id': 11, 'eligible': True, 'status': 'pending', 'blockers': []} DEMO_REPAIRS
+    after an unrelated close-checklist rule -> A1 status: approve | same artifact: True
+    after a superseding rule effective 2027-01-01 -> M2 category: DEMO_REPAIRS | applied rules: [{'id': 1, 'version': 1}, {'id': 2, 'version': 1}, {'id': 4, 'version': 1}]
+    review policy effective 15 November -> A1 (3 Nov): [] pending | M1 (20 Nov): ['MODEL_REVIEW_UNAVAILABLE', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    observation: the approval of A1 (dated before the new policy) did not survive a same-period rule that applies only to later items
+    -> OK
+
+====================================================================================================
+RN04   C-04       OK     a supplier of any version of an item input stays barred; a supplier of another item evidence does not
+RN05   C-04       OK     the author of the chart and policy stays barred after a colleague re-registers the profile
+RN05b  C-04/T-09  OK     the author of a vendor mapping stays barred after a colleague re-proposes the rule with a cosmetic change
+RT09b  T-09       OK     rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive
+
+Verdict counts: {'OK': 4}
+Re-verification gate: PASS

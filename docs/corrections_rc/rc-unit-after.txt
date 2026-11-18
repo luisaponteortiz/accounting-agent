@@ -1,0 +1,30 @@
+test_RC01_withdrawal_then_fresh_or_late_claim_and_relock (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... test_RC02_unchanged_chain_adds_no_bindings_moves_or_accounting_events (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC03_open_target_clears_unresolved_without_quarantine (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC03_pending_cycle_is_not_linked (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+
+======================================================================
+FAIL: test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal (tests.test_review_corrections_rc.ReviewCorrectionsRC) (terminal_approved=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 93, in test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal
+    self.released(o, 'C1')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 44, in released
+    self.assertIn('SOURCE_TRANSITION_REQUIRES_REVIEW', f.gov(os_, keys[0], '2026-12')['blockers'])
+AssertionError: 'SOURCE_TRANSITION_REQUIRES_REVIEW' not found in []
+
+======================================================================
+FAIL: test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal (tests.test_review_corrections_rc.ReviewCorrectionsRC) (terminal_approved=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 93, in test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal
+    self.released(o, 'C1')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 44, in released
+    self.assertIn('SOURCE_TRANSITION_REQUIRES_REVIEW', f.gov(os_, keys[0], '2026-12')['blockers'])
+AssertionError: 'SOURCE_TRANSITION_REQUIRES_REVIEW' not found in []
+
+----------------------------------------------------------------------
+Ran 6 tests in 8.970s
+
+FAILED (failures=2)

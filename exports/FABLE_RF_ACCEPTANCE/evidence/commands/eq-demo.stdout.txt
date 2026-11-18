@@ -1,0 +1,6 @@
+demo runs: [('close_readiness', '2026-11', 'prepared_with_exceptions'), ('journal_preparation', '2026-11', 'prepared_with_exceptions'), ('card_preparation', '2026-11', 'prepared_with_exceptions')]
+autocommit period 2026-11 items 13 in_transaction False
+transaction period 2026-11 items 13 in_transaction True
+same result inside and outside a transaction: True
+
+RF-03 EQUIVALENCE {"calls_in_transaction": 22, "calls_autocommit": 1, "mismatches": 0, "current_evaluations_delivered": 55, "current_evaluations_full": 286, "calls_where_shortcut_saved_work": 21, "autocommit_calls_that_reused": 0} wrapped_script_exit=0

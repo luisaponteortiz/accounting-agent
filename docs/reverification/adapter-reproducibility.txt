@@ -1,0 +1,4 @@
+Adapted 3 positive mandate setups; positive duplicate evidence and revised-document acceptance; RT14b explicitly asserts both initial dispositions and D1 eligibility; all original verdict/gate expressions preserved.
+EXIT 0
+review/fable_reverification_probes.py b9445e6c0cdd89b6f06943c3a47f53da681990d52defe5a2b24ac34cb6427095 identical to delivered copy
+docs/reverification/reverification-probe-adaptations.patch e5e4a2fc63a8cb68009a96bc6f5e2cfce8bcc9143d8a558d233e0755b1d3de2c identical to delivered copy

@@ -1,0 +1,26 @@
+== bundle
+c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd  /Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip
+c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd  FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip
+== unzip -t
+No errors detected in compressed data of /Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip.
+== internal manifest sha
+07bac9cac34acd069c5e509d8fe832a397f768e8e640a9324903f3fe3ee715f0  rf_x/REVIEW_MANIFEST.json
+== external manifest sha
+07bac9cac34acd069c5e509d8fe832a397f768e8e640a9324903f3fe3ee715f0  /Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.REVIEW_MANIFEST.json
+== package check
+  "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+  "manifest_sha256": "07bac9cac34acd069c5e509d8fe832a397f768e8e640a9324903f3fe3ee715f0",
+  "payload_files": 1790,
+== manifest verification
+label FABLE_RF_AND_PRV_CORRECTIONS
+scope Local fictional RF-01–RF-03/PRV-16 developer corrections under unchanged D-026/D-029; independent acceptance pending; no release or live authority.
+hash_rule Every payload file except this manifest itself. Its hash is anchored in the adjacent package-check JSON.
+<class 'dict'> 1790
+listed 1790 actual 1791 bad [] extra [] unlisted_missing []
+== RE baseline
+4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae  /Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip
+label FABLE_RE_AND_PRV_CORRECTIONS
+scope Local fictional RE/PRV developer corrections under D-026 and owner clarification D-029; independent acceptance pending; no release or live authority.
+hash_rule Every payload file except this manifest itself. Its hash is anchored in the adjacent package-check JSON.
+<class 'dict'> 1337
+listed 1337 actual 1338 bad [] extra [] unlisted_missing []

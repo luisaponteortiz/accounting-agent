@@ -1,0 +1,96 @@
+{
+  "status": "DEVELOPER_VALIDATED_INDEPENDENT_REVIEW_PENDING",
+  "source_files_unchanged_during_final_validation": 69,
+  "retained_methods": 227,
+  "retained_methods_unchanged": 226,
+  "sole_authorized_rewrite": "D-031 / test_PRV14_third_authority_is_pinned_and_latest_verdict_controls",
+  "current_methods": 241,
+  "consecutive_complete_runs": 5,
+  "HTTP_methods_per_run": 11,
+  "HTTP_setup": [
+    {
+      "class": "test_http.HTTPCase",
+      "total_seconds": 2.424715,
+      "worker_wait_seconds": 2.268372,
+      "setup_failed": false
+    },
+    {
+      "class": "test_http.HTTPCase",
+      "total_seconds": 2.413763,
+      "worker_wait_seconds": 2.259996,
+      "setup_failed": false
+    },
+    {
+      "class": "test_http.HTTPCase",
+      "total_seconds": 2.507561,
+      "worker_wait_seconds": 2.355119,
+      "setup_failed": false
+    },
+    {
+      "class": "test_http.HTTPCase",
+      "total_seconds": 2.592605,
+      "worker_wait_seconds": 2.436205,
+      "setup_failed": false
+    },
+    {
+      "class": "test_http.HTTPCase",
+      "total_seconds": 2.291841,
+      "worker_wait_seconds": 2.117719,
+      "setup_failed": false
+    }
+  ],
+  "required_zero_exit_commands": [
+    "final-make-check",
+    "final-batch2-gate",
+    "final-reverification-gate",
+    "final-acceptance-gate",
+    "final-rb-gate",
+    "final-rc-gate",
+    "final-rd-gate",
+    "final-re-gate",
+    "final-rf-gate",
+    "authorized-register-tests-final",
+    "retained-older-and-conflicting-matrix",
+    "final-rf-regression-and-validator-tests",
+    "final-protection-inventory-complete",
+    "patch-after-owner-clarification",
+    "response-folder-integrity",
+    "final-fourth-authority-all-three-older-faults-corrected",
+    "five-consecutive-suite-orchestration"
+  ],
+  "baseline_RE_probes": {
+    "OK": 16,
+    "NOTE": 3,
+    "WEAK": 2,
+    "exit": 1
+  },
+  "baseline_orders": {
+    "runs": 480,
+    "double": 40,
+    "released": 0,
+    "audit_failures": 0,
+    "exit": 1
+  },
+  "corrected_RE_probes": {
+    "OK": 19,
+    "NOTE": [
+      "C9c",
+      "C9g"
+    ],
+    "exit": 0
+  },
+  "corrected_orders": {
+    "runs": 480,
+    "double": 0,
+    "released": 0,
+    "audit_failures": 0,
+    "exit": 0
+  },
+  "NOT_RUN": [],
+  "independent_acceptance": "PENDING",
+  "three_affected_requirement_states": "Verification failed",
+  "human_G0": "NOT_GRANTED",
+  "G1_G4": "CLOSED",
+  "Batch_3": "CLOSED",
+  "live_actions": "CLOSED"
+}

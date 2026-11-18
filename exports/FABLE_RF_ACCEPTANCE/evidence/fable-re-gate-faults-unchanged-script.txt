@@ -1,0 +1,34 @@
+K01 probes: the real 12-probe output, exit 0                                                     want=ACCEPTED got=ACCEPTED ok  
+K02 probes: real output, exit 1                                                                  want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K03 probes: E06 reported WEAK                                                                    want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K04 probes: E06 reported NOTE                                                                    want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K05 probes: E06 reported ERROR                                                                   want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K06 probes: E03 line missing                                                                     want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K07 probes: E05 line duplicated                                                                  want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K08 probes: E03 missing and E05 duplicated (count stays 12)                                      want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K09 probes: unknown id Z99 in place of Y06                                                       want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K10 probes: extra unassigned probe Y05 OK added                                                  want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K11 probes: summary section absent                                                               want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K12 probes: two summary sections                                                                 want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K13 probes: empty output                                                                         want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K14 adapted Y05: real output                                                                     want=ACCEPTED got=ACCEPTED ok  
+K15 adapted Y05: reported WEAK                                                                   want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K16 adapted Y05: output of the 12-probe run offered instead                                      want=REJECTED got=REJECTED ok  ValueError: RE gate requires exactly the authorized probe IDs, all OK, exit 0
+K17 orders: the real 336-order result, exit 0                                                    want=ACCEPTED got=ACCEPTED ok  
+K18 orders: real result, exit 1                                                                  want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K19 orders: one order missing                                                                    want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K20 orders: one order missing, runs lowered to 335                                               want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K21 orders: one order duplicated in place of another (count stays 336)                           want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K22 orders: one extra order appended                                                             want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K23 orders: one row marked double                                                                want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K24 orders: one row approved in both periods but not marked double                               want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K25 orders: top-level double count 1                                                             want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K26 orders: a whole family replaced by a renamed one                                             want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K27 orders: summary line says double=1                                                           want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K28 orders: summary line says finalized_silently=1                                               want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K29 orders: summary line absent                                                                  want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K30 orders: summary line printed twice                                                           want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K31 orders: summary says 335 runs                                                                want=REJECTED got=REJECTED ok  ValueError: RE gate requires every exact 336 order, all six families, zero double approval, exit 0
+K32 wiring: make re-gate runs scripts/verify_rd_feed_review.py                                   want=ACCEPTED got=ACCEPTED ok  
+K33 wiring: make test (unittest discover) contains a method that runs the gate main()            want=ACCEPTED got=ACCEPTED ok  
+cases 33 | agree 33 | gaps 0

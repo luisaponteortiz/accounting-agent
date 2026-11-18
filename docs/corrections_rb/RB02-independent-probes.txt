@@ -1,0 +1,75 @@
+Fable RA acceptance probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[R03a] (RA-03) same-key and new-key receipt replacement are held and disclosed; both suppliers are refused; a non-supplier accepts; final review is separate; a further change lapses the acceptance
+    [withdraw-with-replacement] after replacement: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [withdraw-with-replacement] revisions: [('replaced', 'receipt-A1', 1, 'rv-preparer', 'receipt-A1-new', 'rv-preparer-2', ['amount', 'content']), ('replaced', 'receipt-A1', 2, 'rv-preparer-2', 'receipt-A1-new', 'rv-preparer-2', ['amount', 'content'])]
+    supplier of the withdrawn receipt accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    supplier of the replacement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    granted non-supplier accepts: ('ok', 1)
+    [withdraw-with-replacement] after acceptance: {'id': 12, 'eligible': True, 'status': 'pending', 'blockers': []} | revisions still disclosed: True
+    the acceptor gives the final review: ('refused', 403, 'Independent human review required')
+    supplier of the withdrawn receipt gives the final review: ('refused', 403, 'Independent human review required')
+    independent final review: ('ok', None)
+    [withdraw-with-replacement] after a further change to the replacement: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [replacement-before-withdrawal] both receipts active: ['RECEIPT_AMOUNT_POLICY_UNSET', 'RECEIPT_MULTIPLE_POLICY_UNSET'] | revisions: []
+    [replacement-before-withdrawal] after replacement: {'id': 12, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [replacement-before-withdrawal] revisions: [('replaced', 'receipt-A1', 1, 'rv-preparer', 'receipt-A1-new', 'rv-preparer-2', ['amount', 'content'])]
+    supplier of the withdrawn receipt accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    supplier of the replacement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    granted non-supplier accepts: ('ok', 1)
+    [replacement-before-withdrawal] after acceptance: {'id': 17, 'eligible': True, 'status': 'pending', 'blockers': []} | revisions still disclosed: True
+    the acceptor gives the final review: ('refused', 403, 'Independent human review required')
+    supplier of the withdrawn receipt gives the final review: ('refused', 403, 'Independent human review required')
+    independent final review: ('ok', None)
+    [replacement-before-withdrawal] after a further change to the replacement: {'id': 22, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    additional still-active receipt: ['RECEIPT_MULTIPLE_POLICY_UNSET'] | revisions: []
+    -> OK
+
+[R03b] (RA-03) replacing a receipt by re-pointing the old key at another transaction id and supplying a new key is still held and disclosed
+    old key re-pointed away, new key supplied at 40.00 -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    receipts relied on: [('receipt-A1-new', 1)] | revisions disclosed: [('replaced', 'receipt-A1', 1, 'rv-preparer', 'receipt-A1-new', 'rv-preparer', ['amount', 'content'])] | exceptions: []
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+[R04a] (RA-04) a statement corrected to tie (same key, or withdrawn and replaced under a new key) is held on every relying item and disclosed on the workpaper; suppliers of any version are refused; acceptance is item-bound, lapses on new evidence and confers no final review
+    [same-key] A1: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} | A2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [same-key] item revisions: [('revised', 'stmt-2026-11', 1, 'rv-preparer', 'stmt-2026-11', 'rv-preparer-2', ['closing_balance', 'totals'])]
+    [same-key] workpaper statement_revisions: [('revised', 'stmt-2026-11', 'rv-preparer', 'rv-preparer-2', ['closing_balance', 'totals'])]
+    independent approval without acceptance: ('refused', 409, 'Unresolved controls block approval')
+    supplier of the first statement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    supplier of the corrected statement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    acceptance that omits the revised statement from its evidence: ('refused', 400, 'Cite all revised supporting documents')
+    granted non-supplier accepts for A1 only: ('ok', 1)
+    [same-key] after acceptance for A1 -> A1: {'id': 12, 'eligible': True, 'status': 'pending', 'blockers': []} | A2: {'id': 13, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    the acceptor gives the final review of A1: ('refused', 403, 'Independent human review required')
+    independent final review of A1: ('ok', None)
+    [same-key] after a further change to the statement -> A1: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [new-key] A1: {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} | A2: {'id': 8, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    [new-key] item revisions: [('replaced', 'stmt-2026-11', 1, 'rv-preparer', 'stmt-2026-11-replacement', 'rv-preparer-2', ['closing_balance', 'statement_id', 'totals']), ('replaced', 'stmt-2026-11', 2, 'rv-preparer-2', 'stmt-2026-11-replacement', 'rv-preparer-2', ['closing_balance', 'statement_id', 'totals'])]
+    [new-key] workpaper statement_revisions: [('replaced', 'stmt-2026-11', 'rv-preparer', 'rv-preparer-2', ['closing_balance', 'statement_id', 'totals']), ('replaced', 'stmt-2026-11', 'rv-preparer-2', 'rv-preparer-2', ['closing_balance', 'statement_id', 'totals'])]
+    independent approval without acceptance: ('refused', 409, 'Unresolved controls block approval')
+    supplier of the first statement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    supplier of the corrected statement accepts: ('refused', 403, 'Evidence supplier cannot accept any version of their document')
+    acceptance that omits the revised statement from its evidence: ('refused', 400, 'Cite all revised supporting documents')
+    granted non-supplier accepts for A1 only: ('ok', 1)
+    [new-key] after acceptance for A1 -> A1: {'id': 12, 'eligible': True, 'status': 'pending', 'blockers': []} | A2: {'id': 13, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    the acceptor gives the final review of A1: ('refused', 403, 'Independent human review required')
+    independent final review of A1: ('ok', None)
+    [new-key] after a further change to the statement -> A1: {'id': 17, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    -> OK
+
+[R04b] (RA-04) a statement replaced by re-pointing the old key at another cycle and supplying a new key for the period is still held and disclosed
+    old statement key re-pointed to another cycle; a new key supplied that ties -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    item revisions: [('replaced', 'stmt-2026-11', 1, 'rv-preparer', 'stmt-2026-11-b', 'rv-preparer', ['closing_balance', 'statement_id', 'totals'])] | workpaper statement_revisions: [{'changed_fields': ['closing_balance', 'statement_id', 'totals'], 'current': {'hash': '08676b3fa0d9dcaef7808c99d06bb58a273072c84e817d9f0e9faa9642a96c91', 'snapshot_id': 10, 'source_key': 'stmt-2026-11-b', 'supplier': 'rv-preparer', 'version': 1}, 'earlier': {'hash': '368e60584241b425c7b16c9205c92f50500c22a232148ebe3d36df1907a045cb', 'snapshot_id': 7, 'source_key': 'stmt-2026-11', 'supplier': 'rv-preparer', 'version': 1}, 'kind': 'replaced', 'source_key': 'stmt-2026-11-b', 'source_kind': 'statement', 'supplier': 'rv-preparer'}] | workpaper blockers: [] | exceptions: [('stmt-2026-11', None, 'UNASSIGNED_ACCOUNTING_PERIOD')]
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+====================================================================================================
+R03a  RA-03        OK     same-key and new-key receipt replacement are held and disclosed; both suppliers are refused; a non-supplier accepts; final review is separate; a further change lapses the acceptance
+R03b  RA-03        OK     replacing a receipt by re-pointing the old key at another transaction id and supplying a new key is still held and disclosed
+R04a  RA-04        OK     a statement corrected to tie (same key, or withdrawn and replaced under a new key) is held on every relying item and disclosed on the workpaper; suppliers of any version are refused; acceptance is item-bound, lapses on new evidence and confers no final review
+R04b  RA-04        OK     a statement replaced by re-pointing the old key at another cycle and supplying a new key for the period is still held and disclosed
+
+Verdict counts: {'OK': 4}
+RA acceptance gate: PASS

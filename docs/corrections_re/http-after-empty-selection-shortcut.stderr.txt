@@ -1,0 +1,16 @@
+test_approval_and_export_black_box (tests.test_http.HTTPCase) ... ok
+test_blocked_artifact_approval_fails (tests.test_http.HTTPCase) ... ok
+test_health_and_real_worker_results (tests.test_http.HTTPCase) ... ok
+test_host_origin_and_scope_override_defenses (tests.test_http.HTTPCase) ... ok
+test_invalid_api_requests_have_no_side_effects (tests.test_http.HTTPCase) ... ok
+test_loopback_only_and_static_assets_with_csp (tests.test_http.HTTPCase) ... ok
+test_mandate_proposal_requires_independent_activation (tests.test_http.HTTPCase) ... ok
+test_package_and_disposition_routes_enforce_controls (tests.test_http.HTTPCase) ... ok
+test_period_operations_require_independent_human_and_preserve_scope (tests.test_http.HTTPCase) ... ok
+test_reviewer_cannot_intake_or_prepare (tests.test_http.HTTPCase) ... ok
+test_session_is_explicitly_synthetic_and_authorization_required (tests.test_http.HTTPCase) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 8.426s
+
+OK

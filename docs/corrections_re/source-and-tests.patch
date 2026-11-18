@@ -1,0 +1,1723 @@
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+ PYTHON ?= python3
+-.PHONY: setup demo test core-test api-test check verify-no-egress export-demo backup reviewer-test batch1-gate batch2-gate reverification-gate acceptance-gate rb-gate rc-gate rd-gate
++.PHONY: setup demo test core-test api-test check verify-no-egress export-demo backup reviewer-test batch1-gate batch2-gate reverification-gate acceptance-gate rb-gate rc-gate rd-gate re-gate
+ setup:
+ 	$(PYTHON) -m accounting_agent setup
+ demo:
+@@ -47,3 +47,6 @@
+ 
+ rd-gate:
+ 	$(PYTHON) scripts/verify_rc_review.py
++
++re-gate:
++	$(PYTHON) scripts/verify_rd_feed_review.py
+--- a/accounting_agent/exceptions.py
++++ b/accounting_agent/exceptions.py
+@@ -33,11 +33,12 @@
+         return allowed
+ 
+     def active_dispositions(self,db,actor,workflow,period_id,sources,evidence_revisions=None):
+-        heads={s['source_key']:s for s in sources};result=[]
++        heads={s['source_key']:s for s in sources};result=self.card_target_selections(db,actor,workflow,sources)
+         if evidence_revisions is None:evidence_revisions=self.evidence_revisions(db,actor.scope,sources)
+         for r in db.execute("SELECT * FROM dispositions d WHERE scope=? AND workflow=? AND period_id=? AND action='apply' AND NOT EXISTS(SELECT 1 FROM dispositions x WHERE x.scope=d.scope AND x.prior_id=d.id AND x.action='revoke') ORDER BY id",(actor.scope,workflow,period_id)):
+             row=dict(r);source=heads.get(row['item_key']);evidence=json.loads(row['evidence'])
+             allowed=self.disposition_references(db,actor.scope,source,sources) if source else {}
++            if row['choice']=='select_supersession_target':continue
+             if source and source['hash']==row['source_hash'] and all(allowed.get(e['snapshot_id'])==e['hash'] for e in evidence):
+                 row['payload']=json.loads(row['payload']);row['evidence']=evidence
+                 if row['choice']=='settlement_verified' and row['payload'].get('transition_refs')!=self.supersession_refs(db,actor.scope,source['id']):continue
+@@ -56,6 +57,7 @@
+         return list(chosen.values())
+ 
+     def disposition(self,actor,workflow,period_id,item_key,code,choice,payload,evidence,reason,scope_kind='single_item'):
++        if code=='SOURCE_CLAIM_CONFLICT' and choice=='select_supersession_target':return self.select_source_target(actor,workflow,period_id,item_key,payload,evidence,reason,scope_kind)
+         self.authorize(actor,('reviewer',));text_field(reason,'disposition reason',2000)
+         if scope_kind not in ('single_item','propose_rule'):raise ControlError('Unsupported disposition scope')
+         if choice not in VOCABULARY.get(code,set()):raise ControlError('Unsupported disposition; this control cannot be overridden')
+@@ -140,6 +142,7 @@
+         with self.store.transaction() as db:
+             self.require_grant(db,actor,'disposition');r=db.execute('SELECT * FROM dispositions WHERE scope=? AND id=? AND action=\'apply\'',(actor.scope,disposition_id)).fetchone()
+             if not r:raise ControlError('Disposition not found',404)
++            if r['choice']=='select_supersession_target':raise ControlError('Record a new authorized target selection instead of revoking its historical application',409)
+             if self.period(db,actor,r['period_id'])['status']=='locked':raise ControlError('PERIOD_LOCKED',409)
+             if db.execute("SELECT 1 FROM dispositions WHERE scope=? AND prior_id=?",(actor.scope,disposition_id)).fetchone():raise ControlError('Already revoked',409)
+             db.execute("INSERT INTO dispositions(scope,workflow,period_id,item_key,code,choice,payload,evidence,source_hash,actor,reason,action,prior_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,'revoke',?,?)",(actor.scope,r['workflow'],r['period_id'],r['item_key'],r['code'],r['choice'],r['payload'],r['evidence'],r['source_hash'],actor.id,reason,disposition_id,utcnow()))
+--- /dev/null
++++ b/accounting_agent/feed_contract.py
+@@ -0,0 +1,192 @@
++"""D-026: fictional card-feed claims and append-only human target selections."""
++import json
++from .core import ControlError, canonical, digest, instant, text_field, utcnow
++
++CONFLICT='SOURCE_CLAIM_CONFLICT'
++SELECT_TARGET='select_supersession_target'
++
++
++class CardFeedContract:
++    def card_locked_hold(self,db,actor,kind,key):
++        """Latest identity binding, never an older hold after a valid release."""
++        binding=db.execute('SELECT b.* FROM source_periods b JOIN snapshots s ON s.id=b.snapshot_id WHERE s.scope=? AND s.kind=? AND s.source_key=? ORDER BY b.id DESC LIMIT 1',(actor.scope,kind,key)).fetchone()
++        if binding and not binding['admitted'] and binding['reason'] in ('SOURCE_MOVED_FROM_LOCKED_PERIOD','LATE_ACTIVITY_IN_LOCKED_PERIOD') and binding['period_id'] and self.period(db,actor,binding['period_id'])['status']=='locked':return binding
++        return None
++
++    def card_claim_state(self,db,scope,key):
++        declarations=[]
++        for e in db.execute("SELECT * FROM accounting_events WHERE scope=? AND item_key=? AND code IN ('SOURCE_CLAIM_DECLARED','SOURCE_CLAIM_CONFLICT_RECORDED','SOURCE_SUPERSESSION_UNRESOLVED') ORDER BY id",(scope,key)):
++            value=json.loads(e['payload'])
++            sid=value.get('message_snapshot_id',value.get('snapshot_id'))
++            if db.execute("SELECT 1 FROM snapshots WHERE scope=? AND kind='transaction' AND source_key=? AND id=?",(scope,key,sid)).fetchone():
++                declarations.append((e['created'],e['id'],value['target_key']))
++        for link in db.execute("SELECT l.*,o.source_key AS target_key FROM source_links l JOIN snapshots n ON n.id=l.new_snapshot_id JOIN snapshots o ON o.id=l.old_snapshot_id WHERE l.scope=? AND n.kind='transaction' AND n.source_key=? ORDER BY l.id",(scope,key)):
++            declarations.append((link['created'],link['id'],link['target_key']))
++        targets=[]
++        for _,_,target in sorted(declarations):
++            if target not in targets:targets.append(target)
++        if not targets:return None
++        decision=db.execute("SELECT * FROM dispositions WHERE scope=? AND workflow='card_preparation' AND item_key=? AND code=? AND choice=? AND action='apply' ORDER BY id DESC LIMIT 1",(scope,key,CONFLICT,SELECT_TARGET)).fetchone()
++        payload=json.loads(decision['payload']) if decision else {}
++        chosen=payload.get('target_key',targets[0])
++        return {'targets':targets,'target_key':chosen,'conflicted':len(targets)>1 and not set(targets)<=set(payload.get('declared_targets',[])), 'disposition_id':decision['id'] if decision else None}
++
++    def record_card_claim(self,db,actor,key,target,head_id,message_id):
++        state=self.card_claim_state(db,actor.scope,key)
++        if state and target in state['targets']:return False
++        code='SOURCE_CLAIM_CONFLICT_RECORDED' if state else 'SOURCE_CLAIM_DECLARED'
++        self.accounting_event(db,actor,None,key,code,{'snapshot_id':head_id,'message_snapshot_id':message_id,'target_key':target})
++        self.store.audit(db,actor.scope,actor.id,'card_source_claim_recorded',{'source_key':key,'target_key':target,'message_snapshot_id':message_id,'code':code})
++        if state:self.source_approval_events(db,actor,key,head_id,'APPROVED_SOURCE_REVISED')
++        return True
++
++    def card_source_revision(self,db,actor,source,packet):
++        key,value=source['key'],source['data'];kind='transaction'
++        old=db.execute('SELECT s.*,h.removed FROM source_heads h JOIN snapshots s ON s.id=h.snapshot_id WHERE h.scope=? AND h.kind=? AND h.source_key=?',(actor.scope,kind,key)).fetchone()
++        as_of=source.get('as_of')
++        if type(as_of) is int and as_of>=0:order_type,order_value='sequence',str(as_of)
++        elif isinstance(as_of,str):order_type,order_value='timestamp',instant(as_of).isoformat()
++        elif as_of is None:order_type,order_value='legacy_arrival',utcnow()
++        else:raise ControlError('Invalid source as_of')
++        system=source.get('source_system',value.get('source_system','fixture'))
++        if system!='fixture':raise ControlError('Only fictional source systems are enabled',403)
++        removed=source.get('tombstone',False);reason=source.get('removal_reason')
++        if type(removed) is not bool:raise ControlError('Invalid tombstone')
++        if removed and reason not in ('feed_removed','voided','superseded'):raise ControlError('Removal reason required')
++        target=source.get('supersedes') or value.get('supersedes_source_id');predecessor=None
++        if target:
++            target=target if ':' in target else value['account_id']+':'+target
++            predecessor=db.execute('SELECT * FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(actor.scope,kind,target)).fetchone()
++            if target==key:raise ControlError('Supersession requires a different source identity')
++            if predecessor and any(r['source_key']==key for r in self.supersession_refs(db,actor.scope,predecessor['snapshot_id'])):raise ControlError('Supersession cycle is not permitted')
++        state=self.card_claim_state(db,actor.scope,key)
++        different=bool(target and state and target!=state['target_key'])
++        meta=db.execute('SELECT * FROM source_metadata WHERE snapshot_id=?',(old['id'],)).fetchone() if old else None
++        accepted=True
++        if meta and meta['order_type']!='legacy_arrival':
++            if order_type!=meta['order_type']:accepted=False
++            elif order_type=='sequence' and int(order_value)<int(meta['as_of']):accepted=False
++            elif order_type=='timestamp' and order_value<meta['as_of']:accepted=False
++            elif order_value==meta['as_of'] and digest(value)!=old['hash']:accepted=False
++        same_order=as_of is None or bool(meta and meta['order_type']==order_type and meta['as_of']==order_value)
++        same_row=bool(old and old['hash']==digest(value) and old['removed']==int(removed))
++        # A repeated claim changes no source lifecycle row. Batch evidence is
++        # retained by intake, including its supplier, before this call.
++        if same_row and same_order and (not target or state):
++            changed=self.record_card_claim(db,actor,key,target,old['id'],old['id']) if target else False
++            if not target:
++                binding=db.execute('SELECT * FROM source_periods WHERE snapshot_id=? ORDER BY id DESC LIMIT 1',(old['id'],)).fetchone()
++                if binding and binding['reason']=='UNASSIGNED_ACCOUNTING_PERIOD':self.bind_source(db,actor,old['id'],value,packet.get('period_id'))
++            return old['id'],changed
++        if old and not accepted:
++            retained=db.execute('SELECT s.id FROM snapshots s JOIN source_metadata m ON m.snapshot_id=s.id WHERE s.scope=? AND s.kind=? AND s.source_key=? AND s.hash=? AND m.order_type=? AND m.as_of=? AND m.tombstone=? ORDER BY s.id DESC LIMIT 1',(actor.scope,kind,key,digest(value),order_type,order_value,int(removed))).fetchone()
++            if retained:
++                changed=self.record_card_claim(db,actor,key,target,old['id'],retained['id']) if target else False
++                return old['id'],changed
++        force=bool(old and (not same_order or not same_row or target and not state))
++        sid,is_new=self.store.snapshot(db,actor.scope,kind,key,value,actor.id,force_version=force)
++        if not is_new:return sid,False
++        db.execute('INSERT INTO source_metadata VALUES(?,?,?,?,?,?,?,?)',(sid,actor.scope,system,order_type,order_value,int(removed),reason,packet.get('period_id') or value.get('period_id')))
++        if not accepted:
++            self.store.audit(db,actor.scope,actor.id,'older_or_conflicting_source_retained',{'snapshot_id':sid,'governing_snapshot_id':old['id']})
++            changed=self.record_card_claim(db,actor,key,target,old['id'],sid) if target else False
++            if changed and not state:self.apply_first_card_claim(db,actor,key,old['id'],target,predecessor,packet)
++            return sid,changed
++        db.execute('INSERT INTO source_heads(scope,kind,source_key,snapshot_id,removed) VALUES(?,?,?,?,?) ON CONFLICT(scope,kind,source_key) DO UPDATE SET snapshot_id=excluded.snapshot_id,removed=excluded.removed',(actor.scope,kind,key,sid,int(removed)))
++        if target:self.record_card_claim(db,actor,key,target,sid,sid)
++        if target and not different:self.apply_first_card_claim(db,actor,key,sid,target,predecessor,packet)
++        if different and old:
++            binding=db.execute('SELECT * FROM source_periods WHERE snapshot_id=? ORDER BY id DESC LIMIT 1',(old['id'],)).fetchone()
++            if binding:db.execute('INSERT INTO source_periods(scope,snapshot_id,period_id,admitted,reason,created) VALUES(?,?,?,?,?,?)',(actor.scope,sid,binding['period_id'],binding['admitted'],binding['reason'],utcnow()))
++        self.bind_source(db,actor,sid,value,packet.get('period_id') or value.get('period_id'))
++        if old and (old['hash']!=digest(value) or removed):self.source_approval_events(db,actor,key,sid,'APPROVED_SOURCE_REMOVED' if removed else 'APPROVED_SOURCE_REVISED')
++        self.store.audit(db,actor.scope,actor.id,'source_revision_accepted',{'snapshot_id':sid,'source_key':key,'as_of':order_value,'ordering':order_type,'removed':removed,'reason':reason})
++        return sid,True
++
++    def apply_first_card_claim(self,db,actor,key,sid,target,predecessor,packet):
++        if not predecessor:
++            self.accounting_event(db,actor,None,key,'SOURCE_SUPERSESSION_UNRESOLVED',{'snapshot_id':sid,'target_key':target})
++        elif not self.supersession_link(db,actor.scope,sid):
++            db.execute("INSERT INTO source_links(scope,old_snapshot_id,new_snapshot_id,reason,created) VALUES(?,?,?,'superseded',?)",(actor.scope,predecessor['snapshot_id'],sid,utcnow()))
++            for ancestor in {r['source_key'] for r in self.supersession_refs(db,actor.scope,sid)}:self.source_approval_events(db,actor,ancestor,sid,'APPROVED_SOURCE_SUPERSEDED')
++
++    def card_claim_conflicts(self,db,actor,period,sources):
++        if not any(s['kind']=='transaction' for s in sources):return {}
++        # Without any declaration or link in this scope, no identity can have
++        # competing claims. Avoid ancestry scans on ordinary unclaimed feeds.
++        if (not db.execute('SELECT 1 FROM source_links WHERE scope=? LIMIT 1',(actor.scope,)).fetchone()
++            and not db.execute("SELECT 1 FROM accounting_events WHERE scope=? AND code IN ('SOURCE_CLAIM_DECLARED','SOURCE_CLAIM_CONFLICT_RECORDED','SOURCE_SUPERSESSION_UNRESOLVED') LIMIT 1",(actor.scope,)).fetchone()):return {}
++        result={}
++        for source in sources:
++            if source['kind']!='transaction':continue
++            keys=[source['source_key']]+[r['source_key'] for r in self.supersession_refs(db,actor.scope,source['id'])]
++            states={key:self.card_claim_state(db,actor.scope,key) for key in keys}
++            conflicts={key:state for key,state in states.items() if state and state['conflicted']}
++            if conflicts:result[source['source_key']]=conflicts
++        return result
++
++    def card_target_selections(self,db,actor,workflow,sources):
++        if workflow!='card_preparation':return []
++        records=list(db.execute("SELECT * FROM dispositions WHERE scope=? AND workflow=? AND choice=? AND action='apply' ORDER BY id",(actor.scope,workflow,SELECT_TARGET)))
++        if not records:return []
++        keys=set()
++        for source in sources:
++            if source['kind']=='transaction':
++                keys.add(source['source_key'])
++                keys.update(r['source_key'] for r in self.supersession_refs(db,actor.scope,source['id']))
++        result=[]
++        for record in records:
++            row=dict(record)
++            if row['item_key'] not in keys:continue
++            state=self.card_claim_state(db,actor.scope,row['item_key'])
++            if state and not state['conflicted'] and state['disposition_id']==row['id']:
++                row['payload']=json.loads(row['payload']);row['evidence']=json.loads(row['evidence']);result.append(row)
++        return result
++
++    def select_source_target(self,actor,workflow,period_id,key,payload,evidence,reason,scope_kind):
++        if workflow!='card_preparation' or scope_kind!='single_item':raise ControlError('Card target selection requires single-item card preparation')
++        self.authorize(actor,('reviewer',));text_field(reason,'disposition reason',2000)
++        with self.store.transaction() as db:
++            self.require_grant(db,actor,'disposition')
++            row=db.execute("SELECT s.*,h.removed FROM source_heads h JOIN snapshots s ON s.id=h.snapshot_id WHERE h.scope=? AND h.kind='transaction' AND h.source_key=?",(actor.scope,key)).fetchone()
++            state=self.card_claim_state(db,actor.scope,key);target=payload.get('target_key')
++            if not row or not state or len(state['targets'])<2 or target not in state['targets']:raise ControlError('Declared contested source target required',409)
++            source=dict(row,value=json.loads(row['payload']))
++            home=db.execute('SELECT * FROM periods WHERE scope=? AND start<=? AND end>=?',(actor.scope,source['value']['date'],source['value']['date'])).fetchone()
++            if not home or home['period_id']!=period_id:raise ControlError('Use the source accounting-date period')
++            if home['status']=='locked':raise ControlError('PERIOD_LOCKED',409)
++            for batch in db.execute("SELECT actor,payload FROM snapshots WHERE scope=? AND kind='batch'",(actor.scope,)):
++                for message in json.loads(batch['payload']).get('sources',[]):
++                    claim=message.get('supersedes') or message.get('data',{}).get('supersedes_source_id')
++                    if claim and ':' not in claim:claim=message['data'].get('account_id','')+':'+claim
++                    if message['kind']=='transaction' and message['key']==key and claim in state['targets'] and batch['actor']==actor.id:raise ControlError('Claim message supplier cannot disposition either claim',403)
++            affected=[s for s in self.store.latest(db,actor.scope,'transaction') if s['source_key']==key or any(r['source_key']==key for r in self.supersession_refs(db,actor.scope,s['id']))]
++            ctx=self.context(db,actor,period_id,workflow)
++            available=list({s['id']:s for s in ctx['sources']+[source]+[s for s in self.store.latest(db,actor.scope) if any(self.supports_item(item,s) for item in [source]+affected)]}.values())
++            allowed=self.disposition_references(db,actor.scope,source,available)
++            if not evidence or any(allowed.get(e.get('snapshot_id'))!=e.get('hash') for e in evidence):raise ControlError('Current scoped evidence references required')
++            documents=[s for s in available if any(s['id']==e.get('snapshot_id') for e in evidence)]
++            if not any(self.supports_item(item,doc) for item in [source]+affected for doc in documents):raise ControlError('Related receipt, document or statement required as supporting evidence')
++            predecessor=db.execute("SELECT snapshot_id FROM source_heads WHERE scope=? AND kind='transaction' AND source_key=?",(actor.scope,target)).fetchone()
++            if predecessor and (target==key or any(r['source_key']==key for r in self.supersession_refs(db,actor.scope,predecessor['snapshot_id']))):raise ControlError('Supersession cycle is not permitted')
++            new_origin=self.source_origin(db,actor.scope,predecessor['snapshot_id']) if predecessor else None
++            changing=target!=state['target_key']
++            if changing:
++                for item in [source]+affected:
++                    binding=self.card_locked_hold(db,actor,'transaction',item['source_key'])
++                    if binding:
++                        if not new_origin or new_origin['period_id']!=binding['period_id']:self.require_grant(db,actor,'lock')
++            chosen={'target_key':target,'declared_targets':state['targets']}
++            rid=db.execute("INSERT INTO dispositions(scope,workflow,period_id,item_key,code,choice,payload,evidence,source_hash,actor,reason,action,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,'apply',?)",(actor.scope,workflow,period_id,key,CONFLICT,SELECT_TARGET,canonical(chosen),canonical(evidence),row['hash'],actor.id,reason,utcnow())).lastrowid
++            self.accounting_event(db,actor,period_id,key,'SOURCE_CLAIM_TARGET_SELECTED',dict(chosen,disposition_id=rid,snapshot_id=row['id']))
++            if changing:
++                if predecessor:
++                    db.execute("INSERT INTO source_links(scope,old_snapshot_id,new_snapshot_id,reason,created) VALUES(?,?,?,'authorized_target_selection',?)",(actor.scope,predecessor['snapshot_id'],row['id'],utcnow()))
++                    for ancestor in {r['source_key'] for r in self.supersession_refs(db,actor.scope,row['id'])}:self.source_approval_events(db,actor,ancestor,row['id'],'APPROVED_SOURCE_SUPERSEDED')
++                else:self.accounting_event(db,actor,None,key,'SOURCE_SUPERSESSION_UNRESOLVED',{'snapshot_id':row['id'],'target_key':target})
++                for item in sorted(affected,key=lambda s:-len(self.supersession_refs(db,actor.scope,s['id']))):self.bind_source(db,actor,item['id'],item['value'],period_id,allow_locked_release=True)
++                for receipt in self.store.latest(db,actor.scope,'receipt'):
++                    if any(self.supports_item(item,receipt) for item in affected):self.bind_source(db,actor,receipt['id'],receipt['value'],period_id,allow_locked_release=True)
++            self.store.audit(db,actor.scope,actor.id,'source_claim_target_selected',{'disposition_id':rid,'source_key':key,'target_key':target,'reason':reason})
++            self.package_changes(db,actor)
++            return rid
+--- a/accounting_agent/modules.py
++++ b/accounting_agent/modules.py
+@@ -197,6 +197,7 @@
+         if t.get("supersedes_source_id") or ctx.get("source_transitions",{}).get(row["source_key"]) or ctx.get("unresolved_transitions",{}).get(row["source_key"]):
+             blockers.append("SOURCE_TRANSITION_REQUIRES_REVIEW")
+         if ctx.get("unresolved_transitions",{}).get(row["source_key"]):blockers.append("SOURCE_TRANSITION_UNRESOLVED")
++        if ctx.get('source_claim_conflicts',{}).get(row['source_key']):blockers.append('SOURCE_CLAIM_CONFLICT')
+         candidates = [v for v in profile["vendors"] if normalize(t["description"]) and normalize(t["description"]) in [normalize(a) for a in v["aliases"]]]
+         vendor = candidates[0] if len(candidates) == 1 else None
+         if not candidates:
+@@ -238,6 +239,8 @@
+         revised=supporting_revisions(row,sources,ctx.get('evidence_revisions',{}))
+         if revised:blockers.append('EVIDENCE_REVISED_REQUIRES_REVIEW')
+         applied=[d for d in ctx.get('dispositions',[]) if d['item_key']==row['source_key']]+resolutions
++        lineage_keys={row['source_key']}|{ref['source_key'] for ref in ctx.get('source_transitions',{}).get(row['source_key'],[])}
++        selections=[d for d in ctx.get('dispositions',[]) if d['choice']=='select_supersession_target' and d['item_key'] in lineage_keys]
+         excluded=False;allocations=[];settlement=None
+         for d in applied:
+             if d['item_key']!=row['source_key']:continue
+@@ -266,10 +269,10 @@
+                 blockers+=validate_entry(entry,ctx['profile'],period)
+         result.append(output(row["source_key"], "card_proposal", {
+             "proposed_entry":entry,"evidence_revisions":revised,**control_details.get(t["account_id"],{}),
+-            "disposition_ids":[d['id'] for d in applied],"excluded_duplicate":excluded,"allocations":allocations,"settlement":settlement,
++            "disposition_ids":sorted({d['id'] for d in applied+selections}),"excluded_duplicate":excluded,"allocations":allocations,"settlement":settlement,
+             "transaction": t, "vendor": {"id": vendor["id"], "name": vendor["name"]} if vendor else None,
+             "proposed_category": category, "duplicate_candidates": refs(duplicates), "duplicate_population":refs(population), "duplicate_evidence":refs([receipt for receipt in receipts if any(receipt["value"]["account_id"]==candidate["value"]["account_id"] and receipt["value"]["transaction_source_id"]==candidate["value"]["source_id"] for candidate in population)]),
+-            "evidence": refs([row] + docs + controls)+ctx.get("source_transitions",{}).get(row["source_key"],[]), "profile": ctx["profile_ref"],
++            "source_claim_conflict": ctx.get("source_claim_conflicts",{}).get(row["source_key"]), "evidence": refs([row] + docs + controls)+ctx.get("source_transitions",{}).get(row["source_key"],[]), "profile": ctx["profile_ref"],
+             "rationale": "Exact fictional alias proposal; human must validate business purpose and treatment.",
+             "execution": "deterministic", "external_posting": "not_performed"
+         }, blockers, True))
+--- a/accounting_agent/service.py
++++ b/accounting_agent/service.py
+@@ -198,7 +198,7 @@
+     def reopen_period(self,actor,period_id,reason):
+         self.change_period_status(actor,period_id,'open',reason)
+ 
+-    def bind_source(self,db,actor,snapshot_id,value,requested_period):
++    def bind_source(self,db,actor,snapshot_id,value,requested_period,allow_locked_release=False):
+         governing_date=value.get('date');parent_blocked=None
+         if value.get('transaction_source_id'):
+             key=value['account_id']+':'+value['transaction_source_id']
+@@ -220,9 +220,18 @@
+         prior=self.source_origin(db,actor.scope,snapshot_id)
+         link=self.supersession_link(db,actor.scope,snapshot_id)
+         if parent_blocked:prior=parent_blocked
++        if source['kind'] in ('transaction','receipt'):
++            held=self.card_locked_hold(db,actor,source['kind'],source['source_key'])
++            if held:prior=held
+         old_period=self.period(db,actor,prior['period_id']) if prior and prior['period_id'] else None
+         moved=old_period is not None and (p is None or p['period_id']!=old_period['period_id'])
+         blocked=bool(moved and old_period['status']=='locked')
++        if blocked and allow_locked_release:
++            # A selected target's locked ancestry remains quarantined even
++            # when the person may release the former target's hold.
++            ancestors=self.supersession_refs(db,actor.scope,snapshot_id)
++            selected_origin=self.source_origin(db,actor.scope,ancestors[0]['snapshot_id']) if ancestors else parent_blocked
++            if not selected_origin or not selected_origin['period_id'] or self.period(db,actor,selected_origin['period_id'])['status']!='locked':blocked=False
+         if p and latest and latest['admitted'] and latest['period_id']==p['period_id'] and not blocked:
+             self.apply_supersession(db,actor,snapshot_id)
+             return
+@@ -260,6 +269,7 @@
+         for source in sources:
+             claim=self.pending_claim(db,actor.scope,source['kind'],source['source_key'])
+             if claim:unresolved_transitions[source['source_key']]=claim
++        source_claim_conflicts=self.card_claim_conflicts(db,actor,selected,sources)
+         claims=[];owners={};heads={};stale_origins={}
+         for src in sources:
+             identity=self.source_identity(db,actor.scope,src['id']);heads[identity]=src
+@@ -319,14 +329,14 @@
+         evidence_revisions=self.evidence_revisions(db,actor.scope,sources)
+         dispositions=self.active_dispositions(db,actor,workflow_id,selected["period_id"],sources,evidence_revisions) if selected and workflow_id else []
+         prior_acceptances=self.prior_statement_acceptances(db,actor,prior_period,sources) if workflow_id=='card_preparation' else {}
+-        manifest = {"prior_statement_acceptances":prior_acceptances,"unresolved_transitions":unresolved_transitions,"prior_period":prior_period,"statement_rules":statement_rules,"evidence_revisions":evidence_revisions,"stale_origins":stale_origins,"source_transitions":transitions,"period_status":period_status,"entry_claims":claims,"dispositions":dispositions,"period": {k:selected[k] for k in ("period_id","start","end")} if selected else None,
++        manifest = {"source_claim_conflicts":source_claim_conflicts,"prior_statement_acceptances":prior_acceptances,"unresolved_transitions":unresolved_transitions,"prior_period":prior_period,"statement_rules":statement_rules,"evidence_revisions":evidence_revisions,"stale_origins":stale_origins,"source_transitions":transitions,"period_status":period_status,"entry_claims":claims,"dispositions":dispositions,"period": {k:selected[k] for k in ("period_id","start","end")} if selected else None,
+                     "profile_sections": {k:profile.get(k) for k in sorted(sections)},
+                     "workflow_permitted": workflow_id in profile['procedures'] if workflow_id else None,
+                     "sources": [{"kind":s['kind'],"key":s['source_key'],"snapshot_id":s['id'],"hash":s['hash']} for s in sources],
+                     "rules":[{"id":r["id"],"version":r["version"],"value":r["value"]} for r in sorted(applied.values(),key=lambda r:r["id"])], "capabilities":capabilities,"handler_hash":self.handler_hash,"shared_controls":SHARED_CONTROLS}
+         return {"period": selected, "scope": actor.scope, "generation": client["generation"], "profile": profile,
+                 "profile_ref": {"snapshot_id": profile_row["id"], "hash": profile_row["hash"], "version": profile["version"], "actor": profile_row["actor"]},
+-                "prior_statement_acceptances":prior_acceptances,"unresolved_transitions":unresolved_transitions,"prior_period":prior_period,"statement_rules":statement_rules,"evidence_revisions":evidence_revisions,"stale_origins":stale_origins,"source_transitions":transitions,"period_status":period_status,"entry_claims":claims,"dispositions":dispositions,"rules":list(applied.values()),"item_rules":item_rules,"sources": sources, "manifest":manifest, "fingerprint": digest(manifest)}
++                "source_claim_conflicts":source_claim_conflicts,"prior_statement_acceptances":prior_acceptances,"unresolved_transitions":unresolved_transitions,"prior_period":prior_period,"statement_rules":statement_rules,"evidence_revisions":evidence_revisions,"stale_origins":stale_origins,"source_transitions":transitions,"period_status":period_status,"entry_claims":claims,"dispositions":dispositions,"rules":list(applied.values()),"item_rules":item_rules,"sources": sources, "manifest":manifest, "fingerprint": digest(manifest)}
+ 
+     def intake(self, actor, packet):
+         self.authorize(actor, ("preparer",))
+@@ -833,6 +843,7 @@
+             return {"synthetic": True, "environment": "local", "mode": "demo", "scope": actor.scope,
+                     "notice": "Fictional sandbox; actual client accounting policies remain unconfigured.",
+                     "periods": [dict(p) for p in db.execute("SELECT * FROM periods WHERE scope=? ORDER BY start",(actor.scope,))],
++                    "source_claim_conflicts": {row['source_key']:state for row in db.execute("SELECT source_key FROM source_heads WHERE scope=? AND kind='transaction'",(actor.scope,)) for state in [self.card_claim_state(db,actor.scope,row['source_key'])] if state and state['conflicted']},
+                     "source_exceptions": [dict(b) for b in db.execute("SELECT b.*,s.source_key FROM source_periods b JOIN snapshots s ON s.id=b.snapshot_id WHERE b.scope=? AND b.reason IS NOT NULL AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=b.snapshot_id) AND EXISTS(SELECT 1 FROM source_heads h WHERE h.scope=b.scope AND h.snapshot_id=b.snapshot_id AND (h.removed=0 OR (b.admitted=0 AND b.reason='LATE_ACTIVITY_IN_LOCKED_PERIOD' AND EXISTS(SELECT 1 FROM periods p WHERE p.scope=b.scope AND p.period_id=b.period_id AND p.status='locked'))))",(actor.scope,))],
+                     "profile": ctx["profile"], "fingerprint": ctx["fingerprint"], "generation": ctx["generation"],
+                     "capabilities": [{k: v for k, v in asdict(c).items() if k != "handler"} for c in CAPABILITIES.values()],
+--- a/accounting_agent/source_control.py
++++ b/accounting_agent/source_control.py
+@@ -1,10 +1,12 @@
+ """Ordered source lifecycle and scoped provenance; no connector operations."""
+ import json
+ from .core import ControlError, canonical, digest, instant, utcnow
+-
+-
+-class SourceControl:
++from .feed_contract import CardFeedContract
++
++
++class SourceControl(CardFeedContract):
+     def source_revision(self,db,actor,source,packet):
++        if source['kind']=='transaction':return self.card_source_revision(db,actor,source,packet)
+         kind,key,value=source['kind'],source['key'],source['data']
+         old=db.execute('SELECT s.*,h.removed FROM source_heads h JOIN snapshots s ON s.id=h.snapshot_id WHERE h.scope=? AND h.kind=? AND h.source_key=?',(actor.scope,kind,key)).fetchone()
+         as_of=source.get('as_of')
+@@ -58,6 +60,11 @@
+         return sid,True
+ 
+     def supersession_link(self,db,scope,snapshot_id):
++        source=db.execute('SELECT kind,source_key FROM snapshots WHERE scope=? AND id=?',(scope,snapshot_id)).fetchone()
++        if source and source['kind']=='transaction':
++            state=self.card_claim_state(db,scope,source['source_key'])
++            if state:
++                return db.execute('SELECT l.* FROM source_links l JOIN snapshots n ON n.id=l.new_snapshot_id JOIN snapshots o ON o.id=l.old_snapshot_id WHERE l.scope=? AND n.kind=? AND n.source_key=? AND o.source_key=? ORDER BY n.version DESC,l.id DESC LIMIT 1',(scope,'transaction',source['source_key'],state['target_key'])).fetchone()
+         return db.execute('SELECT l.* FROM source_links l JOIN snapshots n ON n.id=l.new_snapshot_id JOIN snapshots current ON current.id=? WHERE l.scope=? AND n.scope=? AND n.kind=current.kind AND n.source_key=current.source_key ORDER BY n.version DESC,l.id DESC LIMIT 1',(snapshot_id,scope,scope)).fetchone()
+ 
+     def supersession_refs(self,db,scope,snapshot_id):
+@@ -114,6 +121,9 @@
+         """Latest recorded claim for an identity, until that identity has a link."""
+         head=db.execute('SELECT snapshot_id FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(scope,kind,key)).fetchone()
+         if not head or self.supersession_link(db,scope,head['snapshot_id']):return None
++        if kind=='transaction':
++            state=self.card_claim_state(db,scope,key)
++            if state:return {'snapshot_id':head['snapshot_id'],'target_key':state['target_key']}
+         for event in db.execute("SELECT payload FROM accounting_events WHERE scope=? AND code='SOURCE_SUPERSESSION_UNRESOLVED' AND item_key=? ORDER BY id DESC",(scope,key)):
+             claim=json.loads(event['payload'])
+             if db.execute('SELECT 1 FROM snapshots WHERE scope=? AND id=? AND kind=? AND source_key=?',(scope,claim['snapshot_id'],kind,key)).fetchone():return claim
+@@ -146,6 +156,8 @@
+             source=db.execute('SELECT kind,source_key FROM snapshots WHERE scope=? AND id=?',(scope,sid)).fetchone()
+             head=db.execute('SELECT removed FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(scope,source['kind'],source['source_key'])).fetchone()
+             blocked=db.execute("SELECT b.period_id FROM source_heads h JOIN source_periods b ON b.snapshot_id=h.snapshot_id JOIN periods p ON p.scope=b.scope AND p.period_id=b.period_id WHERE h.scope=? AND h.kind=? AND h.source_key=? AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=h.snapshot_id) AND b.reason='SOURCE_MOVED_FROM_LOCKED_PERIOD' AND p.status='locked'",(scope,source['kind'],source['source_key'])).fetchone()
++            if source['kind']=='transaction' and not blocked:
++                blocked=db.execute("SELECT b.period_id FROM source_heads h JOIN source_periods b ON b.snapshot_id=h.snapshot_id JOIN periods p ON p.scope=b.scope AND p.period_id=b.period_id WHERE h.scope=? AND h.kind='transaction' AND h.source_key=? AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=h.snapshot_id) AND b.admitted=0 AND b.reason='LATE_ACTIVITY_IN_LOCKED_PERIOD' AND p.status='locked'",(scope,source['source_key'])).fetchone()
+             admitted=db.execute('SELECT b.period_id,p.status FROM snapshots s JOIN source_periods b ON b.snapshot_id=s.id JOIN periods p ON p.scope=b.scope AND p.period_id=b.period_id WHERE s.scope=? AND s.kind=? AND s.source_key=? AND b.admitted=1 ORDER BY s.version DESC,b.id DESC LIMIT 1',(scope,source['kind'],source['source_key'])).fetchone()
+             owners.append((source,head,blocked,admitted))
+         # A late link must not hide a still-live locked ancestor behind this
+--- /dev/null
++++ b/review/fable_rd_feed_contract_probes.py
+@@ -0,0 +1,560 @@
++"""Fable acceptance probes for the RD-01 and RD-02 corrections (Accounting Agent OS).
++
++Usage (from anywhere):
++    python3 fable_rd_acceptance_probes.py <project-root> [PROBE_ID ...]
++
++Drives the application in <project-root> through public service operations only. Temporary
++SQLite files, fictional data, no network, model, posting or payment. Table contents are read
++from the probe's own temporary database, read-only.
++
++Helpers are loaded unchanged from <project-root>/exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py
++(which loads the RB and RA helpers), so all four scripts build identical fixtures.
++
++Part 1 (Y..) states every acceptance assertion of RD-01 and RD-02 as an explicit check, including
++the state BEFORE the target arrives, which probes X01/X01d/X02 only test by outcome.
++Part 2 (E..) tries neighbouring deliveries that no ticket named.
++
++Verdicts: OK control held | WEAK confirmed gap (exit 1) | NOTE observation needing a decision
++          | ERROR probe could not reach its intended state (exit 1)
++"""
++import importlib.util
++import json
++import sqlite3
++import sys
++import traceback
++from pathlib import Path
++
++if len(sys.argv) < 2:
++    sys.exit(__doc__)
++ROOT = Path(sys.argv[1]).resolve()
++import os
++# The RC probe script is read from <project-root>; FABLE_RC_PROBES may point at an identical copy when
++# the root is an earlier checkpoint that does not contain it (used only for the regression comparison).
++_rc_path = Path(os.environ.get('FABLE_RC_PROBES') or ROOT / 'exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py')
++_spec = importlib.util.spec_from_file_location('fable_rc_probes', _rc_path)
++rcp = importlib.util.module_from_spec(_spec)
++_argv = sys.argv
++sys.argv = [str(_rc_path), str(ROOT)]
++_spec.loader.exec_module(rcp)
++sys.argv = _argv
++rb, h = rcp.rb, rcp.h
++
++CARD, NOV, DEC = h.CARD, h.NOV, h.DEC
++PREP, PREP2, REV, REV2, REV3, FIN, PADMIN = h.PREP, h.PREP2, h.REV, h.REV2, h.REV3, h.FIN, h.PADMIN
++tx, rc, stmt, sup, packet, run, gov = h.tx, h.rc, h.stmt, h.sup, h.packet, h.run, h.gov
++review, dispose, brief, show, attempt = h.review, h.dispose, h.brief, h.show, h.attempt
++exceptions_of = h.exceptions_of
++events, held_under, approved, twice, try_to_approve = rb.events, rb.held_under, rb.approved, rb.twice, rb.try_to_approve
++K, MOVED, TRANSITION, REVISED = rb.K, rb.MOVED, rb.TRANSITION, rb.REVISED
++UNRESOLVED = 'SOURCE_TRANSITION_UNRESOLVED'
++check, links, approve_fully = rcp.check, rcp.links, rcp.approve_fully
++PROBES = []
++
++
++def probe(pid, ticket, title):
++    def register(fn):
++        PROBES.append((pid, ticket, title, fn))
++        return fn
++    return register
++
++
++def ro(os_):
++    return sqlite3.connect('file:%s?mode=ro' % os_.probe_path, uri=True)
++
++
++def lifecycle(os_):
++    """Full contents of every table the corrections write to, batch envelopes listed apart (read-only)."""
++    db = ro(os_)
++    try:
++        q = {'source_snapshots': "SELECT * FROM snapshots WHERE kind!='batch' ORDER BY id",
++             'batch_snapshots': "SELECT * FROM snapshots WHERE kind='batch' ORDER BY id",
++             'bindings': 'SELECT * FROM source_periods ORDER BY id', 'moves': 'SELECT * FROM source_moves ORDER BY id',
++             'links': 'SELECT * FROM source_links ORDER BY id', 'events': 'SELECT * FROM accounting_events ORDER BY id',
++             'decisions': 'SELECT * FROM decisions ORDER BY id', 'heads': 'SELECT * FROM source_heads ORDER BY scope,kind,source_key',
++             'artifacts': 'SELECT * FROM artifacts ORDER BY id', 'packages': 'SELECT * FROM packages ORDER BY id',
++             'audit': 'SELECT * FROM audit ORDER BY id'}
++        out = {}
++        for name, sql in q.items():
++            try:
++                out[name] = [tuple(r) for r in db.execute(sql)]
++            except sqlite3.OperationalError as exc:
++                out[name] = 'unreadable: %s' % exc
++        return out
++    finally:
++        db.close()
++
++
++def delta(before, after):
++    return {k: (len(after[k]) - len(before[k])) if isinstance(after[k], list) and isinstance(before[k], list) else '?' for k in after}
++
++
++def prefix_kept(before, after, tables):
++    """True when every earlier row of the named tables is still present, byte for byte, as a prefix."""
++    return all(after[t][:len(before[t])] == before[t] for t in tables)
++
++
++def unresolved_events(os_, key):
++    return [e for e in os_.export(PREP)['accounting_events'] if e['code'] == 'SOURCE_SUPERSESSION_UNRESOLVED' and e['item_key'] == key]
++
++
++def y_plain():
++    return [tx('A1Y', '2026-12-03', '40.00'), rc('A1Y', '2026-12-03', '40.00')]
++
++
++def x_rows():
++    return [sup('A1X', '2026-12-02', '40.00', 'A1'), rc('A1X', '2026-12-02', '40.00')]
++
++
++def prep(os_):
++    run(os_, 'card_preparation', '2026-12', PREP2)
++
++
++# =======================================================================================
++# Part 1. The acceptance assertions of RD-01 and RD-02, one check each
++# =======================================================================================
++
++@probe('Y01', 'RD-01', 'unchanged row re-sent with a claim on an unknown target: recorded once, both blockers before the target, held after; eligible and approved')
++def _():
++    good = True
++    for was_approved in (False, True):
++        tag = '[approved before]' if was_approved else '[eligible]'
++        os_ = h.approved_locked_november()
++        os_.intake(PREP2, packet('y-plain', y_plain() + [stmt(y_plain(), DEC, opening='100.00')])); prep(os_)
++        prior = gov(os_, K('A1Y'), '2026-12')
++        good &= check('%s A1Y is eligible in December before any claim' % tag, prior['eligible'])
++        if was_approved:
++            show('%s A1Y approved in December' % tag, review(os_, REV2, prior, 'approve'))
++            good &= check('%s A1Y approved and governing before the claim' % tag, approved(os_, K('A1Y'), '2026-12'))
++        before = lifecycle(os_)
++        r = show('%s A1Y re-sent unchanged with supersedes=A1X (not received)' % tag, attempt(os_.intake, PREP2, packet('y-claim', [sup('A1Y', '2026-12-03', '40.00', 'A1X')])))
++        after = lifecycle(os_); d = delta(before, after)
++        print('    %s row deltas after the claim: %s' % (tag, d))
++        good &= check('%s the intake answers changed=True' % tag, r[0] == 'ok' and r[1]['changed'] is True)
++        good &= check('%s exactly one new source version' % tag, d['source_snapshots'] == 1)
++        good &= check('%s exactly one SOURCE_SUPERSESSION_UNRESOLVED event for A1Y' % tag, len(unresolved_events(os_, K('A1Y'))) == 1)
++        good &= check('%s no link yet' % tag, d['links'] == 0)
++        good &= check('%s earlier snapshots, decisions, artifacts, audit rows are an unchanged prefix' % tag, prefix_kept(before, after, ('source_snapshots', 'batch_snapshots', 'decisions', 'artifacts', 'audit', 'events', 'bindings', 'moves')))
++        # state BEFORE the target arrives, first without re-preparing, then after re-preparing
++        stale = gov(os_, K('A1Y'), '2026-12')
++        print('    %s governing A1Y straight after the claim (no new run): %s' % (tag, brief(stale)))
++        if was_approved:
++            good &= check('%s the earlier approval no longer governs, even before a new run' % tag, not approved(os_, K('A1Y'), '2026-12'))
++            fin = show('%s finalize December before re-preparing' % tag, attempt(os_.finalize_package, FIN, '2026-12', 'card_preparation', 'probe'))
++            good &= check('%s December cannot be finalized on the earlier approval' % tag, fin[0] == 'refused')
++        prep(os_)
++        y = gov(os_, K('A1Y'), '2026-12')
++        print('    %s A1Y after re-preparing, target still unknown: %s' % (tag, brief(y)))
++        good &= check('%s both transition blockers before the target arrives' % tag, y is not None and {TRANSITION, UNRESOLVED} <= set(y['blockers']))
++        good &= check('%s A1Y is not eligible and not approved' % tag, y is not None and not y['eligible'] and y['review_status'] != 'approve')
++        rv = show('%s independent approval attempt while unresolved' % tag, review(os_, REV3, y, 'approve'))
++        good &= check('%s approval refused while unresolved' % tag, rv[0] == 'refused')
++        dv = show('%s settlement_verified attempt while unresolved' % tag, dispose(os_, K('A1Y'), TRANSITION, 'settlement_verified', period='2026-12'))
++        prep(os_); y = gov(os_, K('A1Y'), '2026-12')
++        good &= check('%s the unresolved blocker cannot be cleared by a disposition' % tag, y is not None and UNRESOLVED in y['blockers'] and not y['eligible'])
++        fin = show('%s finalize December while unresolved' % tag, attempt(os_.finalize_package, FIN, '2026-12', 'card_preparation', 'probe'))
++        good &= check('%s December cannot be finalized while unresolved' % tag, fin[0] == 'refused')
++        n_approvals = rcp.approvals_kept(os_, K('A1Y'))
++        mid = lifecycle(os_)
++        os_.intake(PREP2, packet('x', x_rows())); prep(os_)
++        end = lifecycle(os_)
++        ev = os_.export(PREP)['accounting_events']
++        print('    %s after A1X: held=%s links=%s' % (tag, sorted(held_under(os_)), links(os_)))
++        good &= check('%s December has no governing artifact for A1Y' % tag, gov(os_, K('A1Y'), '2026-12') is None)
++        good &= check('%s A1Y and its receipt are held under November as MOVED' % tag, {K('A1Y'), 'receipt-A1Y'} <= held_under(os_))
++        good &= check('%s A1X and its receipt are held under November as MOVED' % tag, {K('A1X'), 'receipt-A1X'} <= held_under(os_))
++        good &= check('%s A1 is still approved and governing in November' % tag, approved(os_, K('A1'), '2026-11'))
++        good &= check('%s links are A1->A1X and A1X->A1Y' % tag, set(links(os_)) == {(K('A1'), K('A1X')), (K('A1X'), K('A1Y'))})
++        if was_approved:
++            named = [e for e in ev if e['code'].startswith('APPROVED_SOURCE_') and json.loads(e['payload']).get('artifact_id') == prior['id']]
++            print('    %s approved-source events naming the December approval: %s' % (tag, sorted({(e['code'], e['period_id'], e['item_key']) for e in named})))
++            good &= check('%s an approved-source event names the former December approval' % tag, bool(named))
++            good &= check('%s ITEM_LEFT_POPULATION recorded for A1Y' % tag, any(e['code'] == 'ITEM_LEFT_POPULATION' and e['item_key'] == K('A1Y') for e in ev))
++            good &= check('%s the approval decision remains (%d)' % (tag, n_approvals), rcp.approvals_kept(os_, K('A1Y')) == n_approvals >= 1)
++        good &= check('%s no earlier snapshot, decision, artifact, event or audit row rewritten' % tag, prefix_kept(mid, end, ('source_snapshots', 'batch_snapshots', 'decisions', 'artifacts', 'audit', 'events', 'bindings', 'moves', 'links')))
++        good &= check('%s audit chain verifies' % tag, os_.verify_audit(PREP))
++        fin = show('%s finalize December after the hold' % tag, attempt(os_.finalize_package, FIN, '2026-12', 'card_preparation', 'probe'))
++        good &= check('%s not approved in both periods' % tag, not twice(os_, K('A1'), K('A1Y')))
++    return 'OK' if good else 'WEAK'
++
++
++@probe('Y02', 'RD-01', 'the same unresolved claim repeated twice in new envelopes, then an exact packet replay')
++def _():
++    good = True
++    os_ = h.approved_locked_november()
++    os_.intake(PREP2, packet('y-plain', y_plain() + [stmt(y_plain(), DEC, opening='100.00')])); prep(os_)
++    claim = packet('y-claim', [sup('A1Y', '2026-12-03', '40.00', 'A1X')])
++    good &= check('first claim: changed=True', os_.intake(PREP2, claim)['changed'] is True)
++    prep(os_)
++    before = lifecycle(os_)
++    for name in ('y-claim-2', 'y-claim-3'):
++        r = os_.intake(PREP2, dict(claim, batch_id=name)); after = lifecycle(os_); d = delta(before, after)
++        print('    repeat %s -> %s ; deltas %s' % (name, r, d))
++        good &= check('%s: changed=False and not a replay' % name, r['changed'] is False and r['replay'] is False)
++        good &= check('%s: no source snapshot, binding, move, link, decision or accounting event added' % name, all(after[t] == before[t] for t in ('source_snapshots', 'bindings', 'moves', 'links', 'events', 'decisions', 'heads', 'artifacts')))
++        good &= check('%s: only the batch envelope (1) and its intake audit row are added' % name, len(after['batch_snapshots']) - len(before['batch_snapshots']) == 1)
++        print('    audit rows added by %s: %d' % (name, len(after['audit']) - len(before['audit'])))
++        before = dict(before, batch_snapshots=after['batch_snapshots'], audit=after['audit'])
++    g = gov(os_, K('A1Y'), '2026-12')
++    good &= check('the governing December artifact is unchanged by the repeats (still blocked, still governing)', g is not None and UNRESOLVED in g['blockers'])
++    r = os_.intake(PREP2, claim); after = lifecycle(os_)
++    print('    exact replay ->', r)
++    good &= check('exact packet replay: replay=True, changed=False', r['replay'] is True and r['changed'] is False)
++    good &= check('exact packet replay adds no snapshot of any kind and no lifecycle row', all(after[t] == before[t] for t in ('source_snapshots', 'batch_snapshots', 'bindings', 'moves', 'links', 'events', 'decisions', 'heads')))
++    good &= check('exactly one unresolved event in total', len(unresolved_events(os_, K('A1Y'))) == 1)
++    return 'OK' if good else 'WEAK'
++
++
++@probe('Y03', 'RD-02', 'claimant revised (amount) with and without the claim, service restarted, target arrives')
++def _():
++    good = True
++    for repeat in (False, True):
++        tag = '[claim repeated=%s]' % repeat
++        os_ = h.approved_locked_november()
++        y = [sup('A1Y', '2026-12-03', '40.00', 'A1X'), rc('A1Y', '2026-12-03', '40.00')]
++        os_.intake(PREP2, packet('y', y + [stmt(y, DEC, opening='100.00')])); prep(os_)
++        y2 = [sup('A1Y', '2026-12-03', '41.00', 'A1X') if repeat else tx('A1Y', '2026-12-03', '41.00'), rc('A1Y', '2026-12-03', '41.00')]
++        os_.intake(PREP2, packet('y-rev', y2 + [stmt(y2, DEC, opening='100.00')])); prep(os_)
++        a = gov(os_, K('A1Y'), '2026-12'); print('    %s revised A1Y: %s' % (tag, brief(a)))
++        good &= check('%s the revised version still carries both transition blockers' % tag, a is not None and {TRANSITION, UNRESOLVED} <= set(a['blockers']))
++        good &= check('%s unresolved events for A1Y: %d' % (tag, 2 if repeat else 1), len(unresolved_events(os_, K('A1Y'))) == (2 if repeat else 1))
++        show('%s revised_evidence_accepted' % tag, dispose(os_, K('A1Y'), REVISED, 'revised_evidence_accepted', period='2026-12')); prep(os_)
++        a = gov(os_, K('A1Y'), '2026-12')
++        good &= check('%s accepting the revised evidence does not release the unresolved hold' % tag, a is not None and UNRESOLVED in a['blockers'] and not a['eligible'])
++        path, scopes, probe_path = os_.store.path, os_.allowed_scopes, os_.probe_path
++        os_ = type(os_)(path, scopes); os_.probe_path = probe_path                      # restart: a new service on the same file
++        a = gov(os_, K('A1Y'), '2026-12')
++        good &= check('%s after a restart the hold is still shown' % tag, a is not None and UNRESOLVED in a['blockers'])
++        os_.intake(PREP2, packet('x', x_rows())); prep(os_)
++        print('    %s after A1X: held=%s links=%s' % (tag, sorted(held_under(os_)), links(os_)))
++        good &= check('%s A1Y and its receipt held under November' % tag, {K('A1Y'), 'receipt-A1Y'} <= held_under(os_) and gov(os_, K('A1Y'), '2026-12') is None)
++        db = ro(os_)
++        try:
++            head = db.execute('SELECT snapshot_id FROM source_heads WHERE source_key=?', (K('A1Y'),)).fetchone()[0]
++            linked = [r[0] for r in db.execute('SELECT new_snapshot_id FROM source_links l JOIN snapshots n ON n.id=l.new_snapshot_id WHERE n.source_key=?', (K('A1Y'),))]
++        finally:
++            db.close()
++        good &= check('%s the link is on the CURRENT head of A1Y' % tag, linked == [head])
++        approve_fully(os_, K('A1Y'))
++        good &= check('%s not approved in both periods' % tag, not twice(os_, K('A1'), K('A1Y')))
++    return 'OK' if good else 'WEAK'
++
++
++@probe('Y04', 'RD-02', 'claimant retired by its own replacement and re-sent without the claim: orders Yc Z Yp X and Z Yc Yp X')
++def _():
++    good = True
++    d = {'Yc': lambda: [sup('A1Y', '2026-12-03', '40.00', 'A1X'), rc('A1Y', '2026-12-03', '40.00')],
++         'Z': lambda: [sup('A1Z', '2026-12-04', '40.00', 'A1Y'), rc('A1Z', '2026-12-04', '40.00')],
++         'Yp': y_plain, 'X': x_rows}
++    for order in (('Yc', 'Z', 'Yp', 'X'), ('Z', 'Yc', 'Yp', 'X')):
++        tag = '[%s]' % ' '.join(order)
++        os_ = h.approved_locked_november()
++        for i, step in enumerate(order[:3]):
++            os_.intake(PREP2, packet('s%d' % i, d[step]()))
++            db = ro(os_)
++            try:
++                heads = {r[0].split(':')[-1]: r[1] for r in db.execute("SELECT source_key,removed FROM source_heads WHERE kind='transaction' AND source_key LIKE ?", (CARD + ':A1_',))}
++            finally:
++                db.close()
++            print('    %s after %s: removed flags %s, unresolved events for A1Y: %d' % (tag, step, heads, len(unresolved_events(os_, K('A1Y')))))
++        rows = [tx('A1Z', '2026-12-04', '40.00')]
++        os_.intake(PREP2, packet('statement', [stmt(rows, DEC, opening='100.00')])); prep(os_)
++        z = gov(os_, K('A1Z'), '2026-12'); yv = gov(os_, K('A1Y'), '2026-12')
++        print('    %s before A1X: A1Z %s | A1Y %s' % (tag, brief(z), brief(yv)))
++        good &= check('%s before the target: no member of the chain is eligible without a transition blocker' % tag, all(a is None or TRANSITION in a['blockers'] for a in (z, yv)))
++        good &= check('%s before the target: A1Y, if in the population, shows the unresolved hold' % tag, yv is None or UNRESOLVED in yv['blockers'])
++        os_.intake(PREP2, packet('x', d['X']())); prep(os_)
++        print('    %s after A1X: held=%s links=%s' % (tag, sorted(held_under(os_)), links(os_)))
++        good &= check('%s the claim resolved onto A1Y (link A1X->A1Y exists)' % tag, (K('A1X'), K('A1Y')) in links(os_))
++        good &= check('%s A1Z and its receipt held under November' % tag, {K('A1Z'), 'receipt-A1Z'} <= held_under(os_))
++        for k in ('A1X', 'A1Y', 'A1Z'):
++            approve_fully(os_, K(k))
++        dec = [k for k in ('A1X', 'A1Y', 'A1Z') if approved(os_, K(k), '2026-12')]
++        good &= check('%s no chain member approved in December (%s)' % (tag, dec), not dec)
++        good &= check('%s audit chain verifies' % tag, os_.verify_audit(PREP))
++    return 'OK' if good else 'WEAK'
++
++
++@probe('Y05', 'RD-02', 'most recent target wins; open target; cycle refusal; already linked identity; unrelated intake')
++def _():
++    good = True
++    # (a) D-026: the first pending claim stays active; a second target is contested.
++    os_ = h.approved_locked_november()
++    os_.intake(PREP2, packet('first', [sup('A1Y', '2026-12-03', '40.00', 'A1X'), rc('A1Y', '2026-12-03', '40.00')]))
++    before = lifecycle(os_)
++    result = os_.intake(PREP2, packet('retarget', [sup('A1Y', '2026-12-03', '40.00', 'A1W')]))
++    after = lifecycle(os_)
++    conflicts = [e for e in os_.export(PREP)['accounting_events'] if e['code'] == 'SOURCE_CLAIM_CONFLICT_RECORDED' and e['item_key'] == K('A1Y')]
++    good &= check('(a) the second target is recorded once and changes the control state', result['changed'] and len(conflicts) == 1)
++    good &= check('(a) the second claim changes no binding, move or link', all(before[t] == after[t] for t in ('bindings', 'moves', 'links')))
++    os_.intake(PREP2, packet('old-target', [tx('A1X', '2026-12-02', '40.00'), rc('A1X', '2026-12-02', '40.00')]))
++    good &= check('(a) the first claim still links when its target arrives', (K('A1X'), K('A1Y')) in links(os_))
++    os_.intake(PREP2, packet('new-target', [sup('A1W', '2026-12-02', '40.00', 'A1'), rc('A1W', '2026-12-02', '40.00')])); prep(os_)
++    y = gov(os_, K('A1Y'), '2026-12')
++    good &= check('(a) the contested target is not applied and the row stays blocked in December', (K('A1W'), K('A1Y')) not in links(os_) and y is not None and 'SOURCE_CLAIM_CONFLICT' in y['blockers'] and not y['eligible'] and K('A1Y') not in held_under(os_))
++    # (b) open target: the claimed row is an ordinary December row
++    os_ = h.approved_locked_november()
++    y = [sup('A1Y', '2026-12-03', '40.00', 'B9'), rc('A1Y', '2026-12-03', '40.00')]
++    os_.intake(PREP2, packet('y', y + [stmt(y, DEC, opening='100.00')]))
++    os_.intake(PREP2, packet('b9', [tx('B9', '2026-12-02', '40.00'), rc('B9', '2026-12-02', '40.00')])); prep(os_)
++    a = gov(os_, K('A1Y'), '2026-12'); b = gov(os_, K('B9'), '2026-12')
++    print('    (b) A1Y %s | B9 %s | links %s | held %s' % (brief(a), brief(b), links(os_), sorted(held_under(os_))))
++    good &= check('(b) open target: linked, the target is retired, the claimant stays in December with a review blocker and no hold', (K('B9'), K('A1Y')) in links(os_) and b is None and a is not None and TRANSITION in a['blockers'] and UNRESOLVED not in a['blockers'] and not held_under(os_))
++    # (c) cycle
++    os_ = h.approved_locked_november()
++    os_.intake(PREP2, packet('y', [sup('A1Y', '2026-12-03', '40.00', 'A1X'), rc('A1Y', '2026-12-03', '40.00')]))
++    r = show('(c) A1X arrives claiming A1Y, which claims A1X', attempt(os_.intake, PREP2, packet('x', [sup('A1X', '2026-12-02', '40.00', 'A1Y'), rc('A1X', '2026-12-02', '40.00')])))
++    print('    (c) links=%s' % links(os_))
++    good &= check('(c) at most one direction is linked', len(links(os_)) <= 1)
++    r2 = show('(c) A1Y repeats its claim on A1X', attempt(os_.intake, PREP2, packet('y-again', [sup('A1Y', '2026-12-03', '40.00', 'A1X')])))
++    good &= check('(c) the closing claim is refused or ignored; still at most one link', len(links(os_)) <= 1)
++    # (d) already linked identity: nothing is resolved a second time by unrelated intake
++    os_ = h.approved_locked_november()
++    os_.intake(PREP2, packet('y', [sup('A1Y', '2026-12-03', '40.00', 'A1X'), rc('A1Y', '2026-12-03', '40.00')]))
++    os_.intake(PREP2, packet('x', x_rows())); prep(os_)
++    before = lifecycle(os_)
++    r = os_.intake(PREP2, packet('unrelated', [tx('D1', '2026-12-05', '15.00'), rc('D1', '2026-12-05', '15.00')])); after = lifecycle(os_)
++    chain_rows = lambda L: [e for e in L['events'] if e[4].startswith('APPROVED_SOURCE_') or e[4].startswith('SOURCE_SUPERSESSION') or e[4] == 'ITEM_LEFT_POPULATION'] if all(isinstance(e[4], str) for e in L['events']) else None
++    good &= check('(d) unrelated intake adds no link, move or chain binding', after['links'] == before['links'] and after['moves'] == before['moves'])
++    db = ro(os_)
++    try:
++        n_chain = db.execute("SELECT COUNT(*) FROM accounting_events WHERE code LIKE 'APPROVED_SOURCE_%' OR code LIKE 'SOURCE_SUPERSESSION%' OR code='ITEM_LEFT_POPULATION'").fetchone()[0]
++        chain_binds = db.execute("SELECT COUNT(*) FROM source_periods b JOIN snapshots s ON s.id=b.snapshot_id WHERE s.source_key IN (?,?,?,?)", (K('A1Y'), K('A1X'), 'receipt-A1Y', 'receipt-A1X')).fetchone()[0]
++    finally:
++        db.close()
++    os_.intake(PREP2, packet('unrelated-2', [tx('D2', '2026-12-06', '16.00'), rc('D2', '2026-12-06', '16.00')]))
++    db = ro(os_)
++    try:
++        n_chain2 = db.execute("SELECT COUNT(*) FROM accounting_events WHERE code LIKE 'APPROVED_SOURCE_%' OR code LIKE 'SOURCE_SUPERSESSION%' OR code='ITEM_LEFT_POPULATION'").fetchone()[0]
++        chain_binds2 = db.execute("SELECT COUNT(*) FROM source_periods b JOIN snapshots s ON s.id=b.snapshot_id WHERE s.source_key IN (?,?,?,?)", (K('A1Y'), K('A1X'), 'receipt-A1Y', 'receipt-A1X')).fetchone()[0]
++    finally:
++        db.close()
++    good &= check('(d) a second unrelated intake adds no chain event (%d) and no chain binding (%d)' % (n_chain, chain_binds), n_chain2 == n_chain and chain_binds2 == chain_binds)
++    # (e) release and relock, then unrelated intake
++    show('(e) reopen November', attempt(os_.reopen_period, PADMIN, '2026-11', 'probe reopen'))
++    os_.intake(PREP2, packet('unrelated-3', [tx('D3', '2026-12-07', '17.00'), rc('D3', '2026-12-07', '17.00')]))
++    rl = show('(e) relock November', attempt(os_.lock_period, PADMIN, '2026-11', 'probe relock'))
++    if rl[0] == 'refused':
++        rl = show('(e) relock November with acknowledgement', attempt(os_.lock_period, PADMIN, '2026-11', 'probe relock', 'Fictional probe acknowledgement of unsettled preparation'))
++    good &= check('(e) November is locked again', rl[0] == 'ok')
++    print('    (e) held after relock: %s' % sorted(held_under(os_)))
++    mid = lifecycle(os_)
++    os_.intake(PREP2, packet('unrelated-4', [tx('D4', '2026-12-08', '18.00'), rc('D4', '2026-12-08', '18.00')]))
++    end = lifecycle(os_)
++    chain = lambda L: [b for b in L['bindings'] if b[2] in chain_ids]
++    db = ro(os_)
++    try:
++        chain_ids = {r[0] for r in db.execute("SELECT id FROM snapshots WHERE source_key IN (?,?,?,?,?)", (K('A1'), K('A1Y'), K('A1X'), 'receipt-A1Y', 'receipt-A1X'))}
++    finally:
++        db.close()
++    good &= check('(e) after release and relock, unrelated intake adds no link, move or chain binding', end['links'] == mid['links'] and end['moves'] == mid['moves'] and chain(end) == chain(mid))
++    return 'OK' if good else 'WEAK'
++
++
++@probe('Y06', 'RD-01', 'finalized packages: November finalized and locked, December finalized with A1Y approved, then the late claim and its target')
++def _():
++    good = True
++    os_ = h.new_os(periods=(NOV, DEC))
++    h.clean_november(os_); run(os_, 'card_preparation')
++    for k in ('A1', 'A2'):
++        review(os_, REV, gov(os_, K(k)), 'approve')
++    f1 = show('finalize November', attempt(os_.finalize_package, FIN, '2026-11', 'card_preparation', 'probe'))
++    os_.lock_period(PADMIN, '2026-11', 'probe lock')
++    os_.intake(PREP2, packet('y-plain', y_plain() + [stmt(y_plain(), DEC, opening='100.00')])); prep(os_)
++    show('A1Y approved in December', review(os_, REV2, gov(os_, K('A1Y'), '2026-12'), 'approve'))
++    f2 = show('finalize December', attempt(os_.finalize_package, FIN, '2026-12', 'card_preparation', 'probe'))
++    good &= check('both packages finalized before the claim', f1[0] == 'ok' and f2[0] == 'ok')
++    before = lifecycle(os_)
++    r = os_.intake(PREP2, packet('y-claim', [sup('A1Y', '2026-12-03', '40.00', 'A1X')]))
++    mid = lifecycle(os_)
++    pfc = lambda L: [(e[2], e[3]) for e in L['events'] if e[4] == 'POST_FINALIZATION_CHANGE']
++    print('    after the claim: changed=%s | package rows %d -> %d | POST_FINALIZATION_CHANGE (period, item): %s' % (r['changed'], len(before['packages']), len(mid['packages']), pfc(mid)))
++    good &= check('the claim is recorded (changed=True, one unresolved event)', r['changed'] is True and len(unresolved_events(os_, K('A1Y'))) == 1)
++    good &= check('no package row is rewritten or added by the claim', mid['packages'] == before['packages'])
++    good &= check('a POST_FINALIZATION_CHANGE event is recorded for December before the target arrives', any(p == '2026-12' for p, _ in pfc(mid)))
++    good &= check('no POST_FINALIZATION_CHANGE event for locked November from the claim', not any(p == '2026-11' for p, _ in pfc(mid)))
++    good &= check('the December approval no longer governs', not approved(os_, K('A1Y'), '2026-12'))
++    os_.intake(PREP2, packet('x', x_rows())); prep(os_)
++    end = lifecycle(os_)
++    print('    after A1X: held=%s | POST_FINALIZATION_CHANGE: %s' % (sorted(held_under(os_)), pfc(end)))
++    good &= check('A1Y and its receipt are held under November', {K('A1Y'), 'receipt-A1Y'} <= held_under(os_) and gov(os_, K('A1Y'), '2026-12') is None)
++    good &= check('A1 still approved and governing in November', approved(os_, K('A1'), '2026-11'))
++    good &= check('no package, snapshot, decision, artifact, event or audit row rewritten', end['packages'][:len(before['packages'])] == before['packages'] and prefix_kept(before, end, ('source_snapshots', 'batch_snapshots', 'decisions', 'artifacts', 'audit', 'events', 'bindings', 'moves', 'links')))
++    good &= check('audit chain verifies', os_.verify_audit(PREP))
++    st = os_.export(PREP)
++    print('    packages in export: %s' % [(p.get('id'), p.get('period_id'), p.get('status')) for p in st.get('packages', [])])
++    return 'OK' if good else 'WEAK'
++
++
++# =======================================================================================
++# Part 2. Neighbouring deliveries that no ticket named
++# =======================================================================================
++
++@probe('E01', 'RD-01', 'the unchanged row that receives the late claim sits in a LOCKED period (A1 itself claims an unknown row)')
++def _():
++    os_ = h.approved_locked_november()
++    before = lifecycle(os_)
++    a0 = gov(os_, K('A1'), '2026-11')
++    r = show('A1 re-sent unchanged with supersedes=A0 (not received)', attempt(os_.intake, PREP2, packet('a1-claim', [sup('A1', '2026-11-03', '40.00', 'A0')])))
++    after = lifecycle(os_)
++    a1 = gov(os_, K('A1'), '2026-11')
++    print('    deltas: %s' % delta(before, after))
++    print('    November A1 before: %s | after: %s' % (brief(a0), brief(a1)))
++    print('    exceptions: %s' % exceptions_of(os_))
++    print('    events: %s' % events(os_))
++    still = approved(os_, K('A1'), '2026-11')
++    print('    A1 still approved and governing in locked November: %s' % still)
++    return 'OK' if still else 'NOTE'
++
++
++@probe('E02', 'RD-01', 'an identity that already has a link declares a second claim on an unknown row, repeatedly')
++def _():
++    os_ = h.approved_locked_november()
++    os_.intake(PREP2, packet('x', x_rows()))
++    os_.intake(PREP2, packet('y', [sup('A1Y', '2026-12-03', '40.00', 'A1X'), rc('A1Y', '2026-12-03', '40.00')])); prep(os_)
++    base = lifecycle(os_)
++    out = []
++    for i in range(3):
++        before = lifecycle(os_)
++        r = attempt(os_.intake, PREP2, packet('y-second-claim-%d' % i, [sup('A1Y', '2026-12-03', '40.00', 'A1W')]))
++        d = delta(before, lifecycle(os_)); out.append((r[1] if r[0] == 'ok' else r, {k: v for k, v in d.items() if v}))
++        print('    repeat %d -> %s ; deltas %s' % (i, out[-1][0], out[-1][1]))
++    prep(os_)
++    a = gov(os_, K('A1Y'), '2026-12')
++    print('    A1Y in December: %s | held: %s | unresolved events for A1Y: %d' % (brief(a), sorted(held_under(os_)), len(unresolved_events(os_, K('A1Y')))))
++    os_.intake(PREP2, packet('w', [tx('A1W', '2026-12-01', '40.00'), rc('A1W', '2026-12-01', '40.00')])); prep(os_)
++    print('    after A1W arrives: links=%s held=%s' % (links(os_), sorted(held_under(os_))))
++    idempotent = all(not o[1].get('source_snapshots') and not o[1].get('events') for o in out[1:])
++    print('    repeats after the first are lifecycle no-ops: %s' % idempotent)
++    safe = K('A1Y') in held_under(os_) and not approved(os_, K('A1Y'), '2026-12')
++    print('    A1Y still held under November: %s' % safe)
++    return 'OK' if idempotent and safe else ('NOTE' if safe else 'WEAK')
++
++
++@probe('E03', 'RD-01', 'the claim arrives in a message ORDERED BEFORE the governing version (provider sequence), delivered late')
++def _():
++    out = {}
++    for variant in ('unknown-target', 'known-target'):
++        os_ = h.approved_locked_november()
++        y = [tx('A1Y', '2026-12-03', '40.00', as_of=5), rc('A1Y', '2026-12-03', '40.00')]
++        os_.intake(PREP2, packet('y-seq5', y + [stmt(y, DEC, opening='100.00')])); prep(os_)
++        if variant == 'known-target':
++            claim = dict(tx('A1Y', '2026-12-03', '40.00', as_of=4), supersedes=K('A1'))
++            r = show('[%s] A1Y sequence 4 (older) delivered late with supersedes=A1' % variant, attempt(os_.intake, PREP2, packet('y-seq4', [claim])))
++        else:
++            claim = dict(tx('A1Y', '2026-12-03', '40.00', as_of=4), supersedes=K('A1X'))
++            r = show('[%s] A1Y sequence 4 (older) delivered late with supersedes=A1X (not received)' % variant, attempt(os_.intake, PREP2, packet('y-seq4', [claim])))
++            os_.intake(PREP2, packet('x', x_rows()))
++        prep(os_)
++        print('    [%s] events: %s' % (variant, [e for e in events(os_) if 'SUPERSESSION' in e[0] or 'APPROVED_SOURCE' in e[0]]))
++        print('    [%s] links: %s | held: %s | A1Y: %s' % (variant, links(os_), sorted(held_under(os_)), brief(gov(os_, K('A1Y'), '2026-12'))))
++        approve_fully(os_, K('A1Y'))
++        out[variant] = twice(os_, K('A1'), K('A1Y'))
++        if out[variant]:
++            show('[%s] finalize December without acknowledgement' % variant, attempt(os_.finalize_package, FIN, '2026-12', 'card_preparation', 'probe'))
++        print('    [%s] approved in both periods: %s' % (variant, out[variant]))
++    return 'WEAK' if any(out.values()) else 'OK'
++
++
++@probe('E04', 'RD-02', 'the claimant is withdrawn by the feed (tombstone) while its claim is unresolved, then re-sent plain; target arrives last')
++def _():
++    out = {}
++    for resend in (True, False):
++        os_ = h.approved_locked_november()
++        y = [sup('A1Y', '2026-12-03', '40.00', 'A1X'), rc('A1Y', '2026-12-03', '40.00')]
++        os_.intake(PREP2, packet('y', y + [stmt(y, DEC, opening='100.00')]))
++        os_.intake(PREP2, packet('y-gone', [dict(tx('A1Y', '2026-12-03', '40.00'), tombstone=True, removal_reason='feed_removed')]))
++        if resend:
++            os_.intake(PREP2, packet('y-back', y_plain()))
++        os_.intake(PREP2, packet('x', x_rows())); prep(os_)
++        print('    [re-sent=%s] links=%s held=%s A1Y=%s' % (resend, links(os_), sorted(held_under(os_)), brief(gov(os_, K('A1Y'), '2026-12'))))
++        approve_fully(os_, K('A1Y'))
++        out[resend] = twice(os_, K('A1'), K('A1Y'))
++        print('    [re-sent=%s] approved in both periods: %s' % (resend, out[resend]))
++    return 'WEAK' if any(out.values()) else 'OK'
++
++
++@probe('E05', 'RD-01', 'the late claim on an unchanged row is declared on the RECEIPT-free path twice with a different target in between (A1X, A1W, A1X)')
++def _():
++    os_ = h.approved_locked_november()
++    os_.intake(PREP2, packet('y-plain', y_plain() + [stmt(y_plain(), DEC, opening='100.00')])); prep(os_)
++    for i, t in enumerate(('A1X', 'A1W', 'A1X')):
++        r = os_.intake(PREP2, packet('claim-%d' % i, [sup('A1Y', '2026-12-03', '40.00', t)]))
++        print('    claim on %s -> changed=%s, unresolved events=%d' % (t, r['changed'], len(unresolved_events(os_, K('A1Y')))))
++    os_.intake(PREP2, packet('w', [tx('A1W', '2026-12-01', '40.00'), rc('A1W', '2026-12-01', '40.00')]))
++    print('    after A1W (the superseded target) arrives: links=%s' % links(os_))
++    os_.intake(PREP2, packet('x', x_rows())); prep(os_)
++    print('    after A1X arrives: links=%s held=%s' % (links(os_), sorted(held_under(os_))))
++    approve_fully(os_, K('A1Y'))
++    both = twice(os_, K('A1'), K('A1Y'))
++    print('    approved in both periods: %s' % both)
++    return 'WEAK' if both or K('A1Y') not in held_under(os_) else 'OK'
++
++
++@probe('E03c', 'RD-01', 'control for E03: the same two messages delivered in provider order (sequence 4 with the claim, then sequence 5)')
++def _():
++    out = {}
++    for variant in ('unknown-target', 'known-target'):
++        os_ = h.approved_locked_november()
++        target = 'A1' if variant == 'known-target' else 'A1X'
++        y4 = [dict(tx('A1Y', '2026-12-03', '40.00', as_of=4), supersedes=K(target)), rc('A1Y', '2026-12-03', '40.00')]
++        os_.intake(PREP2, packet('y-seq4', y4 + [stmt(y4, DEC, opening='100.00')]))
++        os_.intake(PREP2, packet('y-seq5', [tx('A1Y', '2026-12-03', '40.00', as_of=5)]))
++        if variant == 'unknown-target':
++            os_.intake(PREP2, packet('x', x_rows()))
++        prep(os_)
++        print('    [%s] links: %s | held: %s | A1Y: %s' % (variant, links(os_), sorted(held_under(os_)), brief(gov(os_, K('A1Y'), '2026-12'))))
++        approve_fully(os_, K('A1Y'))
++        out[variant] = twice(os_, K('A1'), K('A1Y')) or K('A1Y') not in held_under(os_)
++        print('    [%s] approved in both periods or not held: %s' % (variant, out[variant]))
++    return 'WEAK' if any(out.values()) else 'OK'
++
++
++@probe('E06', 'RD-02', 'an identity already linked to an open December row later declares a claim on an unknown row that turns out to replace locked A1')
++def _():
++    out = {}
++    for order in ('claim-before-target', 'target-before-claim'):
++        os_ = h.approved_locked_november()
++        b9 = [tx('B9', '2026-12-02', '40.00'), rc('B9', '2026-12-02', '40.00')]
++        os_.intake(PREP2, packet('b9', b9))
++        y = [sup('A1Y', '2026-12-03', '40.00', 'B9'), rc('A1Y', '2026-12-03', '40.00')]
++        os_.intake(PREP2, packet('y', y + [stmt(y, DEC, opening='100.00')])); prep(os_)
++        claim = lambda: os_.intake(PREP2, packet('y-claim-x', [sup('A1Y', '2026-12-03', '40.00', 'A1X')]))
++        if order == 'claim-before-target':
++            r = claim(); os_.intake(PREP2, packet('x', x_rows()))
++        else:
++            os_.intake(PREP2, packet('x', x_rows())); r = claim()
++        prep(os_)
++        a = gov(os_, K('A1Y'), '2026-12')
++        print('    [%s] claim intake %s | links=%s | held=%s | A1Y=%s | unresolved events=%d' % (order, r, links(os_), sorted(held_under(os_)), brief(a), len(unresolved_events(os_, K('A1Y')))))
++        approve_fully(os_, K('A1Y'))
++        out[order] = twice(os_, K('A1'), K('A1Y'))
++        if out[order]:
++            show('[%s] finalize December without acknowledgement' % order, attempt(os_.finalize_package, FIN, '2026-12', 'card_preparation', 'probe'))
++        print('    [%s] A1 approved in November and A1Y approved in December: %s' % (order, out[order]))
++    print('    outcome depends on arrival order: %s' % (out['claim-before-target'] != out['target-before-claim']))
++    return 'WEAK' if any(out.values()) else 'OK'
++
++
++def main():
++    wanted = set(sys.argv[2:])
++    results = []
++    for pid, ticket, title, fn in PROBES:
++        if wanted and pid not in wanted:
++            continue
++        print('\n=== %s [%s] %s' % (pid, ticket, title))
++        try:
++            verdict = fn()
++        except Exception:
++            traceback.print_exc(file=sys.stdout); verdict = 'ERROR'
++        print('--- %s: %s' % (pid, verdict)); results.append((pid, ticket, verdict))
++    print('\nSUMMARY')
++    for pid, ticket, verdict in results:
++        print('  %-5s %-8s %s' % (pid, ticket, verdict))
++    tally = {v: sum(1 for r in results if r[2] == v) for v in ('OK', 'NOTE', 'WEAK', 'ERROR')}
++    print('  totals: %s' % tally)
++    h.TMP.cleanup()
++    return 1 if tally['WEAK'] or tally['ERROR'] else 0
++
++
++if __name__ == '__main__':
++    sys.exit(main())
+--- /dev/null
++++ b/scripts/build_feed_contract_adapter.py
+@@ -0,0 +1,39 @@
++"""Adapt only Y05(a), as expressly authorized by CODEX_RE_CORRECTIONS_PROMPT.md."""
++import difflib
++from pathlib import Path
++import sys
++
++ROOT=Path(__file__).resolve().parents[1]
++ORIGINAL=ROOT/'exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py'
++ADAPTED=ROOT/'review/fable_rd_feed_contract_probes.py'
++PART_A='    # (a) most recent target\n'
++PART_B='    # (b) open target: the claimed row is an ordinary December row\n'
++REPLACEMENT='''    # (a) D-026: the first pending claim stays active; a second target is contested.
++    os_ = h.approved_locked_november()
++    os_.intake(PREP2, packet('first', [sup('A1Y', '2026-12-03', '40.00', 'A1X'), rc('A1Y', '2026-12-03', '40.00')]))
++    before = lifecycle(os_)
++    result = os_.intake(PREP2, packet('retarget', [sup('A1Y', '2026-12-03', '40.00', 'A1W')]))
++    after = lifecycle(os_)
++    conflicts = [e for e in os_.export(PREP)['accounting_events'] if e['code'] == 'SOURCE_CLAIM_CONFLICT_RECORDED' and e['item_key'] == K('A1Y')]
++    good &= check('(a) the second target is recorded once and changes the control state', result['changed'] and len(conflicts) == 1)
++    good &= check('(a) the second claim changes no binding, move or link', all(before[t] == after[t] for t in ('bindings', 'moves', 'links')))
++    os_.intake(PREP2, packet('old-target', [tx('A1X', '2026-12-02', '40.00'), rc('A1X', '2026-12-02', '40.00')]))
++    good &= check('(a) the first claim still links when its target arrives', (K('A1X'), K('A1Y')) in links(os_))
++    os_.intake(PREP2, packet('new-target', [sup('A1W', '2026-12-02', '40.00', 'A1'), rc('A1W', '2026-12-02', '40.00')])); prep(os_)
++    y = gov(os_, K('A1Y'), '2026-12')
++    good &= check('(a) the contested target is not applied and the row stays blocked in December', (K('A1W'), K('A1Y')) not in links(os_) and y is not None and 'SOURCE_CLAIM_CONFLICT' in y['blockers'] and not y['eligible'] and K('A1Y') not in held_under(os_))
++'''
++
++def adapted_text():
++    text=ORIGINAL.read_text();a=text.index(PART_A,text.index("@probe('Y05'"));b=text.index(PART_B,a)
++    return text[:a]+REPLACEMENT+text[b:]
++
++if __name__=='__main__':
++    new=adapted_text()
++    if '--check' in sys.argv:
++        assert ADAPTED.read_text()==new,'Y05 adapter differs from its declared part-(a)-only change'
++    else:
++        ADAPTED.write_text(new)
++        patch=''.join(difflib.unified_diff(ORIGINAL.read_text().splitlines(True),new.splitlines(True),fromfile=str(ORIGINAL.relative_to(ROOT)),tofile=str(ADAPTED.relative_to(ROOT))))
++        (ROOT/'docs/corrections_re/Y05-contract.patch').write_text(patch)
++    print('Y05(a) contract adaptation checked; all bytes outside part (a) unchanged.')
+--- /dev/null
++++ b/scripts/build_re_review_bundle.py
+@@ -0,0 +1,145 @@
++"""Create the RE/PRV handoff without overwriting any earlier review envelope."""
++import argparse
++import ast
++import difflib
++import hashlib
++import json
++from pathlib import Path
++import zipfile
++
++ROOT = Path(__file__).resolve().parents[1]
++LABEL = 'FABLE_RE_AND_PRV_CORRECTIONS'
++BASELINE = 'exports/FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip'
++BASELINE_HASH = '0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9'
++OUT = ROOT/'docs/corrections_re'
++BUNDLE = ROOT/'exports'/(LABEL+'_REVIEW_BUNDLE.zip')
++ENVELOPE = {str(p.relative_to(ROOT)) for p in (
++    BUNDLE, BUNDLE.with_suffix('.zip.sha256'), BUNDLE.with_suffix('.REVIEW_MANIFEST.json'),
++    ROOT/'exports'/(LABEL+'_PACKAGE_CHECK.json'),
++    ROOT/'exports'/(LABEL+'_FINAL_VERIFICATION.json'))}
++SELF_ARTIFACTS = {'docs/corrections_re/changed-files.json', 'docs/corrections_re/source-and-tests.patch'}
++
++
++def sha(raw):
++    return hashlib.sha256(raw).hexdigest()
++
++
++def payload_files():
++    files = {}
++    for path in ROOT.rglob('*'):
++        relative = path.relative_to(ROOT)
++        name = relative.as_posix()
++        if any(p in {'.git', '__pycache__', '.venv', '.agents', '.codex'} for p in relative.parts):continue
++        if not path.is_file() or path.name == '.DS_Store' or path.suffix in {'.pyc', '.sqlite3', '.db'} or path.name.endswith(('-wal', '-shm')):continue
++        if relative.parts[0] == 'data' and name != 'data/.gitkeep':continue
++        if name in ENVELOPE or name.startswith('exports/'+LABEL+'_FINAL_VERIFICATION/') or name == 'REVIEW_MANIFEST.json':continue
++        if path.is_symlink():raise ValueError('Unexpected symlink in payload: '+name)
++        files[name] = path.read_bytes()
++    return files
++
++
++def test_methods(raw):
++    tree = ast.parse(raw)
++    return {cls.name+'.'+node.name for cls in ast.walk(tree) if isinstance(cls, ast.ClassDef)
++            for node in cls.body if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name.startswith('test_')}
++
++
++def prepare():
++    assert sha((ROOT/BASELINE).read_bytes()) == BASELINE_HASH
++    initial = json.loads((OUT/'initial-files.json').read_text())
++    current = payload_files()
++    with zipfile.ZipFile(ROOT/BASELINE) as archive:
++        baseline = {n: archive.read(n) for n in archive.namelist() if n != 'REVIEW_MANIFEST.json' and not n.endswith('/')}
++    retained = {}
++    for name, raw in baseline.items():
++        if not name.startswith('tests/') or not name.endswith('.py'):continue
++        assert name in current, 'Missing prior test file: '+name
++        before = test_methods(raw); after = test_methods(current[name])
++        assert before <= after, 'Lost prior methods: '+name
++        # Earlier test files may only gain methods in this pass.
++        if name == 'tests/test_product_requirements.py':
++            assert current[name].startswith(raw), 'Earlier test bytes changed: '+name
++        elif name == 'tests/test_review_corrections_rd.py':
++            def mask_authorized(body):
++                tree=ast.parse(body)
++                nodes=[node for node in ast.walk(tree) if isinstance(node,ast.FunctionDef) and node.name=='test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced']
++                assert len(nodes)==1
++                node=nodes[0];lines=body.splitlines(True)
++                return b''.join(lines[:node.lineno-1])+b'<AUTHORIZED METHOD>\n'+b''.join(lines[node.end_lineno:])
++            assert mask_authorized(raw)==mask_authorized(current[name]), 'Changed bytes outside the sole authorized RD method: '+name
++        else:assert raw == current[name], 'Modified original test file: '+name
++        before_tree=ast.parse(raw);after_tree=ast.parse(current[name])
++        prior_bodies={node.name:ast.dump(node) for node in ast.walk(before_tree) if isinstance(node,ast.FunctionDef)}
++        now_bodies={node.name:ast.dump(node) for node in ast.walk(after_tree) if isinstance(node,ast.FunctionDef)}
++        allowed={'test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced'} if name=='tests/test_review_corrections_rd.py' else set()
++        assert all(n in allowed or now_bodies.get(n)==body for n,body in prior_bodies.items()), 'Changed earlier method body: '+name
++        retained[name] = {'baseline_methods': len(before), 'retained_methods': sorted(before),
++                          'new_methods': sorted(after-before), 'byte_identical': raw == current[name], 'authorized_rewrite': sorted(allowed)}
++    protected = json.loads((OUT/'input-checksums.json').read_text())
++    for name, expected in protected.items():assert name in current and sha(current[name]) == expected, 'Changed immutable input: '+name
++    changes = []; patch = []
++    for name in sorted(set(baseline) | set(current)):
++        if name in SELF_ARTIFACTS:continue
++        old = baseline.get(name); new = current.get(name)
++        if old == new:continue
++        changes.append({'file': name, 'status': 'added' if old is None else 'deleted' if new is None else 'modified',
++                        'baseline_sha256': sha(old) if old is not None else None,
++                        'initial_working_sha256': initial.get(name), 'sha256': sha(new) if new is not None else None,
++                        'pre_existing_difference': initial.get(name) != (sha(old) if old is not None else None),
++                        'changed_in_this_pass': initial.get(name) != (sha(new) if new is not None else None)})
++        if name in ('Makefile','review/fable_rd_feed_contract_probes.py') or name.startswith(('accounting_agent/', 'tests/', 'scripts/')):
++            patch.extend(difflib.unified_diff((old or b'').decode().splitlines(True), (new or b'').decode().splitlines(True),
++                         fromfile='a/'+name if old is not None else '/dev/null', tofile='b/'+name if new is not None else '/dev/null'))
++    inventory = {'baseline': BASELINE, 'baseline_sha256': BASELINE_HASH,
++                 'scope': 'Every deliverable payload file against the RD/PRV correction bundle, including exports/ and START_HERE.md.',
++                 'coverage_rules': [
++                     'All differing payload files are individually listed except the two self-artifacts named below, which are covered by REVIEW_MANIFEST.json.',
++                     'REVIEW_MANIFEST.json hashes every payload file except itself; its own SHA-256 is in the adjacent PACKAGE_CHECK JSON.',
++                     'The final archive and its adjacent checksum, external manifest and PACKAGE_CHECK JSON are the output envelope, excluded from the payload to prevent recursion. The checksum sidecar hashes the archive.',
++                     'Final extracted-archive verification JSON/logs are adjacent output-envelope evidence, excluded from the payload to avoid self-reference; they verify this archive without rebuilding it.',
++                     'Git metadata, caches, virtual environments, .DS_Store and runtime databases/data are excluded; no delivered source/evidence file is excluded by that rule.'
++                 ], 'self_artifacts_covered_by_manifest': sorted(SELF_ARTIFACTS),
++                 'output_envelope': sorted(ENVELOPE), 'original_tests': retained, 'files': changes}
++    (OUT/'source-and-tests.patch').write_text(''.join(patch))
++    (OUT/'changed-files.json').write_text(json.dumps(inventory, indent=2)+'\n')
++    return inventory
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--prepare', action='store_true', help='Refresh only the new inventory/patch before packaging')
++    args = parser.parse_args()
++    if not args.prepare and any((ROOT/n).exists() for n in ENVELOPE):
++        raise SystemExit('Review envelope already exists; never overwrite an earlier archive, sidecar or manifest.')
++    inventory = prepare()
++    if args.prepare:
++        print('Prepared comprehensive inventory:', len(inventory['files']), 'differences; prior methods retained:', sum(r['baseline_methods'] for r in inventory['original_tests'].values()))
++        return
++    files = payload_files()
++    manifest = {'label': LABEL, 'scope': 'Local fictional RE/PRV developer corrections under D-026 and owner clarification D-029; independent acceptance pending; no release or live authority.',
++                'hash_rule': 'Every payload file except this manifest itself. Its hash is anchored in the adjacent package-check JSON.',
++                'files': {n: sha(raw) for n, raw in sorted(files.items())}}
++    manifest_raw = (json.dumps(manifest, indent=2)+'\n').encode()
++    with zipfile.ZipFile(BUNDLE, 'x', zipfile.ZIP_DEFLATED) as archive:
++        for name, raw in sorted(files.items()):archive.writestr(name, raw)
++        archive.writestr('REVIEW_MANIFEST.json', manifest_raw)
++    with zipfile.ZipFile(BUNDLE) as archive:
++        assert archive.testzip() is None
++        assert len(archive.namelist()) == len(set(archive.namelist()))
++        for name, expected in manifest['files'].items():assert sha(archive.read(name)) == expected
++    bundle_hash = sha(BUNDLE.read_bytes())
++    BUNDLE.with_suffix('.zip.sha256').write_text(bundle_hash+'  '+BUNDLE.name+'\n')
++    BUNDLE.with_suffix('.REVIEW_MANIFEST.json').write_bytes(manifest_raw)
++    check = {'bundle': BUNDLE.name, 'bundle_sha256': bundle_hash, 'manifest_sha256': sha(manifest_raw),
++             'payload_files': len(files), 'all_payload_hashes_and_crc_verified': True,
++             'protected_inputs_verified': len(json.loads((OUT/'input-checksums.json').read_text())),
++             'baseline_test_methods_retained': sum(r['baseline_methods'] for r in inventory['original_tests'].values()),
++             'contract_completion': 'DEVELOPER_VALIDATED_INDEPENDENT_REVIEW_PENDING',
++             'owner_clarification': 'D-029: preserve frozen approval; block incoming version until authorized reopen',
++             'independent_acceptance': 'PENDING', 'human_G0': 'NOT_GRANTED', 'batch3': 'CLOSED'}
++    (ROOT/'exports'/(LABEL+'_PACKAGE_CHECK.json')).write_text(json.dumps(check, indent=2)+'\n')
++    print(json.dumps(check, indent=2))
++
++
++if __name__ == '__main__':
++    main()
+--- a/scripts/check_product_requirements.py
++++ b/scripts/check_product_requirements.py
+@@ -19,6 +19,8 @@
+ REFERENCE=re.compile(r'AAOS-[A-Z]+-\d{2}')
+ CONDITIONAL=re.compile(r'^\s*(?:\(\s*)?(?:if ratified\b|for (?:real|later|hosted|live)\b|before G[12]\b|where applicable\b|when authorized\b)',re.I)
+ REVIEW_INPUT_HASHES={
++    'exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json':'b4c07743d54b1a69c86a728c432e8291269f1ba17ece6195ea780bfa5851806c',
++    'exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md':'e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0',
+     'exports/FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_CORRECTIONS.json':'04fe3acc4cbd2e6bae79b5435391652b96a7c71a8dcd4b1aedd38076f17a0fd8',
+     'exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_RESULTS.json':'f5f4ea014b692253ceb7c2b7cc9a43830d81301436c0beae055dc30206e89f76',
+     'exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md':'528c94e49a951e7a1fca1869e2f3b57d13584a3157682772189344e8ee57fd9c',
+@@ -86,7 +88,7 @@
+ 
+ 
+ def reviewer_verdicts(root):
+-    """Read the two pinned reviewer authorities in chronological order."""
++    """Read the three pinned reviewer authorities in chronological order."""
+     for name,expected in REVIEW_INPUT_HASHES.items():
+         path=root/name
+         require(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest()==expected,'Protected reviewer input hash differs: '+name)
+@@ -108,6 +110,9 @@
+         add(dict(row,state=state),'exports/FABLE_RB_ACCEPTANCE/FABLE_RB_ACCEPTANCE_REPORT.md',earlier['bundle_sha256'],conclusions['scope_of_every_conclusion'])
+     for row in later['register_verdicts']:
+         add(row,row['report_path'],row['bundle_sha256'],later['scope_of_every_conclusion'])
++    newest=json.loads((root/'exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json').read_text())
++    for row in newest['register_verdicts']:
++        add(row,row['report_path'],row['bundle_sha256'],newest['scope_of_every_conclusion'])
+     return latest,history
+ 
+ 
+@@ -115,6 +120,7 @@
+     authoritative,history=reviewer_verdicts(root)
+     rows=json.loads((root/'docs/INDEPENDENT_VERIFICATION_RESULTS.json').read_text())['results'];result={}
+     require(len(rows)==len(authoritative) and {row['id'] for row in rows}==set(authoritative),'Independent results must name every reviewer verdict and no other record')
++    require([row['id'] for row in rows]==list(authoritative),'Independent reviewer verdict row order differs from the preserved seven-row order')
+     for row in rows:
+         identifier=row['id']
+         require(identifier in records and identifier not in result,'Unknown/duplicate independent result: '+identifier)
+--- /dev/null
++++ b/scripts/verify_rd_feed_review.py
+@@ -0,0 +1,44 @@
++"""Supplied RE probe/order gate; the whole-contract boundary is reported separately."""
++import itertools
++import json
++from pathlib import Path
++import re
++import subprocess
++import sys
++import tempfile
++
++ROOT=Path(__file__).resolve().parents[1]
++IDS=('Y01','Y02','Y03','Y04','Y06','E01','E02','E03','E03c','E04','E05','E06')
++FAMILIES=(('X','Yp','Yc','Yr','Z'),('X','Yp','Yc','Z','V'),('X','B','Yb','Yc'),('X','Y5','Y4c','Z'),('X','Yc','Yt','Yp'),('X','Yc','Yt','Z'))
++
++def validate_probes(code,stdout,ids=IDS):
++    summary=stdout.split('\nSUMMARY\n')
++    rows=re.findall(r'(?m)^\s*(\S+)\s+\S+\s+(OK|WEAK|ERROR|NOTE)\s*$',summary[-1])
++    if code or len(summary)!=2 or len(rows)!=len(ids) or dict(rows)!={pid:'OK' for pid in ids}:raise ValueError('RE gate requires exactly the authorized probe IDs, all OK, exit 0')
++
++def validate_orders(code,stdout,data):
++    wanted={('+'.join(f),order) for f in FAMILIES for order in itertools.permutations(f)}
++    rows=data.get('results',[])
++    actual={(r['family'],tuple(r['order'])) for r in rows}
++    if (code or re.findall(r'(?m)^SUMMARY runs=(\d+) double=(\d+) finalized_silently=(\d+)\s*$',stdout)!=[('336','0','0')]
++        or data.get('runs')!=336 or data.get('double')!=0 or len(rows)!=336 or actual!=wanted
++        or any(r['double'] or (r['november_A1_approved'] and r['december_approved']) for r in rows)):
++        raise ValueError('RE gate requires every exact 336 order, all six families, zero double approval, exit 0')
++
++def run(args):
++    r=subprocess.run([sys.executable]+args,cwd=ROOT,capture_output=True,text=True)
++    print(r.stdout,end='',flush=True);print(r.stderr,end='',file=sys.stderr,flush=True)
++    return r
++
++def main():
++    from build_feed_contract_adapter import ADAPTED,adapted_text
++    assert ADAPTED.read_text()==adapted_text(),'Only Y05(a) may differ from the independent script'
++    r=run(['exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py',str(ROOT)]+list(IDS));validate_probes(r.returncode,r.stdout)
++    r=run(['review/fable_rd_feed_contract_probes.py',str(ROOT),'Y05']);validate_probes(r.returncode,r.stdout,('Y05',))
++    with tempfile.TemporaryDirectory(prefix='aaos-re-orders-') as tmp:
++        path=Path(tmp)/'orders.json'
++        r=run(['exports/FABLE_RD_ACCEPTANCE/fable_rd_order_search.py',str(ROOT),'--json',str(path)])
++        validate_orders(r.returncode,r.stdout,json.loads(path.read_text()))
++    print('PASS: supplied RE probe/336-order gate; whole D-026 compliance and independent RE acceptance are not established.')
++
++if __name__=='__main__':main()
+--- /dev/null
++++ b/scripts/verify_re_bundle.py
+@@ -0,0 +1,88 @@
++"""Verify the finalized RE archive in clean copies; write adjacent evidence once."""
++import datetime
++import hashlib
++import json
++import os
++from pathlib import Path
++import platform
++import shutil
++import sqlite3
++import subprocess
++import sys
++import tempfile
++import time
++import zipfile
++
++ROOT=Path(__file__).resolve().parents[1]
++LABEL='FABLE_RE_AND_PRV_CORRECTIONS'
++BUNDLE=ROOT/'exports'/(LABEL+'_REVIEW_BUNDLE.zip')
++OUT=ROOT/'exports'/(LABEL+'_FINAL_VERIFICATION')
++RESULT=ROOT/'exports'/(LABEL+'_FINAL_VERIFICATION.json')
++
++
++def sha(raw):return hashlib.sha256(raw).hexdigest()
++
++
++def main():
++    if OUT.exists() or RESULT.exists():raise SystemExit('Final verification evidence already exists; never overwrite it.')
++    OUT.mkdir()
++    bundle_hash=sha(BUNDLE.read_bytes())
++    package=json.loads((ROOT/'exports'/(LABEL+'_PACKAGE_CHECK.json')).read_text())
++    assert BUNDLE.with_suffix('.zip.sha256').read_text().split()[0]==bundle_hash==package['bundle_sha256']
++    with zipfile.ZipFile(BUNDLE) as archive:
++        assert archive.testzip() is None
++        names=archive.namelist();assert len(names)==len(set(names))
++        assert all(not Path(n).is_absolute() and '..' not in Path(n).parts for n in names)
++        manifest_raw=archive.read('REVIEW_MANIFEST.json');manifest=json.loads(manifest_raw)
++        assert sha(manifest_raw)==package['manifest_sha256']
++        assert set(names)==set(manifest['files'])|{'REVIEW_MANIFEST.json'}
++        assert all(sha(archive.read(n))==h for n,h in manifest['files'].items())
++        with tempfile.TemporaryDirectory(prefix='aaos-re-final-') as tmp:
++            copy=Path(tmp)/'project';archive.extractall(copy)
++            protected=json.loads((copy/'docs/corrections_re/input-checksums.json').read_text())
++            assert all(sha((copy/n).read_bytes())==h==sha((ROOT/n).read_bytes()) for n,h in protected.items())
++            commands=[]
++            env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
++            for label,command in (
++                ('make-check',['make','check']),
++                ('rb-register-faults',[sys.executable,'exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py','.']),
++                ('rc-register-faults',[sys.executable,'exports/FABLE_RC_ACCEPTANCE/evidence/scripts/fable_rc_register_faults.py',str(copy)]),
++                ('gate-faults',[sys.executable,'-m','unittest',
++                    'tests.test_re_review_gate.REReviewGate.test_rejects_nonzero_missing_duplicate_unknown_changed_or_extra_verdicts',
++                    'tests.test_re_review_gate.REReviewGate.test_only_Y05_part_a_is_adapted',
++                    'tests.test_re_review_gate.REReviewGate.test_all_protected_inputs_unchanged_and_contract_exact','-v']),
++            ):
++                tick=time.monotonic();start=datetime.datetime.now(datetime.timezone.utc).isoformat()
++                with (OUT/(label+'.stdout.txt')).open('x') as stdout,(OUT/(label+'.stderr.txt')).open('x') as stderr:
++                    run=subprocess.run(command,cwd=copy,stdout=stdout,stderr=stderr,env=env)
++                row={'command':command,'cwd':str(copy),'started_utc':start,'elapsed_seconds':round(time.monotonic()-tick,3),'exit_code':run.returncode}
++                (OUT/(label+'.json')).write_text(json.dumps(row,indent=2)+'\n');commands.append(row)
++                assert run.returncode==0,row
++                text=(OUT/(label+'.stdout.txt')).read_text()
++                if label=='rb-register-faults':assert 'cases 37 | agree 37 | gaps 0' in text and 'GAP' not in text
++                if label=='rc-register-faults':
++                    assert 'cases 44 | agree 44 | gaps 0' in text and 'make check gaps 0' in text and 'GAP' not in text
++                    for case in ('G16','G17','G18','G44'):
++                        line=next(line for line in text.splitlines() if line.startswith(case+' '))
++                        assert 'got=REJECTED' in line,line
++                print(label,run.returncode,flush=True)
++            changed=[n for n,h in manifest['files'].items() if sha((copy/n).read_bytes())!=h]
++            extra=[p.relative_to(copy).as_posix() for p in copy.rglob('*') if p.is_file() and p.relative_to(copy).as_posix() not in set(names)]
++            assert not changed and not extra,(changed,extra)
++    assert bundle_hash==sha(BUNDLE.read_bytes())
++    before=(ROOT/'docs/corrections_re/git-history-before.txt').read_text()
++    now=subprocess.check_output(['git','log','--format=fuller'],cwd=ROOT,text=True)
++    assert before==now and subprocess.check_output(['git','rev-list','--count','HEAD'],cwd=ROOT,text=True).strip()=='8'
++    assert subprocess.check_output(['git','branch','--show-current'],cwd=ROOT,text=True).strip()=='review/fable-rc-acceptance'
++    result={'bundle':BUNDLE.name,'bundle_sha256':bundle_hash,'manifest_sha256':sha(manifest_raw),'payload_files':len(manifest['files']),
++            'crc_and_every_payload_hash_verified':True,'protected_inputs_verified_in_working_and_bundle':len(protected),
++            'extracted_payload_changes_after_commands':changed,'extra_files_after_commands':extra,'eight_commits_unchanged':True,
++            'python':sys.version,'sqlite':sqlite3.sqlite_version,'platform':platform.platform(),'commands':commands,
++            'raw_evidence_sha256':{p.name:sha(p.read_bytes()) for p in sorted(OUT.iterdir()) if p.is_file()},
++            'contract_completion':'DEVELOPER_VALIDATED_INDEPENDENT_REVIEW_PENDING','owner_clarification':'D-029',
++            'independent_acceptance':'PENDING','human_G0':'NOT_GRANTED','batch3':'CLOSED'}
++    with RESULT.open('x') as stream:stream.write(json.dumps(result,indent=2)+'\n')
++    print(json.dumps({k:v for k,v in result.items() if k not in ('commands','raw_evidence_sha256')},indent=2))
++
++
++if __name__=='__main__':main()
+--- /dev/null
++++ b/scripts/verify_re_patch.py
+@@ -0,0 +1,24 @@
++"""Apply the RE source/test patch to a disposable immutable RD checkpoint."""
++import hashlib
++import json
++from pathlib import Path
++import subprocess
++import tempfile
++import zipfile
++from build_re_review_bundle import ROOT,BASELINE,prepare,payload_files
++
++def main():
++    inventory=prepare();payload=payload_files()
++    patch=ROOT/'docs/corrections_re/source-and-tests.patch'
++    names=[r['file'] for r in inventory['files'] if r['file'] in ('Makefile','review/fable_rd_feed_contract_probes.py') or r['file'].startswith(('accounting_agent/','tests/','scripts/'))]
++    with tempfile.TemporaryDirectory(prefix='aaos-re-patch-') as tmp:
++        work=Path(tmp)
++        with zipfile.ZipFile(ROOT/BASELINE) as z:z.extractall(work)
++        for options in (['--dry-run'],[]):
++            run=subprocess.run(['patch','-p1','--batch']+options+['-i',str(patch)],cwd=work,capture_output=True,text=True)
++            print(run.stdout,end='');print(run.stderr,end='')
++            assert run.returncode==0,run.returncode
++        assert all((work/n).read_bytes()==payload[n] if n in payload else not (work/n).exists() for n in names)
++    print(json.dumps({'patch_sha256':hashlib.sha256(patch.read_bytes()).hexdigest(),'dry_run_exit':0,'apply_exit':0,'all_changed_code_test_gate_adapter_files_reproduced_exactly':True,'count':len(names),'files':names},indent=2))
++
++if __name__=='__main__':main()
+--- /dev/null
++++ b/scripts/verify_re_preservation.py
+@@ -0,0 +1,52 @@
++"""Read-only checks of the RE pass's preserved checkpoint and authorized test edit."""
++import ast
++import hashlib
++import json
++from pathlib import Path
++import subprocess
++import zipfile
++from build_re_review_bundle import BASELINE,BASELINE_HASH,test_methods
++from check_product_requirements import parse_register
++ROOT=Path(__file__).resolve().parents[1]
++
++def sha(raw):return hashlib.sha256(raw).hexdigest()
++
++def main():
++    assert sha((ROOT/BASELINE).read_bytes())==BASELINE_HASH
++    protected=json.loads((ROOT/'docs/corrections_re/input-checksums.json').read_text())
++    assert all(sha((ROOT/n).read_bytes())==h for n,h in protected.items())
++    with zipfile.ZipFile(ROOT/BASELINE) as z:
++        before=parse_register(z.read('docs/PRODUCT_REQUIREMENTS.md').decode());after=parse_register((ROOT/'docs/PRODUCT_REQUIREMENTS.md').read_text())
++        assert list(before)==list(after) and len(after)==88
++        assert all(before[k][f]==after[k][f] for k in before for f in ('Product decision','Implementation state'))
++        changed={k for k in before if before[k]!=after[k]}
++        assert changed=={'AAOS-GOV-02','AAOS-GOV-03','AAOS-BNK-03','AAOS-CTL-04'},changed
++        assert all(before[k]==after[k] for k in before if before[k]['Implementation state']=='Independently verified' or k in ('AAOS-BB-01','AAOS-BB-02'))
++        proposed=('AAOS-ONB-01','AAOS-ONB-02','AAOS-INT-07','AAOS-GL-06','AAOS-BNK-07','AAOS-RPT-03')
++        assert all(before[k]==after[k] and after[k]['Product decision']=='Proposed' for k in proposed)
++        assert all((ROOT/n).read_bytes()==z.read(n) for n in ('accounting_agent/storage.py','tests/schema_v1.sql'))
++        assert (ROOT/'DECISIONS.md').read_bytes().startswith(z.read('DECISIONS.md'))
++        baseline_methods=0;current_methods=0
++        for n in z.namelist():
++            if not n.startswith('tests/') or not n.endswith('.py'):continue
++            old=z.read(n);new=(ROOT/n).read_bytes();baseline_methods+=len(test_methods(old))
++            assert test_methods(old)<=test_methods(new)
++            if n=='tests/test_product_requirements.py':assert new.startswith(old)
++            elif n=='tests/test_review_corrections_rd.py':
++                def masked(raw):
++                    tree=ast.parse(raw)
++                    nodes=[node for node in ast.walk(tree) if isinstance(node,ast.FunctionDef) and node.name=='test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced']
++                    assert len(nodes)==1
++                    node=nodes[0];lines=raw.splitlines(True)
++                    return b''.join(lines[:node.lineno-1])+b'<AUTHORIZED METHOD>\n'+b''.join(lines[node.end_lineno:])
++                assert masked(old)==masked(new)
++            else:assert old==new,n
++        current_methods=sum(len(test_methods(p.read_bytes())) for p in (ROOT/'tests').glob('*.py'))
++        assert baseline_methods==205
++    history=subprocess.check_output(['git','log','--format=fuller'],cwd=ROOT)
++    assert history==(ROOT/'docs/corrections_re/git-history-before.txt').read_bytes()
++    assert subprocess.check_output(['git','rev-list','--count','HEAD'],cwd=ROOT,text=True).strip()=='8'
++    assert subprocess.check_output(['git','branch','--show-current'],cwd=ROOT,text=True).strip()=='review/fable-rc-acceptance'
++    print(json.dumps({'protected_inputs_unchanged':len(protected),'all_88_ids_and_order_retained':True,'product_decisions_changed':0,'implementation_states_changed':0,'changed_register_records':sorted(changed),'owner_confirmed_BB01_BB02_all_fields_identical':True,'all_four_verified_records_identical':True,'six_named_unratified_records_still_proposed_and_identical':True,'schema_files_unchanged':True,'prior_decision_log_bytes_are_prefix':True,'baseline_methods_retained':baseline_methods,'current_test_methods':current_methods,'only_authorized_earlier_method_rewritten':True,'branch_and_eight_commits_unchanged':True,'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()},indent=2))
++
++if __name__=='__main__':main()
+--- /dev/null
++++ b/tests/test_feed_contract.py
+@@ -0,0 +1,219 @@
++"""Owner D-026 contract: fictional feed deliveries, authority and append-only decisions."""
++import importlib.util
++import json
++from pathlib import Path
++import sys
++import unittest
++from unittest.mock import patch
++
++ROOT=Path(__file__).resolve().parents[1]
++CONFLICT='SOURCE_CLAIM_CONFLICT'
++CHOICE='select_supersession_target'
++
++class FeedContract(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls):
++        path=ROOT/'exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py'
++        spec=importlib.util.spec_from_file_location('feed_contract_fixtures',path);cls.p=importlib.util.module_from_spec(spec)
++        with patch.object(sys,'argv',[str(path),str(ROOT)]):spec.loader.exec_module(cls.p)
++        cls.f=cls.p.h
++
++    @classmethod
++    def tearDownClass(cls):cls.f.TMP.cleanup()
++
++    def send(self,o,name,rows,who=None):return o.intake(who or self.f.PREP2,self.f.packet(name,rows))
++    def row(self,target,amount='40.00',**kw):return dict(self.f.tx('Y','2026-12-03',amount,**kw),supersedes=self.f.CARD+':'+target)
++    def prep(self,o):self.f.run(o,'card_preparation','2026-12',self.f.PREP2)
++    def gov(self,o):return self.f.gov(o,self.f.CARD+':Y','2026-12')
++    def evidence(self,o):
++        with o.store.connect() as db:
++            r=db.execute("SELECT s.id,s.hash FROM source_heads h JOIN snapshots s ON s.id=h.snapshot_id WHERE h.scope=? AND h.source_key='receipt-Y'",(self.f.SCOPE,)).fetchone()
++        return [{'snapshot_id':r['id'],'hash':r['hash']}]
++    def decide(self,o,target,who=None,evidence=None):
++        return o.disposition(who or self.f.DISP,'card_preparation','2026-12',self.f.CARD+':Y',CONFLICT,CHOICE,{'target_key':self.f.CARD+':'+target},self.evidence(o) if evidence is None else evidence,'Fictional independent feed-target decision')
++    def setup_claim(self,first='B',known=True):
++        f=self.f;o=f.approved_locked_november()
++        if known:self.send(o,'target',[f.tx('B','2026-12-02','40.00'),f.rc('B','2026-12-02','40.00')])
++        rows=[self.row(first),f.rc('Y','2026-12-03','40.00')]
++        self.send(o,'first',rows+[f.stmt(rows,f.DEC,opening='100.00')]);self.prep(o)
++        return o
++    def chain_rows(self):return [self.f.sup('X','2026-12-02','40.00','A1'),self.f.rc('X','2026-12-02','40.00')]
++    def retained(self,o):
++        d=self.p.lifecycle(o);return {k:d[k] for k in ('source_snapshots','bindings','moves','links','events','decisions','heads')}
++
++    def test_clause2_known_unknown_older_conflicting_and_approved(self):
++        f=self.f
++        for known in (True,False):
++            for approved in (False,True):
++                for conflict in (False,True):
++                    with self.subTest(known=known,approved=approved,conflict=conflict):
++                        o=f.approved_locked_november();rows=[f.tx('Y','2026-12-03','40.00',as_of=5),f.rc('Y','2026-12-03','40.00')]
++                        self.send(o,'plain',rows+[f.stmt(rows,f.DEC,opening='100.00')]);self.prep(o)
++                        if approved:self.assertEqual(f.review(o,f.REV2,self.gov(o),'approve')[0],'ok')
++                        claim=self.row('A1' if known else 'X',amount='41.00' if conflict else '40.00',as_of=5 if conflict else 4)
++                        self.assertTrue(self.send(o,'late',[claim])['changed'])
++                        self.assertFalse(self.p.approved(o,f.CARD+':Y','2026-12'))
++                        if not known:
++                            self.prep(o);self.assertIn('SOURCE_TRANSITION_UNRESOLVED',self.gov(o)['blockers'])
++                            self.send(o,'x',self.chain_rows())
++                        self.prep(o);self.assertIsNone(self.gov(o));self.assertIn(f.CARD+':Y',self.p.held_under(o))
++                        with o.store.connect() as db:
++                            head=db.execute('SELECT s.payload,m.as_of FROM source_heads h JOIN snapshots s ON s.id=h.snapshot_id JOIN source_metadata m ON m.snapshot_id=s.id WHERE h.source_key=?',(f.CARD+':Y',)).fetchone()
++                        self.assertEqual(json.loads(head['payload'])['amount'],'40.00');self.assertEqual(head['as_of'],'5')
++                        before=self.retained(o)
++                        self.assertFalse(self.send(o,'late-repeat',[claim])['changed']);self.assertEqual(before,self.retained(o))
++
++    def test_clause7_both_targets_orders_pending_linked_third_and_repeats(self):
++        f=self.f
++        for first,second in (('B','X'),('X','B')):
++            for known in (True,False):
++                with self.subTest(first=first,known=known):
++                    o=self.setup_claim(first,known=False)
++                    if known:
++                        self.send(o,'first-target',self.chain_rows() if first=='X' else [f.tx('B','2026-12-02','40.00')]);self.prep(o)
++                    before=self.retained(o)
++                    self.assertTrue(self.send(o,'second',[self.row(second)])['changed'])
++                    after=self.retained(o)
++                    for t in ('bindings','moves','links'):self.assertEqual(before[t],after[t])
++                    self.assertTrue(self.send(o,'third',[self.row('W')])['changed'])
++                    for i,target in enumerate((first,second,'W',second)):
++                        before=self.retained(o);self.assertFalse(self.send(o,'repeat%d'%i,[self.row(target)])['changed']);self.assertEqual(before,self.retained(o))
++                    self.send(o,'second-target',self.chain_rows() if second=='X' else [f.tx('B','2026-12-02','40.00')]);self.prep(o)
++                    if self.gov(o):self.assertIn(CONFLICT,self.gov(o)['blockers'])
++                    self.assertNotIn((f.CARD+':'+second,f.CARD+':Y'),self.p.links(o))
++                    self.assertTrue(o.verify_audit(f.PREP))
++
++    def test_clause7_earlier_approval_stales_and_existing_dispositions_cannot_clear(self):
++        f=self.f;o=self.setup_claim()
++        self.assertEqual(f.dispose(o,f.CARD+':Y','SOURCE_TRANSITION_REQUIRES_REVIEW','settlement_verified',period='2026-12')[0],'ok');self.prep(o)
++        self.assertEqual(f.review(o,f.REV2,self.gov(o),'approve')[0],'ok')
++        self.send(o,'second',[self.row('X')]);self.assertFalse(self.p.approved(o,f.CARD+':Y','2026-12'));self.prep(o)
++        a=self.gov(o);self.assertIn(CONFLICT,a['blockers']);self.assertFalse(a['eligible'])
++        f.dispose(o,f.CARD+':Y','SOURCE_TRANSITION_REQUIRES_REVIEW','settlement_verified',period='2026-12');self.prep(o)
++        self.assertIn(CONFLICT,self.gov(o)['blockers'])
++        for choice in ('settlement_verified','revised_evidence_accepted'):
++            with self.assertRaises(Exception):o.disposition(f.DISP,'card_preparation','2026-12',f.CARD+':Y',CONFLICT,choice,{},self.evidence(o),'Cannot bypass the conflict')
++        self.assertEqual(f.review(o,f.REV3,self.gov(o),'approve')[0],'refused')
++        with self.assertRaises(Exception):o.finalize_package(f.FIN,'2026-12','card_preparation','No acknowledgement')
++
++    def test_clause2_different_older_claim_is_contested_and_timestamp_order(self):
++        f=self.f;o=self.setup_claim()
++        self.send(o,'sequence-new',[self.row('B',as_of='2026-12-04T12:00:00Z')])
++        self.send(o,'sequence-old',[self.row('X',as_of='2026-12-03T12:00:00Z')]);self.prep(o)
++        self.assertIn(CONFLICT,self.gov(o)['blockers']);self.assertNotIn((f.CARD+':X',f.CARD+':Y'),self.p.links(o))
++
++    def test_clause8_no_provider_release_with_open_target_early_or_last(self):
++        f=self.f
++        for early in (True,False):
++            with self.subTest(early=early):
++                o=self.setup_claim('X',False);self.send(o,'x',self.chain_rows())
++                if early:self.send(o,'open-before',[f.tx('B','2026-12-02','40.00')])
++                before=self.retained(o);self.send(o,'second',[self.row('B')]);mid=self.retained(o)
++                for t in ('bindings','moves','links'):self.assertEqual(before[t],mid[t])
++                if not early:self.send(o,'open-last',[f.tx('B','2026-12-02','40.00')])
++                self.prep(o);self.assertIsNone(self.gov(o));self.assertIn(f.CARD+':Y',self.p.held_under(o))
++                o.reopen_period(f.PADMIN,'2026-11','Authorized reopen');self.prep(o)
++                self.assertIn(CONFLICT,self.gov(o)['blockers'])
++
++    def test_clause9_refuses_missing_grant_suppliers_undeclared_and_bad_support(self):
++        f=self.f;o=self.setup_claim();other=f.human('second-supplier','preparer')
++        self.send(o,'second',[self.row('X')],other)
++        for actor in (f.REV3,f.human(f.PREP2.id,'reviewer'),f.human(other.id,'reviewer')):
++            if actor.id!=f.REV3.id:o.grant_authority(f.ADMIN,actor.id,['disposition'],'Fictional test grant')
++            with self.subTest(actor=actor.id),self.assertRaises(Exception):self.decide(o,'B',actor)
++        for target,refs in (('UNDECLARED',None),('B',[]),('B',[{'snapshot_id':999999,'hash':'ab'*32}])):
++            with self.subTest(target=target,refs=refs),self.assertRaises(Exception):self.decide(o,target,evidence=refs)
++
++    def test_clause9_first_target_stands_clears_only_conflict_and_preserves_history(self):
++        f=self.f;o=self.setup_claim();self.send(o,'second',[self.row('X')]);self.prep(o)
++        before=self.p.lifecycle(o);self.decide(o,'B');after=self.p.lifecycle(o)
++        for table in ('bindings','moves','links'):self.assertEqual(before[table],after[table])
++        self.assertTrue(self.p.prefix_kept(before,after,('source_snapshots','events','decisions','artifacts','packages','audit')))
++        self.prep(o);a=self.gov(o);self.assertNotIn(CONFLICT,a['blockers']);self.assertIn('SOURCE_TRANSITION_REQUIRES_REVIEW',a['blockers']);self.assertNotEqual(a['review_status'],'approve');self.assertTrue(o.verify_audit(f.PREP))
++
++    def test_clause9_second_target_known_or_unknown_has_ordinary_consequences(self):
++        f=self.f
++        for known,locked in ((False,False),(True,False),(True,True)):
++            with self.subTest(known=known,locked=locked):
++                o=self.setup_claim();self.send(o,'second',[self.row('X')])
++                if known:self.send(o,'x',self.chain_rows() if locked else [f.tx('X','2026-12-02','40.00')])
++                self.decide(o,'X');self.prep(o)
++                if locked:self.assertIsNone(self.gov(o));self.assertIn(f.CARD+':Y',self.p.held_under(o))
++                else:
++                    a=self.gov(o);self.assertNotIn(CONFLICT,a['blockers']);self.assertNotEqual(a['review_status'],'approve')
++                    self.assertEqual('SOURCE_TRANSITION_UNRESOLVED' in a['blockers'],not known)
++                self.assertTrue(o.verify_audit(f.PREP))
++
++    def test_clause9_release_needs_lock_and_reopen_does_not_clear_conflict(self):
++        f=self.f;o=self.setup_claim('X',False);self.send(o,'x',self.chain_rows());self.send(o,'b',[f.tx('B','2026-12-02','40.00')]);self.send(o,'second',[self.row('B')])
++        with self.assertRaises(Exception):self.decide(o,'B')
++        o.grant_authority(f.ADMIN,f.DISP.id,['lock'],'Fictional combined release authority')
++        self.decide(o,'B');self.prep(o);self.assertNotIn(f.CARD+':Y',self.p.held_under(o));self.assertIsNotNone(self.gov(o));self.assertNotEqual(self.gov(o)['review_status'],'approve')
++        self.assertTrue(o.verify_audit(f.PREP))
++
++    def test_cycle_self_refusals_remain_atomic_before_contest(self):
++        f=self.f;o=self.setup_claim('X',False);self.send(o,'x',[f.sup('X','2026-12-02','40.00','Y')])
++        before=self.p.lifecycle(o)
++        for target in ('Y','X'):
++            with self.assertRaises(Exception):self.send(o,'invalid-'+target,[self.row(target)])
++            self.assertEqual(before,self.p.lifecycle(o))
++
++    def test_conflict_follows_descendants_and_their_release_requires_lock(self):
++        f=self.f;o=self.setup_claim('X',False)
++        self.send(o,'z',[f.sup('Z','2026-12-04','40.00','Y'),f.rc('Z','2026-12-04','40.00')])
++        self.send(o,'second',[self.row('B')]);self.send(o,'x',self.chain_rows());self.send(o,'b',[f.tx('B','2026-12-02','40.00')])
++        self.prep(o);self.assertIsNone(f.gov(o,f.CARD+':Z','2026-12'))
++        with self.assertRaises(Exception):self.decide(o,'B',evidence=[{'snapshot_id':s['id'],'hash':s['hash']} for s in o.export(f.PREP)['evidence_history'] if s['source_key']=='receipt-Z'])
++        o.reopen_period(f.PADMIN,'2026-11','Authorized reopen');self.prep(o)
++        self.assertIn(CONFLICT,f.gov(o,f.CARD+':Z','2026-12')['blockers'])
++
++    def test_confirmation_held_target_needs_no_lock_and_new_third_claim_reopens(self):
++        f=self.f;o=self.setup_claim('X',False);self.send(o,'x',self.chain_rows());self.send(o,'second',[self.row('B')])
++        before=self.retained(o);self.decide(o,'X');after=self.retained(o)
++        for table in ('bindings','moves','links'):self.assertEqual(before[table],after[table])
++        self.assertNotIn(f.CARD+':Y',o.export(f.PREP)['source_claim_conflicts'])
++        self.send(o,'third',[self.row('W')]);self.assertIn(f.CARD+':Y',o.export(f.PREP)['source_claim_conflicts'])
++        self.prep(o);self.assertIsNone(self.gov(o))
++
++    def test_target_decision_persists_through_revision_and_retains_review_contributor(self):
++        f=self.f;o=self.setup_claim();self.send(o,'second',[self.row('X')]);rid=self.decide(o,'B')
++        self.send(o,'revision',[f.tx('Y','2026-12-03','41.00')]);self.prep(o)
++        a=self.gov(o);self.assertNotIn(CONFLICT,a['blockers'])
++        self.assertIn(rid,a['payload']['data']['disposition_ids'])
++        self.send(o,'third',[self.row('W',amount='41.00')]);self.prep(o)
++        self.assertIn(CONFLICT,self.gov(o)['blockers'])
++        self.assertNotIn(rid,self.gov(o)['payload']['data']['disposition_ids'])
++
++    def test_clause8_plain_date_revision_cannot_release_locked_late_activity(self):
++        f=self.f;o=f.approved_locked_november()
++        self.send(o,'december',[f.tx('Y','2026-12-03','40.00'),f.rc('Y','2026-12-03','40.00')])
++        self.send(o,'late-november',[f.tx('Y','2026-11-20','40.00')])
++        self.assertTrue(any(e['source_key']==f.CARD+':Y' and e['period_id']=='2026-11' for e in o.state(f.PREP)['source_exceptions']))
++        self.send(o,'date-back-to-december',[f.tx('Y','2026-12-03','40.00')]);self.prep(o)
++        self.assertIsNone(self.gov(o));self.assertIn(f.CARD+':Y',self.p.held_under(o))
++        o.reopen_period(f.PADMIN,'2026-11','Fictional authorized release');self.prep(o)
++        self.assertIsNotNone(self.gov(o));self.assertNotEqual(self.gov(o)['review_status'],'approve')
++
++    def test_selected_target_in_locked_late_activity_quarantines_the_claimant(self):
++        f=self.f;o=self.setup_claim()
++        self.send(o,'other-target',[f.tx('L','2026-12-02','40.00')])
++        self.send(o,'late-target-date',[f.tx('L','2026-11-20','40.00')])
++        self.send(o,'second',[self.row('L')]);self.decide(o,'L');self.prep(o)
++        self.assertIsNone(self.gov(o));self.assertIn(f.CARD+':Y',self.p.held_under(o))
++        self.assertTrue(o.verify_audit(f.PREP))
++
++    def test_target_selector_cannot_review_a_descendant_using_their_selection(self):
++        f=self.f;o=f.approved_locked_november();selector=f.human('independent-target-selector','reviewer')
++        o.grant_authority(f.ADMIN,selector.id,['disposition','review'],'Fictional separate target reviewer')
++        z=[f.sup('Z','2026-12-04','40.00','Y'),f.rc('Z','2026-12-04','40.00')]
++        self.send(o,'b',[f.tx('B','2026-12-02','40.00'),f.rc('B','2026-12-02','40.00')])
++        self.send(o,'y',[self.row('B'),f.rc('Y','2026-12-03','40.00'),f.stmt(z,f.DEC,opening='100.00')]);self.send(o,'z',z)
++        self.send(o,'second',[self.row('X')]);self.prep(o)
++        with o.store.connect() as db:
++            doc=db.execute("SELECT s.id,s.hash FROM source_heads h JOIN snapshots s ON s.id=h.snapshot_id WHERE h.source_key='receipt-Z'").fetchone()
++        rid=self.decide(o,'B',selector,[{'snapshot_id':doc['id'],'hash':doc['hash']}]);self.prep(o)
++        self.assertEqual(f.dispose(o,f.CARD+':Z','SOURCE_TRANSITION_REQUIRES_REVIEW','settlement_verified',period='2026-12')[0],'ok');self.prep(o)
++        a=f.gov(o,f.CARD+':Z','2026-12');self.assertTrue(a['eligible'])
++        self.assertIn(rid,a['payload']['data']['disposition_ids'])
++        self.assertEqual(f.review(o,selector,a,'approve')[0],'refused')
++        self.assertEqual(f.review(o,f.REV3,a,'approve')[0],'ok')
+--- a/tests/test_product_requirements.py
++++ b/tests/test_product_requirements.py
+@@ -182,3 +182,31 @@
+         renamed=self.text.replace('## Bird Bowl onboarding and validation','## Cedar Hall onboarding and validation',1)
+         self.rejects(renamed,'client display name')
+         validate_register(self.text.replace('Bird Bowl','Cedar Hall'),ROOT)
++
++    def test_PRV15_result_row_swaps_and_reversal_are_rejected(self):
++        import json
++        with tempfile.TemporaryDirectory() as tmp:
++            root=self.reviewer_fault_copy(tmp);path=root/'docs/INDEPENDENT_VERIFICATION_RESULTS.json';original=json.loads(path.read_text())
++            for rows in ([original['results'][1],original['results'][0]]+original['results'][2:],original['results'][::-1]):
++                path.write_text(json.dumps(dict(original,results=rows)))
++                with self.assertRaisesRegex(ValueError,'row order'):validate_register(self.text,root)
++
++    def test_PRV14_third_authority_is_pinned_and_latest_verdict_controls(self):
++        import hashlib,json
++        from unittest.mock import patch
++        import scripts.check_product_requirements as cpr
++        with tempfile.TemporaryDirectory() as tmp:
++            root=self.reviewer_fault_copy(tmp);name='exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json';path=root/name;original=path.read_bytes()
++            path.write_bytes(original+b'\n')
++            with self.assertRaisesRegex(ValueError,'Protected reviewer input hash differs'):validate_register(self.text,root)
++            data=json.loads(original)
++            for row in data['register_verdicts']:
++                if row['id']=='AAOS-KNO-04':row['state']='Verification failed'
++            changed=json.dumps(data).encode();path.write_bytes(changed)
++            result_path=root/'docs/INDEPENDENT_VERIFICATION_RESULTS.json';results=json.loads(result_path.read_text())
++            for row in results['results']:
++                if row['id']=='AAOS-KNO-04':row['state']='Verification failed'
++            result_path.write_text(json.dumps(results))
++            with patch.dict(cpr.REVIEW_INPUT_HASHES,{name:hashlib.sha256(changed).hexdigest()}):
++                with self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):validate_register(self.text,root)
++                validate_register(self.changed_field('AAOS-KNO-04','Implementation state','Verification failed'),root)
+--- /dev/null
++++ b/tests/test_re_review_gate.py
+@@ -0,0 +1,37 @@
++"""Exact RE gate, authorized adaptation boundaries and immutable inputs."""
++import copy
++import hashlib
++import itertools
++import json
++from pathlib import Path
++import subprocess
++import sys
++import unittest
++from scripts.verify_rd_feed_review import IDS,FAMILIES,validate_probes,validate_orders
++from scripts.build_feed_contract_adapter import ORIGINAL,ADAPTED,PART_A,PART_B,adapted_text
++ROOT=Path(__file__).resolve().parents[1]
++
++class REReviewGate(unittest.TestCase):
++    def test_all_authorized_probes_and_336_orders(self):
++        r=subprocess.run([sys.executable,str(ROOT/'scripts/verify_rd_feed_review.py')],capture_output=True,text=True)
++        self.assertEqual(r.returncode,0,r.stdout+r.stderr)
++    def test_rejects_nonzero_missing_duplicate_unknown_changed_or_extra_verdicts(self):
++        good='\nSUMMARY\n'+''.join('  %s RE OK\n'%pid for pid in IDS)
++        validate_probes(0,good)
++        for code,text in ((1,good),(0,good.replace('  Y01 RE OK\n','')),(0,good+'  Y01 RE OK\n'),(0,good+'  Z99 RE OK\n'),(0,good.replace('E02 RE OK','E02 RE NOTE')),(0,good.replace('E03 RE OK','E03 RE WEAK')),(0,good.replace('Y01','Z99'))):
++            with self.subTest(code=code,text=text),self.assertRaises(ValueError):validate_probes(code,text)
++        data={'runs':336,'double':0,'results':[{'family':'+'.join(f),'order':list(order),'double':False,'november_A1_approved':True,'december_approved':[]} for f in FAMILIES for order in itertools.permutations(f)]}
++        text='SUMMARY runs=336 double=0 finalized_silently=0\n';validate_orders(0,text,data)
++        missing=copy.deepcopy(data);missing['results'].pop()
++        duplicate=copy.deepcopy(data);duplicate['results'][1]=duplicate['results'][0]
++        double=copy.deepcopy(data);double['results'][0]['december_approved']=['A1Y']
++        for code,output,d in ((1,text,data),(0,text,missing),(0,text,duplicate),(0,text,double),(0,text.replace('double=0','double=1'),data)):
++            with self.subTest(code=code),self.assertRaises(ValueError):validate_orders(code,output,d)
++    def test_only_Y05_part_a_is_adapted(self):
++        original=ORIGINAL.read_text();adapted=ADAPTED.read_text();self.assertEqual(adapted,adapted_text())
++        a=original.index(PART_A,original.index("@probe('Y05'"));b=original.index(PART_B,a)
++        self.assertTrue(adapted.startswith(original[:a]));self.assertTrue(adapted.endswith(original[b:]))
++    def test_all_protected_inputs_unchanged_and_contract_exact(self):
++        for n,h in json.loads((ROOT/'docs/corrections_re/input-checksums.json').read_text()).items():self.assertEqual(hashlib.sha256((ROOT/n).read_bytes()).hexdigest(),h,n)
++        contract='**Scope.**'+(ROOT/'CODEX_RE_CORRECTIONS_PROMPT.md').read_text().split('**Scope.**',1)[1].split('\n\nClauses 1,',1)[0]
++        self.assertIn(contract,(ROOT/'DECISIONS.md').read_text())
+--- a/tests/test_review_corrections_rd.py
++++ b/tests/test_review_corrections_rd.py
+@@ -156,6 +156,7 @@
+                     self.assertIsNotNone(o.supersession_link(db, f.SCOPE, head))
+ 
+     def test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced(self):
++        # D-026 supersedes the old method name's latest-target rule.
+         f = self.f
+         o = f.approved_locked_november()
+         o.intake(f.PREP2, f.packet('first', [f.sup('Y', '2026-12-03', '40.00', 'X')]))
+@@ -163,10 +164,15 @@
+         o.intake(f.PREP2, f.packet('old-target-arrives', [f.tx('X', '2026-12-02', '40.00')]))
+         with o.store.connect() as db:
+             head = db.execute('SELECT snapshot_id FROM source_heads WHERE source_key=?', (f.CARD+':Y',)).fetchone()[0]
+-            self.assertIsNone(o.supersession_link(db, f.SCOPE, head))
++            link = o.supersession_link(db, f.SCOPE, head)
++            self.assertIsNotNone(link)
++            self.assertEqual(o.card_claim_state(db, f.SCOPE, f.CARD+':Y')['target_key'], f.CARD+':X')
+         o.intake(f.PREP2, f.packet('new-target-arrives', [f.sup('W', '2026-12-02', '40.00', 'A1')]))
+-        self.prepare(o)
+-        self.held(o, f.CARD+':Y')
++        f.run(o, 'card_preparation', '2026-12', f.PREP2)
++        y = f.gov(o, f.CARD+':Y', '2026-12')
++        self.assertIsNotNone(y)
++        self.assertIn('SOURCE_CLAIM_CONFLICT', y['blockers'])
++        self.assertFalse(y['eligible'])
+         before = self.lifecycle(o)
+         o.intake(f.PREP2, f.packet('unrelated', [f.tx('D1', '2026-12-05', '15.00')]))
+         after = self.lifecycle(o)

@@ -1,0 +1,6 @@
+test_RB02_repointed_receipt_and_statement_replacements_need_independent_acceptance (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.629s
+
+OK

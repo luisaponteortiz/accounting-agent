@@ -1,0 +1,42 @@
+{
+  "bundle": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip",
+  "sha256": "b154db10b8cee32066f089f0f878e7d2d3a3f33ca44e7831318f66faccaf61ea",
+  "bytes": 8701331,
+  "outer_payload_files": 26,
+  "outer_entries_including_manifest": 27,
+  "outer_manifest_and_crc": "PASS",
+  "duplicate_and_unsafe_paths": "NONE",
+  "prompt_file": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/FABLE_PRODUCT_AND_RA_REVIEW_PROMPT.md",
+  "prompt_sha256": "a621c8eca75a67aab0df9a5705ebd056357fee5a4a36b83fee29d4d384a176f1",
+  "saved_prompt_and_archived_prompt_byte_identical": true,
+  "updated_document_copies": 7,
+  "updated_document_copies_byte_identical": "PASS",
+  "original_reference_files": 16,
+  "original_reference_copies_byte_identical": "PASS",
+  "original_ra_bundle": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RA_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "original_ra_bundle_sha256_before": "dec028b06a745ba52ceca448c766893c33e863f98d5728aafd8b6edadb274e4f",
+  "original_ra_bundle_sha256_after": "dec028b06a745ba52ceca448c766893c33e863f98d5728aafd8b6edadb274e4f",
+  "nested_ra_bundle_byte_identical": true,
+  "nested_ra_manifest_files_verified": 324,
+  "nested_frozen_rv_sha256": "247c1cfd31a2128573b5ae29d633c0d9e74bb076a38a5fc3d9844b6748cc1c75",
+  "checkpoint_current_source_difference": {
+    "documentation_only": [
+      "AGENTS.md",
+      "DECISIONS.md",
+      "FABLE_ACCOUNTING_HANDOFF.md",
+      "PROGRESS.md",
+      "README.md",
+      "docs/CONNECTION_READINESS.md"
+    ],
+    "unexpected_source_test_or_evidence_changes": []
+  },
+  "disposable_outer_and_checkpoint_extraction": "PASS",
+  "register_requirement_count": 76,
+  "documentation_checks": "PASS: complete/unique records, resolved acyclic references, 27-ticket crosswalk; make check passed",
+  "runtime_tests_and_accounting_gates": "NOT_RERUN: packaging/documentation only; prior evidence retained without new acceptance claim",
+  "manifest_file": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_MANIFEST.json",
+  "checksum_file": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip.sha256",
+  "authority": "No Batch 3, live connection, posting, payments, sending, paid services or deployment",
+  "preexisting_protected_files_verified": 269,
+  "preexisting_protected_files_changed": []
+}

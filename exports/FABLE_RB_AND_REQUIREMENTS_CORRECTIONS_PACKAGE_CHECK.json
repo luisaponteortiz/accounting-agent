@@ -1,0 +1,23 @@
+{
+  "bundle": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "sha256": "2b47c3f47d5a20461e5a78f67317c1707269d0b4d85998a3ddb795292f26014d",
+  "bytes": 26641311,
+  "manifest_payload_files": 445,
+  "crc_manifest_duplicate_and_safe_path_checks": "PASS",
+  "source_inventory_hashes": "PASS",
+  "protected_input_archive_sidecar_hashes": 103,
+  "protected_inputs_archived_and_working_unchanged": true,
+  "original_test_methods_retained": 154,
+  "current_test_methods_passed": 174,
+  "new_independent_probes": "14 OK",
+  "validation_cases": {
+    "PASS": 29,
+    "FIXED": 10,
+    "DEFERRED-OK": 21
+  },
+  "register_records": 88,
+  "independent_reverification": "PENDING",
+  "Batch3": "CLOSED",
+  "original_frozen_bundle_sha256": "b154db10b8cee32066f089f0f878e7d2d3a3f33ca44e7831318f66faccaf61ea",
+  "checksum_file": "/Users/luis/Documents/ChatGPT/Accounting Agent OS/exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip.sha256"
+}

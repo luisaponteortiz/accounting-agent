@@ -1,0 +1,37 @@
+J01 control: delivered register, results and three pinned authorities                                        want=ACCEPTED got=ACCEPTED ok  
+J02 results: first two rows swapped                                                                          want=REJECTED got=REJECTED ok  ValueError: Independent reviewer verdict row order differs from the preserved seven-row order
+J03 results: last two rows swapped                                                                           want=REJECTED got=REJECTED ok  ValueError: Independent reviewer verdict row order differs from the preserved seven-row order
+J04 results: all seven rows reversed                                                                         want=REJECTED got=REJECTED ok  ValueError: Independent reviewer verdict row order differs from the preserved seven-row order
+J05 results: rotated by one                                                                                  want=REJECTED got=REJECTED ok  ValueError: Independent reviewer verdict row order differs from the preserved seven-row order
+J06 results: sorted by record id                                                                             want=REJECTED got=REJECTED ok  ValueError: Independent reviewer verdict row order differs from the preserved seven-row order
+J07 results: failed records moved in front of verified ones                                                  want=REJECTED got=REJECTED ok  ValueError: Independent reviewer verdict row order differs from the preserved seven-row order
+J08 results: one row dropped                                                                                 want=REJECTED got=REJECTED ok  ValueError: Independent results must name every reviewer verdict and no other record
+J09 results: one row duplicated in place of another                                                          want=REJECTED got=REJECTED ok  ValueError: Independent results must name every reviewer verdict and no other record
+J10 RD results file: BNK-03 flipped to verified, pin unchanged                                               want=REJECTED got=REJECTED ok  ValueError: Protected reviewer input hash differs: exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json
+J11 RD results file: one byte of whitespace appended                                                         want=REJECTED got=REJECTED ok  ValueError: Protected reviewer input hash differs: exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json
+J12 RD report: one byte appended                                                                             want=REJECTED got=REJECTED ok  ValueError: Protected reviewer input hash differs: exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md
+J13 RD results file removed                                                                                  want=REJECTED got=REJECTED ok  ValueError: Protected reviewer input hash differs: exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json
+J14 RD says BNK-03 verified; results keep failed                                                             want=REJECTED got=ACCEPTED GAP 
+J15 RD says BNK-03 verified; results follow; register still Verification failed (lags in the safe direction) want=ACCEPTED got=REJECTED GAP ValueError: Independent results disagree with reviewer verdict: AAOS-BNK-03
+J16 RD says KNO-04 failed; results keep verified                                                             want=REJECTED got=ACCEPTED GAP 
+J17 RD says KNO-04 failed; results follow; register still Independently verified                             want=REJECTED got=REJECTED ok  ValueError: Independent results disagree with reviewer verdict: AAOS-KNO-04
+J18 RD says KNO-04 failed; results and register follow (downgrade by the latest authority)                   want=ACCEPTED got=REJECTED GAP ValueError: Independent results disagree with reviewer verdict: AAOS-KNO-04
+J19 OLDER authority (RC) says BNK-03 verified; RD still failed; results unchanged (older cannot override)    want=ACCEPTED got=ACCEPTED ok  
+J20 OLDER authority (RC) says BNK-03 verified; results follow the older file                                 want=REJECTED got=REJECTED ok  ValueError: Independent results disagree with reviewer verdict: AAOS-BNK-03
+J21 OLDER authority (RC) says KNO-04 failed; RD verified; results unchanged                                  want=ACCEPTED got=ACCEPTED ok  
+J22 RD verdict for GOV-03 deleted: the RC verdict becomes the latest; results still cite RD                  want=REJECTED got=ACCEPTED GAP 
+J23 results: BNK-03 row cites the RC report and bundle (stale authority)                                     want=REJECTED got=REJECTED ok  ValueError: Independent results disagree with reviewer verdict: AAOS-BNK-03
+J24 results: GOV-03 state flipped to verified                                                                want=REJECTED got=REJECTED ok  ValueError: Independent results disagree with reviewer verdict: AAOS-GOV-03
+J25 results: CTL-04 bundle hash replaced by the RE bundle hash (not yet reviewed when delivered)             want=REJECTED got=ACCEPTED GAP 
+J26 register: AAOS-BNK-03 raised to Independently verified                                                   want=REJECTED got=REJECTED ok  ValueError: AAOS-BNK-03: independent Verification failed cannot be promoted by developer evidence
+J27 register: AAOS-BNK-03 raised to Developer-tested                                                         want=REJECTED got=REJECTED ok  ValueError: AAOS-BNK-03: independent Verification failed cannot be promoted by developer evidence
+J28 register: AAOS-BNK-03 raised to Implemented                                                              want=REJECTED got=REJECTED ok  ValueError: AAOS-BNK-03: independent Verification failed cannot be promoted by developer evidence
+J29 register: AAOS-CTL-04 raised to Independently verified                                                   want=REJECTED got=REJECTED ok  ValueError: AAOS-CTL-04: independent Verification failed cannot be promoted by developer evidence
+J30 register: AAOS-CTL-04 raised to Developer-tested                                                         want=REJECTED got=REJECTED ok  ValueError: AAOS-CTL-04: independent Verification failed cannot be promoted by developer evidence
+J31 register: AAOS-CTL-04 raised to Implemented                                                              want=REJECTED got=REJECTED ok  ValueError: AAOS-CTL-04: independent Verification failed cannot be promoted by developer evidence
+J32 register: AAOS-GOV-03 raised to Independently verified                                                   want=REJECTED got=REJECTED ok  ValueError: AAOS-GOV-03: independent Verification failed cannot be promoted by developer evidence
+J33 register: AAOS-GOV-03 raised to Developer-tested                                                         want=REJECTED got=REJECTED ok  ValueError: AAOS-GOV-03: independent Verification failed cannot be promoted by developer evidence
+J34 register: AAOS-GOV-03 raised to Implemented                                                              want=REJECTED got=REJECTED ok  ValueError: AAOS-GOV-03: independent Verification failed cannot be promoted by developer evidence
+J35 register: AAOS-ONB-01 changed from Proposed to Approved (known limit, same as G22; protected by byte comparison) want=ACCEPTED got=ACCEPTED ok  
+cases 35 | agree 29 | gaps 6
+every file restored and every pin intact after the run: True

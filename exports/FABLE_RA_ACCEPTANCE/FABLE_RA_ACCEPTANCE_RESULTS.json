@@ -1,0 +1,1413 @@
+{
+ "title": "Fable independent verification results for RA-01 to RA-08",
+ "authored": "2026-11-15",
+ "notice": "All data fictional. Temporary databases. No source change, connection, model call, posting, payment or deployment.",
+ "bundle": {
+  "outer_sha256": "b154db10b8cee32066f089f0f878e7d2d3a3f33ca44e7831318f66faccaf61ea",
+  "ra_checkpoint_sha256": "dec028b06a745ba52ceca448c766893c33e863f98d5728aafd8b6edadb274e4f",
+  "frozen_rv_sha256": "247c1cfd31a2128573b5ae29d633c0d9e74bb076a38a5fc3d9844b6748cc1c75",
+  "outer_manifest": "26 of 26 files match",
+  "ra_manifest": "324 of 324 files match",
+  "archive_paths": "no duplicate, absolute, parent or symlink entries",
+  "input_checksums": "57 of 57 match (evidence/inventory_checks_output.txt)"
+ },
+ "limits_of_this_verification": [
+  "The 27 independent input files were compared with the hashes the developer recorded; no separately held copy was available in this session to compare against.",
+  "Commands ran on a byte copy of the extracted checkpoint so that the supplied files stayed untouched; the copy was identical to the original after the run apart from Python caches.",
+  "HTTP tests ran with loopback access and passed."
+ ],
+ "versions": [
+  "date: 2026-11-16T04:19:25Z",
+  "Darwin MacBook-Pro-112.local 25.5.0 Darwin Kernel Version 25.5.0: Tue Jun  9 22:26:23 PDT 2026; root:xnu-12377.121.10~1/RELEASE_X86_64 x86_64",
+  "Python 3.9.6",
+  "GNU Make 3.81",
+  "3.51.0 2025-06-12 13:14:41 f0ca7bba1c5e232e5d279fad6338121ab55af0c8c68c84cdfb18ba5114dcaapl (64-bit)",
+  "python sqlite 3.51.0"
+ ],
+ "commands": [
+  {
+   "name": "make-test",
+   "exit": 0,
+   "stdout": "evidence/make-test.stdout.txt",
+   "stderr": "evidence/make-test.stderr.txt"
+  },
+  {
+   "name": "make-check",
+   "exit": 0,
+   "stdout": "evidence/make-check.stdout.txt",
+   "stderr": "evidence/make-check.stderr.txt"
+  },
+  {
+   "name": "make-batch2-gate",
+   "exit": 0,
+   "stdout": "evidence/make-batch2-gate.stdout.txt",
+   "stderr": "evidence/make-batch2-gate.stderr.txt"
+  },
+  {
+   "name": "make-reverification-gate",
+   "exit": 0,
+   "stdout": "evidence/make-reverification-gate.stdout.txt",
+   "stderr": "evidence/make-reverification-gate.stderr.txt"
+  },
+  {
+   "name": "make-acceptance-gate",
+   "exit": 0,
+   "stdout": "evidence/make-acceptance-gate.stdout.txt",
+   "stderr": "evidence/make-acceptance-gate.stderr.txt"
+  },
+  {
+   "name": "original-full-acceptance",
+   "exit": 1,
+   "stdout": "evidence/original-full-acceptance.stdout.txt",
+   "stderr": "evidence/original-full-acceptance.stderr.txt"
+  },
+  {
+   "name": "original-full-reverification",
+   "exit": 1,
+   "stdout": "evidence/original-full-reverification.stdout.txt",
+   "stderr": "evidence/original-full-reverification.stderr.txt"
+  },
+  {
+   "name": "fable_ra_acceptance_probes.py (RA source)",
+   "exit": 1,
+   "stdout": "fable_ra_acceptance_output.txt"
+  },
+  {
+   "name": "fable_ra_acceptance_probes.py R01b R01c R03b R04b R02b R04c (frozen RV baseline)",
+   "exit": 1,
+   "stdout": "evidence/baseline-frozen-rv-comparison.txt"
+  }
+ ],
+ "make_test": {
+  "methods_ok": 154,
+  "ran": "154",
+  "result": "OK",
+  "methods_in_frozen_rv_baseline": 136,
+  "baseline_methods_missing": 0,
+  "new_methods": 18,
+  "expected_failure_or_skip_markers": 0
+ },
+ "acceptance_gate": {
+  "unmodified_originals_20": [
+   {
+    "id": "A04",
+    "ticket": "RV-04",
+    "raw": "OK",
+    "title": "a locked, finalized period is untouched by later intake; a genuinely changed receipt is still quarantined"
+   },
+   {
+    "id": "A01",
+    "ticket": "RV-01",
+    "raw": "OK",
+    "title": "new-key supersession out of a locked period, by envelope or by data, is quarantined until reopen and never double-approved"
+   },
+   {
+    "id": "A02",
+    "ticket": "RV-02",
+    "raw": "OK",
+    "title": "one origin, one owner: the conflict survives revision, re-citation and supersession of the cited source"
+   },
+   {
+    "id": "A06",
+    "ticket": "RV-06",
+    "raw": "OK",
+    "title": "untyped checklist entries are refused; labels do not satisfy reconciliation or tie-out lines"
+   },
+   {
+    "id": "A07",
+    "ticket": "RV-07",
+    "raw": "OK",
+    "title": "dispositions obey activity and account type; valid credit, settlement, transfer, fee and interest paths still work"
+   },
+   {
+    "id": "A08",
+    "ticket": "RV-08/RV-15",
+    "raw": "OK",
+    "title": "distinct purchases needs every candidate receipt, binds the exact candidate set, and lapses when a new candidate arrives"
+   },
+   {
+    "id": "A09",
+    "ticket": "RV-09",
+    "raw": "OK",
+    "title": "excluding a duplicate frees the surviving charge with full lineage; revocation restores both holds and the earlier rejection"
+   },
+   {
+    "id": "A10",
+    "ticket": "RV-10",
+    "raw": "OK",
+    "title": "a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not"
+   },
+   {
+    "id": "A11",
+    "ticket": "RV-11",
+    "raw": "OK",
+    "title": "freshness must be stated and well formed; explicit no-evidence authority is independently approved and audited"
+   },
+   {
+    "id": "A12",
+    "ticket": "RV-12",
+    "raw": "OK",
+    "title": "a revised receipt is disclosed and held; suppliers cannot accept it; acceptance lapses on a further change; referral never clears"
+   },
+   {
+    "id": "A13",
+    "ticket": "RV-13",
+    "raw": "OK",
+    "title": "statement assurance is disclosed; missing line ids need an approved exception; a missing or quarantined prior statement cannot pass"
+   },
+   {
+    "id": "A14",
+    "ticket": "RV-14/RV-15",
+    "raw": "OK",
+    "title": "the rule record shows normalised aliases, collisions, status and effective end; own-row evidence is refused"
+   },
+   {
+    "id": "X01",
+    "ticket": "RV-01",
+    "raw": "OK",
+    "title": "a second supersession step does not release a charge that is still quarantined behind a locked origin"
+   },
+   {
+    "id": "X12k",
+    "ticket": "RV-12",
+    "raw": "OK",
+    "title": "replacing a receipt under a new key is treated like revising it"
+   },
+   {
+    "id": "X12s",
+    "ticket": "RV-12/RV-13",
+    "raw": "OK",
+    "title": "a statement re-supplied to agree with the population is disclosed as revised evidence"
+   },
+   {
+    "id": "X15",
+    "ticket": "RV-15",
+    "raw": "OK",
+    "title": "the supplier of a candidate receipt cited in a distinct-purchases decision cannot review the item it supports"
+   },
+   {
+    "id": "U1",
+    "ticket": "UC-1",
+    "raw": "OK",
+    "title": "a mandate is not suspended merely because new evidence falls after a rule date that was already approved"
+   },
+   {
+    "id": "U4",
+    "ticket": "UC-4",
+    "raw": "NOTE",
+    "title": "when a superseding source is itself removed, the charge it replaced does not vanish unseen"
+   },
+   {
+    "id": "M1",
+    "ticket": "G0",
+    "raw": "OK",
+    "title": "teaching month, referral route: TX-009 keeps its 79.99 receipt and stays held; second client isolated"
+   },
+   {
+    "id": "M2",
+    "ticket": "G0",
+    "raw": "OK",
+    "title": "teaching month, acceptance route: the corrected TX-009 receipt is held, disclosed, accepted by a non-supplier, then reviewed"
+   }
+  ],
+  "reviewed_setup_all_24": [
+   {
+    "id": "A04",
+    "ticket": "RV-04",
+    "raw": "OK",
+    "title": "a locked, finalized period is untouched by later intake; a genuinely changed receipt is still quarantined"
+   },
+   {
+    "id": "A03",
+    "ticket": "RV-03",
+    "raw": "OK",
+    "title": "removed and voided sources leave no governing item; exceptions are superseded; the package records the removal"
+   },
+   {
+    "id": "A01",
+    "ticket": "RV-01",
+    "raw": "OK",
+    "title": "new-key supersession out of a locked period, by envelope or by data, is quarantined until reopen and never double-approved"
+   },
+   {
+    "id": "A02",
+    "ticket": "RV-02",
+    "raw": "OK",
+    "title": "one origin, one owner: the conflict survives revision, re-citation and supersession of the cited source"
+   },
+   {
+    "id": "A05",
+    "ticket": "RV-05",
+    "raw": "OK",
+    "title": "a withdrawn mapping retires only on independent approval, from the effective date; history and reintroduction work"
+   },
+   {
+    "id": "A06",
+    "ticket": "RV-06",
+    "raw": "OK",
+    "title": "untyped checklist entries are refused; labels do not satisfy reconciliation or tie-out lines"
+   },
+   {
+    "id": "A07",
+    "ticket": "RV-07",
+    "raw": "OK",
+    "title": "dispositions obey activity and account type; valid credit, settlement, transfer, fee and interest paths still work"
+   },
+   {
+    "id": "A08",
+    "ticket": "RV-08/RV-15",
+    "raw": "OK",
+    "title": "distinct purchases needs every candidate receipt, binds the exact candidate set, and lapses when a new candidate arrives"
+   },
+   {
+    "id": "A09",
+    "ticket": "RV-09",
+    "raw": "OK",
+    "title": "excluding a duplicate frees the surviving charge with full lineage; revocation restores both holds and the earlier rejection"
+   },
+   {
+    "id": "A10",
+    "ticket": "RV-10",
+    "raw": "OK",
+    "title": "a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not"
+   },
+   {
+    "id": "A11",
+    "ticket": "RV-11",
+    "raw": "OK",
+    "title": "freshness must be stated and well formed; explicit no-evidence authority is independently approved and audited"
+   },
+   {
+    "id": "A12",
+    "ticket": "RV-12",
+    "raw": "OK",
+    "title": "a revised receipt is disclosed and held; suppliers cannot accept it; acceptance lapses on a further change; referral never clears"
+   },
+   {
+    "id": "A13",
+    "ticket": "RV-13",
+    "raw": "OK",
+    "title": "statement assurance is disclosed; missing line ids need an approved exception; a missing or quarantined prior statement cannot pass"
+   },
+   {
+    "id": "A14",
+    "ticket": "RV-14/RV-15",
+    "raw": "OK",
+    "title": "the rule record shows normalised aliases, collisions, status and effective end; own-row evidence is refused"
+   },
+   {
+    "id": "A17",
+    "ticket": "RV-17",
+    "raw": "OK",
+    "title": "a second package names the one it replaces; one package governs; the first stays byte-identical; acknowledgement cannot clear stale work"
+   },
+   {
+    "id": "X01",
+    "ticket": "RV-01",
+    "raw": "OK",
+    "title": "a second supersession step does not release a charge that is still quarantined behind a locked origin"
+   },
+   {
+    "id": "X09",
+    "ticket": "RV-08/RV-09",
+    "raw": "OK",
+    "title": "an exclusion does not outlive the charge it pointed to, and two charges cannot both be excluded unseen"
+   },
+   {
+    "id": "X12k",
+    "ticket": "RV-12",
+    "raw": "OK",
+    "title": "replacing a receipt under a new key is treated like revising it"
+   },
+   {
+    "id": "X12s",
+    "ticket": "RV-12/RV-13",
+    "raw": "OK",
+    "title": "a statement re-supplied to agree with the population is disclosed as revised evidence"
+   },
+   {
+    "id": "X15",
+    "ticket": "RV-15",
+    "raw": "OK",
+    "title": "the supplier of a candidate receipt cited in a distinct-purchases decision cannot review the item it supports"
+   },
+   {
+    "id": "U1",
+    "ticket": "UC-1",
+    "raw": "OK",
+    "title": "a mandate is not suspended merely because new evidence falls after a rule date that was already approved"
+   },
+   {
+    "id": "U4",
+    "ticket": "UC-4",
+    "raw": "NOTE",
+    "title": "when a superseding source is itself removed, the charge it replaced does not vanish unseen"
+   },
+   {
+    "id": "M1",
+    "ticket": "G0",
+    "raw": "OK",
+    "title": "teaching month, referral route: TX-009 keeps its 79.99 receipt and stays held; second client isolated"
+   },
+   {
+    "id": "M2",
+    "ticket": "G0",
+    "raw": "OK",
+    "title": "teaching month, acceptance route: the corrected TX-009 receipt is held, disclosed, accepted by a non-supplier, then reviewed"
+   }
+  ]
+ },
+ "reverification_gate": {
+  "unmodified_originals_27": [
+   {
+    "id": "RN01",
+    "ticket": "C-02",
+    "raw": "OK",
+    "title": "every decision type is refused under lock, and accepted again after an authorised reopen"
+   },
+   {
+    "id": "RN02b",
+    "ticket": "C-01",
+    "raw": "OK",
+    "title": "a locked, approved item cannot be re-entered in another period through supersession under a new key"
+   },
+   {
+    "id": "RN04",
+    "ticket": "C-04",
+    "raw": "OK",
+    "title": "a supplier of any version of an item input stays barred; a supplier of another item evidence does not"
+   },
+   {
+    "id": "RN05",
+    "ticket": "C-04",
+    "raw": "OK",
+    "title": "the author of the chart and policy stays barred after a colleague re-registers the profile"
+   },
+   {
+    "id": "RN05b",
+    "ticket": "C-04/T-09",
+    "raw": "OK",
+    "title": "the author of a vendor mapping stays barred after a colleague re-proposes the rule with a cosmetic change"
+   },
+   {
+    "id": "RN06",
+    "ticket": "C-05",
+    "raw": "OK",
+    "title": "combining marks survive normalisation; unknown and colliding aliases are held; empty aliases refused"
+   },
+   {
+    "id": "RT09a",
+    "ticket": "T-09",
+    "raw": "OK",
+    "title": "a proposed profile is inert; the proposer, an ungranted human and a service cannot approve it"
+   },
+   {
+    "id": "RT09b",
+    "ticket": "T-09",
+    "raw": "OK",
+    "title": "rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive"
+   },
+   {
+    "id": "RT09c",
+    "ticket": "T-09",
+    "raw": "OK",
+    "title": "a vendor removed from the approved profile no longer produces a clean match"
+   },
+   {
+    "id": "RT09d",
+    "ticket": "T-09",
+    "raw": "OK",
+    "title": "normalised alias form is visible to the rule approver; punctuation-only collisions are held"
+   },
+   {
+    "id": "RT11",
+    "ticket": "T-11",
+    "raw": "OK",
+    "title": "client_sample with missing facts yields no eligible item; demo waivers are explicit in artifact and export"
+   },
+   {
+    "id": "RT12b",
+    "ticket": "T-12/T-18",
+    "raw": "OK",
+    "title": "unrelated later intake leaves a locked, finalized period untouched (no new quarantine, no change event)"
+   },
+   {
+    "id": "RT12c",
+    "ticket": "T-12",
+    "raw": "OK",
+    "title": "evidence received before its period opens is adopted; a receipt follows its charge across a month boundary in either arrival order"
+   },
+   {
+    "id": "RT12d",
+    "ticket": "T-12/T-18",
+    "raw": "OK",
+    "title": "a removed or superseded source leaves no open item behind and raises an event when it had been approved"
+   },
+   {
+    "id": "RT10a",
+    "ticket": "T-10",
+    "raw": "OK",
+    "title": "mandates: independent approval, fixed target period, fresh-evidence wait and wake-up, suspension on policy change"
+   },
+   {
+    "id": "RT10b",
+    "ticket": "T-10",
+    "raw": "OK",
+    "title": "a mandate must state what fresh evidence it needs before it can dispatch"
+   },
+   {
+    "id": "RT13",
+    "ticket": "T-13",
+    "raw": "OK",
+    "title": "statement control: identity swap, purchase/payment offset, opening break and foreign rows are caught or disclosed"
+   },
+   {
+    "id": "RT13n",
+    "ticket": "T-13",
+    "raw": "OK",
+    "title": "limits of the statement control when line identities or the prior statement are absent"
+   },
+   {
+    "id": "RT14c",
+    "ticket": "T-14",
+    "raw": "OK",
+    "title": "after one of two charges is excluded as a duplicate, the surviving charge has a truthful path to approval"
+   },
+   {
+    "id": "RT14d",
+    "ticket": "T-14",
+    "raw": "OK",
+    "title": "evidence cited for a disposition must be more than the item's own source row"
+   },
+   {
+    "id": "RT14e",
+    "ticket": "T-14/T-15",
+    "raw": "OK",
+    "title": "a card payment cannot be turned into a credit to an expense account through dispositions"
+   },
+   {
+    "id": "RT14f",
+    "ticket": "T-14",
+    "raw": "OK",
+    "title": "an empty inventory blocks the steps that depend on it"
+   },
+   {
+    "id": "RT15",
+    "ticket": "T-15",
+    "raw": "OK",
+    "title": "one source, one live entry: a journal citing a card item is held on both, and stays held after the source is revised"
+   },
+   {
+    "id": "RT16",
+    "ticket": "T-16",
+    "raw": "OK",
+    "title": "journal controls tested one at a time: wrong-type support, unbound support, duplicates, no net effect, dimensions"
+   },
+   {
+    "id": "RT17",
+    "ticket": "T-17",
+    "raw": "OK",
+    "title": "receipt policy: unset stays explicit, a proposed rule has no effect, both sides of the date and amount boundaries"
+   },
+   {
+    "id": "RT19a",
+    "ticket": "T-19",
+    "raw": "OK",
+    "title": "close readiness: a document label alone does not complete reconciliation or tie-out requirements"
+   },
+   {
+    "id": "RT19b",
+    "ticket": "T-19",
+    "raw": "OK",
+    "title": "close readiness waits for in-flight preparation and does not adopt changed sources"
+   }
+  ],
+  "reviewed_setup_all_35": [
+   {
+    "id": "RN01",
+    "ticket": "C-02",
+    "raw": "OK",
+    "title": "every decision type is refused under lock, and accepted again after an authorised reopen"
+   },
+   {
+    "id": "RN02",
+    "ticket": "C-01",
+    "raw": "OK",
+    "title": "a source re-dated out of a locked period enters no other period until the origin is reopened"
+   },
+   {
+    "id": "RN02b",
+    "ticket": "C-01",
+    "raw": "OK",
+    "title": "a locked, approved item cannot be re-entered in another period through supersession under a new key"
+   },
+   {
+    "id": "RN03",
+    "ticket": "C-03",
+    "raw": "OK",
+    "title": "identical work by another enqueuer or mandate issuer keeps the governing artifact and its rejection"
+   },
+   {
+    "id": "RN04",
+    "ticket": "C-04",
+    "raw": "OK",
+    "title": "a supplier of any version of an item input stays barred; a supplier of another item evidence does not"
+   },
+   {
+    "id": "RN05",
+    "ticket": "C-04",
+    "raw": "OK",
+    "title": "the author of the chart and policy stays barred after a colleague re-registers the profile"
+   },
+   {
+    "id": "RN05b",
+    "ticket": "C-04/T-09",
+    "raw": "OK",
+    "title": "the author of a vendor mapping stays barred after a colleague re-proposes the rule with a cosmetic change"
+   },
+   {
+    "id": "RN06",
+    "ticket": "C-05",
+    "raw": "OK",
+    "title": "combining marks survive normalisation; unknown and colliding aliases are held; empty aliases refused"
+   },
+   {
+    "id": "RN07",
+    "ticket": "C-06",
+    "raw": "OK",
+    "title": "actor kind is mandatory; a service identity cannot use any human authority whatever its name, role or grants"
+   },
+   {
+    "id": "RT09a",
+    "ticket": "T-09",
+    "raw": "OK",
+    "title": "a proposed profile is inert; the proposer, an ungranted human and a service cannot approve it"
+   },
+   {
+    "id": "RT09b",
+    "ticket": "T-09",
+    "raw": "OK",
+    "title": "rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive"
+   },
+   {
+    "id": "RT09c",
+    "ticket": "T-09",
+    "raw": "OK",
+    "title": "a vendor removed from the approved profile no longer produces a clean match"
+   },
+   {
+    "id": "RT09d",
+    "ticket": "T-09",
+    "raw": "OK",
+    "title": "normalised alias form is visible to the rule approver; punctuation-only collisions are held"
+   },
+   {
+    "id": "RT11",
+    "ticket": "T-11",
+    "raw": "OK",
+    "title": "client_sample with missing facts yields no eligible item; demo waivers are explicit in artifact and export"
+   },
+   {
+    "id": "RT12a",
+    "ticket": "T-12",
+    "raw": "OK",
+    "title": "older, conflicting, mixed-order and unordered deliveries never replace an accepted ordered head"
+   },
+   {
+    "id": "RT12b",
+    "ticket": "T-12/T-18",
+    "raw": "OK",
+    "title": "unrelated later intake leaves a locked, finalized period untouched (no new quarantine, no change event)"
+   },
+   {
+    "id": "RT12c",
+    "ticket": "T-12",
+    "raw": "OK",
+    "title": "evidence received before its period opens is adopted; a receipt follows its charge across a month boundary in either arrival order"
+   },
+   {
+    "id": "RT12d",
+    "ticket": "T-12/T-18",
+    "raw": "OK",
+    "title": "a removed or superseded source leaves no open item behind and raises an event when it had been approved"
+   },
+   {
+    "id": "RT10a",
+    "ticket": "T-10",
+    "raw": "OK",
+    "title": "mandates: independent approval, fixed target period, fresh-evidence wait and wake-up, suspension on policy change"
+   },
+   {
+    "id": "RT10b",
+    "ticket": "T-10",
+    "raw": "OK",
+    "title": "a mandate must state what fresh evidence it needs before it can dispatch"
+   },
+   {
+    "id": "RT13",
+    "ticket": "T-13",
+    "raw": "OK",
+    "title": "statement control: identity swap, purchase/payment offset, opening break and foreign rows are caught or disclosed"
+   },
+   {
+    "id": "RT13n",
+    "ticket": "T-13",
+    "raw": "OK",
+    "title": "limits of the statement control when line identities or the prior statement are absent"
+   },
+   {
+    "id": "RT14a",
+    "ticket": "T-14",
+    "raw": "OK",
+    "title": "dispositions: closed vocabulary, exact split, separate review, revocation, inert rule proposal, referral never clears"
+   },
+   {
+    "id": "RT14b",
+    "ticket": "T-14",
+    "raw": "OK",
+    "title": "a distinct-purchases disposition does not cover a duplicate candidate that arrives afterwards"
+   },
+   {
+    "id": "RT14c",
+    "ticket": "T-14",
+    "raw": "OK",
+    "title": "after one of two charges is excluded as a duplicate, the surviving charge has a truthful path to approval"
+   },
+   {
+    "id": "RT14d",
+    "ticket": "T-14",
+    "raw": "OK",
+    "title": "evidence cited for a disposition must be more than the item's own source row"
+   },
+   {
+    "id": "RT14e",
+    "ticket": "T-14/T-15",
+    "raw": "OK",
+    "title": "a card payment cannot be turned into a credit to an expense account through dispositions"
+   },
+   {
+    "id": "RT14f",
+    "ticket": "T-14",
+    "raw": "OK",
+    "title": "an empty inventory blocks the steps that depend on it"
+   },
+   {
+    "id": "RT15",
+    "ticket": "T-15",
+    "raw": "OK",
+    "title": "one source, one live entry: a journal citing a card item is held on both, and stays held after the source is revised"
+   },
+   {
+    "id": "RT16",
+    "ticket": "T-16",
+    "raw": "OK",
+    "title": "journal controls tested one at a time: wrong-type support, unbound support, duplicates, no net effect, dimensions"
+   },
+   {
+    "id": "RT17",
+    "ticket": "T-17",
+    "raw": "OK",
+    "title": "receipt policy: unset stays explicit, a proposed rule has no effect, both sides of the date and amount boundaries"
+   },
+   {
+    "id": "RT18",
+    "ticket": "T-18",
+    "raw": "OK",
+    "title": "finalization: independent granted human, acknowledgement of carried items, frozen bytes, visible later changes"
+   },
+   {
+    "id": "RT19a",
+    "ticket": "T-19",
+    "raw": "OK",
+    "title": "close readiness: a document label alone does not complete reconciliation or tie-out requirements"
+   },
+   {
+    "id": "RT19b",
+    "ticket": "T-19",
+    "raw": "OK",
+    "title": "close readiness waits for in-flight preparation and does not adopt changed sources"
+   },
+   {
+    "id": "RG0",
+    "ticket": "G0",
+    "raw": "OK",
+    "title": "teaching month through service operations only; lineage, entry impact and second-client isolation recomputed"
+   }
+  ]
+ },
+ "unmodified_full_acceptance_script": [
+  {
+   "id": "A04",
+   "ticket": "RV-04",
+   "raw": "OK",
+   "title": "a locked, finalized period is untouched by later intake; a genuinely changed receipt is still quarantined"
+  },
+  {
+   "id": "A03",
+   "ticket": "RV-03",
+   "raw": "WEAK",
+   "title": "removed and voided sources leave no governing item; exceptions are superseded; the package records the removal"
+  },
+  {
+   "id": "A01",
+   "ticket": "RV-01",
+   "raw": "OK",
+   "title": "new-key supersession out of a locked period, by envelope or by data, is quarantined until reopen and never double-approved"
+  },
+  {
+   "id": "A02",
+   "ticket": "RV-02",
+   "raw": "OK",
+   "title": "one origin, one owner: the conflict survives revision, re-citation and supersession of the cited source"
+  },
+  {
+   "id": "A05",
+   "ticket": "RV-05",
+   "raw": "WEAK",
+   "title": "a withdrawn mapping retires only on independent approval, from the effective date; history and reintroduction work"
+  },
+  {
+   "id": "A06",
+   "ticket": "RV-06",
+   "raw": "OK",
+   "title": "untyped checklist entries are refused; labels do not satisfy reconciliation or tie-out lines"
+  },
+  {
+   "id": "A07",
+   "ticket": "RV-07",
+   "raw": "OK",
+   "title": "dispositions obey activity and account type; valid credit, settlement, transfer, fee and interest paths still work"
+  },
+  {
+   "id": "A08",
+   "ticket": "RV-08/RV-15",
+   "raw": "OK",
+   "title": "distinct purchases needs every candidate receipt, binds the exact candidate set, and lapses when a new candidate arrives"
+  },
+  {
+   "id": "A09",
+   "ticket": "RV-09",
+   "raw": "OK",
+   "title": "excluding a duplicate frees the surviving charge with full lineage; revocation restores both holds and the earlier rejection"
+  },
+  {
+   "id": "A10",
+   "ticket": "RV-10",
+   "raw": "OK",
+   "title": "a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not"
+  },
+  {
+   "id": "A11",
+   "ticket": "RV-11",
+   "raw": "OK",
+   "title": "freshness must be stated and well formed; explicit no-evidence authority is independently approved and audited"
+  },
+  {
+   "id": "A12",
+   "ticket": "RV-12",
+   "raw": "OK",
+   "title": "a revised receipt is disclosed and held; suppliers cannot accept it; acceptance lapses on a further change; referral never clears"
+  },
+  {
+   "id": "A13",
+   "ticket": "RV-13",
+   "raw": "OK",
+   "title": "statement assurance is disclosed; missing line ids need an approved exception; a missing or quarantined prior statement cannot pass"
+  },
+  {
+   "id": "A14",
+   "ticket": "RV-14/RV-15",
+   "raw": "OK",
+   "title": "the rule record shows normalised aliases, collisions, status and effective end; own-row evidence is refused"
+  },
+  {
+   "id": "A17",
+   "ticket": "RV-17",
+   "raw": "ERROR",
+   "title": "a second package names the one it replaces; one package governs; the first stays byte-identical; acknowledgement cannot clear stale work"
+  },
+  {
+   "id": "X01",
+   "ticket": "RV-01",
+   "raw": "OK",
+   "title": "a second supersession step does not release a charge that is still quarantined behind a locked origin"
+  },
+  {
+   "id": "X09",
+   "ticket": "RV-08/RV-09",
+   "raw": "WEAK",
+   "title": "an exclusion does not outlive the charge it pointed to, and two charges cannot both be excluded unseen"
+  },
+  {
+   "id": "X12k",
+   "ticket": "RV-12",
+   "raw": "OK",
+   "title": "replacing a receipt under a new key is treated like revising it"
+  },
+  {
+   "id": "X12s",
+   "ticket": "RV-12/RV-13",
+   "raw": "OK",
+   "title": "a statement re-supplied to agree with the population is disclosed as revised evidence"
+  },
+  {
+   "id": "X15",
+   "ticket": "RV-15",
+   "raw": "OK",
+   "title": "the supplier of a candidate receipt cited in a distinct-purchases decision cannot review the item it supports"
+  },
+  {
+   "id": "U1",
+   "ticket": "UC-1",
+   "raw": "OK",
+   "title": "a mandate is not suspended merely because new evidence falls after a rule date that was already approved"
+  },
+  {
+   "id": "U4",
+   "ticket": "UC-4",
+   "raw": "NOTE",
+   "title": "when a superseding source is itself removed, the charge it replaced does not vanish unseen"
+  },
+  {
+   "id": "M1",
+   "ticket": "G0",
+   "raw": "OK",
+   "title": "teaching month, referral route: TX-009 keeps its 79.99 receipt and stays held; second client isolated"
+  },
+  {
+   "id": "M2",
+   "ticket": "G0",
+   "raw": "OK",
+   "title": "teaching month, acceptance route: the corrected TX-009 receipt is held, disclosed, accepted by a non-supplier, then reviewed"
+  }
+ ],
+ "unmodified_full_reverification_script": [
+  {
+   "id": "RN01",
+   "ticket": "C-02",
+   "raw": "OK",
+   "title": "every decision type is refused under lock, and accepted again after an authorised reopen"
+  },
+  {
+   "id": "RN02",
+   "ticket": "C-01",
+   "raw": "ERROR",
+   "title": "a source re-dated out of a locked period enters no other period until the origin is reopened"
+  },
+  {
+   "id": "RN02b",
+   "ticket": "C-01",
+   "raw": "OK",
+   "title": "a locked, approved item cannot be re-entered in another period through supersession under a new key"
+  },
+  {
+   "id": "RN03",
+   "ticket": "C-03",
+   "raw": "ERROR",
+   "title": "identical work by another enqueuer or mandate issuer keeps the governing artifact and its rejection"
+  },
+  {
+   "id": "RN04",
+   "ticket": "C-04",
+   "raw": "OK",
+   "title": "a supplier of any version of an item input stays barred; a supplier of another item evidence does not"
+  },
+  {
+   "id": "RN05",
+   "ticket": "C-04",
+   "raw": "OK",
+   "title": "the author of the chart and policy stays barred after a colleague re-registers the profile"
+  },
+  {
+   "id": "RN05b",
+   "ticket": "C-04/T-09",
+   "raw": "OK",
+   "title": "the author of a vendor mapping stays barred after a colleague re-proposes the rule with a cosmetic change"
+  },
+  {
+   "id": "RN06",
+   "ticket": "C-05",
+   "raw": "OK",
+   "title": "combining marks survive normalisation; unknown and colliding aliases are held; empty aliases refused"
+  },
+  {
+   "id": "RN07",
+   "ticket": "C-06",
+   "raw": "ERROR",
+   "title": "actor kind is mandatory; a service identity cannot use any human authority whatever its name, role or grants"
+  },
+  {
+   "id": "RT09a",
+   "ticket": "T-09",
+   "raw": "OK",
+   "title": "a proposed profile is inert; the proposer, an ungranted human and a service cannot approve it"
+  },
+  {
+   "id": "RT09b",
+   "ticket": "T-09",
+   "raw": "OK",
+   "title": "rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive"
+  },
+  {
+   "id": "RT09c",
+   "ticket": "T-09",
+   "raw": "OK",
+   "title": "a vendor removed from the approved profile no longer produces a clean match"
+  },
+  {
+   "id": "RT09d",
+   "ticket": "T-09",
+   "raw": "OK",
+   "title": "normalised alias form is visible to the rule approver; punctuation-only collisions are held"
+  },
+  {
+   "id": "RT11",
+   "ticket": "T-11",
+   "raw": "OK",
+   "title": "client_sample with missing facts yields no eligible item; demo waivers are explicit in artifact and export"
+  },
+  {
+   "id": "RT12a",
+   "ticket": "T-12",
+   "raw": "WEAK",
+   "title": "older, conflicting, mixed-order and unordered deliveries never replace an accepted ordered head"
+  },
+  {
+   "id": "RT12b",
+   "ticket": "T-12/T-18",
+   "raw": "OK",
+   "title": "unrelated later intake leaves a locked, finalized period untouched (no new quarantine, no change event)"
+  },
+  {
+   "id": "RT12c",
+   "ticket": "T-12",
+   "raw": "OK",
+   "title": "evidence received before its period opens is adopted; a receipt follows its charge across a month boundary in either arrival order"
+  },
+  {
+   "id": "RT12d",
+   "ticket": "T-12/T-18",
+   "raw": "OK",
+   "title": "a removed or superseded source leaves no open item behind and raises an event when it had been approved"
+  },
+  {
+   "id": "RT10a",
+   "ticket": "T-10",
+   "raw": "OK",
+   "title": "mandates: independent approval, fixed target period, fresh-evidence wait and wake-up, suspension on policy change"
+  },
+  {
+   "id": "RT10b",
+   "ticket": "T-10",
+   "raw": "OK",
+   "title": "a mandate must state what fresh evidence it needs before it can dispatch"
+  },
+  {
+   "id": "RT13",
+   "ticket": "T-13",
+   "raw": "OK",
+   "title": "statement control: identity swap, purchase/payment offset, opening break and foreign rows are caught or disclosed"
+  },
+  {
+   "id": "RT13n",
+   "ticket": "T-13",
+   "raw": "OK",
+   "title": "limits of the statement control when line identities or the prior statement are absent"
+  },
+  {
+   "id": "RT14a",
+   "ticket": "T-14",
+   "raw": "WEAK",
+   "title": "dispositions: closed vocabulary, exact split, separate review, revocation, inert rule proposal, referral never clears"
+  },
+  {
+   "id": "RT14b",
+   "ticket": "T-14",
+   "raw": "OK",
+   "title": "a distinct-purchases disposition does not cover a duplicate candidate that arrives afterwards"
+  },
+  {
+   "id": "RT14c",
+   "ticket": "T-14",
+   "raw": "OK",
+   "title": "after one of two charges is excluded as a duplicate, the surviving charge has a truthful path to approval"
+  },
+  {
+   "id": "RT14d",
+   "ticket": "T-14",
+   "raw": "OK",
+   "title": "evidence cited for a disposition must be more than the item's own source row"
+  },
+  {
+   "id": "RT14e",
+   "ticket": "T-14/T-15",
+   "raw": "OK",
+   "title": "a card payment cannot be turned into a credit to an expense account through dispositions"
+  },
+  {
+   "id": "RT14f",
+   "ticket": "T-14",
+   "raw": "OK",
+   "title": "an empty inventory blocks the steps that depend on it"
+  },
+  {
+   "id": "RT15",
+   "ticket": "T-15",
+   "raw": "OK",
+   "title": "one source, one live entry: a journal citing a card item is held on both, and stays held after the source is revised"
+  },
+  {
+   "id": "RT16",
+   "ticket": "T-16",
+   "raw": "OK",
+   "title": "journal controls tested one at a time: wrong-type support, unbound support, duplicates, no net effect, dimensions"
+  },
+  {
+   "id": "RT17",
+   "ticket": "T-17",
+   "raw": "OK",
+   "title": "receipt policy: unset stays explicit, a proposed rule has no effect, both sides of the date and amount boundaries"
+  },
+  {
+   "id": "RT18",
+   "ticket": "T-18",
+   "raw": "WEAK",
+   "title": "finalization: independent granted human, acknowledgement of carried items, frozen bytes, visible later changes"
+  },
+  {
+   "id": "RT19a",
+   "ticket": "T-19",
+   "raw": "OK",
+   "title": "close readiness: a document label alone does not complete reconciliation or tie-out requirements"
+  },
+  {
+   "id": "RT19b",
+   "ticket": "T-19",
+   "raw": "OK",
+   "title": "close readiness waits for in-flight preparation and does not adopt changed sources"
+  },
+  {
+   "id": "RG0",
+   "ticket": "G0",
+   "raw": "WEAK",
+   "title": "teaching month through service operations only; lineage, entry impact and second-client isolation recomputed"
+  }
+ ],
+ "new_independent_probes": [
+  {
+   "id": "R01a",
+   "ticket": "RA-01/RA-06",
+   "raw": "OK",
+   "title": "a four-link chain with mixed receipt order stays quarantined under lock; reopen admits only the last link; whole-evidence disposition takes effect; no double approval; relock and restart are stable"
+  },
+  {
+   "id": "R01b",
+   "ticket": "RA-01",
+   "raw": "WEAK",
+   "title": "a charge already admitted to December that later declares it supersedes an approved charge in locked November is not approvable in both periods"
+  },
+  {
+   "id": "R01c",
+   "ticket": "RA-01",
+   "raw": "WEAK",
+   "title": "a link that arrives before the link it replaces (unresolved), and is later resolved, is not released while the root is locked"
+  },
+  {
+   "id": "R01d",
+   "ticket": "RA-01",
+   "raw": "OK",
+   "title": "two- and three-source supersession cycles are refused and leave nothing behind"
+  },
+  {
+   "id": "R03a",
+   "ticket": "RA-03",
+   "raw": "OK",
+   "title": "same-key and new-key receipt replacement are held and disclosed; both suppliers are refused; a non-supplier accepts; final review is separate; a further change lapses the acceptance"
+  },
+  {
+   "id": "R03b",
+   "ticket": "RA-03",
+   "raw": "WEAK",
+   "title": "replacing a receipt by re-pointing the old key at another transaction id and supplying a new key is still held and disclosed"
+  },
+  {
+   "id": "R04a",
+   "ticket": "RA-04",
+   "raw": "OK",
+   "title": "a statement corrected to tie (same key, or withdrawn and replaced under a new key) is held on every relying item and disclosed on the workpaper; suppliers of any version are refused; acceptance is item-bound, lapses on new evidence and confers no final review"
+  },
+  {
+   "id": "R04b",
+   "ticket": "RA-04",
+   "raw": "WEAK",
+   "title": "a statement replaced by re-pointing the old key at another cycle and supplying a new key for the period is still held and disclosed"
+  },
+  {
+   "id": "R04c",
+   "ticket": "RA-04",
+   "raw": "NOTE",
+   "title": "observation: a prior-period statement revised while its period is still open, so that the next opening balance agrees, is disclosed to the next period"
+  },
+  {
+   "id": "R02a",
+   "ticket": "RA-02",
+   "raw": "OK",
+   "title": "unlinked re-proposals keep the earlier author barred (vendor mapping and receipt policy); cosmetic and non-cosmetic values, other categories and aliases behave as specified; an independent reviewer can approve"
+  },
+  {
+   "id": "R02b",
+   "ticket": "RA-02",
+   "raw": "WEAK",
+   "title": "the earlier author stays barred when the identical mapping is re-proposed for the single item, or under a new rule key"
+  },
+  {
+   "id": "R05",
+   "ticket": "RA-05",
+   "raw": "OK",
+   "title": "a relevant rule approved after the mandate suspends it; an irrelevant close rule and a rule outside the period do not; a held occurrence does not dispatch twice"
+  },
+  {
+   "id": "R07",
+   "ticket": "RA-07",
+   "raw": "OK",
+   "title": "own or unrelated transaction rows and unrelated receipts are not supporting evidence; the item receipt or its account statement is"
+  },
+  {
+   "id": "R08",
+   "ticket": "RA-08",
+   "raw": "OK",
+   "title": "two- and three-charge exclusion cycles are refused before and after re-preparation; one live entry remains; revocation and withdrawal of the survivor restore the excluded charge"
+  }
+ ],
+ "new_probes_on_frozen_rv_baseline": [
+  {
+   "id": "R01b",
+   "ticket": "RA-01",
+   "raw": "OK",
+   "title": "a charge already admitted to December that later declares it supersedes an approved charge in locked November is not approvable in both periods"
+  },
+  {
+   "id": "R01c",
+   "ticket": "RA-01",
+   "raw": "OK",
+   "title": "a link that arrives before the link it replaces (unresolved), and is later resolved, is not released while the root is locked"
+  },
+  {
+   "id": "R03b",
+   "ticket": "RA-03",
+   "raw": "WEAK",
+   "title": "replacing a receipt by re-pointing the old key at another transaction id and supplying a new key is still held and disclosed"
+  },
+  {
+   "id": "R04b",
+   "ticket": "RA-04",
+   "raw": "WEAK",
+   "title": "a statement replaced by re-pointing the old key at another cycle and supplying a new key for the period is still held and disclosed"
+  },
+  {
+   "id": "R04c",
+   "ticket": "RA-04",
+   "raw": "WEAK",
+   "title": "observation: a prior-period statement revised while its period is still open, so that the next opening balance agrees, is disclosed to the next period"
+  },
+  {
+   "id": "R02b",
+   "ticket": "RA-02",
+   "raw": "WEAK",
+   "title": "the earlier author stays barred when the identical mapping is re-proposed for the single item, or under a new rule key"
+  }
+ ],
+ "sixty_cases": {
+  "FV-C01": "PASS",
+  "FV-C02": "PASS",
+  "FV-C03": "PASS",
+  "FV-C04": "PASS",
+  "FV-C05": "PASS",
+  "FV-C06": "PASS",
+  "FV-C07": "PASS",
+  "FV-C08": "PASS",
+  "FV-C09": "PASS",
+  "FV-C10": "PASS",
+  "FV-C11": "PASS",
+  "FV-C12": "PASS",
+  "FV-C13": "PASS",
+  "FV-C14": "PASS",
+  "FV-C15": "FIXED",
+  "FV-C16": "PASS",
+  "FV-C17": "PASS",
+  "FV-C18": "PASS",
+  "FV-C19": "PASS",
+  "FV-J01": "PASS",
+  "FV-J02": "PASS",
+  "FV-J03": "PASS",
+  "FV-J04": "PASS",
+  "FV-J05": "PASS",
+  "FV-J06": "PASS",
+  "FV-J07": "PASS",
+  "FV-J08": "FIXED",
+  "FV-J09": "FIXED",
+  "FV-J10": "FIXED",
+  "FV-CL01": "PASS",
+  "FV-CL02": "FIXED",
+  "FV-R01": "FIXED",
+  "FV-R02": "PASS",
+  "FV-R03": "FIXED",
+  "FV-R04": "FIXED",
+  "FV-RC01": "FIXED",
+  "FV-RC02": "FIXED",
+  "FV-RC03": "PASS",
+  "FV-AP01": "DEFERRED-OK",
+  "FV-AP02": "DEFERRED-OK",
+  "FV-AP03": "DEFERRED-OK",
+  "FV-AP04": "DEFERRED-OK",
+  "FV-AP05": "DEFERRED-OK",
+  "FV-AR01": "DEFERRED-OK",
+  "FV-AR02": "DEFERRED-OK",
+  "FV-AR03": "DEFERRED-OK",
+  "FV-AR04": "DEFERRED-OK",
+  "FV-BK01": "DEFERRED-OK",
+  "FV-BK02": "DEFERRED-OK",
+  "FV-BK03": "DEFERRED-OK",
+  "FV-BK04": "DEFERRED-OK",
+  "FV-BK05": "DEFERRED-OK",
+  "FV-CL03": "DEFERRED-OK",
+  "FV-CL04": "PASS",
+  "FV-GL01": "DEFERRED-OK",
+  "FV-RP01": "DEFERRED-OK",
+  "FV-RP02": "DEFERRED-OK",
+  "FV-RP03": "DEFERRED-OK",
+  "FV-RP04": "DEFERRED-OK",
+  "FV-RP05": "DEFERRED-OK"
+ },
+ "assessed": [
+  {
+   "criterion": "RA-01",
+   "assessed": "NOT_ACCEPTED",
+   "basis": "X01, A01 and R01a OK; R01b and R01c WEAK. RB-01 (P1), a regression against the frozen RV submission for R01b."
+  },
+  {
+   "criterion": "RA-03",
+   "assessed": "ACCEPTED_WITH_REMAINING_ROUTE",
+   "basis": "X12k, A12, R03a OK; R03b WEAK. RB-02 (P2)."
+  },
+  {
+   "criterion": "RA-04",
+   "assessed": "ACCEPTED_WITH_REMAINING_ROUTE",
+   "basis": "X12s, A13, R04a OK; R04b WEAK (RB-02, P2); R04c NOTE (RB-04, P3)."
+  },
+  {
+   "criterion": "RA-02",
+   "assessed": "ACCEPTED",
+   "basis": "A10 and R02a OK. Adjacent routes R02b WEAK recorded as RB-03 (P3), outside the RA-02 assertions."
+  },
+  {
+   "criterion": "RA-06",
+   "assessed": "ACCEPTED",
+   "basis": "R01a: whole-evidence disposition takes effect after reopen; outside reference refused."
+  },
+  {
+   "criterion": "RA-05",
+   "assessed": "ACCEPTED",
+   "basis": "U1, RT10a, RT10b, R05 OK. Period-boundary recurrence not independently run (UC-8)."
+  },
+  {
+   "criterion": "RA-07",
+   "assessed": "ACCEPTED",
+   "basis": "A14 and R07 OK. Journal-support path by inspection and delivered tests only (UC-9)."
+  },
+  {
+   "criterion": "RA-08",
+   "assessed": "ACCEPTED",
+   "basis": "X09 (reviewed setup) and R08 OK."
+  },
+  {
+   "criterion": "C-01 to C-06 retained",
+   "assessed": "RETAINED_EXCEPT_C-01",
+   "basis": "Corrective gate and frozen corrective checkpoint pass. The C-01 objective is breached by RB-01."
+  },
+  {
+   "criterion": "RV-01 to RV-17 retained",
+   "assessed": "RETAINED_EXCEPT_RV-01_RV-12",
+   "basis": "27 unmodified originals OK, all 35 current-setup OK. RV-01 reopened by RB-01; RV-12 route remains (RB-02)."
+  },
+  {
+   "criterion": "Batch 2 (T-09 to T-19) and 60 cases",
+   "assessed": "REPRODUCED",
+   "basis": "29 PASS / 10 FIXED / 21 DEFERRED-OK in my run. DEFERRED-OK is a refusal, not accounting functionality."
+  },
+  {
+   "criterion": "Adaptation A03",
+   "assessed": "ACCEPTED",
+   "basis": "Hold and statement disclosure asserted first; existing granted non-supplier accepts; original returns and assignments identical."
+  },
+  {
+   "criterion": "Adaptation A05",
+   "assessed": "ACCEPTED",
+   "basis": "Acceptance for M3 only; M2 unknown-vendor hold retained."
+  },
+  {
+   "criterion": "Adaptation A17",
+   "assessed": "ACCEPTED",
+   "basis": "Stale-finalization refusal stays before acceptance."
+  },
+  {
+   "criterion": "Adaptation X09",
+   "assessed": "ACCEPTED",
+   "basis": "Acceptance for D2 only; circular-exclusion phase untouched."
+  },
+  {
+   "criterion": "Adaptation older RT18",
+   "assessed": "ACCEPTED",
+   "basis": "Stale-package refusal first; helper asserts hold and disclosure but not that the revision is a statement (minor)."
+  },
+  {
+   "criterion": "Seven earlier adaptations and strengthened RT14b",
+   "assessed": "RETAINED",
+   "basis": "Diff of original against the maintained copy shows only the reviewed changes; both RT14b guard tests pass in make test."
+  },
+  {
+   "criterion": "Unmodified full acceptance command",
+   "assessed": "NONZERO_AS_DISCLOSED",
+   "basis": "Exit 1: A03, A05, X09 WEAK; A17 ERROR; U4 NOTE; 19 OK. Not relabelled."
+  },
+  {
+   "criterion": "Teaching month, referral route",
+   "assessed": "REPRODUCED",
+   "basis": "M1 OK: ten approvals, three held, supplies +311.00, repairs +200.00, liability -211.00, cash -300.00, nets to zero."
+  },
+  {
+   "criterion": "Teaching month, acceptance route",
+   "assessed": "REPRODUCED",
+   "basis": "M2 OK: eleven approvals, supplies +391.00, liability -291.00, same repairs and cash, nets to zero."
+  },
+  {
+   "criterion": "Two-client isolation",
+   "assessed": "REPRODUCED",
+   "basis": "M1: cross-client decisions and packets refused; first client unchanged; both audit chains verify."
+  },
+  {
+   "criterion": "G0 technical criteria",
+   "assessed": "NOT_MET",
+   "basis": "One P1 (RB-01) and one P2 (RB-02) are open."
+  }
+ ],
+ "not_run": [
+  {
+   "item": "UC-6 duplicated payment row vocabulary",
+   "status": "NOT_RUN"
+  },
+  {
+   "item": "RA-05 recurrence across a period boundary, caps, expiry and concurrency beyond the existing probes",
+   "status": "NOT_RUN independently; delivered tests only"
+  },
+  {
+   "item": "RA-07 journal-support disposition",
+   "status": "NOT_RUN independently; inspection and delivered tests only"
+  },
+  {
+   "item": "External linter, type checker or JavaScript compiler",
+   "status": "NOT_RUN; none is part of the project"
+  }
+ ],
+ "deferred": "The 21 DEFERRED-OK cases validate refusal of AP, AR, reconciliation, reporting and posting capabilities that are not built."
+}

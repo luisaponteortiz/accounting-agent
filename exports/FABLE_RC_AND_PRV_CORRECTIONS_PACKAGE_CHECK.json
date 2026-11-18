@@ -1,0 +1,12 @@
+{
+  "bundle": "FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "bundle_sha256": "9a85c78a40fd9b5f675b4d135274808056b34097ad907e38e962bf25b0762454",
+  "manifest_sha256": "2cd170c68e3acd2231fd429a6c7b4393bef1ca00922391ee9b85bbfceef54d77",
+  "payload_files": 740,
+  "all_payload_hashes_and_crc_verified": true,
+  "protected_inputs_verified": 345,
+  "baseline_test_methods_retained": 174,
+  "independent_acceptance": "PENDING",
+  "human_G0": "NOT_GRANTED",
+  "batch3": "CLOSED"
+}

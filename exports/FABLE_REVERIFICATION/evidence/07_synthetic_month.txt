@@ -1,0 +1,54 @@
+=== 07_synthetic_month: python3 scripts/synthetic_month.py ===
+{
+  "gate": "G0 software synthetic acceptance only",
+  "reviewed_items": [
+    "demo_card_001:TX-012",
+    "demo_card_001:TX-010",
+    "demo_card_001:TX-009",
+    "demo_card_001:TX-006",
+    "demo_card_001:TX-005",
+    "demo_card_001:TX-004",
+    "demo_card_001:TX-003",
+    "demo_card_001:TX-002",
+    "demo_card_001:TX-001",
+    "J-002",
+    "J-001"
+  ],
+  "carried_dispositioned_items": [
+    {
+      "item_key": "demo_card_001:TX-011",
+      "blockers": [
+        "CURRENCY_MISMATCH"
+      ]
+    },
+    {
+      "item_key": "demo_card_001:TX-007",
+      "blockers": [
+        "PENDING_TRANSACTION"
+      ]
+    }
+  ],
+  "package_ids": [
+    1,
+    2
+  ],
+  "package_hashes": [
+    "b5fb37a1f7cb71542fbfea4f1a8cb5e3203fcf54772872914c3412d5a3d91ca4",
+    "f16bba7590e17ef61fa41fedaef373aca3b33a9d5be0b962cb2ce6ac669ddc7b"
+  ],
+  "period_status": "locked",
+  "proposed_entry_impact": {
+    "DEMO_CARD_LIABILITY": "-291.00",
+    "DEMO_CASH": "-300.00",
+    "DEMO_OFFICE_SUPPLIES": "391.00",
+    "DEMO_REPAIRS": "200.00"
+  },
+  "impact_balances": true,
+  "second_client_period": "2026-12",
+  "isolation": "PASS",
+  "audit_integrity": "PASS",
+  "records_changed_via": "service operations only",
+  "external_effects": "none",
+  "real_readiness": "NOT ESTABLISHED"
+}
+=== exit code: 0 ===

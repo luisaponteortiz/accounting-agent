@@ -1,0 +1,27 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RT18] (T-18) finalization: independent granted human, acknowledgement of carried items, frozen bytes, visible later changes
+    finalize refused for preparer role: ('refused', 403, 'Client scope or role denied')
+    finalize refused for same person in a reviewer role: ('refused', 403, 'Independent finalizer required')
+    finalize refused for reviewer without the finalize grant: ('refused', 403, 'Human authority grant required: finalize')
+    finalize refused for no acknowledgement while A3 is carried: ('refused', 409, 'Unreviewed/carried exceptions require acknowledgement')
+    finalize by the independent finalizer with acknowledgement: ('ok', 1)
+    package records: ['acknowledgement', 'audit_head', 'authority', 'dispositions', 'finalizer', 'items', 'manifest', 'open_exceptions', 'period_id', 'quarantined_sources', 'reason', 'removed_items', 'rule_versions', 'scope', 'supersedes_package_id', 'workflow'] | carried: [{'blockers': ['MISSING_RECEIPT', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'], 'item_key': 'demo_card_001:A3', 'status': 'pending'}] | authority: preparation_only_not_external_close
+    after unrelated journal intake -> events: [] | after a card source revision -> events: [('APPROVED_SOURCE_REVISED', 'demo_card_001:A2'), ('APPROVED_SOURCE_REVISED', 'demo_card_001:A2'), ('APPROVED_SOURCE_REVISED', 'demo_card_001:A1'), ('APPROVED_SOURCE_REVISED', 'demo_card_001:A2'), ('POST_FINALIZATION_CHANGE', 'package:1')]
+    package bytes unchanged: True
+    finalize again while items are stale, with acknowledgement: ('refused', 409, 'Stale/disputed items cannot be finalized')
+    finalize while A1 is disputed, with acknowledgement: ('refused', 409, 'Stale/disputed items cannot be finalized')
+    third reviewer resolves the dispute: ('ok', None)
+    mistaken revoke by a fourth reviewer: ('ok', None)
+    recovery by a fifth independent reviewer: ('ok', None)
+    second package for the same period and workflow: ('ok', 2)
+    A1 status after recovery: approve | packages on file for November card preparation: 2
+    observation: a second package was accepted with no link to, or supersession of, the first
+    -> OK
+
+====================================================================================================
+RT18   T-18       OK     finalization: independent granted human, acknowledgement of carried items, frozen bytes, visible later changes
+
+Verdict counts: {'OK': 1}
+Re-verification gate: PASS

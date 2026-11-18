@@ -1,0 +1,202 @@
+--- a/README.md
++++ b/README.md
+@@ -4,9 +4,9 @@
+ 
+ The authoritative [product requirements register](docs/PRODUCT_REQUIREMENTS.md) preserves the universal multi-client vision, current capability status and future requirements. Consult it alongside the existing Fable backlog and current corrective gates before implementation; it does not authorize new features, live actions or Batch 3.
+ 
+-The current [RB correction handoff](FABLE_RB_CORRECTIONS_HANDOFF.md) responds to the returned RA/product reviews. It preserves the frozen submission and all original reviewer inputs. Current source repairs the new control paths and adds enforceable register checks; independent re-verification and human G0 remain pending. The register has 88 retained records; proposed shared additions are documentation, not implemented features.
++**Current state (17 November 2026).** The independent RF review accepted RF-01–RF-03, PRV-16 and RE-01/RB-01 with no corrective ticket, and that review is registered: the register has seven Independently verified records and none Verification failed. Read the [current handoff](HANDOFF_RF_REGISTRATION_2026-11-17.md), the [registration record](docs/registration_rf/RF_REGISTRATION_REPORT.md) and the [G0 criteria check](docs/G0_CRITERIA_CHECK_2026-11-17.md). **Human G0 has not been accepted**; it is the accounting owner's decision. The register has 88 retained records; proposed shared additions are documentation, not implemented features.
+ 
+-The exact [RB/PR Fable verification prompt](FABLE_RB_REVIEW_PROMPT.md) is included in the separately labeled V2 review bundle. V2 changes prompt/administrative packaging only; source, tests and prior evidence remain unchanged.
++The correction handoffs, review prompts and reports for the RA to RF passes remain in the repository as dated records of each checkpoint. [DECISIONS.md](DECISIONS.md) and [PROGRESS.md](PROGRESS.md) hold the full history; all delivered archives and reviewer inputs are immutable.
+ 
+ ## Run locally
+ 
+@@ -32,6 +32,11 @@
+ make batch2-gate
+ make reverification-gate
+ make acceptance-gate
++make rb-gate
++make rc-gate
++make rd-gate
++make re-gate
++make rf-gate
+ python3 scripts/synthetic_month.py
+ python3 scripts/verify_corrective_checkpoint.py
+ python3 -m accounting_agent inspect
+@@ -39,7 +44,7 @@
+ make backup
+ ```
+ 
+-Tests use temporary databases and loopback servers; the local environment may require loopback permission. The current RA correction pass adds regression coverage and the independent acceptance gate; exact final counts and results are in docs/acceptance_ra/execution-results.json. The 60-case gate reports 29 PASS, 10 FIXED and 21 DEFERRED-OK. check performs offline syntax/JSON/profile/registry checks; it is not an external linter or JavaScript build. Backup refuses to overwrite an existing destination. CLI --db/--output select alternative synthetic paths.
++Tests use temporary databases and loopback servers; the local environment may require loopback permission. The suite has 250 test methods; the latest complete results for the suite and all gates are in docs/registration_rf/commands/. The rb to rf gates run the independent reviewers' unmodified probes and delivery-order searches; rf-gate takes about 50 minutes. The 60-case gate reports 29 PASS, 10 FIXED and 21 DEFERRED-OK. check performs offline syntax/JSON/profile/registry checks; it is not an external linter or JavaScript build. Backup refuses to overwrite an existing destination. CLI --db/--output select alternative synthetic paths.
+ 
+ ## Implemented and unconnected
+ 
+@@ -50,6 +55,7 @@
+ | Card preparation | Vendor/category proposals, duplicates, document policies, statement checks, dispositions and derived entries | Real feeds/OCR, full reconciliation, FX and posting |
+ | GL preparation | Shared entry validator, support binding, duplicate/no-effect/origin collision controls | Ledger balances, accrual creation, recognition policy and posting |
+ | Close readiness | Typed outcome/evidence checks, quarantined/unreviewed work and immutable preparation handover | External reconciliations, AP/AR ties and actual close sign-off |
++| Card-feed contract (D-026) | Provider order, replacement claims on late, older or conflicting messages, contested-target holds, and a recorded target selection under disposition and lock authority, for fictional card rows and their receipts | Journals, confirmation against a real provider (G2), and a web control for target selection |
+ | Recurrence | Independently approved bounded mandates with period/freshness predicates and simulated events | Live schedules and external event delivery |
+ | Other accounting areas | Six-area contracts and refused deferred tools | AP, AR, full banking/reconciliation, reporting and analysis execution |
+ 
+@@ -65,6 +71,6 @@
+ 6. Propose a fictional mandate with the UI's explicit occurrence-start freshness requirement, switch to reviewer to approve it, then deliver simulated events as preparer. A repeated event reuses its occurrence; freshness and policy changes can hold future work. Empty freshness is refused. A no-evidence mandate requires a stated reason and independent approval through the service; live schedules remain disabled.
+ 7. Export scoped evidence, rule/grant/decision histories, exceptions, immutable packages and audit. Full live export's transaction-consistency hardening remains T-25; finalized package bytes remain fixed.
+ 
+-See [architecture](docs/ARCHITECTURE.md), [capability contracts](docs/CAPABILITY_CONTRACTS.md), [current correction report](docs/RA_CORRECTIONS_REPORT.md) and [Fable handoff](FABLE_RA_CORRECTIONS_HANDOFF.md). The original ss_agent_system_handoff/ package is preserved as reference; executive/marketing/sales work remains outside scope.
++See [architecture](docs/ARCHITECTURE.md), [capability contracts](docs/CAPABILITY_CONTRACTS.md), the [RF registration record](docs/registration_rf/RF_REGISTRATION_REPORT.md) and the [current handoff](HANDOFF_RF_REGISTRATION_2026-11-17.md). The original ss_agent_system_handoff/ package is preserved as reference; executive/marketing/sales work remains outside scope.
+ 
+-Fable accepted 14 of 17 RV corrections and all seven earlier probe adaptations, including strengthened RT14b, then identified RA-01–RA-08. This pass addresses those findings. All original inputs and the submitted archive remain unchanged. The current gates run 27 compatible older probes and 20 compatible acceptance probes directly from their supplied files, with all 35/24 controls exercised through explicit current setup. RA-04 requires independent acceptance after statement changes; four new positive setups and older RT18 now supply that decision after asserting the hold/history. Their original verdicts remain intact. Full original-script setup failures remain disclosed; read [the new adapter explanation](docs/acceptance_ra/probe-adaptations.md). Independent acceptance of these additions and G0 remain pending. No real operating readiness or Batch 3 authority is claimed.
++**History of the RA pass, kept as written at that checkpoint.** Fable accepted 14 of 17 RV corrections and all seven earlier probe adaptations, including strengthened RT14b, then identified RA-01–RA-08. This pass addresses those findings. All original inputs and the submitted archive remain unchanged. The current gates run 27 compatible older probes and 20 compatible acceptance probes directly from their supplied files, with all 35/24 controls exercised through explicit current setup. RA-04 requires independent acceptance after statement changes; four new positive setups and older RT18 now supply that decision after asserting the hold/history. Their original verdicts remain intact. Full original-script setup failures remain disclosed; read [the new adapter explanation](docs/acceptance_ra/probe-adaptations.md). Independent acceptance of these additions and G0 remain pending. No real operating readiness or Batch 3 authority is claimed. (Since then the RA to RF reviews have returned; see the current state above.)
+--- a/START_HERE.md
++++ b/START_HERE.md
+@@ -1,3 +1,9 @@
++# Current state: RF review registered — 17 November 2026
++
++The independent RF review accepted RF-01–RF-03, PRV-16 and RE-01/RB-01 with no corrective ticket, and it is registered (D-033/D-034): no requirement is Verification failed. **Human G0 has not been accepted.** Start with [the current handoff](HANDOFF_RF_REGISTRATION_2026-11-17.md), [the registration record](docs/registration_rf/RF_REGISTRATION_REPORT.md) and [the G0 criteria check](docs/G0_CRITERIA_CHECK_2026-11-17.md). `make test` runs 250 methods. No further implementation is authorized; Batch 3 and all live actions remain closed.
++
++The sections below are earlier checkpoints, kept as written at the time. Their "pending" statements describe those dates, not today.
++
+ # RE/PRV correction checkpoint — independent verification pending
+ 
+ This pass covers RE-01–RE-03 and PRV-14/15 under D-026 and owner clarification D-029. Start with [the handoff](FABLE_RE_CORRECTIONS_HANDOFF.md), [report](docs/corrections_re/RE_CORRECTIONS_REPORT.md), [owner clarification](docs/corrections_re/CONTRACT_CLARIFICATION.md) and [exact Fable prompt](FABLE_RE_REVIEW_PROMPT.md). Developer validation passes 227 tests and all named gates, with zero double approval in 336 extended and 120 retained orders. The owner's answer preserves frozen approval and blocks the incoming version until reopen; the dedicated check passes and reopen retains the contested blocker. No schema, branch or commit change; three requirements remain Verification failed pending independent RE verification. Batch 3, deferred/Proposed capabilities and live actions remain closed. Earlier checkpoints below are historical.
+--- a/docs/ARCHITECTURE.md
++++ b/docs/ARCHITECTURE.md
+@@ -1,6 +1,6 @@
+ # General Accounting Agent OS — current architecture
+ 
+-Current corrective checkpoint: the returned RA review was not accepted; RB-01–RB-04 correct late-link locked-origin routing, re-pointed support replacement, semantic author retention across scope/key changes and prior-statement revision continuity. The unchanged latest independent probe file is now run by normal tests and make rb-gate. See [RB response](corrections_rb/RB_CORRECTIONS_REPORT.md) for exact developer evidence and remaining limits; independent re-verification/G0 and Batch 3 remain closed. The product register now separates product decisions from implementation/verification states; proposed shared requirements do not activate modules.
++Current checkpoint (17 November 2026): the independent RF review accepted RF-01–RF-03, PRV-16 and RE-01/RB-01 at checkpoint c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd with no corrective ticket, and that review is registered in the product register (D-033/D-034). Human G0 and Batch 3 remain closed. The sections from "RV correction details" onward record each correction pass in order and are written as of that pass; the RB to RF passes and the card-feed contract are described at the end. The product register separates product decisions from implementation/verification states; proposed shared requirements do not activate modules.
+ 
+ This local synthetic platform retains Python standard library, SQLite and static HTML/JS. It provides common execution, evidence, knowledge, authority and review boundaries for six accounting areas. Card preparation, mechanical journal validation and close readiness execute; AP, AR, full reconciliation and reporting remain deferred.
+ 
+@@ -10,7 +10,7 @@
+ 
+ Client-specific chart, entity/book, currency, vendors, receipt matching, procedures and close checklist remain separate from shared invariants. Capabilities declare required facts; missing facts block client-sample preparation. Explicit explanatory waivers are allowed only for synthetic_demo profiles and are exported. No actual Bird Bowl policy or fact is supplied by these waivers.
+ 
+-Capabilities declare rule kinds and date-governing source kinds as well as source/profile reads. Unrelated close-policy changes preserve card/journal approvals and mandates; item-effective review policy governs required model holds. Pure handlers receive declared source/profile inputs, committed dependency outputs and relevant dispositions. They cannot query storage, approve work, call a model or invoke external effects. The runner persists exact manifests, checkpoints, bounded leases and retry attempts. Dependency package controls propagate by default; a blocked inventory cannot yield an unblocked downstream package. Close readiness waits for earlier queued/running preparation in its period, then captures completed upstream outcomes when its execution begins; this refresh changes only that outcome dependency, never silently adopts revised sources/policy.
++Each of the three workflows starts with the shared capability `evidence.inventory`, which lists the scoped sources the workflow declares and blocks with NO_SOURCE_EVIDENCE when there are none, and ends with `package.manifest`, which records the input fingerprint and scope and states that nothing was posted or signed off. Neither proves a complete ledger or statement population. Capabilities declare rule kinds and date-governing source kinds as well as source/profile reads. Unrelated close-policy changes preserve card/journal approvals and mandates; item-effective review policy governs required model holds. Pure handlers receive declared source/profile inputs, committed dependency outputs and relevant dispositions. They cannot query storage, approve work, call a model or invoke external effects. The runner persists exact manifests, checkpoints, bounded leases and retry attempts. Dependency package controls propagate by default; a blocked inventory cannot yield an unblocked downstream package. Close readiness waits for earlier queued/running preparation in its period, then captures completed upstream outcomes when its execution begins; this refresh changes only that outcome dependency, never silently adopts revised sources/policy.
+ 
+ ## Durable periods and source lifecycle
+ 
+@@ -71,3 +71,22 @@
+ Rule provenance follows approved kind/key/item identity as well as explicit links, filtered by the semantic alias/category or receipt policy actually consumed. Mandates bind relevant approved policy windows/retirement effects rather than the changing set of source dates. Disposition creation and activation share reference validity, including the item's immutable predecessor snapshots. Duplicate/replay targets must remain live rather than already excluded.
+ 
+ Developer gates retain all original assertions, with explicit statement-acceptance positive setup where RA-04 invalidates old immediate-eligibility fixtures. The original files and raw full-command failures remain disclosed. See docs/acceptance_ra/probe-adaptations.md; independent judgment of the new setup is still required. No accepted developer fixture establishes actual client policy, G0 acceptance, final close or production readiness.
++
++## RB, RC and RD correction boundary
++
++RB-01–RB-04 corrected late-link locked-origin routing, re-pointed support replacement, semantic author retention across scope/key changes and prior-statement revision continuity; the independent RB review accepted RB-02–RB-04. RC-01–RC-03 and RD-01/RD-02 then closed further arrival orders of the locked-origin control. A replacement claim persists by row identity: an unchanged row that first declares a claim on an unknown target gets a new source version and is blocked at once, any earlier open-period approval stops governing before the target arrives, a later version that omits the claim does not withdraw it, and the claim links when the target arrives without the claimant being re-sent. Cycle and self-supersession refusals stay atomic. Transition acceptance is bound to the exact resolved chain and lapses when that chain changes. The independent RC and RD reviews accepted these corrections.
++
++## Card-feed contract and target selection (D-026)
++
++The owner's feed contract D-026, with clarification D-029, governs fictional card transaction rows and their receipts. Journals are outside it, and whether a real provider behaves this way is a G2 confirmation. It is implemented in `accounting_agent/feed_contract.py` on the existing append-only accounting events, source links and dispositions; no schema changed. Its promise is that, for every delivery order the contract allows, one charge is never approved in a locked period and again in an open one, and nothing leaves a locked-period hold without a person's authority. It does not promise identical intermediate records in every order.
++
++- **Provider order.** Where messages carry a sequence number or timestamp, the highest governs the row. An older or conflicting message is retained as a source version with an audit record and never replaces the governing row.
++- **Replacement claims.** A message may declare that its row replaces another. The first claim for a row is recorded (SOURCE_CLAIM_DECLARED) and applied wherever it arrives: on the governing version, on a newly retained older or conflicting version, or on a re-send of a message already retained. If the target is on file, the rows are linked and approvals along the chain raise approved-source events. If it is not, the claim waits (SOURCE_SUPERSESSION_UNRESOLVED), the row is blocked, and it links when the target arrives.
++- **Repeats and omissions.** Repeating a claim the row already has changes no source lifecycle record. A later version that does not repeat a claim does not withdraw it. A new batch keeps its own delivery record; an exact replay adds nothing.
++- **Second claim naming a different target.** It is recorded (SOURCE_CLAIM_CONFLICT_RECORDED) and not applied. The row and its live replacements carry the SOURCE_CLAIM_CONFLICT blocker and any approval stops governing. The row is neither moved into a hold nor out of one, and the second target is not retired. Further different targets join the same open question.
++- **Locked periods.** If a chain reaches a locked period, the row, its live replacements and their receipts are held under that period. A provider message alone never releases the hold. An approval already frozen in the row's own locked period is preserved and the incoming version is held until an authorized reopen; reopen does not clear a contested-claim blocker.
++- **Target selection.** Only a recorded disposition clears the contested-claim blocker: choice `select_supersession_target` with payload `target_key`, through the ordinary disposition operation (service call or POST /api/dispositions) for a single card item in its accounting-date period. It requires the reviewer role with a disposition grant, a target among the row's declared targets, an open home period, current scoped supporting evidence related to the item, no cycle, and a person who supplied none of the row's claim messages. When the selection changes the standing target and would release a held charge from a locked period other than the new target's origin, the same person must also hold the lock grant. It records SOURCE_CLAIM_TARGET_SELECTED and approves nothing. Confirming the standing target moves nothing. A selection is not revoked through the ordinary revocation route; a new equally authorized selection replaces it, and new different claims reopen the question.
++- **Review independence.** Every person who recorded a target selection for a row, or for any row it was ever linked to, stays a contributor of the row, its revisions and its live replacements, and so cannot review or finalize them. As delivered, a selector is also a contributor of that card run's period-level artifacts (owner observation UC-23).
++- **Report cost.** Within one database transaction and one report calculation, a run's currentness is computed once; outside a transaction every artifact is evaluated afresh.
++
++The local web page has no control for target selection. Open questions for the owner are U4, UC-14, UC-17, UC-18 and UC-20 to UC-25 in the RF review's observations. The independent RE review accepted RE-02 and RE-03; the independent RF review accepted the rest and verified the promise above in 3,120 stepwise delivery orders. That is evidence for the orders tried on fictional data, not proof for every provider or client workflow.
+--- a/docs/CAPABILITY_CONTRACTS.md
++++ b/docs/CAPABILITY_CONTRACTS.md
+@@ -1,7 +1,9 @@
+ # Six accounting capability areas and extension contracts
+ 
+-The RB correction response strengthens existing shared contracts only. A late/later-resolved supersession claim must inspect still-live locked ancestors before own destination admission. Replacement evidence includes re-pointed old keys as well as withdrawals. Relevant rule author history follows semantic coverage across general/item scopes and renamed keys. Statement continuity carries prior revision disclosure and depends on active own-period acceptance for every relying item; revocation invalidates that dependency. These additions do not implement reconciliation, new integrations or any deferred module. See corrections_rb/RB_CORRECTIONS_REPORT.md and PRODUCT_REQUIREMENTS.md for current evidence/state.
++Current state (17 November 2026): the contracts below include the RB to RF corrections, and the independent RF review of them is registered; human G0, Batch 3 and every deferred capability remain closed. The card-feed contract D-026 is summarized under Banking & Reconciliation and described in ARCHITECTURE.md.
+ 
++The earlier RB correction response strengthened existing shared contracts only. A late/later-resolved supersession claim must inspect still-live locked ancestors before own destination admission. Replacement evidence includes re-pointed old keys as well as withdrawals. Relevant rule author history follows semantic coverage across general/item scopes and renamed keys. Statement continuity carries prior revision disclosure and depends on active own-period acceptance for every relying item; revocation invalidates that dependency. These additions do not implement reconciliation, new integrations or any deferred module. See corrections_rb/RB_CORRECTIONS_REPORT.md and PRODUCT_REQUIREMENTS.md for current evidence/state.
++
+ Design coverage is distinct from implementation. This file defines module seams for progressive execution under the shared runner. Entries marked deferred have no executable handler and cannot be invoked as successful tools.
+ 
+ ## Common contract
+@@ -12,7 +14,7 @@
+ 
+ Supporting-evidence revisions are visible and held until a granted human who supplied none of their versions explicitly accepts them. Separate final review still applies. Dispositions bind the duplicate population and require support for each candidate; a valid duplicate exclusion carries provenance to the surviving item. Mandates require an explicit freshness predicate or independently approved reason for no evidence requirement. Statement artifacts disclose identity, continuity and provenance limits; typed close requirements cannot be satisfied by an untyped label.
+ 
+-Shared exact-money and entry validation is mechanical. Client policies still determine recognition, tax, materiality, accounts, tolerances, matching and procedures. Only explicit fictional entity/book/mappings are supplied. USD/two-decimal fixtures are not universal currency support. package.manifest propagates package controls and records provenance; it cannot certify actual ledger completeness or final close.
++Shared exact-money and entry validation is mechanical. Client policies still determine recognition, tax, materiality, accounts, tolerances, matching and procedures. Only explicit fictional entity/book/mappings are supplied. USD/two-decimal fixtures are not universal currency support. Every workflow starts with `evidence.inventory`, the scoped inventory of its declared sources, which is not proof of a complete population. `package.manifest` propagates package controls and records provenance; it cannot certify actual ledger completeness or final close.
+ 
+ ## 1. General Ledger
+ 
+@@ -46,6 +48,7 @@
+ - Inputs: authoritative statement/complete transaction population, ledger extract and prior reconciliation, client mapping/matching rules and support. Outputs: intake inventory, proposed classifications/matches, transfer candidates, reconciliation workpapers and unresolved differences.
+ - Controls: stable source IDs; pending-to-posted revision/removal handling; one posting route; no reuse of a matched item; ambiguous matches hold; transfer counterpart/currency/period evidence; arithmetic plus source completeness; distinct prepared/posted/reconciled states. Equal totals do not prove completeness.
+ - `banking.card_prepare` executes the limited fictional card workflow. `banking.match_transfer_reconcile` is deferred. Human evidence-bound dispositions can resolve demonstrated credits, settlements, splits and duplicates into proposed entries. Foreign currency stays held; no FX policy is invented. Statement checks and source lifecycle execute; full reconciliation remains deferred.
++- Card-feed contract (D-026, fictional card rows and receipts only): the highest provider order governs a row while older or conflicting messages are retained; a first replacement claim applies wherever it arrives and waits for an unknown target; a second claim naming a different target is recorded, not applied, and blocks the row with SOURCE_CLAIM_CONFLICT; a locked-period hold is never released by a provider message. The disposition choice `select_supersession_target` lets a person with disposition authority who supplied none of the claim messages state which declared target stands, with supporting evidence, and with lock authority where it releases a locked-period hold; it approves nothing and its author stays a contributor. Journals are excluded and real-provider behaviour is a G2 confirmation.
+ - Public API capability for pending feed UI actions and reconciled status must be verified separately from ledger operations before integration; no private endpoint workaround.
+ 
+ ## 5. Month-End Close
+--- a/FABLE_ACCOUNTING_HANDOFF.md
++++ b/FABLE_ACCOUNTING_HANDOFF.md
+@@ -1,14 +1,22 @@
+-# Current RF/PRV developer checkpoint — 16 November 2026
++# Current state: RF review returned and registered — 17 November 2026
+ 
++Fable's independent RF review accepted RF-01–RF-03, PRV-16 and RE-01/RB-01 at checkpoint c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd with no corrective ticket. Under owner decision D-033 that review is registered: its results and report are the fifth pinned reviewer authority, AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 are recorded Independently verified for that checkpoint and synthetic scope, and no requirement is Verification failed. `make test` passes 250 methods and all nine gate targets pass (D-034). A documentation-only pass under D-035 then brought the entry, architecture and capability documents to this state and described the D-026 card-feed contract in them.
++
++Read [HANDOFF_RF_REGISTRATION_2026-11-17.md](HANDOFF_RF_REGISTRATION_2026-11-17.md), [the registration record](docs/registration_rf/RF_REGISTRATION_REPORT.md) and [the G0 criteria check](docs/G0_CRITERIA_CHECK_2026-11-17.md). The registration and the documentation pass were done by a Claude (Fable) session at the owner's assignment and have not themselves been independently reviewed. **Human G0 has not been accepted**; owner observations UC-21 to UC-25 are open with U4, UC-14, UC-17, UC-18 and UC-20. No further implementation is authorized. Journals, real-provider confirmation, G1 sample processing, Batch 3, deferred/Proposed capabilities and all live actions remain closed.
++
++The sections below are earlier checkpoints and the original handoff, kept as written at the time.
++
++# Earlier RF/PRV developer checkpoint — 16 November 2026
++
+ RF-01–RF-03/PRV-16 are developer validated under unchanged D-026/D-029. Five consecutive complete suites passed 241 methods each; all eleven HTTP methods ran each time, with setup 2.12–2.44 seconds. All nine required targets pass, including 19 OK/C9c+C9g NOTE and zero double/released/audit failures in 480 orders. D-031 authorizes the sole PRV-14 retained-method rewrite; the other 226 remain unchanged. All protected inputs, schema, criteria, owner wording, ten commits and branch remain intact.
+ 
+ Read [FABLE_RF_CORRECTIONS_HANDOFF.md](FABLE_RF_CORRECTIONS_HANDOFF.md), [RF report](docs/corrections_rf/RF_CORRECTIONS_REPORT.md) and [next independent prompt](FABLE_RF_REVIEW_PROMPT.md). RE-02/RE-03 and PRV-14/15 were accepted at 4890b297…98ae; RF acceptance remains pending. Three requirements remain Verification failed; no G0/readiness, Batch 3 or live authority is granted. After delivery await independent results and a new assignment. Prior handoff history below remains intact.
+ 
+-# Current RC/PRV review handoff — 16 November 2026
++# Earlier RC/PRV review handoff — 16 November 2026
+ 
+ See FABLE_RC_CORRECTIONS_HANDOFF.md and FABLE_RC_REVIEW_PROMPT.md for the authorized correction checkpoint. Latest independent verdict: RB-02–04 accepted; RB-01 failed RC-01–03. Developer corrections await independent verification; no G0/Batch 3/live release. Earlier handoff content below is historical.
+ 
+-> Current correction response: Fable's reviews are preserved in exports/FABLE_RA_ACCEPTANCE/ and exports/FABLE_PRODUCT_REQUIREMENTS/. RA was not accepted; the user authorizes RB-01–RB-04 and required PR corrections only. Read docs/corrections_rb/ for baseline reproduction, current results and PR dispositions. Original b154db10… combined submission, exact prompt and freeze sidecar remain unchanged. Batch 3/G0/live actions remain closed pending independent re-verification and applicable human decisions.
++> Earlier RB correction response: Fable's reviews are preserved in exports/FABLE_RA_ACCEPTANCE/ and exports/FABLE_PRODUCT_REQUIREMENTS/. RA was not accepted; the user authorizes RB-01–RB-04 and required PR corrections only. Read docs/corrections_rb/ for baseline reproduction, current results and PR dispositions. Original b154db10… combined submission, exact prompt and freeze sidecar remain unchanged. Batch 3/G0/live actions remain closed pending independent re-verification and applicable human decisions.
+ 
+ > Historical combined review delivery: [FABLE_PRODUCT_AND_RA_REVIEW_PROMPT.md](FABLE_PRODUCT_AND_RA_REVIEW_PROMPT.md) is the unchanged exact prompt for the submitted RA checkpoint/register. FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip remains frozen; its START_HERE.md describes that historical transfer. New corrections must use a different archive label.
+ 
+--- a/REVIEW_FREEZE.md
++++ b/REVIEW_FREEZE.md
+@@ -1,22 +1,30 @@
+-# Current RF correction authority — 16 November 2026
++# Current boundary after the RF result registration — 17 November 2026
+ 
++No correction pass is authorized. The delivered RF bundle (c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd), its returned response (343da96a13daecdbc5f8bd7c8d9c9ac265c7b1a9ebca97c478ac1be1a2583232), every earlier archive, sidecar and manifest, all original reviewer inputs and every delivered handoff, prompt and report are immutable. docs/registration_rf/input-checksums.json lists 1,506 protected inputs, including the returned RF review.
++
++Working files changed since the RF bundle only under two owner decisions: D-033 (registration of the RF review: checker pins, derived results, three register records, six named register-test methods, decision/progress/readiness/AGENTS records) and D-035 (documentation only: README.md, START_HERE.md, docs/ARCHITECTURE.md, docs/CAPABILITY_CONTRACTS.md, FABLE_ACCOUNTING_HANDOFF.md, this file and stale status lines in the register). No application source, schema, probe, gate script or HTTP test changed. These working changes are not a new delivered bundle and nothing is committed. Human G0, G1–G4, Batch 3 and all live actions remain closed; a new specific owner assignment is required before any further change.
++
++The sections below are earlier authorities and freezes, kept as written at the time.
++
++# Earlier RF correction authority — 16 November 2026
++
+ CODEX_RF_CORRECTIONS_PROMPT.md authorizes RF-01–RF-03 and PRV-16 only. The RE bundle at 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae, its response at e0b0a49932ca4e4f7adf4c18f21202ea85b33219b08e3bc76038778c9178cf2a, every earlier archive/sidecar/manifest and all original review inputs remain immutable. Preserve all ten commits at HEAD 5af9a6194bc39e2f303cc6b43b0b59094118b8e4 on review/fable-rc-acceptance; add no commit. D-026/D-029, schema and HTTP deadline remain protected. The reproduced PRV-14 retained-unit conflict is resolved only by the explicit owner exception D-031: all 227 methods remain present, 226 unchanged, and only the named method is adapted under its precise fixture/pin/assertion conditions. All other earlier test/probe/fault bytes remain protected. After delivery await independent results and a new assignment. Batch 3 and all later/live gates remain closed. Prior authority paragraphs below are historical; all archive freezes remain binding.
+ 
+-# Current RE correction authority — 16 November 2026
++# Earlier RE correction authority — 16 November 2026
+ 
+ The user returned independent RD results and assigned CODEX_RE_CORRECTIONS_PROMPT.md. This supersedes working-file waiting only for RE-01–RE-03 and PRV-14/15 under D-026. Every previously frozen archive, checksum, manifest, freeze sidecar and reviewer input remains immutable, including the RD/PRV ZIP at 0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9. Preserve all eight commits at HEAD 542688b; add no commit. After delivery await independent results and a new assignment. Batch 3, deferred/Proposed capabilities and live actions stay closed. The prior authority paragraphs below are historical; their archive freezes remain in force.
+ 
+-# Current RD correction authority — 16 November 2026
++# Earlier RD correction authority — 16 November 2026
+ 
+ CODEX_RD_CORRECTIONS_PROMPT.md authorizes one pass for RD-01/RD-02 and PRV-11–PRV-13 only. Working files may change for that assignment; exports/FABLE_RC_ACCEPTANCE/, its response ZIP and all earlier archives, sidecars and reviewer inputs remain immutable. Preserve all five commits on review/fable-rc-acceptance (HEAD 5a12ab0); add no commit. After delivery await independent results and a new assignment. Batch 3, Proposed/deferred capabilities and live actions remain closed. Prior working-file authority paragraphs below are historical; archive freezes remain in force.
+ 
+-# Current correction authority — 16 November 2026
++# Earlier RC correction authority — 16 November 2026
+ 
+ The user returned independent RB/PR results and explicitly assigned CODEX_RC_CORRECTIONS_PROMPT.md. Working files may change for RC-01–RC-03 and PRV-01–PRV-10 only (D-018–D-020). All submitted archives, freeze sidecars and original independent inputs remain immutable. D-016/D-017 were pre-existing user-directed exceptions for the working register. No Batch 3, deferred capability or live operation is authorized. The V2 waiting instruction below is historical; its archive freeze remains in force.
+ 
+ # Review checkpoint frozen — awaiting Fable
+ 
+-## Current V2 submission frozen — 16 November 2026
++## Earlier V2 submission frozen — 16 November 2026
+ 
+ The user is sending exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip to Fable. Freeze this exact submitted version at SHA-256 00a13d9309cc8a26a281214e2c86bbf23050b2f1197f7f1a685aaf95f1be001d. Do not rebuild it or change its exact FABLE_RB_REVIEW_PROMPT.md, 88-record register, source, tests, fixtures, original reviewer inputs or evidence while awaiting independent results. No further implementation or Batch 3 work is authorized. Receipt of results alone does not open Batch 3; a new assignment remains required.
+ 

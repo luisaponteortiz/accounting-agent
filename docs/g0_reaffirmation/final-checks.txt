@@ -1,0 +1,36 @@
+Final checks in the working project after recording D-039 (documents only).
+Run 2026-11-17T23:13:10Z
+
+$ make check
+python3 scripts/check.py
+PASS: Python syntax, JSON parsing, executable profile validation, workflow DAG/tool registration, DOM text rendering checks.
+No external linter/typechecker/JS compiler installed; these checks are not a claim of those tools passing.
+PASS: capability IDs named in implementation documentation exist in the registry.
+PASS: product requirements schema/evidence/dependencies/crosswalk/client boundaries; 88 records, 27 tickets.
+PASS: shared application/web files contain no client-specific names/choices from the client section; demo/config/fixtures remain isolated.
+exit 0
+
+$ python3 scripts/check_documentation.py --json
+{
+  "test_methods": 274,
+  "gates_listed": 8,
+  "feed_contract_codes_described": 7,
+  "capabilities_named": 12,
+  "human_g0_accepted": true,
+  "latest_review": "RF",
+  "records": 88,
+  "independently_verified": 7,
+  "verification_failed": 0,
+  "links_checked": 161,
+  "decisions_recorded": 39,
+  "verification_rule_decision": "D-037",
+  "current_documents": 10
+}
+exit 0
+
+$ python3 -m unittest tests.test_documentation_review tests.test_product_requirements tests.test_product_requirements_rf tests.test_product_requirements_rf_registration tests.test_re_review_gate.REReviewGate.test_all_protected_inputs_unchanged_and_contract_exact
+----------------------------------------------------------------------
+Ran 53 tests in 137.397s
+
+OK
+exit 0

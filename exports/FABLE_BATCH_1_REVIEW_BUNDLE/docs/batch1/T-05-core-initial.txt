@@ -1,0 +1,24 @@
+======================================================================
+ERROR: test_scope_denial_and_second_client_uses_same_engine (tests.test_platform.PlatformCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_platform.py", line 164, in test_scope_denial_and_second_client_uses_same_engine
+    multi.intake(other,packet);multi.enqueue(other,'journal_preparation')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/accounting_agent/service.py", line 273, in enqueue
+    return self._enqueue(db, actor, workflow_id, period_id=period_id)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/accounting_agent/service.py", line 246, in _enqueue
+    raise ControlError("PERIOD_LOCKED" if ctx["period"] else "Accounting period not configured",409)
+accounting_agent.core.ControlError: Accounting period not configured
+
+======================================================================
+FAIL: test_separate_regression_cases (tests.test_validation.ValidationCase) (case='V-10')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_validation.py", line 22, in test_separate_regression_cases
+    self.assertFalse(any(a['run_id']==rid and a['item_key']==target for a in os.state(actor())['artifacts']))
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 52 tests in 12.013s
+
+FAILED (failures=1, errors=1, expected failures=9)

@@ -1,0 +1,1510 @@
+{
+ "title": "Fable independent verification of RF-01 to RF-03 and PRV-16 under unchanged D-026 and D-029",
+ "date": "2026-11-17",
+ "reviewed_bundle": "exports/FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+ "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+ "checkpoints": {
+  "reviewed_bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+  "internal_review_manifest_sha256": "07bac9cac34acd069c5e509d8fe832a397f768e8e640a9324903f3fe3ee715f0",
+  "payload_files_hash_verified": 1790,
+  "baseline_re_bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
+  "re_review_response_sha256": "e0b0a49932ca4e4f7adf4c18f21202ea85b33219b08e3bc76038778c9178cf2a",
+  "codex_rf_prompt_sha256": "a4b2e870551f93931b5247d215a576218424765a64f79461171921594c32cc1a",
+  "fable_rf_review_prompt_sha256": "781440f6ce38023cc58b160feae43e43500e4958731bafb2b06701c5a5776e54",
+  "register_sha256_at_this_checkpoint": "8a91c6ff07c512479b5c25d7b371164ed991998ec5e501401f5e1222349b680f",
+  "decisions_sha256_at_this_checkpoint": "4f13572e610d5a6a9616ca38fad7115d41b92917bfb3baf2ca7fe66eb8651e87",
+  "source_and_tests_patch_sha256": "79b0755f45ee26e722fc10906f62ba4f31a3f1a0220eef41bcb3bbbd4902b1ac",
+  "git": {
+   "branch": "review/fable-rc-acceptance",
+   "head": "5af9a6194bc39e2f303cc6b43b0b59094118b8e4",
+   "commits": 10,
+   "commit_added_by_the_developer_pass": false
+  }
+ },
+ "scope_of_every_conclusion": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance.",
+ "ticket_verdicts": [
+  {
+   "id": "RF-01",
+   "priority": "P1",
+   "clause": "2",
+   "verdict": "ACCEPTED",
+   "reason": "A claim-free older or conflicting message that is re-sent carrying the row's first claim now applies that claim: linked at once when the target is on file, held with its receipt when the chain reaches the locked period, waiting as unresolved and linking without a re-send when the target arrives. No other path was found on which a first claim is recorded without being applied.",
+   "probes": [
+    "C2d",
+    "C2f",
+    "G1a",
+    "G1b",
+    "G1c",
+    "G1d",
+    "G1e",
+    "G1f",
+    "G1g",
+    "G1h"
+   ],
+   "searches": [
+    "fable_re_step_search.py (480)",
+    "fable_rf_step_search.py (2640)"
+   ]
+  },
+  {
+   "id": "RF-02",
+   "priority": "P3",
+   "clause": "9",
+   "verdict": "ACCEPTED",
+   "reason": "Every person who recorded a target selection stays a contributor of the row, its revisions and its live replacements after confirming and replacing selections and after the replacement is retargeted; none can approve or finalize; an independent person can. Earlier records are byte-identical. Ordinary dispositions behave exactly as at the RE checkpoint. Scopes are isolated.",
+   "probes": [
+    "C9h",
+    "G2a",
+    "G2b",
+    "G2c",
+    "G2d",
+    "G2e",
+    "G2f"
+   ]
+  },
+  {
+   "id": "RF-03",
+   "priority": "P3",
+   "clause": null,
+   "verdict": "ACCEPTED",
+   "reason": "The shortcut gives the same report as the full computation at every call made by seven probe suites, one search family and the demo data; it is local to one call inside one transaction and is not used outside a transaction. tests/test_http.py and its five-second deadline are byte-identical. Five consecutive complete make test runs, made one after another with no other job of this review running, passed all 241 methods, the 11 HTTP methods included; under the same load the delivered HTTP setup finishes sooner than that of the RD checkpoint.",
+   "evidence": [
+    "evidence/equivalence.txt",
+    "evidence/http-setup-timing.txt",
+    "evidence/commands/consecutive-make-test-1..5"
+   ]
+  },
+  {
+   "id": "PRV-16",
+   "priority": null,
+   "clause": null,
+   "verdict": "ACCEPTED",
+   "reason": "The fourth authority (RE results and report) is hash pinned; the latest verdict wins per record; the seven rows keep their original order; no acceptance criterion, state, product decision or protected record changed; D-026 and D-029 text and the schema are byte-identical.",
+   "evidence": [
+    "evidence/fable-rf-register-faults.txt",
+    "evidence/preservation.txt"
+   ]
+  },
+  {
+   "id": "RE-01 / RB-01",
+   "priority": null,
+   "clause": "2",
+   "verdict": "ACCEPTED",
+   "reason": "RF-01 was the only remaining failure of RE-01; with it corrected, RB-01 holds for every delivery order tried."
+  }
+ ],
+ "clause_verdicts": [
+  {
+   "clause": 1,
+   "title": "Provider order",
+   "verdict": "HOLDS",
+   "probes": [
+    "C2a",
+    "G1a",
+    "G1f",
+    "G1g",
+    "Y01",
+    "Y02"
+   ]
+  },
+  {
+   "clause": 2,
+   "title": "Claim on a late, older or conflicting message",
+   "verdict": "HOLDS",
+   "probes": [
+    "C2a",
+    "C2b",
+    "C2c",
+    "C2d",
+    "C2e",
+    "C2f",
+    "G1a",
+    "G1b",
+    "G1d",
+    "G1f",
+    "G1g",
+    "G1h"
+   ]
+  },
+  {
+   "clause": 3,
+   "title": "Claim after its row",
+   "verdict": "HOLDS",
+   "probes": [
+    "C2a",
+    "C7c",
+    "C7d",
+    "G1a",
+    "G1h",
+    "Y01",
+    "Y02",
+    "Y03",
+    "Y04",
+    "E01"
+   ]
+  },
+  {
+   "clause": 4,
+   "title": "Claim before its target",
+   "verdict": "HOLDS",
+   "probes": [
+    "C2a",
+    "C7a",
+    "C9c",
+    "G1a",
+    "G1c",
+    "G1d",
+    "G1e"
+   ],
+   "observation": "UC-20 (unchanged)"
+  },
+  {
+   "clause": 5,
+   "title": "Identical repeat",
+   "verdict": "HOLDS for a repeated claim",
+   "probes": [
+    "C2a",
+    "C2c",
+    "C7b",
+    "C9d",
+    "G1a",
+    "G1b",
+    "E02",
+    "E04",
+    "E05"
+   ],
+   "observation": "UC-21, UC-22 (both the same at the RE checkpoint)"
+  },
+  {
+   "clause": 6,
+   "title": "Later omission",
+   "verdict": "HOLDS",
+   "probes": [
+    "C8a",
+    "G1d",
+    "G1e",
+    "Y04",
+    "Y06"
+   ]
+  },
+  {
+   "clause": 7,
+   "title": "Second claim naming a different target",
+   "verdict": "HOLDS",
+   "probes": [
+    "C7a",
+    "C7b",
+    "C7c",
+    "C7d",
+    "C2c",
+    "G1b"
+   ]
+  },
+  {
+   "clause": 8,
+   "title": "Release from a locked-period hold",
+   "verdict": "HOLDS",
+   "probes": [
+    "C8a",
+    "C8b",
+    "C8c",
+    "C9d"
+   ],
+   "searches": "no release in 3120 orders"
+  },
+  {
+   "clause": 9,
+   "title": "Who may disposition",
+   "verdict": "HOLDS",
+   "probes": [
+    "C9a",
+    "C9b",
+    "C9c",
+    "C9d",
+    "C9e",
+    "C9f",
+    "C9g",
+    "C9h",
+    "G2a",
+    "G2b",
+    "G2d",
+    "G2e",
+    "G2f"
+   ],
+   "observation": "UC-17, UC-18 (unchanged), UC-23"
+  }
+ ],
+ "contract_promise": {
+  "verdict": "MET in every delivery order tried",
+  "reason": "No charge is approved in locked November and again in open December, and nothing leaves a locked-period hold without a person's authority, in 3120 stepwise orders and in every probe."
+ },
+ "register_verdicts": [
+  {
+   "id": "AAOS-BNK-03",
+   "state": "Independently verified",
+   "conclusion": "May be recorded Independently verified at this checkpoint, for this scope",
+   "criterion": "one charge approved in two periods, for every delivery order within the feed contract of D-026",
+   "evidence": "RF-01 accepted: C2d and C2f OK; 21 RE probes 19 OK with C9c and C9g NOTE; own probes G1a-G1h OK (G1c and G1g NOTE); 480 original and 2640 further stepwise orders with 0 double approvals, 0 releases, 0 unlinked first claims; 12 supplied RD probes and adapted Y05 OK; 336 and 120 supplied orders 0 double.",
+   "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+   "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md"
+  },
+  {
+   "id": "AAOS-CTL-04",
+   "state": "Independently verified",
+   "conclusion": "May be recorded Independently verified at this checkpoint, for this scope",
+   "criterion": "a replacement chain never leaves the same expense approved in two periods",
+   "evidence": "as AAOS-BNK-03; clause 8 holds in every delivery tried; RF-02 accepted (C9h, G2a-G2f)",
+   "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+   "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md"
+  },
+  {
+   "id": "AAOS-GOV-03",
+   "state": "Independently verified",
+   "conclusion": "May be recorded Independently verified at this checkpoint, for this scope",
+   "criterion": "known repaired defects must pass",
+   "evidence": "RB-01 is accepted at this checkpoint (RF-01). All 227 earlier methods present, 226 unchanged, one rewritten under D-031; every retained gate passes; five consecutive complete make test runs pass 241 methods (RF-03).",
+   "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+   "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md"
+  },
+  {
+   "id": "AAOS-KNO-04",
+   "state": "Independently verified",
+   "conclusion": "Unchanged; its probes still report OK at this checkpoint",
+   "criterion": null,
+   "evidence": "R02a, R02b, N03a, N03b, N03c",
+   "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+   "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md"
+  },
+  {
+   "id": "AAOS-CTL-01",
+   "state": "Independently verified",
+   "conclusion": "Unchanged; its probes still report OK at this checkpoint",
+   "criterion": null,
+   "evidence": "R02a, R02b, N03a, N03b, N04a",
+   "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+   "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md"
+  },
+  {
+   "id": "AAOS-BNK-02",
+   "state": "Independently verified",
+   "conclusion": "Unchanged; its probes still report OK at this checkpoint; UC-11 stays open",
+   "criterion": null,
+   "evidence": "R04a, R04b, R04c, N02b, N04a to N04d; N04e NOTE",
+   "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+   "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md"
+  },
+  {
+   "id": "AAOS-CTL-09",
+   "state": "Independently verified",
+   "conclusion": "Unchanged; its probes still report OK at this checkpoint; UC-10 stays open",
+   "criterion": null,
+   "evidence": "R03a, R03b, R04a, R04b, R04c, N02a, N02b, N04a to N04d, Q02; N02c NOTE",
+   "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+   "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md"
+  }
+ ],
+ "own_probes": {
+  "script": "fable_rf_acceptance_probes.py",
+  "output": "fable_rf_acceptance_output.txt",
+  "assertions": 439,
+  "assertions_failed": 0,
+  "verdicts": [
+   {
+    "id": "G1a",
+    "ticket": "RF-01",
+    "verdict": "OK"
+   },
+   {
+    "id": "G1b",
+    "ticket": "RF-01 / clause 7",
+    "verdict": "OK"
+   },
+   {
+    "id": "G1c",
+    "ticket": "RF-01 / clause 4",
+    "verdict": "NOTE"
+   },
+   {
+    "id": "G1d",
+    "ticket": "RF-01",
+    "verdict": "OK"
+   },
+   {
+    "id": "G1e",
+    "ticket": "RF-01 / clauses 4, 6",
+    "verdict": "OK"
+   },
+   {
+    "id": "G1f",
+    "ticket": "RF-01",
+    "verdict": "OK"
+   },
+   {
+    "id": "G1g",
+    "ticket": "RF-01 / clause 5",
+    "verdict": "NOTE"
+   },
+   {
+    "id": "G1h",
+    "ticket": "RF-01 / clause 3",
+    "verdict": "OK"
+   },
+   {
+    "id": "G5a",
+    "ticket": "clause 5",
+    "verdict": "NOTE"
+   },
+   {
+    "id": "G2a",
+    "ticket": "RF-02",
+    "verdict": "OK"
+   },
+   {
+    "id": "G2b",
+    "ticket": "RF-02",
+    "verdict": "OK"
+   },
+   {
+    "id": "G2c",
+    "ticket": "RF-02",
+    "verdict": "OK"
+   },
+   {
+    "id": "G2d",
+    "ticket": "RF-02",
+    "verdict": "OK"
+   },
+   {
+    "id": "G2e",
+    "ticket": "RF-02",
+    "verdict": "OK"
+   },
+   {
+    "id": "G2f",
+    "ticket": "RF-02",
+    "verdict": "OK"
+   }
+  ],
+  "on_the_re_checkpoint_source": {
+   "counts": {
+    "WEAK": 9,
+    "NOTE": 2,
+    "OK": 4
+   },
+   "verdicts": {
+    "G1a": "WEAK",
+    "G1b": "WEAK",
+    "G1c": "WEAK",
+    "G1d": "WEAK",
+    "G1e": "WEAK",
+    "G1f": "WEAK",
+    "G1g": "NOTE",
+    "G1h": "WEAK",
+    "G5a": "NOTE",
+    "G2a": "WEAK",
+    "G2b": "OK",
+    "G2c": "OK",
+    "G2d": "OK",
+    "G2e": "OK",
+    "G2f": "WEAK"
+   },
+   "output": "evidence/baseline-re-source-rf-probes.txt"
+  }
+ },
+ "own_order_search": {
+  "original_script_unchanged": {
+   "runs": 480,
+   "double": 0,
+   "released_without_authority": 0,
+   "audit_failures": 0,
+   "families": {
+    "late-row-target": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "approved_before_target_known": 0,
+     "audit_failures": 0
+    },
+    "older-claim+newer-claim": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "approved_before_target_known": 0,
+     "audit_failures": 0
+    },
+    "older-resent-with-claim": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "approved_before_target_known": 40,
+     "audit_failures": 0
+    },
+    "two-claims+revision": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "approved_before_target_known": 0,
+     "audit_failures": 0
+    }
+   },
+   "script": "exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py"
+  },
+  "extended": {
+   "runs": 2640,
+   "double": 0,
+   "released_without_authority": 0,
+   "unlinked_first_claim": 0,
+   "repeat_checked": 1320,
+   "repeat_changed": 0,
+   "repeat_of_retired_row": 244,
+   "audit_failures": 0,
+   "approved_before_target_known": 0,
+   "families": {
+    "claim-inside-row-data": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 19,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 40,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 40
+    },
+    "conflict+selection-without-lock": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 0,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 0
+    },
+    "retained-claim+newer-conflict": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 0,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 0
+    },
+    "retained-claim+older-conflict": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 0,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 0
+    },
+    "retained-claim+receipt-revision": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 0,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 0
+    },
+    "retained-claim+replacement+revision": {
+     "runs": 720,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 360,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 172,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 6,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 300,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 300
+    },
+    "retained-claim+row-revision": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 0,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 0
+    },
+    "retained-claim+withdrawal+resend": {
+     "runs": 720,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 360,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 6,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 0,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 0
+    },
+    "retained-claim-on-replacement": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 13,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 30,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 30
+    },
+    "retained-conflict+confirming-selection": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 0,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 0
+    },
+    "same-order-conflict-resent": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 21,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 40,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 40
+    },
+    "timestamp-order": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 19,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5,
+     "uc20_orders_approved_while_an_ancestor_claim_waits": 40,
+     "uc20_orders_waiting_claimant_itself_approved": 0,
+     "uc20_orders_approval_survived_target_arrival": 0,
+     "uc20_orders_stopped_and_held_on_arrival": 40
+    }
+   },
+   "uc20_orders_approved_while_an_ancestor_claim_waits": 450,
+   "uc20_orders_waiting_claimant_itself_approved": 0,
+   "uc20_orders_approval_survived_target_arrival": 0,
+   "uc20_orders_stopped_and_held_on_arrival": 450,
+   "uc20_note": "approved_before_target_known is the script's own flag, which fires only when the missing row is itself a locked row and is 0 by construction in these families; the uc20_* counts are taken from the kept trails by evidence/scripts/uc20_from_trails.py",
+   "script": "fable_rf_step_search.py"
+  },
+  "extended_on_the_re_checkpoint_source_six_families": {
+   "runs": 720,
+   "double": 60,
+   "released_without_authority": 0,
+   "unlinked_first_claim": 190,
+   "repeat_checked": 360,
+   "repeat_changed": 59,
+   "repeat_of_retired_row": 11,
+   "audit_failures": 0,
+   "approved_before_target_known": 0,
+   "families": {
+    "claim-inside-row-data": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 0,
+     "repeat_checked": 60,
+     "repeat_changed": 19,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5
+    },
+    "retained-claim+receipt-revision": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 40,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5
+    },
+    "retained-claim+row-revision": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 50,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5
+    },
+    "retained-claim-on-replacement": {
+     "runs": 120,
+     "double": 0,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 40,
+     "repeat_checked": 60,
+     "repeat_changed": 0,
+     "repeat_of_retired_row": 11,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5
+    },
+    "same-order-conflict-resent": {
+     "runs": 120,
+     "double": 20,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 20,
+     "repeat_checked": 60,
+     "repeat_changed": 21,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5
+    },
+    "timestamp-order": {
+     "runs": 120,
+     "double": 40,
+     "released_without_authority": 0,
+     "unlinked_first_claim": 40,
+     "repeat_checked": 60,
+     "repeat_changed": 19,
+     "repeat_of_retired_row": 0,
+     "audit_failures": 0,
+     "approved_before_target_known": 0,
+     "steps": 5
+    }
+   }
+  }
+ },
+ "supplied_checks": {
+  "re_probes_21": {
+   "OK": 19,
+   "NOTE": 2
+  },
+  "re_probes_21_notes": [
+   "C9c",
+   "C9g"
+  ],
+  "rd_probes_12": {
+   "OK": 12
+  },
+  "adapted_y05": {
+   "OK": 1
+  },
+  "rd_order_search": [
+   "SUMMARY runs=336 double=0 finalized_silently=0"
+  ],
+  "rc_probes": {
+   "OK": 15,
+   "NOTE": 1
+  },
+  "rc_order_search": [
+   "SUMMARY runs=120 double=0 finalized_silently=0"
+  ],
+  "rb_probes": {
+   "OK": 16,
+   "NOTE": 2
+  },
+  "ra_probes": [
+   "Verdict counts: {'OK': 14}"
+  ],
+  "reviewer_cases": [
+   "Summary: DEFERRED-OK=21, FIXED=10, PASS=29"
+  ],
+  "older_acceptance_gate": [
+   "Verdict counts: {'NOTE': 1, 'OK': 19}",
+   "Verdict counts: {'NOTE': 1, 'OK': 23}"
+  ],
+  "gate_targets": {
+   "acceptance-gate": 0,
+   "batch2-gate": 0,
+   "check": 0,
+   "rb-gate": 0,
+   "rc-gate": 0,
+   "rd-gate": 0,
+   "re-gate": 0,
+   "reverification-gate": 0,
+   "rf-gate": 0
+  }
+ },
+ "fault_injection": {
+  "register_F_unchanged": {
+   "cases": 37,
+   "agree": 37,
+   "gaps": 0
+  },
+  "register_G_unchanged": {
+   "cases": 44,
+   "agree": 44,
+   "gaps": 0
+  },
+  "register_H_unchanged": {
+   "cases": 37,
+   "agree": 34,
+   "gaps": 3,
+   "disagree": [
+    "H22",
+    "H23",
+    "H24"
+   ],
+   "reason": "written when the RC review was the latest authority"
+  },
+  "register_J_unchanged": {
+   "cases": 35,
+   "agree": 29,
+   "gaps": 6,
+   "disagree": [
+    "J14",
+    "J15",
+    "J16",
+    "J18",
+    "J22",
+    "J25"
+   ],
+   "reason": "written when the RD review was the latest authority and the RE bundle was unreviewed"
+  },
+  "register_K_own_fourth_authority": {
+   "cases": 62,
+   "agree": 62,
+   "gaps": 0
+  },
+  "re_gate_K_unchanged": {
+   "cases": 33,
+   "agree": 33,
+   "gaps": 0
+  },
+  "rf_gate_M_own": {
+   "cases": 56,
+   "agree": 56,
+   "gaps": 0
+  },
+  "rf_gate_on_re_checkpoint_source": {
+   "exit_code": 1,
+   "expected": "non-zero"
+  }
+ },
+ "rf03_equivalence": {
+  "eq-demo": {
+   "calls_in_transaction": 22,
+   "calls_autocommit": 1,
+   "mismatches": 0,
+   "current_evaluations_delivered": 55,
+   "current_evaluations_full": 286,
+   "calls_where_shortcut_saved_work": 21,
+   "autocommit_calls_that_reused": 0,
+   "wrapped_script_exit": 0
+  },
+  "eq-ra-probes": {
+   "calls_in_transaction": 4,
+   "calls_autocommit": 0,
+   "mismatches": 0,
+   "current_evaluations_delivered": 4,
+   "current_evaluations_full": 7,
+   "calls_where_shortcut_saved_work": 3,
+   "autocommit_calls_that_reused": 0,
+   "wrapped_script_exit": 0
+  },
+  "eq-rb-probes": {
+   "calls_in_transaction": 15,
+   "calls_autocommit": 0,
+   "mismatches": 0,
+   "current_evaluations_delivered": 15,
+   "current_evaluations_full": 26,
+   "calls_where_shortcut_saved_work": 11,
+   "autocommit_calls_that_reused": 0,
+   "wrapped_script_exit": 0
+  },
+  "eq-rc-probes": {
+   "calls_in_transaction": 31,
+   "calls_autocommit": 0,
+   "mismatches": 0,
+   "current_evaluations_delivered": 29,
+   "current_evaluations_full": 52,
+   "calls_where_shortcut_saved_work": 23,
+   "autocommit_calls_that_reused": 0,
+   "wrapped_script_exit": 0
+  },
+  "eq-rd-probes": {
+   "calls_in_transaction": 57,
+   "calls_autocommit": 0,
+   "mismatches": 0,
+   "current_evaluations_delivered": 54,
+   "current_evaluations_full": 100,
+   "calls_where_shortcut_saved_work": 46,
+   "autocommit_calls_that_reused": 0,
+   "wrapped_script_exit": 1
+  },
+  "eq-re-probes": {
+   "calls_in_transaction": 65,
+   "calls_autocommit": 0,
+   "mismatches": 0,
+   "current_evaluations_delivered": 63,
+   "current_evaluations_full": 120,
+   "calls_where_shortcut_saved_work": 57,
+   "autocommit_calls_that_reused": 0,
+   "wrapped_script_exit": 0
+  },
+  "eq-re-step-search-older-resent": {
+   "calls_in_transaction": 120,
+   "calls_autocommit": 0,
+   "mismatches": 0,
+   "current_evaluations_delivered": 120,
+   "current_evaluations_full": 240,
+   "calls_where_shortcut_saved_work": 120,
+   "autocommit_calls_that_reused": 0,
+   "wrapped_script_exit": 0
+  },
+  "eq-rf-probes": {
+   "calls_in_transaction": 52,
+   "calls_autocommit": 0,
+   "mismatches": 0,
+   "current_evaluations_delivered": 50,
+   "current_evaluations_full": 88,
+   "calls_where_shortcut_saved_work": 38,
+   "autocommit_calls_that_reused": 0,
+   "wrapped_script_exit": 0
+  }
+ },
+ "make_test": {
+  "five_consecutive_runs": [
+   {
+    "label": "consecutive-make-test-1",
+    "exit_code": 0,
+    "started_utc": "2026-11-17T03:47:44Z",
+    "methods_run": 241,
+    "suite_seconds": 1531.639,
+    "result_line": "OK",
+    "methods_ok": 241,
+    "http_methods_ok": 11,
+    "failures_or_errors": 0,
+    "skipped_or_expected_failures": 0,
+    "http_class_setup_seconds": 2.429482,
+    "http_worker_wait_seconds": 2.219297,
+    "http_setup_failed": false,
+    "load_averages_before": "24.70 39.84 36.64",
+    "load_averages_after": "4.74 9.56 18.84"
+   },
+   {
+    "label": "consecutive-make-test-2",
+    "exit_code": 0,
+    "started_utc": "2026-11-17T04:13:17Z",
+    "methods_run": 241,
+    "suite_seconds": 1427.187,
+    "result_line": "OK",
+    "methods_ok": 241,
+    "http_methods_ok": 11,
+    "failures_or_errors": 0,
+    "skipped_or_expected_failures": 0,
+    "http_class_setup_seconds": 2.672572,
+    "http_worker_wait_seconds": 2.493846,
+    "http_setup_failed": false,
+    "load_averages_before": "4.74 9.56 18.84",
+    "load_averages_after": "26.73 25.69 22.16"
+   },
+   {
+    "label": "consecutive-make-test-3",
+    "exit_code": 0,
+    "started_utc": "2026-11-17T04:37:05Z",
+    "methods_run": 241,
+    "suite_seconds": 1624.468,
+    "result_line": "OK",
+    "methods_ok": 241,
+    "http_methods_ok": 11,
+    "failures_or_errors": 0,
+    "skipped_or_expected_failures": 0,
+    "http_class_setup_seconds": 3.38533,
+    "http_worker_wait_seconds": 3.151351,
+    "http_setup_failed": false,
+    "load_averages_before": "26.73 25.69 22.16",
+    "load_averages_after": "7.22 17.58 21.87"
+   },
+   {
+    "label": "consecutive-make-test-4",
+    "exit_code": 0,
+    "started_utc": "2026-11-17T05:04:10Z",
+    "methods_run": 241,
+    "suite_seconds": 1006.603,
+    "result_line": "OK",
+    "methods_ok": 241,
+    "http_methods_ok": 11,
+    "failures_or_errors": 0,
+    "skipped_or_expected_failures": 0,
+    "http_class_setup_seconds": 2.356651,
+    "http_worker_wait_seconds": 2.202476,
+    "http_setup_failed": false,
+    "load_averages_before": "7.22 17.58 21.87",
+    "load_averages_after": "4.21 5.41 10.20"
+   },
+   {
+    "label": "consecutive-make-test-5",
+    "exit_code": 0,
+    "started_utc": "2026-11-17T05:20:57Z",
+    "methods_run": 241,
+    "suite_seconds": 1015.042,
+    "result_line": "OK",
+    "methods_ok": 241,
+    "http_methods_ok": 11,
+    "failures_or_errors": 0,
+    "skipped_or_expected_failures": 0,
+    "http_class_setup_seconds": 2.449014,
+    "http_worker_wait_seconds": 2.293722,
+    "http_setup_failed": false,
+    "load_averages_before": "4.21 5.41 10.20",
+    "load_averages_after": "3.60 4.31 6.31"
+   }
+  ],
+  "other_runs": [
+   {
+    "label": "make-test-under-load",
+    "exit_code": 0,
+    "started_utc": "2026-11-17T01:50:56Z",
+    "methods_run": 241,
+    "suite_seconds": 2601.023,
+    "result_line": "OK",
+    "methods_ok": 241,
+    "http_methods_ok": 11,
+    "failures_or_errors": 0,
+    "skipped_or_expected_failures": 0
+   },
+   {
+    "label": "make-test-idle-no-hook",
+    "exit_code": 0,
+    "started_utc": "2026-11-17T05:38:29Z",
+    "methods_run": 241,
+    "suite_seconds": 1018.939,
+    "result_line": "OK",
+    "methods_ok": 241,
+    "http_methods_ok": 11,
+    "failures_or_errors": 0,
+    "skipped_or_expected_failures": 0
+   }
+  ],
+  "http_setup_timing": "evidence/http-setup-timing.txt"
+ },
+ "preservation": {
+  "earlier_test_methods": 227,
+  "present": 227,
+  "unchanged": 226,
+  "rewritten_under_D-031": [
+   "tests/test_product_requirements.py::ProductRequirements::test_PRV14_third_authority_is_pinned_and_latest_verdict_controls"
+  ],
+  "methods_added": {
+   "tests/test_product_requirements_rf.py": 5,
+   "tests/test_review_corrections_rf.py": 6,
+   "tests/test_rf_review_gate.py": 3
+  },
+  "skips_or_expected_failures": 0,
+  "tests_test_http_py_byte_identical": true,
+  "schema_byte_identical": true,
+  "adapted_y05_byte_identical": true,
+  "decisions_md_re_text_is_unchanged_prefix": true,
+  "register_records": 88,
+  "register_records_changed": [
+   "AAOS-GOV-02",
+   "AAOS-GOV-03",
+   "AAOS-BNK-03",
+   "AAOS-CTL-04"
+  ],
+  "register_fields_changed": [
+   "Scope note",
+   "Evidence"
+  ],
+  "protected_inputs_verified_in_bundle_and_working_project": 1198,
+  "prior_archives_verified": 16,
+  "changed_files_vs_re_bundle": 15,
+  "added_files_vs_re_bundle": 453,
+  "removed_files": 0,
+  "patch_reproduces_code_tests_scripts_review_makefile": 89,
+  "working_project_equals_bundle_payload": 1790
+ },
+ "commands": [
+  {
+   "label": "baseline-re-source-rf-probes",
+   "argv": "python3 /private/tmp/claude-501/rf/scripts/fable_rf_acceptance_probes.py .",
+   "exit_code": 1,
+   "elapsed_seconds": 179,
+   "started_utc": "2026-11-17T02:30:51Z",
+   "stdout": "evidence/commands/baseline-re-source-rf-probes.stdout.txt",
+   "stderr": "evidence/commands/baseline-re-source-rf-probes.stderr.txt"
+  },
+  {
+   "label": "consecutive-make-test-1",
+   "argv": "make test",
+   "exit_code": 0,
+   "elapsed_seconds": 1533,
+   "started_utc": "2026-11-17T03:47:44Z",
+   "stdout": "evidence/commands/consecutive-make-test-1.stdout.txt",
+   "stderr": "evidence/commands/consecutive-make-test-1.stderr.txt"
+  },
+  {
+   "label": "consecutive-make-test-2",
+   "argv": "make test",
+   "exit_code": 0,
+   "elapsed_seconds": 1428,
+   "started_utc": "2026-11-17T04:13:17Z",
+   "stdout": "evidence/commands/consecutive-make-test-2.stdout.txt",
+   "stderr": "evidence/commands/consecutive-make-test-2.stderr.txt"
+  },
+  {
+   "label": "consecutive-make-test-3",
+   "argv": "make test",
+   "exit_code": 0,
+   "elapsed_seconds": 1625,
+   "started_utc": "2026-11-17T04:37:05Z",
+   "stdout": "evidence/commands/consecutive-make-test-3.stdout.txt",
+   "stderr": "evidence/commands/consecutive-make-test-3.stderr.txt"
+  },
+  {
+   "label": "consecutive-make-test-4",
+   "argv": "make test",
+   "exit_code": 0,
+   "elapsed_seconds": 1007,
+   "started_utc": "2026-11-17T05:04:10Z",
+   "stdout": "evidence/commands/consecutive-make-test-4.stdout.txt",
+   "stderr": "evidence/commands/consecutive-make-test-4.stderr.txt"
+  },
+  {
+   "label": "consecutive-make-test-5",
+   "argv": "make test",
+   "exit_code": 0,
+   "elapsed_seconds": 1016,
+   "started_utc": "2026-11-17T05:20:57Z",
+   "stdout": "evidence/commands/consecutive-make-test-5.stdout.txt",
+   "stderr": "evidence/commands/consecutive-make-test-5.stderr.txt"
+  },
+  {
+   "label": "eq-demo",
+   "argv": "python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . /private/tmp/claude-501/rf/scripts/eq_demo.py",
+   "exit_code": 0,
+   "elapsed_seconds": 17,
+   "started_utc": "2026-11-17T02:06:10Z",
+   "stdout": "evidence/commands/eq-demo.stdout.txt",
+   "stderr": "evidence/commands/eq-demo.stderr.txt"
+  },
+  {
+   "label": "eq-ra-probes",
+   "argv": "python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py",
+   "exit_code": 0,
+   "elapsed_seconds": 53,
+   "started_utc": "2026-11-17T02:08:56Z",
+   "stdout": "evidence/commands/eq-ra-probes.stdout.txt",
+   "stderr": "evidence/commands/eq-ra-probes.stderr.txt"
+  },
+  {
+   "label": "eq-rb-probes",
+   "argv": "python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py",
+   "exit_code": 0,
+   "elapsed_seconds": 92,
+   "started_utc": "2026-11-17T02:08:08Z",
+   "stdout": "evidence/commands/eq-rb-probes.stdout.txt",
+   "stderr": "evidence/commands/eq-rb-probes.stderr.txt"
+  },
+  {
+   "label": "eq-rc-probes",
+   "argv": "python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py",
+   "exit_code": 0,
+   "elapsed_seconds": 91,
+   "started_utc": "2026-11-17T02:07:24Z",
+   "stdout": "evidence/commands/eq-rc-probes.stdout.txt",
+   "stderr": "evidence/commands/eq-rc-probes.stderr.txt"
+  },
+  {
+   "label": "eq-rd-probes",
+   "argv": "python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py",
+   "exit_code": 1,
+   "elapsed_seconds": 57,
+   "started_utc": "2026-11-17T02:06:27Z",
+   "stdout": "evidence/commands/eq-rd-probes.stdout.txt",
+   "stderr": "evidence/commands/eq-rd-probes.stderr.txt"
+  },
+  {
+   "label": "eq-re-probes",
+   "argv": "python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RE_ACCEPTANCE/fable_re_acceptance_probes.py",
+   "exit_code": 0,
+   "elapsed_seconds": 177,
+   "started_utc": "2026-11-17T02:06:10Z",
+   "stdout": "evidence/commands/eq-re-probes.stdout.txt",
+   "stderr": "evidence/commands/eq-re-probes.stderr.txt"
+  },
+  {
+   "label": "eq-re-step-search-older-resent",
+   "argv": "python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py --family older-resent-with-claim",
+   "exit_code": 0,
+   "elapsed_seconds": 2146,
+   "started_utc": "2026-11-17T02:09:07Z",
+   "stdout": "evidence/commands/eq-re-step-search-older-resent.stdout.txt",
+   "stderr": "evidence/commands/eq-re-step-search-older-resent.stderr.txt"
+  },
+  {
+   "label": "eq-rf-probes",
+   "argv": "python3 /private/tmp/claude-501/rf/scripts/fable_rf_equivalence.py . /private/tmp/claude-501/rf/scripts/fable_rf_acceptance_probes.py",
+   "exit_code": 0,
+   "elapsed_seconds": 118,
+   "started_utc": "2026-11-17T02:06:10Z",
+   "stdout": "evidence/commands/eq-rf-probes.stdout.txt",
+   "stderr": "evidence/commands/eq-rf-probes.stderr.txt"
+  },
+  {
+   "label": "gate-negative-rf-gate-on-re-source",
+   "argv": "python3 scripts/verify_re_acceptance_review.py",
+   "exit_code": 1,
+   "elapsed_seconds": 173,
+   "started_utc": "2026-11-17T02:18:28Z",
+   "stdout": "evidence/commands/gate-negative-rf-gate-on-re-source.stdout.txt",
+   "stderr": "evidence/commands/gate-negative-rf-gate-on-re-source.stderr.txt"
+  },
+  {
+   "label": "make-acceptance-gate",
+   "argv": "make acceptance-gate",
+   "exit_code": 0,
+   "elapsed_seconds": 52,
+   "started_utc": "2026-11-17T01:52:54Z",
+   "stdout": "evidence/commands/make-acceptance-gate.stdout.txt",
+   "stderr": "evidence/commands/make-acceptance-gate.stderr.txt"
+  },
+  {
+   "label": "make-batch2-gate",
+   "argv": "make batch2-gate",
+   "exit_code": 0,
+   "elapsed_seconds": 64,
+   "started_utc": "2026-11-17T01:50:58Z",
+   "stdout": "evidence/commands/make-batch2-gate.stdout.txt",
+   "stderr": "evidence/commands/make-batch2-gate.stderr.txt"
+  },
+  {
+   "label": "make-check",
+   "argv": "make check",
+   "exit_code": 0,
+   "elapsed_seconds": 2,
+   "started_utc": "2026-11-17T01:50:56Z",
+   "stdout": "evidence/commands/make-check.stdout.txt",
+   "stderr": "evidence/commands/make-check.stderr.txt"
+  },
+  {
+   "label": "make-rb-gate",
+   "argv": "make rb-gate",
+   "exit_code": 0,
+   "elapsed_seconds": 31,
+   "started_utc": "2026-11-17T01:53:46Z",
+   "stdout": "evidence/commands/make-rb-gate.stdout.txt",
+   "stderr": "evidence/commands/make-rb-gate.stderr.txt"
+  },
+  {
+   "label": "make-rc-gate",
+   "argv": "make rc-gate",
+   "exit_code": 0,
+   "elapsed_seconds": 27,
+   "started_utc": "2026-11-17T01:54:17Z",
+   "stdout": "evidence/commands/make-rc-gate.stdout.txt",
+   "stderr": "evidence/commands/make-rc-gate.stderr.txt"
+  },
+  {
+   "label": "make-rd-gate",
+   "argv": "make rd-gate",
+   "exit_code": 0,
+   "elapsed_seconds": 159,
+   "started_utc": "2026-11-17T01:54:44Z",
+   "stdout": "evidence/commands/make-rd-gate.stdout.txt",
+   "stderr": "evidence/commands/make-rd-gate.stderr.txt"
+  },
+  {
+   "label": "make-re-gate",
+   "argv": "make re-gate",
+   "exit_code": 0,
+   "elapsed_seconds": 853,
+   "started_utc": "2026-11-17T01:57:23Z",
+   "stdout": "evidence/commands/make-re-gate.stdout.txt",
+   "stderr": "evidence/commands/make-re-gate.stderr.txt"
+  },
+  {
+   "label": "make-reverification-gate",
+   "argv": "make reverification-gate",
+   "exit_code": 0,
+   "elapsed_seconds": 52,
+   "started_utc": "2026-11-17T01:52:02Z",
+   "stdout": "evidence/commands/make-reverification-gate.stdout.txt",
+   "stderr": "evidence/commands/make-reverification-gate.stderr.txt"
+  },
+  {
+   "label": "make-rf-gate",
+   "argv": "make rf-gate",
+   "exit_code": 0,
+   "elapsed_seconds": 5086,
+   "started_utc": "2026-11-17T02:11:36Z",
+   "stdout": "evidence/commands/make-rf-gate.stdout.txt",
+   "stderr": "evidence/commands/make-rf-gate.stderr.txt"
+  },
+  {
+   "label": "make-test-idle-no-hook",
+   "argv": "make test",
+   "exit_code": 0,
+   "elapsed_seconds": 1020,
+   "started_utc": "2026-11-17T05:38:29Z",
+   "stdout": "evidence/commands/make-test-idle-no-hook.stdout.txt",
+   "stderr": "evidence/commands/make-test-idle-no-hook.stderr.txt"
+  },
+  {
+   "label": "make-test-under-load",
+   "argv": "make test",
+   "exit_code": 0,
+   "elapsed_seconds": 2602,
+   "started_utc": "2026-11-17T01:50:56Z",
+   "stdout": "evidence/commands/make-test-under-load.stdout.txt",
+   "stderr": "evidence/commands/make-test-under-load.stderr.txt"
+  },
+  {
+   "label": "owner-clarification-repro",
+   "argv": "python3 docs/corrections_re/locked_second_claim_reproduction.py",
+   "exit_code": 0,
+   "elapsed_seconds": 1,
+   "started_utc": "2026-11-17T01:53:28Z",
+   "stdout": "evidence/commands/owner-clarification-repro.stdout.txt",
+   "stderr": "evidence/commands/owner-clarification-repro.stderr.txt"
+  },
+  {
+   "label": "ra-probes",
+   "argv": "python3 exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py .",
+   "exit_code": 0,
+   "elapsed_seconds": 15,
+   "started_utc": "2026-11-17T01:53:13Z",
+   "stdout": "evidence/commands/ra-probes.stdout.txt",
+   "stderr": "evidence/commands/ra-probes.stderr.txt"
+  },
+  {
+   "label": "rb-probes",
+   "argv": "python3 exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py .",
+   "exit_code": 0,
+   "elapsed_seconds": 28,
+   "started_utc": "2026-11-17T01:52:45Z",
+   "stdout": "evidence/commands/rb-probes.stdout.txt",
+   "stderr": "evidence/commands/rb-probes.stderr.txt"
+  },
+  {
+   "label": "rb-register-faults-F",
+   "argv": "python3 exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py .",
+   "exit_code": 0,
+   "elapsed_seconds": 64,
+   "started_utc": "2026-11-17T01:50:56Z",
+   "stdout": "evidence/commands/rb-register-faults-F.stdout.txt",
+   "stderr": "evidence/commands/rb-register-faults-F.stderr.txt"
+  },
+  {
+   "label": "rc-order-search-120",
+   "argv": "python3 exports/FABLE_RC_ACCEPTANCE/fable_rc_order_search.py . --json /private/tmp/claude-501/rf/out/rc-order-search-120.results.json",
+   "exit_code": 0,
+   "elapsed_seconds": 267,
+   "started_utc": "2026-11-17T02:00:45Z",
+   "stdout": "evidence/commands/rc-order-search-120.stdout.txt",
+   "stderr": "evidence/commands/rc-order-search-120.stderr.txt"
+  },
+  {
+   "label": "rc-probes",
+   "argv": "python3 exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py .",
+   "exit_code": 0,
+   "elapsed_seconds": 28,
+   "started_utc": "2026-11-17T01:52:17Z",
+   "stdout": "evidence/commands/rc-probes.stdout.txt",
+   "stderr": "evidence/commands/rc-probes.stderr.txt"
+  },
+  {
+   "label": "rc-register-faults-G",
+   "argv": "python3 exports/FABLE_RC_ACCEPTANCE/evidence/scripts/fable_rc_register_faults.py /private/tmp/claude-501/rf/run4",
+   "exit_code": 0,
+   "elapsed_seconds": 44,
+   "started_utc": "2026-11-17T01:52:00Z",
+   "stdout": "evidence/commands/rc-register-faults-G.stdout.txt",
+   "stderr": "evidence/commands/rc-register-faults-G.stderr.txt"
+  },
+  {
+   "label": "rd-order-search-336",
+   "argv": "python3 exports/FABLE_RD_ACCEPTANCE/fable_rd_order_search.py . --json /private/tmp/claude-501/rf/out/rd-order-search-336.results.json",
+   "exit_code": 0,
+   "elapsed_seconds": 436,
+   "started_utc": "2026-11-17T01:53:29Z",
+   "stdout": "evidence/commands/rd-order-search-336.stdout.txt",
+   "stderr": "evidence/commands/rd-order-search-336.stderr.txt"
+  },
+  {
+   "label": "rd-probes-12",
+   "argv": "python3 exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py . Y01 Y02 Y03 Y04 Y06 E01 E02 E03 E03c E04 E05 E06",
+   "exit_code": 0,
+   "elapsed_seconds": 18,
+   "started_utc": "2026-11-17T01:51:57Z",
+   "stdout": "evidence/commands/rd-probes-12.stdout.txt",
+   "stderr": "evidence/commands/rd-probes-12.stderr.txt"
+  },
+  {
+   "label": "rd-register-faults-H",
+   "argv": "python3 exports/FABLE_RD_ACCEPTANCE/evidence/scripts/fable_rd_register_faults.py /private/tmp/claude-501/rf/run5",
+   "exit_code": 1,
+   "elapsed_seconds": 22,
+   "started_utc": "2026-11-17T01:52:44Z",
+   "stdout": "evidence/commands/rd-register-faults-H.stdout.txt",
+   "stderr": "evidence/commands/rd-register-faults-H.stderr.txt"
+  },
+  {
+   "label": "re-probes-21",
+   "argv": "python3 exports/FABLE_RE_ACCEPTANCE/fable_re_acceptance_probes.py .",
+   "exit_code": 0,
+   "elapsed_seconds": 61,
+   "started_utc": "2026-11-17T01:50:56Z",
+   "stdout": "evidence/commands/re-probes-21.stdout.txt",
+   "stderr": "evidence/commands/re-probes-21.stderr.txt"
+  },
+  {
+   "label": "re-register-faults-J",
+   "argv": "python3 exports/FABLE_RE_ACCEPTANCE/evidence/scripts/fable_re_register_faults.py /private/tmp/claude-501/rf/run7",
+   "exit_code": 1,
+   "elapsed_seconds": 25,
+   "started_utc": "2026-11-17T01:53:06Z",
+   "stdout": "evidence/commands/re-register-faults-J.stdout.txt",
+   "stderr": "evidence/commands/re-register-faults-J.stderr.txt"
+  },
+  {
+   "label": "re-step-search-late-row-target",
+   "argv": "python3 exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py . --family late-row-target --json /private/tmp/claude-501/rf/out/re-step-search-late-row-target.results.json",
+   "exit_code": 0,
+   "elapsed_seconds": 3196,
+   "started_utc": "2026-11-17T01:59:36Z",
+   "stdout": "evidence/commands/re-step-search-late-row-target.stdout.txt",
+   "stderr": "evidence/commands/re-step-search-late-row-target.stderr.txt"
+  },
+  {
+   "label": "re-step-search-older-claim+newer-claim",
+   "argv": "python3 exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py . --family older-claim+newer-claim --json /private/tmp/claude-501/rf/out/re-step-search-older-claim+newer-claim.results.json",
+   "exit_code": 0,
+   "elapsed_seconds": 2664,
+   "started_utc": "2026-11-17T01:59:36Z",
+   "stdout": "evidence/commands/re-step-search-older-claim+newer-claim.stdout.txt",
+   "stderr": "evidence/commands/re-step-search-older-claim+newer-claim.stderr.txt"
+  },
+  {
+   "label": "re-step-search-older-resent-with-claim",
+   "argv": "python3 exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py . --family older-resent-with-claim --json /private/tmp/claude-501/rf/out/re-step-search-older-resent-with-claim.results.json",
+   "exit_code": 0,
+   "elapsed_seconds": 1733,
+   "started_utc": "2026-11-17T01:59:36Z",
+   "stdout": "evidence/commands/re-step-search-older-resent-with-claim.stdout.txt",
+   "stderr": "evidence/commands/re-step-search-older-resent-with-claim.stderr.txt"
+  },
+  {
+   "label": "re-step-search-two-claims+revision",
+   "argv": "python3 exports/FABLE_RE_ACCEPTANCE/fable_re_step_search.py . --family two-claims+revision --json /private/tmp/claude-501/rf/out/re-step-search-two-claims+revision.results.json",
+   "exit_code": 0,
+   "elapsed_seconds": 3213,
+   "started_utc": "2026-11-17T01:59:36Z",
+   "stdout": "evidence/commands/re-step-search-two-claims+revision.stdout.txt",
+   "stderr": "evidence/commands/re-step-search-two-claims+revision.stderr.txt"
+  },
+  {
+   "label": "rf-probes-own",
+   "argv": "python3 /private/tmp/claude-501/rf/scripts/fable_rf_acceptance_probes.py .",
+   "exit_code": 0,
+   "elapsed_seconds": 199,
+   "started_utc": "2026-11-17T02:27:32Z",
+   "stdout": "evidence/commands/rf-probes-own.stdout.txt",
+   "stderr": "evidence/commands/rf-probes-own.stderr.txt"
+  },
+  {
+   "label": "y05-adapted",
+   "argv": "python3 review/fable_rd_feed_contract_probes.py . Y05",
+   "exit_code": 0,
+   "elapsed_seconds": 2,
+   "started_utc": "2026-11-17T01:52:15Z",
+   "stdout": "evidence/commands/y05-adapted.stdout.txt",
+   "stderr": "evidence/commands/y05-adapted.stderr.txt"
+  }
+ ],
+ "corrective_tickets": "FABLE_RF_CORRECTIONS.json",
+ "open_items_unchanged": [
+  "U4",
+  "UC-14",
+  "UC-17",
+  "UC-18",
+  "UC-20",
+  "X08",
+  "N02c",
+  "N04e",
+  "C9c",
+  "C9g",
+  "UC-9 reading only"
+ ],
+ "new_observations_for_the_owner": [
+  "UC-21",
+  "UC-22",
+  "UC-23",
+  "UC-24",
+  "UC-25"
+ ],
+ "authorizes": "Nothing. No implementation, no promotion of any requirement by itself, no readiness, no live action. Recording the three verdicts in the register is a separate, owner-assigned change."
+}

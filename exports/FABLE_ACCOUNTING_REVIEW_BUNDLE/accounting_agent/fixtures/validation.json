@@ -1,0 +1,16 @@
+{
+  "synthetic": true,
+  "status": "developer-authored regression cases, separate from teaching; not independently validated accounting policy",
+  "cases": [
+    {"id":"V-01","workflow":"card_preparation","source_kind":"transaction","source_key":"demo_card_001:TX-001","changes":{"description":"Acme-Paper Demo 001"},"expected_blockers":[],"expected_category":"DEMO_OFFICE_SUPPLIES","eligible":true},
+    {"id":"V-02","workflow":"card_preparation","source_kind":"receipt","source_key":"receipt-TX-001","changes":{"vendor":"Unrelated Supplier Demo"},"expected_blockers":["RECEIPT_VENDOR_MISMATCH"],"eligible":false},
+    {"id":"V-03","workflow":"card_preparation","source_kind":"receipt","source_key":"receipt-TX-001","changes":{"currency":"EUR"},"expected_blockers":["RECEIPT_CURRENCY_MISMATCH"],"eligible":false},
+    {"id":"V-04","workflow":"card_preparation","source_kind":"receipt","source_key":"receipt-TX-001","changes":{"date":"2026-11-04"},"expected_blockers":["RECEIPT_DATE_MISMATCH"],"eligible":false},
+    {"id":"V-05","workflow":"card_preparation","source_kind":"transaction","source_key":"demo_card_001:TX-001","changes":{"supersedes_source_id":"AUTH-OLD-001"},"expected_blockers":["SOURCE_TRANSITION_REQUIRES_REVIEW"],"eligible":false},
+    {"id":"V-06","workflow":"card_preparation","source_kind":"transaction","source_key":"demo_card_001:TX-001","changes":{"activity":"transfer"},"expected_blockers":["NON_EXPENSE_REQUIRES_REVIEW"],"expected_category":null,"eligible":false},
+    {"id":"V-07","workflow":"journal_preparation","source_kind":"journal","source_key":"J-001","changes":{"supporting_keys":[]},"expected_blockers":["MISSING_JOURNAL_SUPPORT"],"eligible":false},
+    {"id":"V-08","workflow":"journal_preparation","source_kind":"journal","source_key":"J-001","changes":{"lines":[{"account_id":"DEMO_OFFICE_SUPPLIES","debit":"25.00","credit":"1.00"},{"account_id":"DEMO_CARD_LIABILITY","debit":"0.00","credit":"24.00"}]},"expected_blockers":["INVALID_JOURNAL_LINE"],"eligible":false},
+    {"id":"V-09","workflow":"journal_preparation","source_kind":"journal","source_key":"J-001","changes":{"lines":[{"account_id":"DEMO_OFFICE_SUPPLIES","debit":"0.00","credit":"0.00"},{"account_id":"DEMO_CARD_LIABILITY","debit":"0.00","credit":"0.00"}]},"expected_blockers":["EMPTY_OR_NEGATIVE_JOURNAL","INVALID_JOURNAL_LINE"],"eligible":false},
+    {"id":"V-10","workflow":"journal_preparation","source_kind":"journal","source_key":"J-001","changes":{"date":"2026-12-01"},"expected_blockers":["OUTSIDE_PERIOD"],"eligible":false}
+  ]
+}

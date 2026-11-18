@@ -1,0 +1,29 @@
+test_P01_contributor_cannot_review_colleague_run (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_P02_identity_kind_not_name_controls_review (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_P03_stale_occurrence_redispatched (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_P04_unfit_mandate_does_not_stop_others (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_P05_one_governing_artifact_across_occurrences (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_P06_unicode_vendor_never_collapses_to_another (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_P07_stale_source_revision_cannot_replace_newer (tests.test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P08_journal_support_duplicates_no_effect_are_held (tests.test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P09_lock_preserves_review_and_blocks_new_dispatch (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_P10_second_period_does_not_strand_first (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_P11_transport_change_does_not_invalidate_accounting (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_P12_close_considers_open_preparation_exceptions (tests.test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P13_statement_population_swap_detected (tests.test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P14_decisions_cannot_be_repeated_or_overwritten (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_P15_receipt_tolerance_is_explicit_client_policy (tests.test_reviewer_probes.ReviewerProbes) ... expected failure
+test_P16_unrelated_receipt_keeps_approved_journal (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_concurrent_duplicate_approvals_commit_one_decision (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_concurrent_ticks_and_skipped_occurrences (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_expired_partial_slot_is_recorded_as_skipped (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_handlers_only_receive_declared_sources_and_accounting_code_changes_stale (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_journal_document_does_not_invalidate_card_review (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_mandate_issuer_is_hashed_contributor (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_reused_artifact_keeps_review_and_dispute_requires_third_reviewer (tests.test_reviewer_probes.ReviewerProbes) ... ok
+test_unicode_alias_validation_and_accents (tests.test_reviewer_probes.ReviewerProbes) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 7.011s
+
+OK (expected failures=5)

@@ -1,0 +1,23 @@
+test_PRV15_result_row_swaps_and_reversal_are_rejected (tests.test_product_requirements.ProductRequirements) ... FAIL
+test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (tests.test_product_requirements.ProductRequirements) ... FAIL
+
+======================================================================
+FAIL: test_PRV15_result_row_swaps_and_reversal_are_rejected (tests.test_product_requirements.ProductRequirements)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 192, in test_PRV15_result_row_swaps_and_reversal_are_rejected
+    with self.assertRaisesRegex(ValueError,'row order'):validate_register(self.text,root)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (tests.test_product_requirements.ProductRequirements)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements.py", line 201, in test_PRV14_third_authority_is_pinned_and_latest_verdict_controls
+    with self.assertRaisesRegex(ValueError,'Protected reviewer input hash differs'):validate_register(self.text,root)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 5.297s
+
+FAILED (failures=2)

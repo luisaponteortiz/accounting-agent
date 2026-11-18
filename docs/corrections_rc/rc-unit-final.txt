@@ -1,0 +1,11 @@
+test_RC01_withdrawal_then_fresh_or_late_claim_and_relock (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC02_unchanged_chain_adds_no_bindings_moves_or_accounting_events (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC03_open_target_clears_unresolved_without_quarantine (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC03_pending_cycle_is_not_linked (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 8.613s
+
+OK

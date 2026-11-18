@@ -1,0 +1,56 @@
+
+### P01 same person supplies profile+evidence, a colleague enqueues, first person approves
+  RESULT: approval ACCEPTED from the person who registered the policy and supplied the journal + support
+
+### P02 independence check is a string prefix on actor id
+  automation-agent-7           -> approval accepted
+  worker-of-the-month-jane     -> denied (Independent human review required)
+
+### P03 recurring occurrence consumed when evidence arrives before the worker runs
+  first tick run ids [4] second tick [4]
+  occurrence run status: held | artifacts for occurrence: 0 | current journal artifacts for client: 0
+
+### P04 one mandate naming a workflow later removed from procedures blocks every tick
+  tick RAISED: Workflow unavailable for this client | mandate runs created: 0
+
+### P05 two recurring occurrences on identical inputs give two current artifacts for one journal
+  J-001 artifacts (run, current, review_status, hash): [(5, True, 'reject', '737b5939'), (4, True, 'approve', '52872115'), (2, True, 'pending', '20fd5f28')]
+  same journal source hash in both: True
+
+### P06 non-Latin alias and a different non-Latin descriptor both normalise to the empty string
+  descriptor: 大阪修理 | matched vendor: {'id': 'demo_tokyo', 'name': 'Tokyo stationery (fictional)'} | category: DEMO_OFFICE_SUPPLIES | eligible: True | blockers: []
+
+### P07 late delivery of an older batch silently replaces the newer source version
+  intake result: {'changed': True, 'generation': 4, 'replay': False} | current version: 3 | current amount: 42.50
+
+### P08 journal support: unrelated document accepted; identical journal under a second key not flagged
+  J-001 eligible=True blockers=[]
+  J-003 eligible=True blockers=[]
+  J-004 eligible=True blockers=[]
+
+### P09 locking the period voids the approvals it should protect
+  after lock, previously approved J-001 review_status: stale
+  re-prepared J-001 eligible=False blockers=['PERIOD_LOCKED']
+
+### P10 moving the profile to December strands November
+  approved November TX-001 now: stale
+  re-prepared TX-001 eligible=False blockers=['OUTSIDE_PERIOD', 'STATEMENT_CONTROL_MISMATCH']
+
+### P11 any code change (here simulated) marks every approval stale
+  J-001 review_status after unrelated code change: stale | current runs: 0 of 3
+
+### P12 close readiness: five placeholder documents, 13 open exceptions elsewhere
+  missing_evidence: [] | blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED']
+  open card/journal exceptions not referenced by checklist: 12 | checklist mentions them: False
+
+### P13 statement control: swap one posted item for a different one with the same amount
+  TX-001 blockers after population swap: [] | eligible: True
+
+### P14 repeated and contradictory decisions on one artifact
+  decisions: [('o-reviewer', 'approve'), ('o-reviewer', 'approve'), ('reviewer-2', 'reject'), ('o-reviewer', 'approve')] | review_status: approve
+
+### P15 receipt dated one day after the card transaction; receipt with tip-inclusive total
+  purchase 11-02, posted 11-03 -> blockers: ['RECEIPT_DATE_MISMATCH']
+
+### P16 export immediately after approval and after an unrelated intake
+  before unrelated card receipt: [('J-001', 'approve')] | after: [('J-001', 'stale')]

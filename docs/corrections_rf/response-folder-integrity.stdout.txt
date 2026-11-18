@@ -1,0 +1,7 @@
+{
+  "response_zip_hash_verified": true,
+  "CRC_verified": true,
+  "review_folder_files": 167,
+  "every_review_folder_byte_matches_response_zip": true,
+  "extra_or_missing_files": 0
+}

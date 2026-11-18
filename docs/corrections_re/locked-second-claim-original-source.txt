@@ -1,0 +1,12 @@
+from pathlib import Path
+import importlib.util,sys,json
+root=Path('/Users/luis/Documents/ChatGPT/Accounting Agent OS');path=root/'exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py'
+spec=importlib.util.spec_from_file_location('locked_claim_probe',path);p=importlib.util.module_from_spec(spec);sys.argv=[str(path),str(root)];spec.loader.exec_module(p);f=p.h
+os_=f.approved_locked_november();key=f.CARD+':A1'
+print('Initial locked November approval:',p.approved(os_,key,'2026-11'))
+for i,target in enumerate(('UNKNOWN0','UNKNOWN1')):
+ result=os_.intake(f.PREP2,f.packet('locked-claim-'+str(i),[f.sup('A1','2026-11-03','40.00',target)]))
+ print('Claim',target,'intake',result)
+ print('Frozen approval remains governing:',p.approved(os_,key,'2026-11'))
+ print('Current conflict:',os_.export(f.PREP).get('source_claim_conflicts',{}).get(key))
+print('Source exceptions:',f.exceptions_of(os_));print('Audit verifies:',os_.verify_audit(f.PREP));f.TMP.cleanup()

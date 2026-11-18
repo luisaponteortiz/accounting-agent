@@ -1,0 +1,14 @@
+test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF02_historical_ancestor_selector_survives_descendant_retargeting (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF03_autocommit_always_recomputes_and_cache_is_local_to_one_call (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_all_21_unmodified_RE_probes (tests.test_rf_review_gate.RFReviewGate) ... ok
+test_order_validator_refuses_all_contract_faults (tests.test_rf_review_gate.RFReviewGate) ... ok
+test_probe_validator_refuses_all_contract_faults (tests.test_rf_review_gate.RFReviewGate) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 131.629s
+
+OK

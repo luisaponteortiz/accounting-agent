@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/Library/Developer/CommandLineTools/usr/bin/python3",
+    "-m",
+    "unittest",
+    "tests.test_rf_review_gate.RFReviewGate.test_probe_validator_refuses_all_contract_faults",
+    "tests.test_rf_review_gate.RFReviewGate.test_order_validator_refuses_all_contract_faults",
+    "tests.test_product_requirements.ProductRequirements.test_PRV14_third_authority_is_pinned_and_latest_verdict_controls",
+    "tests.test_product_requirements_rf",
+    "-v"
+  ],
+  "cwd": "/var/folders/bm/9_kl4q4n64x8l46bjvs5qvj40000gn/T/aaos-rf-final-8ijvq6q7/project",
+  "started_utc": "2026-11-17T01:42:28.555671+00:00",
+  "elapsed_seconds": 23.014,
+  "exit_code": 0
+}

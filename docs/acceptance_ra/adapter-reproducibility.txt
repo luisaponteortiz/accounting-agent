@@ -1,0 +1,8 @@
+Adapted positive statement acceptance in A03/A05/A17/X09; all 24 original returns and assignments preserved.
+EXIT 0
+Adapted 3 positive mandate setups; positive duplicate evidence and revised-document acceptance; RT14b explicitly asserts both initial dispositions and D1 eligibility; all original verdict/gate expressions preserved.
+EXIT 0
+review/fable_rv_acceptance_probes.py 3ef0d7f2002a05a2da67c4457cfc5ea4e216756f201dec8394a0742bd1f11c92 reproduced exactly
+review/fable_reverification_probes.py f986e98c364a3daad50d684d148397e9f01c4db66bb9eaad49059f5f52c7e5bf reproduced exactly
+docs/acceptance_ra/acceptance-probe-adaptations.patch 29f593575ff1d8b18f7d0151bd11a4c0602d113cad13e6571dd9645903833fc6 reproduced exactly
+docs/reverification/reverification-probe-adaptations.patch 397cc73623029d507f27b9b0d65bb747ab54a27d96165b3ad7b6e423f3fb8f89 reproduced exactly

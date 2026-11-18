@@ -1,0 +1,6 @@
+{
+  "archive": "/tmp/AAOS_RE_VALIDATION_CANDIDATE.zip",
+  "sha256": "a34d7afe813918398d51daae40d4f5383bee5c19ca11f99c0b525dc1123a010d",
+  "copy": "/tmp/aaos-re-faults",
+  "owner_locked_row_clarification": "PENDING"
+}

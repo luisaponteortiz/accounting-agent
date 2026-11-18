@@ -1,0 +1,2532 @@
+{
+ "title": "Fable acceptance results: RV-01 to RV-17, C-01 to C-06, Batch 2 and G0",
+ "authored": "2026-11-15",
+ "notice": "Review output only. Authorises no connection, posting, payment, model call, hosting, deployment or policy activation, and opens no readiness gate. All data fictional.",
+ "status_vocabulary": {
+  "PASS": "verified by execution unless the evidence says inspection",
+  "FAIL": "confirmed gap with a defect id",
+  "NOTE": "limitation needing a decision",
+  "NOT_RUN": "not executed",
+  "DEFERRED": "capability correctly unavailable; its future accounting behaviour was not tested",
+  "ACCEPTED": "probe adaptation judged valid"
+ },
+ "environment": {
+  "python": "3.9.6",
+  "sqlite": "3.51.0",
+  "platform": "macOS Darwin x86_64",
+  "make": "GNU make 3.81",
+  "network": "not used",
+  "loopback": "available",
+  "bundle_sha256": "247c1cfd31a2128573b5ae29d633c0d9e74bb076a38a5fc3d9844b6748cc1c75",
+  "manifest": "243 of 243 files match; none unlisted; untouched extraction re-verified after all runs"
+ },
+ "decisions": {
+  "RV_01_to_RV_17": {
+   "status": "14 PASS, 3 FAIL",
+   "pass": [
+    "RV-02",
+    "RV-03",
+    "RV-04",
+    "RV-05",
+    "RV-06",
+    "RV-07",
+    "RV-08",
+    "RV-09",
+    "RV-11",
+    "RV-13",
+    "RV-14",
+    "RV-15",
+    "RV-16",
+    "RV-17"
+   ],
+   "fail": [
+    "RV-01",
+    "RV-10",
+    "RV-12"
+   ]
+  },
+  "current_C01_to_C06": {
+   "status": "FAIL on C-01 only",
+   "basis": "RA-01. C-02 to C-06 pass."
+  },
+  "batch_2": {
+   "status": "FAIL",
+   "basis": "Ten of eleven tickets meet every criterion. T-12 has one P1 defect (RA-01). Three P2 defects are open under T-09, T-13 and T-17."
+  },
+  "probe_adaptations": {
+   "status": "ACCEPTED, all seven",
+   "basis": "The delta is exactly the delivered patch; every verdict and gate expression is structurally identical; each change is required by RV-11, RV-12 or RV-15."
+  },
+  "strengthened_RT14b": {
+   "status": "PASS",
+   "basis": "evidence/rt14b_fault_injection.txt"
+  },
+  "G0_technical_criteria": {
+   "status": "FAIL",
+   "basis": "One P1 defect is open (RA-01). Every other G0 criterion is met."
+  },
+  "human_G0_and_gates_G1_to_G4": "not for this review; all remain closed"
+ },
+ "commands": [
+  {
+   "command": "make test",
+   "exit_code": 0,
+   "result": "136 tests, all ok, no expected failure, no skip",
+   "evidence": "evidence/01_make_test.txt"
+  },
+  {
+   "command": "make check",
+   "exit_code": 0,
+   "evidence": "evidence/02_make_check.txt"
+  },
+  {
+   "command": "make batch2-gate",
+   "exit_code": 0,
+   "result": "29 PASS, 10 FIXED, 21 DEFERRED-OK; regenerated report identical to delivered",
+   "evidence": "evidence/03_make_batch2_gate.txt"
+  },
+  {
+   "command": "make reverification-gate",
+   "exit_code": 0,
+   "result": "28 original probes OK directly; 35 OK through the adapted copy; frozen corrective checkpoint passes",
+   "evidence": "evidence/04_make_reverification_gate.txt"
+  },
+  {
+   "command": "python3 scripts/synthetic_month.py",
+   "exit_code": 0,
+   "evidence": "evidence/05_synthetic_month.txt"
+  },
+  {
+   "command": "python3 scripts/verify_corrective_checkpoint.py",
+   "exit_code": 0,
+   "result": "N01 to N07 OK on the frozen archive; says nothing about current source",
+   "evidence": "evidence/06_corrective_checkpoint.txt"
+  },
+  {
+   "command": "python3 exports/FABLE_REVERIFICATION/fable_reverification_probes.py .",
+   "exit_code": 1,
+   "result": "29 OK, 3 ERROR (RN02, RN03, RN07), 3 WEAK (RT12a, RT14a, RG0), as disclosed",
+   "evidence": "evidence/07_original_supplied_probes.txt"
+  },
+  {
+   "command": "python3 review/run_fable_validation_cases.py . review/FABLE_VALIDATION_CASES.json --batch2-gate",
+   "exit_code": 0,
+   "evidence": "evidence/08_cases.txt"
+  },
+  {
+   "command": "PYTHONDONTWRITEBYTECODE=1 python3 fable_rv_acceptance_probes.py <project-root>",
+   "exit_code": 1,
+   "result": "24 probes: 16 OK, 4 WEAK, 4 NOTE",
+   "evidence": "fable_rv_acceptance_output.txt section B"
+  },
+  {
+   "command": "python3 evidence/rt14b_fault_injection.py <root>",
+   "exit_code": 0,
+   "evidence": "evidence/rt14b_fault_injection.txt"
+  },
+  {
+   "command": "python3 evidence/legacy_upgrade_check.py old|new <root> <db> <facts>",
+   "exit_code": 0,
+   "evidence": "evidence/legacy_upgrade_check.txt"
+  },
+  {
+   "command": "python3 -I evidence/preservation_checks.py ...",
+   "exit_code": 0,
+   "evidence": "evidence/preservation_checks.txt"
+  },
+  {
+   "command": "python3 -I evidence/inventory_checks.py ...",
+   "exit_code": 0,
+   "evidence": "evidence/inventory_checks.txt"
+  }
+ ],
+ "developer_claims": [
+  {
+   "claim": "136 passing tests",
+   "status": "PASS"
+  },
+  {
+   "claim": "60 cases: 29 PASS, 10 FIXED, 21 DEFERRED-OK",
+   "status": "PASS",
+   "reproduced": {
+    "PASS": 29,
+    "FIXED": 10,
+    "DEFERRED-OK": 21
+   }
+  },
+  {
+   "claim": "28 unchanged-setup original probes OK; 35 OK through the adaptation",
+   "status": "PASS"
+  },
+  {
+   "claim": "original full command exits 1 with RN02, RN03, RN07 ERROR and RT12a, RT14a, RG0 WEAK",
+   "status": "PASS"
+  },
+  {
+   "claim": "test methods retained: 40 (initial archive), 41 (Batch 1 baseline), 43 (reviewed Batch 2 checkpoint)",
+   "status": "PASS",
+   "reproduced": "all present; none has fewer assertions; no expected-failure or skip marker"
+  },
+  {
+   "claim": "all 22 supplied files, the four earlier inputs and three nested archives unchanged",
+   "status": "PASS"
+  },
+  {
+   "claim": "both change inventories and patches complete, including JS/HTML",
+   "status": "PASS"
+  },
+  {
+   "claim": "adapter preserves every original verdict and gate expression",
+   "status": "PASS",
+   "reproduced": "return statements and verdict-condition assignments identical in all 35 probes; six probe bodies and one helper changed, one helper added; delta equals the delivered patch"
+  },
+  {
+   "claim": "baseline 21 OK / 11 WEAK / 3 NOTE reproduced before changes; implementation order",
+   "status": "NOT_VERIFIED",
+   "reproduced": "delivered logs are consistent; chronology cannot be established from an archive"
+  },
+  {
+   "claim": "teaching month: ten approvals, three held dispositions, impact +311 / +200 / -211 / -300",
+   "status": "PASS",
+   "reproduced": "delivered script and independent probe M1"
+  }
+ ],
+ "rv_corrections": {
+  "RV-01": {
+   "title": "A charge approved in a locked period can be approved again in another period through supersession under a new source key",
+   "previous_priority": "P1",
+   "acceptance": "FAIL",
+   "note": "Every stated assertion holds. A second supersession step defeats the control (probe X01).",
+   "open_defects": [
+    "RA-01",
+    "RA-06"
+   ],
+   "assertions": [
+    {
+     "assertion": "Probe RN02b reports OK: December has no governing artifact for A1X while November is locked.",
+     "status": "PASS",
+     "evidence": [
+      "RN02b direct",
+      "A01"
+     ]
+    },
+    {
+     "assertion": "state.source_exceptions lists A1X with SOURCE_MOVED_FROM_LOCKED_PERIOD; export.source_move_history has a row from 2026-11 with blocked=1.",
+     "status": "PASS",
+     "evidence": [
+      "A01"
+     ]
+    },
+    {
+     "assertion": "Probe RT12d: an event whose code starts with APPROVED_SOURCE is recorded for the superseded, approved A1.",
+     "status": "PASS",
+     "evidence": [
+      "RT12d direct",
+      "A01"
+     ]
+    },
+    {
+     "assertion": "With envelope-level supersedes in an open period, the new item carries SOURCE_TRANSITION_REQUIRES_REVIEW.",
+     "status": "PASS",
+     "evidence": [
+      "A02"
+     ]
+    },
+    {
+     "assertion": "Probe RN02 and FV-C13 results are unchanged.",
+     "status": "PASS",
+     "evidence": [
+      "RN02 adapted",
+      "case FV-C13"
+     ]
+    }
+   ]
+  },
+  "RV-02": {
+   "title": "Double-recording hold disappears when the cited source receives any later version",
+   "previous_priority": "P1",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT15 reports OK: after the cosmetic revision both items still carry SOURCE_ALREADY_HAS_ENTRY and the journal also carries ORIGIN_SOURCE_SUPERSEDED.",
+     "status": "PASS",
+     "evidence": [
+      "RT15 direct",
+      "A02"
+     ]
+    },
+    {
+     "assertion": "Re-supplying the journal against the current snapshot leaves SOURCE_ALREADY_HAS_ENTRY on both.",
+     "status": "PASS",
+     "evidence": [
+      "A02"
+     ]
+    },
+    {
+     "assertion": "FV-J01 to FV-J10 unchanged.",
+     "status": "PASS",
+     "evidence": [
+      "cases FV-J01 to FV-J10"
+     ]
+    }
+   ]
+  },
+  "RV-03": {
+   "title": "An item whose source has left the period remains a stale governing item and blocks finalization permanently",
+   "previous_priority": "P1",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT12d reports OK for the finalization part: finalize succeeds after the tombstone and the package lists P1 under removed_items.",
+     "status": "PASS",
+     "evidence": [
+      "RT12d direct",
+      "A03"
+     ]
+    },
+    {
+     "assertion": "state shows no governing artifact for demo_card_001:P1; exceptions for it are superseded with history rows.",
+     "status": "PASS",
+     "evidence": [
+      "A03"
+     ]
+    },
+    {
+     "assertion": "Probe RN02: after reopen, November has no governing artifact for the moved A1.",
+     "status": "PASS",
+     "evidence": [
+      "RN02 adapted",
+      "A01"
+     ]
+    },
+    {
+     "assertion": "FV-C13 unchanged.",
+     "status": "PASS",
+     "evidence": [
+      "case FV-C13"
+     ]
+    }
+   ]
+  },
+  "RV-04": {
+   "title": "Any later intake re-binds the receipts of a locked period, records them as late activity and raises a false change event against a finalized package",
+   "previous_priority": "P1",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT12b reports OK: after December-only intake, source_exceptions is empty and accounting_events is empty.",
+     "status": "PASS",
+     "evidence": [
+      "RT12b direct",
+      "A04"
+     ]
+    },
+    {
+     "assertion": "Probe RN02 still lists exactly the moved transaction and its receipt, and no unrelated receipt.",
+     "status": "PASS",
+     "evidence": [
+      "RN02 adapted"
+     ]
+    },
+    {
+     "assertion": "Probe RT12c (receipt follows its charge in either arrival order) still reports OK.",
+     "status": "PASS",
+     "evidence": [
+      "RT12c direct"
+     ]
+    },
+    {
+     "assertion": "A genuinely revised November receipt arriving after lock is still listed as LATE_ACTIVITY_IN_LOCKED_PERIOD.",
+     "status": "PASS",
+     "evidence": [
+      "A04"
+     ]
+    }
+   ]
+  },
+  "RV-05": {
+   "title": "A vendor mapping removed from the approved profile keeps producing clean, approvable matches",
+   "previous_priority": "P1",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT09c reports OK: the Metro item carries UNKNOWN_VENDOR under v2.",
+     "status": "PASS",
+     "evidence": [
+      "RT09c direct"
+     ]
+    },
+    {
+     "assertion": "An item dated before the effective date of v2 in an earlier period still matches the retired mapping (rule in force for that date).",
+     "status": "PASS",
+     "evidence": [
+      "A05"
+     ]
+    },
+    {
+     "assertion": "Probes RT09a and RT09b unchanged; FV-C01 and FV-C15 unchanged.",
+     "status": "PASS",
+     "evidence": [
+      "RT09a, RT09b direct",
+      "cases FV-C01, FV-C15"
+     ]
+    }
+   ]
+  },
+  "RV-06": {
+   "title": "Under the shipped checklist a document label alone satisfies the bank reconciliation and AP/AR tie-out requirements",
+   "previous_priority": "P1",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT19a reports OK: with label-only documents, bank_reconciliation, ap_tieout and ar_tieout report satisfied=false and MISSING_CLOSE_EVIDENCE is present.",
+     "status": "PASS",
+     "evidence": [
+      "RT19a direct",
+      "A06"
+     ]
+    },
+    {
+     "assertion": "A profile or close_checklist rule containing a bare string is refused with 400.",
+     "status": "PASS",
+     "evidence": [
+      "A06"
+     ]
+    },
+    {
+     "assertion": "FV-CL01, FV-CL02 and FV-CL04 keep their expected blockers.",
+     "status": "PASS",
+     "evidence": [
+      "cases FV-CL01, FV-CL02, FV-CL04"
+     ]
+    }
+   ]
+  },
+  "RV-07": {
+   "title": "Disposition choices are not tied to the kind of activity or account: a card payment can be approved as a credit to an expense account",
+   "previous_priority": "P2",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT14e reports OK: the standalone_credit disposition on a payment is refused.",
+     "status": "PASS",
+     "evidence": [
+      "RT14e direct",
+      "A07"
+     ]
+    },
+    {
+     "assertion": "A code_category disposition naming DEMO_CARD_LIABILITY or DEMO_CASH is refused.",
+     "status": "PASS",
+     "evidence": [
+      "A07"
+     ]
+    },
+    {
+     "assertion": "Probe RT14a and the teaching-month probe RG0 are unchanged (TX-006 credit and TX-012 payment still resolve as before).",
+     "status": "PASS",
+     "evidence": [
+      "RT14a adapted",
+      "RG0 adapted",
+      "M1",
+      "M2"
+     ]
+    }
+   ]
+  },
+  "RV-08": {
+   "title": "A distinct-purchases disposition stays in force when a new duplicate candidate arrives",
+   "previous_priority": "P2",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT14b reports OK: after D3 arrives, D1 carries POSSIBLE_DUPLICATE and is not eligible.",
+     "status": "PASS",
+     "evidence": [
+      "RT14b adapted",
+      "evidence/rt14b_fault_injection.txt",
+      "A08"
+     ]
+    },
+    {
+     "assertion": "Probe RT14a unchanged.",
+     "status": "PASS",
+     "evidence": [
+      "RT14a adapted"
+     ]
+    }
+   ]
+  },
+  "RV-09": {
+   "title": "After one charge is excluded as a duplicate, the surviving charge can only be cleared by a false distinct-purchases statement",
+   "previous_priority": "P2",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found. One P3 observation: both charges can be excluded at once (RA-08).",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT14c reports OK: D1 has no POSSIBLE_DUPLICATE blocker, cites the disposition, and the dispositioner cannot approve D1.",
+     "status": "PASS",
+     "evidence": [
+      "RT14c direct",
+      "A09"
+     ]
+    },
+    {
+     "assertion": "Revoking the disposition restores POSSIBLE_DUPLICATE on both.",
+     "status": "PASS",
+     "evidence": [
+      "A09"
+     ]
+    }
+   ]
+  },
+  "RV-10": {
+   "title": "The author of a vendor mapping regains review rights when a colleague re-proposes the rule with a cosmetic change",
+   "previous_priority": "P2",
+   "acceptance": "FAIL",
+   "note": "Every stated assertion holds. The control depends on an optional link the re-proposer can omit (probe A10).",
+   "open_defects": [
+    "RA-02"
+   ],
+   "assertions": [
+    {
+     "assertion": "Probe RN05b reports OK: the author of version 1 is refused with 403.",
+     "status": "PASS",
+     "evidence": [
+      "RN05b direct",
+      "A10 (linked case)"
+     ]
+    },
+    {
+     "assertion": "A reviewer who authored an earlier version with a different category is not barred.",
+     "status": "PASS",
+     "evidence": [
+      "A10 (different-category case)"
+     ]
+    },
+    {
+     "assertion": "Probes RN04, RN05 and RT09b unchanged.",
+     "status": "PASS",
+     "evidence": [
+      "RN04, RN05, RT09b direct"
+     ]
+    }
+   ]
+  },
+  "RV-11": {
+   "title": "A mandate may be created and approved with an empty freshness predicate",
+   "previous_priority": "P2",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT10b reports OK: creation with {} is refused with 400.",
+     "status": "PASS",
+     "evidence": [
+      "RT10b direct",
+      "A11"
+     ]
+    },
+    {
+     "assertion": "Probe RT10a unchanged.",
+     "status": "PASS",
+     "evidence": [
+      "RT10a direct"
+     ]
+    },
+    {
+     "assertion": "Existing dedup, cap, expiry and revocation tests pass with an explicit predicate.",
+     "status": "PASS",
+     "evidence": [
+      "make test",
+      "evidence/legacy_upgrade_check.txt"
+     ]
+    }
+   ]
+  },
+  "RV-12": {
+   "title": "A receipt mismatch can only be cleared by re-supplying the receipt, and the reviewer is not told the evidence was revised",
+   "previous_priority": "P2",
+   "acceptance": "FAIL",
+   "note": "Every stated assertion holds for a revised receipt. A replacement receipt under a new key, and a re-supplied statement, are not covered (probes X12k, X12s).",
+   "open_defects": [
+    "RA-03",
+    "RA-04"
+   ],
+   "assertions": [
+    {
+     "assertion": "With the teaching fixture, re-supplying receipt-TX-009 at 80.00 yields EVIDENCE_REVISED_REQUIRES_REVIEW and evidence_revisions naming version 1 and the amount change.",
+     "status": "PASS",
+     "evidence": [
+      "M2",
+      "A12"
+     ]
+    },
+    {
+     "assertion": "refer_external on RECEIPT_AMOUNT_POLICY_UNSET is accepted and the item stays ineligible.",
+     "status": "PASS",
+     "evidence": [
+      "A12",
+      "M1"
+     ]
+    },
+    {
+     "assertion": "Probe RG0 reports the month complete with TX-009 either referred or accepted through the new disposition.",
+     "status": "PASS",
+     "evidence": [
+      "M1 (referred)",
+      "M2 (accepted)",
+      "RG0 adapted"
+     ]
+    }
+   ]
+  },
+  "RV-13": {
+   "title": "The statement workpaper does not disclose when line identity, continuity or provenance could not be checked",
+   "previous_priority": "P2",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found. A re-supplied statement is not disclosed as revised; ticketed under RA-04.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT13n reports OK: the substituted item is not eligible, or the workpaper discloses line_identity=not_supplied.",
+     "status": "PASS",
+     "evidence": [
+      "RT13n direct",
+      "A13"
+     ]
+    },
+    {
+     "assertion": "Probe RT13 unchanged; FV-C08, FV-C09 and FV-C19 unchanged.",
+     "status": "PASS",
+     "evidence": [
+      "RT13 direct",
+      "cases FV-C08, FV-C09, FV-C19"
+     ]
+    }
+   ]
+  },
+  "RV-14": {
+   "title": "The normalised alias is recorded only in the audit event, not where the approver reads the rule",
+   "previous_priority": "P3",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT09d reports OK.",
+     "status": "PASS",
+     "evidence": [
+      "RT09d direct",
+      "A14"
+     ]
+    }
+   ]
+  },
+  "RV-15": {
+   "title": "A disposition may cite only the item's own source row as its evidence",
+   "previous_priority": "P3",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found. One P3 observation: another item's transaction row counts as support (RA-07).",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT14d reports OK.",
+     "status": "PASS",
+     "evidence": [
+      "RT14d direct",
+      "A08"
+     ]
+    },
+    {
+     "assertion": "Probe RT14a unchanged.",
+     "status": "PASS",
+     "evidence": [
+      "RT14a adapted"
+     ]
+    }
+   ]
+  },
+  "RV-16": {
+   "title": "The change inventory and the patch omit two changed runtime files",
+   "previous_priority": "P3",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "evidence/static_checks.py reports no computed-but-unlisted file.",
+     "status": "PASS",
+     "evidence": [
+      "evidence/inventory_checks.txt"
+     ]
+    }
+   ]
+  },
+  "RV-17": {
+   "title": "Several packages can be finalized for one period and workflow with no link between them",
+   "previous_priority": "P3",
+   "acceptance": "PASS",
+   "note": "Stated assertions hold and no route around the control was found.",
+   "open_defects": [],
+   "assertions": [
+    {
+     "assertion": "Probe RT18 prints no second-package observation, or the second package payload names package 1.",
+     "status": "PASS",
+     "evidence": [
+      "A17",
+      "RT18 direct"
+     ]
+    }
+   ]
+  }
+ },
+ "corrective_tickets_C01_to_C06": {
+  "C-01": {
+   "status": "FAIL",
+   "summary": "Re-dating and single-step supersession are quarantined and released correctly (RN02, RN02b, A01). A two-step supersession chain is admitted and approved in a second period (X01).",
+   "open_defects": [
+    "RA-01"
+   ]
+  },
+  "C-02": {
+   "status": "PASS",
+   "summary": "RN01 direct: every decision type, dispositions and finalization refuse under lock; audited reopen required.",
+   "open_defects": []
+  },
+  "C-03": {
+   "status": "PASS",
+   "summary": "RN03 adapted and A09: identical work reuses the artifact and keeps its rejection; contributors append outside the hash.",
+   "open_defects": []
+  },
+  "C-04": {
+   "status": "PASS",
+   "summary": "RN04, RN05, RN05b direct and X15: version suppliers, configuration authors and cited-evidence suppliers stay barred. One P2 residual for unlinked rule versions.",
+   "open_defects": [
+    "RA-02"
+   ]
+  },
+  "C-05": {
+   "status": "PASS",
+   "summary": "RN06 direct.",
+   "open_defects": []
+  },
+  "C-06": {
+   "status": "PASS",
+   "summary": "RN07 adapted: all service attempts refused with 403.",
+   "open_defects": []
+  }
+ },
+ "original_probe_ids": {
+  "RN01": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RN02": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "ERROR",
+   "original_script_in_delivered_gate": "not run directly (setup changed)",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RN02b": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RN03": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "ERROR",
+   "original_script_in_delivered_gate": "not run directly (setup changed)",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RN04": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RN05": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RN05b": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RN06": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RN07": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "ERROR",
+   "original_script_in_delivered_gate": "not run directly (setup changed)",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT09a": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT09b": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT09c": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT09d": {
+   "previous_review": "NOTE",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT11": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT12a": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "WEAK",
+   "original_script_in_delivered_gate": "not run directly (setup changed)",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT12b": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT12c": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT12d": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT10a": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT10b": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT13": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT13n": {
+   "previous_review": "NOTE",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT14a": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "WEAK",
+   "original_script_in_delivered_gate": "not run directly (setup changed)",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT14b": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "not run directly (setup changed)",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS",
+   "note": "The original script prints OK on current source without reaching its starting state. Accepted on the strengthened adapted probe and independent fault injection."
+  },
+  "RT14c": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT14d": {
+   "previous_review": "NOTE",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT14e": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT14f": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT15": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT16": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT17": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT18": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT19a": {
+   "previous_review": "WEAK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RT19b": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "OK",
+   "original_script_in_delivered_gate": "OK",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  },
+  "RG0": {
+   "previous_review": "OK",
+   "original_script_full_command_now": "WEAK",
+   "original_script_in_delivered_gate": "not run directly (setup changed)",
+   "adapted_copy_in_delivered_gate": "OK",
+   "judgment": "PASS"
+  }
+ },
+ "previously_failed_or_noted_ids": {
+  "failed_before": [
+   "RN02b",
+   "RN05b",
+   "RT09c",
+   "RT12b",
+   "RT12d",
+   "RT10b",
+   "RT14b",
+   "RT14c",
+   "RT14e",
+   "RT15",
+   "RT19a"
+  ],
+  "noted_before": [
+   "RT09d",
+   "RT13n",
+   "RT14d"
+  ],
+  "all_now_ok_in_delivered_gate": true
+ },
+ "probe_adaptations": {
+  "RN02": {
+   "acceptance": "ACCEPTED",
+   "original_command_verdict_now": "ERROR",
+   "adapted_verdict": "OK",
+   "reason": "The only change is the empty freshness predicate, replaced by the explicit no-evidence form that RV-11 itself provides. Issuer, independent approver, schedule and every verdict expression are unchanged. The probe then runs to completion and its lock, recurrence and reopen conditions hold."
+  },
+  "RN03": {
+   "acceptance": "ACCEPTED",
+   "original_command_verdict_now": "ERROR",
+   "adapted_verdict": "OK",
+   "reason": "Same single change. The identity, rejection, contributor and 403 conditions are unchanged and hold."
+  },
+  "RN07": {
+   "acceptance": "ACCEPTED",
+   "original_command_verdict_now": "ERROR",
+   "adapted_verdict": "OK",
+   "reason": "Same single change, on a mandate that is deliberately left unapproved. The service approval attempt is refused with 403 by the grant check, not by an invalid mandate. The service-created mandate with {} is untouched and is refused with 403 by the human check, which runs before freshness validation."
+  },
+  "RT12a": {
+   "acceptance": "ACCEPTED",
+   "original_command_verdict_now": "WEAK",
+   "adapted_verdict": "OK",
+   "reason": "The newer delivery changes the receipt, so RV-12 requires a hold. The helper first asserts the hold and the disclosed history, then obtains acceptance from the existing dispositioner, who supplied neither version. No grant is added. The original ordering conditions are unchanged."
+  },
+  "RT14a": {
+   "acceptance": "ACCEPTED",
+   "original_command_verdict_now": "WEAK",
+   "adapted_verdict": "OK",
+   "reason": "The shared helper adds the candidate receipts only when a distinct-purchases call uses default evidence. The explicit empty-evidence negative is untouched and still refused. All final conditions are unchanged."
+  },
+  "RT14b": {
+   "acceptance": "ACCEPTED",
+   "original_command_verdict_now": "OK",
+   "adapted_verdict": "OK",
+   "reason": "Evidence now names the candidate receipt, still without the statement. The added assertions make the probe fail when its starting state is not reached. My own fault injection confirms: refusal of D1, refusal of D2 and an ineligible D1 each give ERROR, exit 1, before the third charge is constructed; the valid path gives OK, exit 0."
+  },
+  "RG0": {
+   "acceptance": "ACCEPTED",
+   "original_command_verdict_now": "WEAK",
+   "adapted_verdict": "OK",
+   "reason": "Peer receipts are cited for the two distinct-purchases decisions, and the corrected TX-009 receipt is accepted only after its hold and history are asserted. Expected counts, the hand calculation and the isolation conditions are unchanged. My independent M2 reaches the same result by the same route."
+  }
+ },
+ "strengthened_RT14b": {
+  "status": "PASS",
+  "cases": [
+   "initial D1 disposition refused -> ERROR, exit 1, third charge not constructed",
+   "initial D2 disposition refused -> ERROR, exit 1, third charge not constructed",
+   "D1 ineligible before the third charge -> ERROR, exit 1, third charge not constructed",
+   "no fault -> OK, exit 0; D1 eligible, then ineligible with POSSIBLE_DUPLICATE after D3"
+  ],
+  "delivered_tests": [
+   "test_RT14b_fails_when_either_initial_disposition_is_refused",
+   "test_RT14b_fails_when_initial_D1_is_ineligible"
+  ],
+  "evidence": "evidence/rt14b_fault_injection.txt"
+ },
+ "independent_probes": [
+  {
+   "id": "A04",
+   "requirement": "RV-04",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "a locked, finalized period is untouched by later intake; a genuinely changed receipt is still quarantined"
+  },
+  {
+   "id": "A03",
+   "requirement": "RV-03",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "removed and voided sources leave no governing item; exceptions are superseded; the package records the removal"
+  },
+  {
+   "id": "A01",
+   "requirement": "RV-01",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "new-key supersession out of a locked period, by envelope or by data, is quarantined until reopen and never double-approved"
+  },
+  {
+   "id": "A02",
+   "requirement": "RV-02",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "one origin, one owner: the conflict survives revision, re-citation and supersession of the cited source"
+  },
+  {
+   "id": "A05",
+   "requirement": "RV-05",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "a withdrawn mapping retires only on independent approval, from the effective date; history and reintroduction work"
+  },
+  {
+   "id": "A06",
+   "requirement": "RV-06",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "untyped checklist entries are refused; labels do not satisfy reconciliation or tie-out lines"
+  },
+  {
+   "id": "A07",
+   "requirement": "RV-07",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "dispositions obey activity and account type; valid credit, settlement, transfer, fee and interest paths still work"
+  },
+  {
+   "id": "A08",
+   "requirement": "RV-08/RV-15",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "distinct purchases needs every candidate receipt, binds the exact candidate set, and lapses when a new candidate arrives"
+  },
+  {
+   "id": "A09",
+   "requirement": "RV-09",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "excluding a duplicate frees the surviving charge with full lineage; revocation restores both holds and the earlier rejection"
+  },
+  {
+   "id": "A10",
+   "requirement": "RV-10",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not"
+  },
+  {
+   "id": "A11",
+   "requirement": "RV-11",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "freshness must be stated and well formed; explicit no-evidence authority is independently approved and audited"
+  },
+  {
+   "id": "A12",
+   "requirement": "RV-12",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "a revised receipt is disclosed and held; suppliers cannot accept it; acceptance lapses on a further change; referral never clears"
+  },
+  {
+   "id": "A13",
+   "requirement": "RV-13",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "statement assurance is disclosed; missing line ids need an approved exception; a missing or quarantined prior statement cannot pass"
+  },
+  {
+   "id": "A14",
+   "requirement": "RV-14/RV-15",
+   "raw_verdict": "NOTE",
+   "status": "NOTE",
+   "checks": "the rule record shows normalised aliases, collisions, status and effective end; own-row evidence is refused"
+  },
+  {
+   "id": "A17",
+   "requirement": "RV-17",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "a second package names the one it replaces; one package governs; the first stays byte-identical; acknowledgement cannot clear stale work"
+  },
+  {
+   "id": "X01",
+   "requirement": "RV-01",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "a second supersession step does not release a charge that is still quarantined behind a locked origin"
+  },
+  {
+   "id": "X09",
+   "requirement": "RV-08/RV-09",
+   "raw_verdict": "NOTE",
+   "status": "NOTE",
+   "checks": "an exclusion does not outlive the charge it pointed to, and two charges cannot both be excluded unseen"
+  },
+  {
+   "id": "X12k",
+   "requirement": "RV-12",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "replacing a receipt under a new key is treated like revising it"
+  },
+  {
+   "id": "X12s",
+   "requirement": "RV-12/RV-13",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "a statement re-supplied to agree with the population is disclosed as revised evidence"
+  },
+  {
+   "id": "X15",
+   "requirement": "RV-15",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "the supplier of a candidate receipt cited in a distinct-purchases decision cannot review the item it supports"
+  },
+  {
+   "id": "U1",
+   "requirement": "UC-1",
+   "raw_verdict": "NOTE",
+   "status": "NOTE",
+   "checks": "a mandate is not suspended merely because new evidence falls after a rule date that was already approved"
+  },
+  {
+   "id": "U4",
+   "requirement": "UC-4",
+   "raw_verdict": "NOTE",
+   "status": "NOTE",
+   "checks": "when a superseding source is itself removed, the charge it replaced does not vanish unseen"
+  },
+  {
+   "id": "M1",
+   "requirement": "G0",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "teaching month, referral route: TX-009 keeps its 79.99 receipt and stays held; second client isolated"
+  },
+  {
+   "id": "M2",
+   "requirement": "G0",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "teaching month, acceptance route: the corrected TX-009 receipt is held, disclosed, accepted by a non-supplier, then reviewed"
+  }
+ ],
+ "batch_2_tickets": {
+  "T-09": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "A proposed version or rule is never applied by a run.",
+     "status": "PASS",
+     "evidence": [
+      "RT09a",
+      "RT09b",
+      "RT17",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "The proposer cannot approve; a service actor cannot approve.",
+     "status": "PASS",
+     "evidence": [
+      "RT09a",
+      "RT09b",
+      "RN07",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "A rule effective on the first day of the next period is not applied to an item dated in the current period.",
+     "status": "PASS",
+     "evidence": [
+      "RT09b",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "After supersession, re-preparing an earlier period applies the rule that was in force for that date.",
+     "status": "PASS",
+     "evidence": [
+      "RT09b",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Export shows, for every artifact, the rule ids and versions applied.",
+     "status": "PASS",
+     "evidence": [
+      "RT09b",
+      "inspection: service.py commit line 539",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "The list is the run-wide set, not the rules used by that item (DE-1).",
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: independence uses the proposer and approver of each rule applied to the item; probe N05 stays refused.",
+     "status": "PASS",
+     "evidence": [
+      "RN05",
+      "maintained N05",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "Earlier versions of a superseded rule are not included.",
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: a rule effective in a later period leaves approvals in earlier periods intact; probe N17 reports OK.",
+     "status": "PASS",
+     "evidence": [
+      "RT09b",
+      "maintained N17",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: alias approval shows the normalised form (probe N18).",
+     "status": "PASS",
+     "evidence": [
+      "RT09d",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "Recorded in the audit event only.",
+     "previous_status": "FAIL"
+    },
+    {
+     "criterion": "Adversarial: a mapping withdrawn by a newly approved profile stops applying.",
+     "status": "PASS",
+     "evidence": [
+      "RT09c",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "FAIL"
+    },
+    {
+     "criterion": "Adversarial: fixture approval and grant helpers are not reachable through HTTP.",
+     "status": "PASS",
+     "evidence": [
+      "inspection: accounting_agent/http.py routes; demo.py",
+      "delivered tests/test_http.py (11 tests, executed)",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Adversarial: rule-author lineage does not depend on the optional supersedes link.",
+     "status": "FAIL",
+     "evidence": [
+      "A10"
+     ],
+     "previous_status": "new this review",
+     "defects": [
+      "RA-02"
+     ],
+     "note": "P2."
+    }
+   ],
+   "open_p2": [
+    "RA-02"
+   ]
+  },
+  "T-11": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "A client_sample profile with a null accounting basis yields no eligible journal artifact.",
+     "status": "PASS",
+     "evidence": [
+      "RT11",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "The demo profile yields the same results as before and its waivers appear in the export.",
+     "status": "PASS",
+     "evidence": [
+      "RT11",
+      "validation cases",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Re-run this review.",
+     "status": "PASS",
+     "evidence": [
+      "RT11 direct"
+     ],
+     "previous_status": "new this review"
+    }
+   ]
+  },
+  "T-12": {
+   "status": "FAIL",
+   "criteria": [
+    {
+     "criterion": "Probe P07: the newer amount stays current after the late older batch.",
+     "status": "PASS",
+     "evidence": [
+      "RT12a",
+      "maintained P07",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "A tombstoned pending authorisation produces no artifact and no blockers.",
+     "status": "PASS",
+     "evidence": [
+      "RT12d",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "The old artifact stays governing with status stale and blocks finalization.",
+     "previous_status": "FAIL"
+    },
+    {
+     "criterion": "FV-C13 holds the settled row and no longer reports the superseded pending row as an open item.",
+     "status": "PASS",
+     "evidence": [
+      "case FV-C13",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Required behaviour: revision or removal of a source with an approved governing artifact raises an exception against that approval.",
+     "status": "PASS",
+     "evidence": [
+      "RT12d",
+      "RT18",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "Raised for revision and removal; not for supersession.",
+     "previous_status": "FAIL"
+    },
+    {
+     "criterion": "Added: supporting evidence is assigned to the period of the item it references and is listed even when it does not match; probe N09.",
+     "status": "PASS",
+     "evidence": [
+      "RT12c",
+      "maintained N09",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: opening a period adopts every quarantined source that belongs to it; probe N08.",
+     "status": "PASS",
+     "evidence": [
+      "RT12c",
+      "maintained N08",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: quarantined sources are included in the period status passed to close readiness.",
+     "status": "PASS",
+     "evidence": [
+      "RT19a",
+      "case FV-CL04",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Adversarial: later intake for another period leaves a locked period untouched.",
+     "status": "PASS",
+     "evidence": [
+      "RT12b",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "FAIL"
+    },
+    {
+     "criterion": "Adversarial: a supersession chain respects a locked origin.",
+     "status": "FAIL",
+     "evidence": [
+      "X01"
+     ],
+     "previous_status": "new this review",
+     "defects": [
+      "RA-01"
+     ]
+    }
+   ]
+  },
+  "T-10": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "Issuer cannot approve own mandate.",
+     "status": "PASS",
+     "evidence": [
+      "RT10a",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "No run is created for an occurrence without fresh required evidence.",
+     "status": "PASS",
+     "evidence": [
+      "RT10a",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "Holds when a requirement is declared; an empty predicate is accepted.",
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Changing a bound rule halts dispatch and is visible.",
+     "status": "PASS",
+     "evidence": [
+      "RT10a",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Existing dedup, cap, expiry and revocation tests pass.",
+     "status": "PASS",
+     "evidence": [
+      "make test",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: each occurrence prepares the period named by the period rule, not the calendar date of the slot.",
+     "status": "PASS",
+     "evidence": [
+      "RT10a",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Adversarial: concurrent ticks and restart.",
+     "status": "PASS",
+     "evidence": [
+      "maintained N11, N12",
+      "delivered concurrency tests in make test",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "Executed through the delivered harness and tests; not re-probed independently.",
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Adversarial: no false suspension when evidence crosses an already-approved rule date.",
+     "status": "NOTE",
+     "evidence": [
+      "U1"
+     ],
+     "previous_status": "new this review",
+     "defects": [
+      "RA-05"
+     ],
+     "note": "P3; fails safe."
+    }
+   ]
+  },
+  "T-13": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "A foreign-currency row appears as an unreconciled population item.",
+     "status": "PASS",
+     "evidence": [
+      "RT13",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "An opening-balance break blocks every item on that account.",
+     "status": "PASS",
+     "evidence": [
+      "RT13",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Purchases, credits and payments tie separately.",
+     "status": "PASS",
+     "evidence": [
+      "RT13",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "FV-C08 and FV-C09 pass with statement inputs.",
+     "status": "PASS",
+     "evidence": [
+      "cases FV-C08, FV-C09",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "Through the test-only adapter, which keeps the declared count and total defects.",
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Substitution detected when line ids are present.",
+     "status": "PASS",
+     "evidence": [
+      "RT13",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Limits disclosed when line ids or the prior statement are absent.",
+     "status": "PASS",
+     "evidence": [
+      "RT13n",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "NOTE"
+    },
+    {
+     "criterion": "Adversarial: a re-supplied statement is disclosed and held.",
+     "status": "FAIL",
+     "evidence": [
+      "X12s"
+     ],
+     "previous_status": "new this review",
+     "defects": [
+      "RA-04"
+     ],
+     "note": "P2."
+    }
+   ],
+   "open_p2": [
+    "RA-04"
+   ]
+  },
+  "T-14": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "Two duplicate candidates with a distinct_purchases disposition and distinct receipts become eligible and cite the disposition.",
+     "status": "PASS",
+     "evidence": [
+      "RT14a",
+      "RG0",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "A split disposition whose lines sum exactly becomes eligible; lines that do not sum are refused.",
+     "status": "PASS",
+     "evidence": [
+      "RT14a",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "A service actor cannot disposition; a disposition creates no active rule; revoking it re-blocks the item.",
+     "status": "PASS",
+     "evidence": [
+      "RN07",
+      "RT14a",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "An inventory step with NO_SOURCE_EVIDENCE blocks its dependants.",
+     "status": "PASS",
+     "evidence": [
+      "RT14f",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: contributors are computed per item lineage (N14 flips, N04 stays refused).",
+     "status": "PASS",
+     "evidence": [
+      "RN04",
+      "maintained N14, N04",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Adversarial: external referral or duplicate exclusion never produces a clean approval or a silent loss of ledger effect.",
+     "status": "PASS",
+     "evidence": [
+      "RT14a",
+      "RT14c",
+      "RG0",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Adversarial: a disposition is bound to the facts it decided.",
+     "status": "PASS",
+     "evidence": [
+      "RT14b",
+      "RT14c",
+      "RT14d",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "P2 and P3 residuals.",
+     "previous_status": "FAIL"
+    }
+   ]
+  },
+  "T-15": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "Each approved card item has exactly one proposed entry traceable to its source snapshot.",
+     "status": "PASS",
+     "evidence": [
+      "RT15",
+      "RG0",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "A journal citing a source that already has a card-derived entry is held.",
+     "status": "PASS",
+     "evidence": [
+      "RT15",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "Held at first; released by any later version of the cited source.",
+     "previous_status": "FAIL"
+    },
+    {
+     "criterion": "The sum of proposed entries by account for a period is reproducible from the export.",
+     "status": "PASS",
+     "evidence": [
+      "RG0",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "FV-J01 to FV-J07 still pass through the shared validator.",
+     "status": "PASS",
+     "evidence": [
+      "cases FV-J01 to FV-J07",
+      "inspection: core.py validate_entry used by both handlers",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Adversarial: signed expense, credit, settlement and transfer effects.",
+     "status": "PASS",
+     "evidence": [
+      "RT14e",
+      "RG0",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "Correct for the intended paths; a payment can be dispositioned as a credit to expense.",
+     "previous_status": "FAIL"
+    }
+   ]
+  },
+  "T-16": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "FV-J08, FV-J09 and FV-J10 report FIXED.",
+     "status": "PASS",
+     "evidence": [
+      "cases",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "FV-J01 to FV-J07 still pass.",
+     "status": "PASS",
+     "evidence": [
+      "cases",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: separate unit tests for unbound support, duplicate journal and no-effect journal.",
+     "status": "PASS",
+     "evidence": [
+      "tests/test_reviewer_probes.py test_P08_* (three tests, executed)",
+      "RT16",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    }
+   ]
+  },
+  "T-17": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "With no rule, FV-C17 and FV-C18 are still held, with policy-unset codes.",
+     "status": "PASS",
+     "evidence": [
+      "cases FV-C17, FV-C18",
+      "RT17",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "With an approved one-day window a receipt dated the day before posting matches; two days does not.",
+     "status": "PASS",
+     "evidence": [
+      "RT17",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "A proposed rule has no effect.",
+     "status": "PASS",
+     "evidence": [
+      "RT17",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: test_P15 asserts behaviour.",
+     "status": "PASS",
+     "evidence": [
+      "inspection and execution of tests/test_reviewer_probes.py test_P15_receipt_tolerance_is_explicit_client_policy",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Adversarial: an item with a receipt exception can be carried or resolved without altering evidence.",
+     "status": "PASS",
+     "evidence": [
+      "RG0",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "FAIL"
+    },
+    {
+     "criterion": "Adversarial: a replacement receipt under a new key is treated as a revision.",
+     "status": "FAIL",
+     "evidence": [
+      "X12k"
+     ],
+     "previous_status": "new this review",
+     "defects": [
+      "RA-03"
+     ],
+     "note": "P2."
+    }
+   ],
+   "open_p2": [
+    "RA-03"
+   ]
+  },
+  "T-18": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "Finalized package hash is identical before and after unrelated later intake.",
+     "status": "PASS",
+     "evidence": [
+      "RT18",
+      "RT12b",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "A source revision after finalization leaves the package unchanged and opens a visible exception.",
+     "status": "PASS",
+     "evidence": [
+      "RT18",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "A preparer cannot finalize.",
+     "status": "PASS",
+     "evidence": [
+      "RT18",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: locking or finalizing is refused, or requires a recorded acknowledgement, while any governing item is stale, disputed or unreviewed (probe N10).",
+     "status": "PASS",
+     "evidence": [
+      "RN01",
+      "RT18",
+      "maintained N10",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Added: no source key has a current governing artifact in more than one period.",
+     "status": "PASS",
+     "evidence": [
+      "RN02",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "Holds for one key; the same charge under a superseding key is not covered.",
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "T-07 follow-up: a defined recovery path for a mistaken revoke; a bound on re-opening a resolved dispute.",
+     "status": "PASS",
+     "evidence": [
+      "RT18",
+      "maintained N15",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Adversarial: change events against a finalized package are raised only for real changes.",
+     "status": "PASS",
+     "evidence": [
+      "RT12b",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "FAIL"
+    },
+    {
+     "criterion": "Adversarial: a period in which a source was removed can still be finalized.",
+     "status": "PASS",
+     "evidence": [
+      "RT12d",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "FAIL"
+    }
+   ]
+  },
+  "T-19": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "FV-CL02 reports FIXED.",
+     "status": "PASS",
+     "evidence": [
+      "case FV-CL02",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "FV-CL04 passes as an executable case.",
+     "status": "PASS",
+     "evidence": [
+      "case FV-CL04",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "FV-CL01 still passes.",
+     "status": "PASS",
+     "evidence": [
+      "case FV-CL01",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "Adversarial: a label-only document cannot complete reconciliation or tie-out requirements.",
+     "status": "PASS",
+     "evidence": [
+      "RT19a",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "note": "Holds for typed requirements; the shipped checklist is untyped.",
+     "previous_status": "FAIL"
+    },
+    {
+     "criterion": "Adversarial: in-flight preparation race; waiting does not adopt changed sources or policy.",
+     "status": "PASS",
+     "evidence": [
+      "RT19b",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    },
+    {
+     "criterion": "External and final-close holds remain.",
+     "status": "PASS",
+     "evidence": [
+      "RT19a",
+      "delivered gate: original probes direct or adapted, all OK"
+     ],
+     "previous_status": "PASS"
+    }
+   ]
+  }
+ },
+ "validation_cases": [
+  {
+   "id": "FV-C01",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C02",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C03",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C04",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C05",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C06",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C07",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C08",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C09",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C10",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C11",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C12",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C13",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C14",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C15",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-C16",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C17",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C18",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C19",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J01",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J02",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J03",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J04",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J05",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J06",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J07",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J08",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-J09",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-J10",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-CL01",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-CL02",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-R01",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-R02",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-R03",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-R04",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-RC01",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-RC02",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-RC03",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-AP01",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AP02",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AP03",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AP04",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AP05",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AR01",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AR02",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AR03",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AR04",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-BK01",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-BK02",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-BK03",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-BK04",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-BK05",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-CL03",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-CL04",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-GL01",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-RP01",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-RP02",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-RP03",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-RP04",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-RP05",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  }
+ ],
+ "validation_case_summary": {
+  "PASS": 29,
+  "FIXED": 10,
+  "DEFERRED-OK": 21
+ },
+ "validation_case_changes_since_last_review": [
+  "base profile close checklist is typed (RV-06)",
+  "runner mandates state the explicit no-evidence reason (RV-11)",
+  "no expected outcome of any case changed"
+ ],
+ "teaching_month": {
+  "referral_route": {
+   "status": "PASS",
+   "approvals": 10,
+   "held_with_referral": [
+    "TX-007",
+    "TX-009",
+    "TX-011"
+   ],
+   "quarantined": [
+    "TX-008",
+    "receipt-TX-008"
+   ],
+   "impact": {
+    "DEMO_OFFICE_SUPPLIES": "311.00",
+    "DEMO_REPAIRS": "200.00",
+    "DEMO_CARD_LIABILITY": "-211.00",
+    "DEMO_CASH": "-300.00"
+   },
+   "evidence": [
+    "M1",
+    "evidence/05_synthetic_month.txt"
+   ],
+   "note": "TX-009 keeps one receipt version at 79.99."
+  },
+  "acceptance_route": {
+   "status": "PASS",
+   "approvals": 11,
+   "held_with_referral": [
+    "TX-007",
+    "TX-011"
+   ],
+   "impact": {
+    "DEMO_OFFICE_SUPPLIES": "391.00",
+    "DEMO_REPAIRS": "200.00",
+    "DEMO_CARD_LIABILITY": "-291.00",
+    "DEMO_CASH": "-300.00"
+   },
+   "evidence": [
+    "M2",
+    "RG0 adapted"
+   ],
+   "note": "The corrected receipt is held, disclosed, accepted by a non-supplier, then independently reviewed."
+  },
+  "isolation": {
+   "status": "PASS",
+   "evidence": [
+    "M1"
+   ],
+   "note": "First-client artifacts, package bytes and evidence history unchanged; four cross-client attempts refused; both audit chains verify."
+  }
+ },
+ "G0_criteria": [
+  {
+   "criterion": "Batch 1 and Batch 2 complete.",
+   "status": "FAIL",
+   "note": "T-12 has an open P1 defect."
+  },
+  {
+   "criterion": "All P0 and P1 current defects fixed with tests.",
+   "status": "FAIL",
+   "note": "RA-01."
+  },
+  {
+   "criterion": "Reviewer cases: zero unexpected, all fail-until-fix cases fixed.",
+   "status": "PASS"
+  },
+  {
+   "criterion": "A full synthetic month reaches approved-or-dispositioned, finalized and locked with no database edits and no weakened blocker.",
+   "status": "PASS",
+   "note": "Without the previous caveat: TX-009 keeps its receipt and is referred."
+  },
+  {
+   "criterion": "Two synthetic clients in different periods on one engine with no cross-effects.",
+   "status": "PASS"
+  },
+  {
+   "criterion": "Documentation matches code.",
+   "status": "PASS",
+   "note": "Inventories complete; the report discloses the adapted probes and the failing original command."
+  }
+ ],
+ "not_run": [
+  {
+   "item": "Browser walkthrough of the demo UI",
+   "reason": "No accounting control depends on it; HTTP boundaries executed through the delivered tests."
+  },
+  {
+   "item": "Chronology of the implementation order and of the baseline reproduction",
+   "reason": "Cannot be established from a final archive; delivered logs are consistent."
+  },
+  {
+   "item": "UC-5 and UC-6",
+   "reason": "Read only."
+  }
+ ]
+}

@@ -1,0 +1,440 @@
+{
+  "synthetic": true,
+  "organization_id": "demo_org",
+  "client_id": "bird_bowl_demo",
+  "external_company_id": "fixture_realm_001",
+  "batch_id": "teaching-batch2-statements-v1",
+  "sources": [
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-001",
+      "data": {
+        "source_id": "TX-001",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-03",
+        "description": "ACME PAPER DEMO",
+        "amount": "42.50",
+        "currency": "USD",
+        "status": "posted",
+        "activity": "purchase"
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-002",
+      "data": {
+        "source_id": "TX-002",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-04",
+        "description": "METRO REPAIR DEMO",
+        "amount": "180.00",
+        "currency": "USD",
+        "status": "posted",
+        "activity": "purchase"
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-003",
+      "data": {
+        "source_id": "TX-003",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-05",
+        "description": "UNKNOWN MARKET DEMO",
+        "amount": "65.00",
+        "currency": "USD",
+        "status": "posted",
+        "activity": "purchase"
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-004",
+      "data": {
+        "source_id": "TX-004",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-06",
+        "description": "ACME PAPER DEMO",
+        "amount": "90.00",
+        "currency": "USD",
+        "status": "posted",
+        "activity": "purchase"
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-005",
+      "data": {
+        "source_id": "TX-005",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-06",
+        "description": "ACME PAPER DEMO",
+        "amount": "90.00",
+        "currency": "USD",
+        "status": "posted",
+        "activity": "purchase"
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-006",
+      "data": {
+        "source_id": "TX-006",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-07",
+        "description": "ACME PAPER DEMO",
+        "amount": "-42.50",
+        "currency": "USD",
+        "status": "posted",
+        "activity": "credit"
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-007",
+      "data": {
+        "source_id": "TX-007",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-08",
+        "description": "ACME PAPER DEMO",
+        "amount": "10.00",
+        "currency": "USD",
+        "status": "pending",
+        "activity": "purchase"
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-008",
+      "data": {
+        "source_id": "TX-008",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-10-31",
+        "description": "ACME PAPER DEMO",
+        "amount": "25.00",
+        "currency": "USD",
+        "status": "posted",
+        "activity": "purchase"
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-009",
+      "data": {
+        "source_id": "TX-009",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-09",
+        "description": "ACME PAPER DEMO",
+        "amount": "80.00",
+        "currency": "USD",
+        "status": "posted",
+        "activity": "purchase"
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-010",
+      "data": {
+        "source_id": "TX-010",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-10",
+        "description": "METRO REPAIR DEMO",
+        "amount": "35.00",
+        "currency": "USD",
+        "status": "posted",
+        "activity": "purchase",
+        "requires_split": true
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-011",
+      "data": {
+        "source_id": "TX-011",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-11",
+        "description": "ACME PAPER DEMO",
+        "amount": "55.00",
+        "currency": "EUR",
+        "status": "posted",
+        "activity": "purchase"
+      }
+    },
+    {
+      "kind": "transaction",
+      "key": "demo_card_001:TX-012",
+      "data": {
+        "source_id": "TX-012",
+        "source_system": "fixture",
+        "account_id": "demo_card_001",
+        "date": "2026-11-12",
+        "description": "CARD PAYMENT DEMO",
+        "amount": "-300.00",
+        "currency": "USD",
+        "status": "posted",
+        "activity": "payment"
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-001",
+      "data": {
+        "transaction_source_id": "TX-001",
+        "account_id": "demo_card_001",
+        "date": "2026-11-03",
+        "vendor": "ACME PAPER DEMO",
+        "amount": "42.50",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-001; not an authentic document."
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-003",
+      "data": {
+        "transaction_source_id": "TX-003",
+        "account_id": "demo_card_001",
+        "date": "2026-11-05",
+        "vendor": "UNKNOWN MARKET DEMO",
+        "amount": "65.00",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-003; not an authentic document."
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-004",
+      "data": {
+        "transaction_source_id": "TX-004",
+        "account_id": "demo_card_001",
+        "date": "2026-11-06",
+        "vendor": "ACME PAPER DEMO",
+        "amount": "90.00",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-004; not an authentic document."
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-005",
+      "data": {
+        "transaction_source_id": "TX-005",
+        "account_id": "demo_card_001",
+        "date": "2026-11-06",
+        "vendor": "ACME PAPER DEMO",
+        "amount": "90.00",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-005; not an authentic document."
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-006",
+      "data": {
+        "transaction_source_id": "TX-006",
+        "account_id": "demo_card_001",
+        "date": "2026-11-07",
+        "vendor": "ACME PAPER DEMO",
+        "amount": "-42.50",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-006; not an authentic document."
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-007",
+      "data": {
+        "transaction_source_id": "TX-007",
+        "account_id": "demo_card_001",
+        "date": "2026-11-08",
+        "vendor": "ACME PAPER DEMO",
+        "amount": "10.00",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-007; not an authentic document."
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-008",
+      "data": {
+        "transaction_source_id": "TX-008",
+        "account_id": "demo_card_001",
+        "date": "2026-10-31",
+        "vendor": "ACME PAPER DEMO",
+        "amount": "25.00",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-008; not an authentic document."
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-009",
+      "data": {
+        "transaction_source_id": "TX-009",
+        "account_id": "demo_card_001",
+        "date": "2026-11-09",
+        "vendor": "ACME PAPER DEMO",
+        "amount": "79.99",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-009; not an authentic document."
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-010",
+      "data": {
+        "transaction_source_id": "TX-010",
+        "account_id": "demo_card_001",
+        "date": "2026-11-10",
+        "vendor": "METRO REPAIR DEMO",
+        "amount": "35.00",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-010; not an authentic document."
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-011",
+      "data": {
+        "transaction_source_id": "TX-011",
+        "account_id": "demo_card_001",
+        "date": "2026-11-11",
+        "vendor": "ACME PAPER DEMO",
+        "amount": "55.00",
+        "currency": "EUR",
+        "content": "Fictional structured receipt for TX-011; not an authentic document."
+      }
+    },
+    {
+      "kind": "receipt",
+      "key": "receipt-TX-012",
+      "data": {
+        "transaction_source_id": "TX-012",
+        "account_id": "demo_card_001",
+        "date": "2026-11-12",
+        "vendor": "CARD PAYMENT DEMO",
+        "amount": "-300.00",
+        "currency": "USD",
+        "content": "Fictional structured receipt for TX-012; not an authentic document."
+      }
+    },
+    {
+      "kind": "statement",
+      "key": "demo-card-control",
+      "data": {
+        "account_id": "demo_card_001",
+        "statement_id": "demo-card-control",
+        "currency": "USD",
+        "period_start": "2026-11-01",
+        "period_end": "2026-11-30",
+        "opening_balance": "1000.00",
+        "closing_balance": "1240.00",
+        "totals": {
+          "purchase": "582.50",
+          "credit": "-42.50",
+          "payment": "-300.00",
+          "fee": "0.00",
+          "interest": "0.00",
+          "transfer": "0.00",
+          "unknown": "0.00"
+        },
+        "line_count": 9,
+        "line_ids": [
+          "TX-001",
+          "TX-002",
+          "TX-003",
+          "TX-004",
+          "TX-005",
+          "TX-006",
+          "TX-009",
+          "TX-010",
+          "TX-012"
+        ],
+        "provenance": "manually_keyed",
+        "sign_convention": "positive_charges_negative_credits_and_payments",
+        "content": "Explicit fictional statement specification; no real client statement verified."
+      }
+    },
+    {
+      "kind": "document",
+      "key": "journal-support-001",
+      "data": {
+        "document_type": "journal_support",
+        "content": "Fictional approved-purchase support; accounting treatment still requires human review.",
+        "journal_keys": [
+          "J-001",
+          "J-002"
+        ],
+        "period_id": "2026-11"
+      }
+    },
+    {
+      "kind": "document",
+      "key": "trial-balance-placeholder",
+      "data": {
+        "document_type": "trial_balance",
+        "content": "Fictional trial-balance placeholder; no actual client balances or report verified.",
+        "period_id": "2026-11"
+      }
+    },
+    {
+      "kind": "journal",
+      "key": "J-001",
+      "data": {
+        "date": "2026-11-13",
+        "currency": "USD",
+        "memo": "Fictional preparation example only",
+        "lines": [
+          {
+            "account_id": "DEMO_OFFICE_SUPPLIES",
+            "debit": "25.00",
+            "credit": "0.00"
+          },
+          {
+            "account_id": "DEMO_CARD_LIABILITY",
+            "debit": "0.00",
+            "credit": "25.00"
+          }
+        ],
+        "supporting_keys": [
+          "journal-support-001"
+        ]
+      }
+    },
+    {
+      "kind": "journal",
+      "key": "J-002",
+      "data": {
+        "date": "2026-11-13",
+        "currency": "USD",
+        "memo": "Fictional preparation example only",
+        "lines": [
+          {
+            "account_id": "DEMO_OFFICE_SUPPLIES",
+            "debit": "25.00",
+            "credit": "0.00"
+          },
+          {
+            "account_id": "DEMO_CARD_LIABILITY",
+            "debit": "0.00",
+            "credit": "24.99"
+          }
+        ],
+        "supporting_keys": [
+          "journal-support-001"
+        ]
+      }
+    }
+  ]
+}

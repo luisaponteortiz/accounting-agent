@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_review_corrections_rf.RFCorrections.test_RF01_retained_message_matrix_and_repeated_claim",
+    "tests.test_review_corrections_rf.RFCorrections.test_RF01_first_claim_link_invariant_across_delivery_matrices",
+    "tests.test_review_corrections_rf.RFCorrections.test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant",
+    "tests.test_review_corrections_rf.RFCorrections.test_RF03_transaction_reuses_current_result_and_matches_full_computation",
+    "-v"
+  ],
+  "cwd": "/tmp/aaos-rf-baseline",
+  "started_utc": "2026-11-16T23:16:19.744036+00:00",
+  "elapsed_seconds": 78.522,
+  "exit_code": 1,
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "sqlite": "3.51.0",
+  "platform": "macOS-26.5.2-x86_64-i386-64bit"
+}

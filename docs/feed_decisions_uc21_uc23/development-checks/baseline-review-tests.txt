@@ -1,0 +1,143 @@
+..EFEFFE
+======================================================================
+ERROR: test_UC21_boundary_restoration_cases_keep_their_earlier_behaviour (tests.test_feed_repeat_decisions.FeedRepeatDecisions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 116, in test_UC21_boundary_restoration_cases_keep_their_earlier_behaviour
+    with o.store.connect() as db:self.assertFalse(o.retired_by_live_replacement(db,p.SCOPE,p.K('Q')))
+AttributeError: 'AccountingOS' object has no attribute 'retired_by_live_replacement'
+
+======================================================================
+ERROR: test_UC22_anomaly_is_visible_in_state_and_export_and_the_message_never_governs (tests.test_feed_repeat_decisions.FeedRepeatDecisions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 160, in test_UC22_anomaly_is_visible_in_state_and_export_and_the_message_never_governs
+    self.assertEqual(o.state(p.PREP)['feed_anomalies'],[])
+KeyError: 'feed_anomalies'
+
+======================================================================
+ERROR: test_UC22_messages_that_are_not_mixed_ordering_raise_no_anomaly (tests.test_feed_repeat_decisions.FeedRepeatDecisions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 206, in test_UC22_messages_that_are_not_mixed_ordering_raise_no_anomaly
+    self.assertEqual(self.mixed_events(o),[]);self.assertEqual(o.state(p.PREP)['feed_anomalies'],[])
+KeyError: 'feed_anomalies'
+
+======================================================================
+FAIL: test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (order=7, repeat='row and receipt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 64, in test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing
+    self.assertIs(result['changed'],False);self.assertIs(result['replay'],False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (order=7, repeat='row only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 64, in test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing
+    self.assertIs(result['changed'],False);self.assertIs(result['replay'],False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (order=7, repeat='receipt only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 64, in test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing
+    self.assertIs(result['changed'],False);self.assertIs(result['replay'],False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (order='2026-12-03T10:00:00+00:00', repeat='row and receipt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 64, in test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing
+    self.assertIs(result['changed'],False);self.assertIs(result['replay'],False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (order='2026-12-03T10:00:00+00:00', repeat='row only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 64, in test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing
+    self.assertIs(result['changed'],False);self.assertIs(result['replay'],False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (order='2026-12-03T10:00:00+00:00', repeat='receipt only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 64, in test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing
+    self.assertIs(result['changed'],False);self.assertIs(result['replay'],False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (order=None, repeat='row and receipt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 64, in test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing
+    self.assertIs(result['changed'],False);self.assertIs(result['replay'],False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (order=None, repeat='row only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 64, in test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing
+    self.assertIs(result['changed'],False);self.assertIs(result['replay'],False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (order=None, repeat='receipt only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 64, in test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing
+    self.assertIs(result['changed'],False);self.assertIs(result['replay'],False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_UC21_repeat_through_a_chain_of_replacements_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 81, in test_UC21_repeat_through_a_chain_of_replacements_changes_nothing
+    self.assertIs(self.send(o,'uc21-q-again',q_rows)['changed'],False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_UC22_claim_on_an_unordered_message_applies_once_and_its_repeat_adds_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 193, in test_UC22_claim_on_an_unordered_message_applies_once_and_its_repeat_adds_nothing
+    self.assertEqual(p.rows_of(o),snapshot)
+AssertionError: {'sou[7519 chars]:00'), (20, 'demo_org/bird_bowl_demo/local', '[4848 chars] 0)]} != {'sou[7519 chars]:00')], 'bindings': [(1, 'demo_org/bird_bowl_d[4050 chars] 0)]}
+Diff is 20490 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_UC22_each_distinct_unordered_message_is_kept_and_flagged_once (tests.test_feed_repeat_decisions.FeedRepeatDecisions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 153, in test_UC22_each_distinct_unordered_message_is_kept_and_flagged_once
+    self.assertEqual(len(after['source_snapshots']),len(before['source_snapshots'])+3)
+AssertionError: 14 != 12
+
+======================================================================
+FAIL: test_UC22_unordered_message_with_different_data_is_kept_once_and_flagged_once (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (governing_order=7)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 139, in test_UC22_unordered_message_with_different_data_is_kept_once_and_flagged_once
+    self.assertEqual(len(after['events']),len(before['events'])+1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_UC22_unordered_message_with_different_data_is_kept_once_and_flagged_once (tests.test_feed_repeat_decisions.FeedRepeatDecisions) (governing_order='2026-12-03T10:00:00+00:00')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/ucbase/tests/test_feed_repeat_decisions.py", line 139, in test_UC22_unordered_message_with_different_data_is_kept_once_and_flagged_once
+    self.assertEqual(len(after['events']),len(before['events'])+1)
+AssertionError: 0 != 1
+
+----------------------------------------------------------------------
+Ran 10 tests in 17.166s
+
+FAILED (failures=14, errors=3)
+baseline exit 1

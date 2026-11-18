@@ -1,0 +1,12 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RT14f] (T-14) an empty inventory blocks the steps that depend on it
+    artifacts with no source evidence: {'package-manifest': ['NO_SOURCE_EVIDENCE', 'STATEMENT_CONTROL_MISSING_OR_AMBIGUOUS'], 'statement:demo_card_001': ['NO_SOURCE_EVIDENCE', 'STATEMENT_CONTROL_MISSING_OR_AMBIGUOUS'], 'no-transactions': ['NO_SOURCE_EVIDENCE', 'NO_TRANSACTIONS'], 'inventory': ['NO_SOURCE_EVIDENCE']}
+    -> OK
+
+====================================================================================================
+RT14f  T-14       OK     an empty inventory blocks the steps that depend on it
+
+Verdict counts: {'OK': 1}
+Re-verification gate: PASS

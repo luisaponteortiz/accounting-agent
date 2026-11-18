@@ -1,0 +1,59 @@
+{
+  "label": "FABLE_RA_AND_PRODUCT_REQUIREMENTS",
+  "created_date": "2026-11-15",
+  "package_type": "transfer_container_with_unchanged_executable_checkpoint_and_separate_documentation_addendum",
+  "scope": "Independent RA-01–RA-08 verification and permanent product requirements review; fictional local evidence only; no new feature, Batch 3 or live operating authority.",
+  "review_prompt": "FABLE_PRODUCT_AND_RA_REVIEW_PROMPT.md",
+  "executable_checkpoint": {
+    "path": "FABLE_RA_CORRECTIONS_REVIEW_BUNDLE.zip",
+    "sha256": "dec028b06a745ba52ceca448c766893c33e863f98d5728aafd8b6edadb274e4f",
+    "manifested_files": 324,
+    "extract_separately_before_running_commands": true
+  },
+  "documentation_addendum": {
+    "directory": "documentation_addendum/",
+    "project_files": [
+      "AGENTS.md",
+      "DECISIONS.md",
+      "PROGRESS.md",
+      "README.md",
+      "FABLE_ACCOUNTING_HANDOFF.md",
+      "docs/PRODUCT_REQUIREMENTS.md",
+      "docs/CONNECTION_READINESS.md"
+    ],
+    "apply_to_historical_checkpoint": false
+  },
+  "reference_material": {
+    "directory": "reference_material/ss_agent_system_handoff/",
+    "file_count": 16,
+    "role": "unchanged historical specifications, subject to current accounting-only scope"
+  },
+  "files": {
+    "FABLE_PRODUCT_AND_RA_REVIEW_PROMPT.md": "a621c8eca75a67aab0df9a5705ebd056357fee5a4a36b83fee29d4d384a176f1",
+    "FABLE_RA_CORRECTIONS_REVIEW_BUNDLE.zip": "dec028b06a745ba52ceca448c766893c33e863f98d5728aafd8b6edadb274e4f",
+    "START_HERE.md": "c50545839d0cf1eff1fdaab10cf0ad1885f8edd0848da17a15cd48e91dd8324e",
+    "documentation_addendum/AGENTS.md": "fc4abe81370fe0def9375d3c69f0a83ccf52de0caac656ed9e949b159761b14b",
+    "documentation_addendum/DECISIONS.md": "7d0edf86519a306e619b87afe7ce70f22f8c7b67f727d331b2ff921355d8554f",
+    "documentation_addendum/FABLE_ACCOUNTING_HANDOFF.md": "50ac593438e4e938d18fe9d3368f242bee1c2060a3bdc211209b4d7118447214",
+    "documentation_addendum/PROGRESS.md": "634feb525925a90c24c66f724897f7557675f1258a742b8f839b1271c599569e",
+    "documentation_addendum/README.md": "075b6a27e9010f641882d1058a7e186976469136f2fa5f5ab9d72d631f618ce1",
+    "documentation_addendum/docs/CONNECTION_READINESS.md": "4362ab3ff417c4979c992528d9264b107ca1f27c86115fc15b1bcdc2f0dc09b6",
+    "documentation_addendum/docs/PRODUCT_REQUIREMENTS.md": "34623afcfc7545a858cab853552c121150ec8014cdc86ba8523ef4adf21c50e2",
+    "reference_material/ss_agent_system_handoff/ACCEPTANCE_TESTS.md": "b9d547864f3dd34f171c029a9219de2f105c4fb84c777ce35a411b68389210b6",
+    "reference_material/ss_agent_system_handoff/AGENTS.md": "d692b36506f6752b5b9bf66e36ae337b74384a1530c5bfe95209e9372562c626",
+    "reference_material/ss_agent_system_handoff/AGENT_PLAYBOOKS.md": "ee5702c607a56a69a9919691fd2bfd0921569d8f5687198f55df1aa3b6843a19",
+    "reference_material/ss_agent_system_handoff/BIRD_BOWL_ACCOUNTING_PILOT.md": "28fefadcc294fb7073cabdbea4a1cdd2ae1438de00e70e2c321d376a94633adf",
+    "reference_material/ss_agent_system_handoff/BUILD_PLAN.md": "f90cca9bd72fa34c7fd6daae91cca6b54fa7f4644cb5cb7841aad03a6c64bed1",
+    "reference_material/ss_agent_system_handoff/CONNECTIONS_AND_DECISIONS.md": "c679236ff421c0bdb5e745ebfd224398cacd1ef87baba4b1f1bbfeab00342ac0",
+    "reference_material/ss_agent_system_handoff/EXECUTIVE_AUTONOMY.md": "27d43094e1698780892f1df22eb36d42931c974469a3caab29895a988ea5e4ac",
+    "reference_material/ss_agent_system_handoff/IMPLEMENTATION_BACKLOG.md": "18ee5371bfc176c49a3add42bfd9f58e4e2dce5aa811ddc513d4ec65bb744af6",
+    "reference_material/ss_agent_system_handoff/README.md": "57ed47642dfba0926b3755623bc1196848dfe912a2d8af36c3e802b508aabf2f",
+    "reference_material/ss_agent_system_handoff/SOURCES.md": "fd9961c626be3e781315001bc7944bf0dcb1df587506eb8906723366c76eca74",
+    "reference_material/ss_agent_system_handoff/START_PROMPT.txt": "2ecf9032108941d4eefd7b4d1d1eea2887dff6658db93dc13cc4e39e726bf08d",
+    "reference_material/ss_agent_system_handoff/TESTING_AND_ROLLOUT.md": "cfae4b9ab8c362202918f87fe1c34e85481bc5f3f66cc805295fbc6ec4294b1a",
+    "reference_material/ss_agent_system_handoff/config/pilot_policy.example.yaml": "925b30fe2e262b56bd81fddea1164328036fd418000fa136fc52d9c91670a145",
+    "reference_material/ss_agent_system_handoff/fixtures/business_scenarios.json": "5f495eb6e68a46e899f788322b9683c19a6ec2160a240cec6aa7cab9b50f7f15",
+    "reference_material/ss_agent_system_handoff/fixtures/close_scenario.json": "3a6128e67b1545d6ce92ae49b43369d97e0a52898cfc45315472a9ede9887edd",
+    "reference_material/ss_agent_system_handoff/fixtures/legal_scenario.json": "6aa625286d65006f08c74a085878766f97fb7623166c02639b766f10ee6f0466"
+  }
+}

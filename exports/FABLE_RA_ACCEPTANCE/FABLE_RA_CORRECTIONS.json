@@ -1,0 +1,193 @@
+{
+ "title": "Fable corrective tickets after independent verification of RA-01 to RA-08 (bundle FABLE_RA_CORRECTIONS_REVIEW_BUNDLE, SHA-256 dec028b06a745ba52ceca448c766893c33e863f98d5728aafd8b6edadb274e4f)",
+ "authored": "2026-11-15",
+ "notice": "Review output only. Authorises no connection, posting, payment, model call, hosting, deployment or policy activation, and opens no readiness gate. All data fictional. No source file was changed during this review.",
+ "companion_files": [
+  "FABLE_RA_ACCEPTANCE_REPORT.md",
+  "FABLE_RA_ACCEPTANCE_RESULTS.json",
+  "fable_ra_acceptance_probes.py",
+  "fable_ra_acceptance_output.txt",
+  "evidence/"
+ ],
+ "recommendation": "Five of the eight corrections are accepted (RA-02, RA-05, RA-06, RA-07, RA-08). RA-01 is not accepted: its fix closes the reported chain but introduces a regression that again leaves one charge approved in two periods (RB-01, P1). RA-03 and RA-04 are accepted for the routes they were written against, with one remaining route (RB-02, P2). Fix RB-01 before G0 is recorded and RB-02 in the same pass. Batch 3 stays closed.",
+ "priority_counts": {"P0": 0, "P1": 1, "P2": 1, "P3": 2},
+ "implementation_order": ["RB-01", "RB-02", "RB-03", "RB-04"],
+ "order_note": "RB-01 first: it is the only P1 and is a regression against the frozen RV submission. RB-02 changes one condition shared by receipts and statements. RB-03 and RB-04 are independent of the others.",
+ "completion_gate": [
+  "python3 fable_ra_acceptance_probes.py <project-root> exits 0: no WEAK and no ERROR. R04c becomes OK when RB-04 is done.",
+  "make test, make check, make batch2-gate, make reverification-gate and make acceptance-gate still pass; reviewer cases stay at 29 PASS, 10 FIXED, 21 DEFERRED-OK; only U4 remains a NOTE.",
+  "fable_ra_acceptance_probes.py is added to make test unmodified. An API change that makes a probe unrunnable is returned with the adapted probe for review.",
+  "Each contract change is recorded in DECISIONS.md and the affected records of docs/PRODUCT_REQUIREMENTS.md are updated in the same change."
+ ],
+ "confirmed_defects": [
+  {
+   "id": "RB-01",
+   "priority": "P1",
+   "classification": "confirmed_defect",
+   "regression": "Yes for the first reproduction: the frozen RV submission (SHA-256 247c1cfd...) quarantines it; the RA source approves it. The second reproduction was held in the frozen submission only by the RA-06 defect and is now reachable.",
+   "title": "A source that was admitted to an open period before it gained its supersession link is released into a second approved period",
+   "affected_requirements": ["RA-01", "RV-01", "C-01", "T-12", "AAOS-BNK-03", "AAOS-CTL-04"],
+   "source": [
+    "accounting_agent/source_control.py source_origin lines 95-103: the chain is walked starting with the source's own key, and the walk returns at the first key that has any admitted binding. An earlier admission of the same key to the destination period therefore hides a locked or quarantined ancestor.",
+    "accounting_agent/service.py bind_source lines 219-226: the origin so resolved is the open destination period, so blocked is false, the source is admitted and apply_supersession (source_control.py lines 105-117) marks the approved ancestor and its receipt removed while their period is locked."
+   ],
+   "probe": "R01b, R01c (fable_ra_acceptance_probes.py); frozen-baseline comparison in evidence/baseline-frozen-rv-comparison.txt",
+   "minimal_reproduction": [
+    "R01b. Approve A1 (3 Nov, 40.00) and lock November; December is open.",
+    "Intake B1 dated 2 Dec, 40.00, with its receipt and a December statement, with no supersession claim. It is admitted to December and is eligible.",
+    "Re-send B1 with supersedes='demo_card_001:A1'. Run December card preparation.",
+    "Disposition SOURCE_TRANSITION_REQUIRES_REVIEW as settlement_verified citing the whole evidence list. Re-run. An independent reviewer approves B1. Finalize December without acknowledgement.",
+    "R01c. Same start. Intake A1Y (3 Dec) with supersedes='demo_card_001:A1X' before A1X exists: admitted to December, held as unresolved. Intake A1X (2 Dec) superseding A1: quarantined. Re-send A1Y unchanged so that its link now resolves; disposition and approve as above."
+   ],
+   "expected": "The re-sent source is quarantined with SOURCE_MOVED_FROM_LOCKED_PERIOD, leaves the December population (ITEM_LEFT_POPULATION), and the quarantined links stay listed until November is reopened. This is what the frozen RV submission does for R01b.",
+   "actual": "B1 (R01b) and A1Y (R01c) stay governing in December with only SOURCE_TRANSITION_REQUIRES_REVIEW, are dispositioned and approved. A1 remains approved in locked November. In R01c the quarantine entries for A1X and its receipt disappear from state.source_exceptions. source_move_history records a move from December to December, not blocked. December finalizes without acknowledgement.",
+   "accounting_or_control_consequence": "The same expense and liability are approved in two periods, one of them locked and finalized. This is the outcome RA-01, RV-01 and C-01 exist to prevent. It needs no unusual intent: a feed that delivers a replacement row first and declares the link in a later delivery produces it.",
+   "smallest_sufficient_correction": [
+    "In source_origin, examine the ancestors before the source's own earlier admission. For each ancestor in the chain, nearest first: if its head is not removed and either (a) its latest binding is SOURCE_MOVED_FROM_LOCKED_PERIOD under a period that is still locked, or (b) its latest admitted binding is in a period that is locked, return that period as a blocking origin.",
+    "Only when no ancestor is held by a lock fall back to the nearest admitted owner, own key first. This keeps the relock regression: after a valid release the ancestors' heads are removed, so a later destination revision still resolves to the destination.",
+    "When the source becomes blocked, its earlier governing artifact leaves the destination population in the usual way; an approval already given there is reported with the existing approved-source event.",
+    "Do not record a source_moves row when the origin period and the destination period are the same."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe R01b reports OK: after B1 declares that it supersedes A1, December has no governing artifact for B1, state.source_exceptions lists B1 and its receipt under November with SOURCE_MOVED_FROM_LOCKED_PERIOD, and export.source_move_history has a blocked row with had_approval for B1.",
+    "Probe R01c reports OK: after A1Y is re-sent, December has no governing artifact for A1Y and A1X, A1Y and both receipts are listed as quarantined.",
+    "If B1 had already been approved in December before the claim arrived, that approval is no longer governing and an accounting event names it.",
+    "After reopening November and re-preparing: November has no governing A1 and December has exactly one governing item for the charge, carrying SOURCE_TRANSITION_REQUIRES_REVIEW.",
+    "Probe R01a stays OK, including the relock step; probes A01, X01, RN02, RN02b and RT12d are unchanged."
+   ],
+   "regression_tests": ["probe R01b", "probe R01c", "probe R01a", "probes A01, X01", "probes RN02, RN02b, RT12d", "new unit tests: late supersession claim on an admitted source; unresolved link later resolved; the same with the destination already approved"],
+   "decision_requiring_client_authority": null
+  },
+  {
+   "id": "RB-02",
+   "priority": "P2",
+   "classification": "confirmed_defect",
+   "regression": "No. The frozen RV submission behaves the same way. The correction text of RA-03 asked for comparison with every snapshot ever supplied for the charge; the delivered condition is narrower.",
+   "title": "Replacing a receipt or a statement by re-pointing the old key instead of withdrawing it avoids the revised-evidence hold",
+   "affected_requirements": ["RA-03", "RA-04", "RV-12", "RV-13", "T-13", "T-17", "AAOS-CTL-09", "AAOS-BNK-02"],
+   "source": [
+    "accounting_agent/source_control.py evidence_revisions lines 77-82: an earlier document under another key counts as replaced only when that key's current head is removed (line 81). If the old key is revised so that it names another transaction id (receipt) or another cycle (statement), its head is not removed and the comparison is skipped."
+   ],
+   "probe": "R03b, R04b",
+   "minimal_reproduction": [
+    "R03b. Charge A1 is 40.00 and receipt-A1 says 39.99: the item carries RECEIPT_AMOUNT_POLICY_UNSET.",
+    "In one packet the preparer re-supplies receipt-A1 with transaction_source_id 'A1-VOID' (no such charge) and supplies receipt-A1-new for A1 at 40.00. Re-run; an independent reviewer approves A1.",
+    "R04b. Population is 100.00 and statement stmt-2026-11 says purchases 90.00: every item carries STATEMENT_CONTROL_MISMATCH.",
+    "In one packet the preparer re-supplies stmt-2026-11 with period 2027-01-01 to 2027-01-31 and supplies stmt-2026-11-b for November with purchases 100.00. Re-run; an independent reviewer approves A1."
+   ],
+   "expected": "The item is held with EVIDENCE_REVISED_REQUIRES_REVIEW and discloses the earlier document, its supplier and the fields that differ, as it does when the old key is withdrawn (probes X12k, X12s, R03a, R04a).",
+   "actual": "The item is eligible with no blocker, evidence_revisions is empty, the statement workpaper has no statement_revisions, and the item is approved. For the receipt there is no trace anywhere in state; for the statement the only trace is an UNASSIGNED_ACCOUNTING_PERIOD source exception for the re-pointed key.",
+   "accounting_or_control_consequence": "The RA-03 and RA-04 controls are avoided with one different step. Moving a receipt to another charge and attaching a new one is an ordinary clerical action, so this does not need intent. The reviewer of the item is told nothing.",
+   "smallest_sufficient_correction": [
+    "In evidence_revisions, treat an earlier snapshot under another key as replaced when it has the same identity fields as the current document and the earlier key's current head is either removed or no longer has those identity fields. In other words: it was supplied for this charge or cycle and is no longer relied on for it.",
+    "Keep the existing exception: an earlier document under another key whose current head is active and still names the same charge is a multiple-document question, not a revision."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe R03b reports OK: the item carries EVIDENCE_REVISED_REQUIRES_REVIEW and evidence_revisions names receipt-A1 version 1 and the amount change.",
+    "Probe R04b reports OK: both items are held and the workpaper statement_revisions names stmt-2026-11 version 1 and the totals change.",
+    "The supplier of either document cannot accept; a granted non-supplier can; final review stays separate.",
+    "Probes R03a, R04a, X12k, X12s, A12 and A13 are unchanged, including the case of an additional still-active receipt."
+   ],
+   "regression_tests": ["probe R03b", "probe R04b", "probes R03a, R04a", "probes X12k, X12s, A12, A13", "delivered RA-03 and RA-04 tests extended with a re-pointed key"],
+   "decision_requiring_client_authority": "For a real client: the document policy, including who may re-attach a receipt to another charge and who may accept a corrected or replaced document."
+  },
+  {
+   "id": "RB-03",
+   "priority": "P3",
+   "classification": "confirmed_defect",
+   "regression": "No. Same behaviour in the frozen RV submission.",
+   "title": "The author of a coding rule is dropped from the item lineage when the identical rule is re-proposed with item scope or under a new rule key",
+   "affected_requirements": ["RA-02", "RV-10", "C-04", "T-09", "AAOS-KNO-04", "AAOS-CTL-01"],
+   "source": [
+    "accounting_agent/controls.py applied_rule_lineage line 127: earlier versions are selected with r.rule_key=? AND r.item_key IS ?, so a general rule is not an ancestor of an item-scoped rule with the same key, and a rule under another key is never an ancestor."
+   ],
+   "probe": "R02b",
+   "minimal_reproduction": [
+    "A future reviewer proposes vendor mapping demo_acme (alias and category); a policy approver approves it.",
+    "A colleague proposes the identical mapping with the same key and item_key set to the charge; a second approver approves it. Prepare the charge. The author of the general rule approves it: accepted.",
+    "Variant: the first rule ends on 2 November; the colleague proposes the identical mapping as demo_acme_b from 3 November. The author of the first rule approves the charge: accepted."
+   ],
+   "expected": "Refused with 403, as it is for the unlinked re-proposal with the same key and scope (probe A10).",
+   "actual": "Accepted. The contributor list holds only the proposer and approver of the later rule.",
+   "accounting_or_control_consequence": "The RV-10 control still depends on choices the re-proposer makes. It is P3 rather than P2 because these are deliberate steps that need a second proposer and a second approver, unlike the omitted optional link.",
+   "smallest_sufficient_correction": [
+    "Select candidate ancestors by coverage, not by exact scope: earlier approved rules of the same kind whose item scope is general or equal to the item.",
+    "For vendor mappings, also include earlier approved rules under another key whose alias matches the item description and whose category equals the applied category. For receipt policies, also include earlier approved rules under another key with an equal value. The existing semantic comparison then applies unchanged."
+   ],
+   "depends_on": [],
+   "acceptance_assertions": [
+    "Probe R02b reports OK: both the item-scoped and the re-keyed re-proposal leave the earlier author refused with 403.",
+    "Probe R02a is unchanged: a different earlier category, an earlier rule that did not cover the description and a different earlier policy value do not bar their authors; an independent reviewer can approve."
+   ],
+   "regression_tests": ["probe R02b", "probe R02a", "probes A10, RN04, RN05, RN05b"],
+   "decision_requiring_client_authority": "Whether the person who approves or writes policy may also review items prepared under it (currently barred)."
+  },
+  {
+   "id": "RB-04",
+   "priority": "P3",
+   "classification": "confirmed_defect",
+   "regression": "No. In the frozen RV submission neither period disclosed the change; the RA source now holds the prior period's items but still tells the next period nothing.",
+   "title": "A prior-period statement restated so that the next opening balance agrees is not disclosed to the next period",
+   "affected_requirements": ["RA-04", "RV-13", "T-13", "AAOS-BNK-02", "AAOS-CTL-09"],
+   "source": [
+    "accounting_agent/modules.py supporting_revisions lines 147-153: only the statement whose cycle contains the item date is treated as its supporting evidence.",
+    "accounting_agent/modules.py statement_checks lines 128-139: the lookback statement decides opening_continuity, and the workpaper lists statement_revisions for the current statement only."
+   ],
+   "probe": "R04c",
+   "minimal_reproduction": [
+    "November closes at 100.00 and is still open. December's statement opens at 120.00: December items carry STATEMENT_OPENING_BALANCE_BREAK.",
+    "The preparer re-supplies the November statement with opening 20.00 and closing 120.00. Re-run both periods."
+   ],
+   "expected": "The December workpaper discloses that the statement it relied on for continuity was revised, and continuity is not reported as verified until that revision is accepted in November.",
+   "actual": "December reports opening_continuity 'verified', lists no revision, and the December item is eligible. November items are correctly held with EVIDENCE_REVISED_REQUIRES_REVIEW.",
+   "accounting_or_control_consequence": "The continuity check can be made to agree by the person who supplies the population, with the trace shown only in the other period. It is visible there and the prior period cannot be finalized cleanly, so this is P3.",
+   "smallest_sufficient_correction": [
+    "Add the revisions of the lookback statement to the statement workpaper (for example prior_statement_revisions).",
+    "While a revision of the lookback statement has no active acceptance in its own period, report continuity as unverified with a blocker on the workpaper."
+   ],
+   "depends_on": ["RB-02"],
+   "acceptance_assertions": [
+    "Probe R04c reports OK: the December workpaper lists the November revision, or the December item is not eligible until the revision is accepted.",
+    "Probe A13 is unchanged: a quarantined late revision of a locked prior statement is not used."
+   ],
+   "regression_tests": ["probe R04c", "probes A13, RT13, RT13n", "FV-C08, FV-C09, FV-C19"],
+   "decision_requiring_client_authority": "For a real client: who may correct a prior statement and how a correction to a closed cycle is carried forward."
+  }
+ ],
+ "unverified_or_open_concerns": [
+  {"id": "UC-4", "status": "unchanged, accepted NOTE", "note": "Probe U4 still reports NOTE: when a superseding source is removed, the charge it replaced is not restored; both are visible. Feed-semantics question for gate G2."},
+  {"id": "UC-5", "status": "unchanged", "note": "Synthetic authority grants have no revocation and no rule that the administrator differs from the subject. Must be designed before gate G1."},
+  {"id": "UC-6", "status": "unchanged, by reading only, NOT_RUN", "note": "A duplicated payment row can only be settled or referred. Not executed in this review."},
+  {"id": "UC-7", "status": "new, observed in R01a and R01b", "note": "source_moves records a row whose origin and destination are the same period when a superseding source is revised in place (service.py bind_source line 223: moved is true whenever a link exists). Receipt rows in a blocked chain carry had_approval 0 although the charge they support was approved; the transaction rows carry 1. Neither changes a control outcome; both make the move history harder to read."},
+  {"id": "UC-8", "status": "new, by reading only", "note": "RA-05 across a period boundary: a rule approved before the mandate whose effective date falls in a later period is absent from the bound signature of the first period and present in the next, so a recurring occurrence_calendar mandate would ask for reconfirmation at the boundary. It fails in the safe direction. Covered only by the delivered tests; not independently executed."},
+  {"id": "UC-9", "status": "new, by reading only", "note": "RA-07 for journals: a journal_support document that names the journal counts as supporting evidence. Covered by the delivered tests and by inspection of exceptions.py lines 21-28; no independent journal disposition probe was run."}
+ ],
+ "verified_since_last_review": [
+  {"id": "RA-02", "status": "ACCEPTED as specified", "evidence": "probes A10 (unmodified original) and R02a"},
+  {"id": "RA-05", "status": "ACCEPTED", "evidence": "probes U1, RT10a, RT10b (unmodified originals) and R05"},
+  {"id": "RA-06", "status": "ACCEPTED", "evidence": "probe R01a: after reopen, a disposition citing the whole evidence list, predecessor snapshots included, clears the blocker; a reference outside the item is refused"},
+  {"id": "RA-07", "status": "ACCEPTED", "evidence": "probes A14 (unmodified original) and R07"},
+  {"id": "RA-08", "status": "ACCEPTED", "evidence": "probes X09 (reviewed setup) and R08"},
+  {"id": "RA-03", "status": "ACCEPTED for same-key revision and withdraw-and-replace; one route remains (RB-02)", "evidence": "probes X12k, A12 (unmodified originals), R03a; R03b WEAK"},
+  {"id": "RA-04", "status": "ACCEPTED for same-key revision and withdraw-and-replace; one route remains (RB-02) and one disclosure gap (RB-04)", "evidence": "probes X12s, A13 (unmodified originals), R04a; R04b WEAK; R04c NOTE"},
+  {"id": "RA-01", "status": "NOT ACCEPTED", "evidence": "probes X01, A01 and R01a OK; R01b and R01c WEAK (RB-01)"}
+ ],
+ "deferred_enhancements": [
+  {"id": "DE-1", "note": "Unchanged. Item envelopes carry the run-wide fingerprint and rule list."},
+  {"id": "DE-2", "note": "Unchanged. With multiple receipts allowed, each receipt is compared with the whole charge."},
+  {"id": "DE-3", "note": "Unchanged. Double-recording detection works within one period population. RB-01 is not this enhancement: it concerns a declared supersession link, which the engine already resolves."},
+  {"id": "DE-4", "note": "Unchanged. Statement cycles must equal the accounting period."},
+  {"id": "DE-5", "note": "Unchanged. Trial balance and card statement checklist lines are typed as document."}
+ ],
+ "decisions_requiring_client_authority": [
+  "Whether the person who approves or writes policy may also review items prepared under it (currently barred).",
+  "Document policy: date window, amount tolerance, multiple receipts, who may re-attach a receipt to another charge, and who may accept a corrected or replaced receipt.",
+  "Which document is the authoritative card statement, whether it has line identifiers, who may supply or correct it, how cycles map to periods and how a correction to a closed cycle is carried forward.",
+  "Treatment of fees, interest, card payments and transfers, and the accounts each disposition may use.",
+  "The close checklist, the evidence each line requires, and who gives final sign-off.",
+  "Who may disposition, finalize and lock, and what evidence must be new before a recurring run.",
+  "Feed semantics: whether a provider can deliver a replacement row before it declares what the row replaces, and whether a removed replacement restores the original (gate G2)."
+ ]
+}

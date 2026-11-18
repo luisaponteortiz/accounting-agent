@@ -1,0 +1,10 @@
+test_RB01_late_link_quarantines_previously_admitted_or_approved_destination (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+test_RB01_unresolved_link_then_predecessor_then_resolution_keeps_entire_quarantine (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+test_RB02_repointed_receipt_and_statement_replacements_need_independent_acceptance (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+test_RB03_equivalent_vendor_and_receipt_rules_keep_authors_across_scope_and_key (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+test_RB04_prior_restatement_waits_for_all_own_period_acceptances_and_revocation_reblocks (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 6.779s
+
+OK

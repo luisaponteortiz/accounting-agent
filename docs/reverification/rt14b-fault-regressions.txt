@@ -1,0 +1,7 @@
+test_RT14b_fails_when_either_initial_disposition_is_refused (tests.test_reverification_gate.ReverificationGate) ... ok
+test_RT14b_fails_when_initial_D1_is_ineligible (tests.test_reverification_gate.ReverificationGate) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 1.047s
+
+OK

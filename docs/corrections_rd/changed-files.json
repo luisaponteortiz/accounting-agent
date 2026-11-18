@@ -1,0 +1,2233 @@
+{
+  "baseline": "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "baseline_sha256": "9a85c78a40fd9b5f675b4d135274808056b34097ad907e38e962bf25b0762454",
+  "scope": "Every deliverable payload file against the RC/PRV correction bundle, including exports/ and START_HERE.md.",
+  "coverage_rules": [
+    "All differing payload files are individually listed except the two self-artifacts named below, which are covered by REVIEW_MANIFEST.json.",
+    "REVIEW_MANIFEST.json hashes every payload file except itself; its own SHA-256 is in the adjacent PACKAGE_CHECK JSON.",
+    "The final archive and its adjacent checksum, external manifest and PACKAGE_CHECK JSON are the output envelope, excluded from the payload to prevent recursion. The checksum sidecar hashes the archive.",
+    "Final extracted-archive verification JSON/logs are adjacent output-envelope evidence, excluded from the payload to avoid self-reference; they verify this archive without rebuilding it.",
+    "Git metadata, caches, virtual environments, .DS_Store and runtime databases/data are excluded; no delivered source/evidence file is excluded by that rule."
+  ],
+  "self_artifacts_covered_by_manifest": [
+    "docs/corrections_rd/changed-files.json",
+    "docs/corrections_rd/source-and-tests.patch"
+  ],
+  "output_envelope": [
+    "exports/FABLE_RD_AND_PRV_CORRECTIONS_FINAL_VERIFICATION.json",
+    "exports/FABLE_RD_AND_PRV_CORRECTIONS_PACKAGE_CHECK.json",
+    "exports/FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.REVIEW_MANIFEST.json",
+    "exports/FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+    "exports/FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip.sha256"
+  ],
+  "original_tests": {
+    "tests/__init__.py": {
+      "baseline_methods": 0,
+      "retained_methods": [],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_acceptance_corrections.py": {
+      "baseline_methods": 13,
+      "retained_methods": [
+        "AcceptanceCorrections.test_RA01_entire_chain_and_receipts_remain_blocked_until_reopen",
+        "AcceptanceCorrections.test_RA01_supersession_cycle_is_refused_without_mutation",
+        "AcceptanceCorrections.test_RA02_unlinked_identical_receipt_policy_retains_author",
+        "AcceptanceCorrections.test_RA02_unlinked_rule_identity_preserves_semantic_authors_without_unrelated_scope",
+        "AcceptanceCorrections.test_RA03_additional_receipt_is_multiple_support_until_the_original_is_withdrawn",
+        "AcceptanceCorrections.test_RA03_replacement_key_discloses_old_receipt_and_keeps_both_suppliers_independent",
+        "AcceptanceCorrections.test_RA04_statement_replacement_key_preserves_revision_control",
+        "AcceptanceCorrections.test_RA04_statement_revision_holds_each_item_and_requires_non_supplier_acceptance",
+        "AcceptanceCorrections.test_RA05_future_retirement_does_not_change_prior_period_authority",
+        "AcceptanceCorrections.test_RA05_preapproved_midperiod_rules_do_not_suspend_on_fresh_evidence",
+        "AcceptanceCorrections.test_RA06_transition_disposition_with_predecessor_evidence_takes_effect",
+        "AcceptanceCorrections.test_RA07_unrelated_rows_and_receipts_cannot_support_vendor_coding",
+        "AcceptanceCorrections.test_RA08_circular_duplicate_and_replay_exclusions_are_refused_before_reprepare"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_acceptance_gate.py": {
+      "baseline_methods": 5,
+      "retained_methods": [
+        "AcceptanceGate.test_all_24_independent_assertions_with_explicit_statement_acceptance",
+        "AcceptanceGate.test_independent_review_inputs_and_four_frozen_archives_unchanged",
+        "AcceptanceGate.test_original_acceptance_verdicts_and_assignments_are_preserved",
+        "AcceptanceGate.test_packager_refuses_to_overwrite_frozen_submission",
+        "AcceptanceGate.test_unmodified_compatible_independent_acceptance_probes"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_batch2.py": {
+      "baseline_methods": 11,
+      "retained_methods": [
+        "Batch2.test_T09_chart_author_cannot_erase_lineage_with_cosmetic_profile",
+        "Batch2.test_T09_effective_dated_rule_and_service_proposal",
+        "Batch2.test_T09_model_requirement_uses_item_effective_date",
+        "Batch2.test_T09_proposed_policy_never_runs_and_self_approval_denied",
+        "Batch2.test_T09_unrelated_close_rule_preserves_card_and_journal_review",
+        "Batch2.test_T10_mandate_requires_independence_freshness_and_target_period",
+        "Batch2.test_T11_client_sample_cannot_waive_missing_basis",
+        "Batch2.test_T11_explicit_demo_waivers_are_exported",
+        "Batch2.test_T12_evidence_before_period_and_boundary_receipt",
+        "Batch2.test_T12_order_removal_and_supersession",
+        "Batch2.test_T12_tombstone_without_sequence_and_older_packet_replay"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_batch2_controls.py": {
+      "baseline_methods": 14,
+      "retained_methods": [
+        "Batch2Controls.test_T13_statement_activity_identity_and_opening_controls",
+        "Batch2Controls.test_T14_contributor_is_item_scoped",
+        "Batch2Controls.test_T14_duplicate_disposition_revoke_and_independence",
+        "Batch2Controls.test_T14_empty_inventory_propagates",
+        "Batch2Controls.test_T14_rule_scope_proposes_without_resolving",
+        "Batch2Controls.test_T14_split_exact_and_service_refusal",
+        "Batch2Controls.test_T15_shared_entry_impact_and_double_recording",
+        "Batch2Controls.test_T15_transfer_direction_respects_signed_card_activity",
+        "Batch2Controls.test_T17_approved_amount_tolerance_is_bounded",
+        "Batch2Controls.test_T18_finalization_stability_changes_and_recovery",
+        "Batch2Controls.test_T18_lock_requires_ack_and_disputed_finalization_refused",
+        "Batch2Controls.test_T19_document_label_cannot_complete_deferred_reconciliation",
+        "Batch2Controls.test_T19_period_and_typed_workflow_outcome",
+        "Batch2Controls.test_T19_waits_for_inflight_preparation_before_readiness"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_corrections.py": {
+      "baseline_methods": 8,
+      "retained_methods": [
+        "Corrections.test_N01_all_decisions_refused_under_lock",
+        "Corrections.test_N02_locked_source_move_cannot_govern_two_periods",
+        "Corrections.test_N03_other_enqueuer_does_not_displace_rejection",
+        "Corrections.test_N04_historical_evidence_supplier_cannot_review",
+        "Corrections.test_N05_historical_profile_author_cannot_review",
+        "Corrections.test_N06_combining_marks_are_semantic",
+        "Corrections.test_N07_actor_kind_is_required",
+        "Corrections.test_later_contributor_loses_further_review_rights"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_corrective_gate.py": {
+      "baseline_methods": 1,
+      "retained_methods": [
+        "CorrectiveGate.test_independent_N01_through_N07"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_http.py": {
+      "baseline_methods": 11,
+      "retained_methods": [
+        "HTTPCase.test_approval_and_export_black_box",
+        "HTTPCase.test_blocked_artifact_approval_fails",
+        "HTTPCase.test_health_and_real_worker_results",
+        "HTTPCase.test_host_origin_and_scope_override_defenses",
+        "HTTPCase.test_invalid_api_requests_have_no_side_effects",
+        "HTTPCase.test_loopback_only_and_static_assets_with_csp",
+        "HTTPCase.test_mandate_proposal_requires_independent_activation",
+        "HTTPCase.test_package_and_disposition_routes_enforce_controls",
+        "HTTPCase.test_period_operations_require_independent_human_and_preserve_scope",
+        "HTTPCase.test_reviewer_cannot_intake_or_prepare",
+        "HTTPCase.test_session_is_explicitly_synthetic_and_authorization_required"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_periods.py": {
+      "baseline_methods": 5,
+      "retained_methods": [
+        "PeriodTests.test_concurrent_database_migration_is_idempotent",
+        "PeriodTests.test_dated_sources_route_once_to_their_own_period",
+        "PeriodTests.test_late_locked_evidence_preserves_approval_until_reopen",
+        "PeriodTests.test_legacy_migration_keeps_immutable_bytes_and_relationships",
+        "PeriodTests.test_period_authority_overlap_and_scope_denied"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_platform.py": {
+      "baseline_methods": 32,
+      "retained_methods": [
+        "PlatformCase.test_ambiguous_alias_does_not_choose_arbitrarily",
+        "PlatformCase.test_backup_restore_and_portable_export_preserve_scope_and_evidence",
+        "PlatformCase.test_change_during_execution_discards_uncommitted_result",
+        "PlatformCase.test_changed_inputs_during_export_are_rejected",
+        "PlatformCase.test_close_readiness_never_claims_completed_close",
+        "PlatformCase.test_concurrent_workers_do_not_duplicate_artifacts",
+        "PlatformCase.test_crash_recovery_expired_lease_and_lost_worker_rejected",
+        "PlatformCase.test_idempotent_intake_and_manual_runs",
+        "PlatformCase.test_instruction_injection_stays_source_data",
+        "PlatformCase.test_invalid_scope_components_and_unsafe_backup_destination_rejected",
+        "PlatformCase.test_journal_balance_exact_account_period_and_support_controls",
+        "PlatformCase.test_late_duplicate_also_invalidates_earlier_review",
+        "PlatformCase.test_late_evidence_invalidates_approval_and_new_run_resumes",
+        "PlatformCase.test_malformed_module_result_rolls_back_whole_checkpoint",
+        "PlatformCase.test_mandate_expiry_rechecked_before_dispatch",
+        "PlatformCase.test_mandate_revocation_holds_only_dependent_work",
+        "PlatformCase.test_module_dependencies_receive_only_committed_scoped_outputs",
+        "PlatformCase.test_money_rejects_float_nonfinite_precision_and_oversize",
+        "PlatformCase.test_profile_change_requires_version_and_invalidates_approvals",
+        "PlatformCase.test_recurring_occurrence_dedup_caps_and_no_response_not_approval",
+        "PlatformCase.test_required_model_review_remains_blocked_without_model",
+        "PlatformCase.test_retry_limit_is_persistent",
+        "PlatformCase.test_review_role_exact_hash_and_append_only_revoke",
+        "PlatformCase.test_scope_denial_and_second_client_uses_same_engine",
+        "PlatformCase.test_simulated_recurring_clock_persists_and_worker_uses_it",
+        "PlatformCase.test_statement_population_mismatch_blocks_clean_items",
+        "PlatformCase.test_teaching_results_are_not_client_policy",
+        "PlatformCase.test_unconfigured_and_non_synthetic_profiles_fail_closed",
+        "PlatformCase.test_unimplemented_capabilities_are_honest_and_unavailable",
+        "PlatformCase.test_workflows_complete_with_application_outbound_calls_denied",
+        "PlatformCase.test_workflows_use_shared_runner_and_checkpoint",
+        "PlatformCase.test_wrong_company_rejected_before_intake"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_product_requirements.py": {
+      "baseline_methods": 20,
+      "retained_methods": [
+        "ProductRequirements.test_PRV02_nonexistent_test_ticket_and_arbitrary_token_are_rejected",
+        "ProductRequirements.test_PRV03_failed_verdict_cannot_be_promoted",
+        "ProductRequirements.test_PRV03_self_asserted_independent_verification_is_rejected",
+        "ProductRequirements.test_PRV04_shared_web_and_python_are_checked_but_fixtures_are_exempt",
+        "ProductRequirements.test_PRV05_approved_cannot_depend_unconditionally_on_proposed",
+        "ProductRequirements.test_PRV06_unstarted_or_deferred_dependency_needs_local_condition",
+        "ProductRequirements.test_PRV07_scope_disposition_must_match_table",
+        "ProductRequirements.test_PRV08_stray_dependency_punctuation_is_rejected",
+        "ProductRequirements.test_PRV10_every_shared_field_except_trace_uses_client_section_terms",
+        "ProductRequirements.test_current_register_has_split_states_and_all_backlog_tickets",
+        "ProductRequirements.test_dependency_cycle_is_rejected",
+        "ProductRequirements.test_developer_tested_without_named_tests_is_rejected",
+        "ProductRequirements.test_duplicate_id_is_rejected",
+        "ProductRequirements.test_established_id_cannot_be_silently_renamed",
+        "ProductRequirements.test_independent_verification_requires_review_and_checkpoint",
+        "ProductRequirements.test_missing_backlog_ticket_is_rejected",
+        "ProductRequirements.test_missing_field_is_rejected",
+        "ProductRequirements.test_mixed_implementation_state_is_rejected",
+        "ProductRequirements.test_shared_criteria_cannot_impose_first_client_facts",
+        "ProductRequirements.test_unknown_dependency_is_rejected"
+      ],
+      "new_methods": [
+        "ProductRequirements.test_PRV12_both_reviewer_authority_files_are_hash_pinned",
+        "ProductRequirements.test_PRV12_omitted_changed_and_invented_results_cannot_promote_records",
+        "ProductRequirements.test_PRV12_stale_checkpoint_metadata_is_rejected",
+        "ProductRequirements.test_PRV13_terms_must_include_the_display_name_in_the_client_heading"
+      ],
+      "byte_identical": false
+    },
+    "tests/test_ra_review_gate.py": {
+      "baseline_methods": 3,
+      "retained_methods": [
+        "RAReviewGate.test_all_14_unmodified_independent_probes_report_OK",
+        "RAReviewGate.test_combined_frozen_submission_cannot_be_overwritten",
+        "RAReviewGate.test_returned_inputs_and_submitted_archives_remain_unchanged"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_rc_review_gate.py": {
+      "baseline_methods": 3,
+      "retained_methods": [
+        "RCReviewGate.test_all_18_unmodified_probes_meet_exact_contract",
+        "RCReviewGate.test_gate_refuses_nonzero_missing_duplicate_or_changed_verdicts",
+        "RCReviewGate.test_supplied_inputs_and_prior_archives_are_byte_identical"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_reverification_controls.py": {
+      "baseline_methods": 20,
+      "retained_methods": [
+        "ReverificationControls.test_RV01_superseding_identity_respects_lock_then_releases_and_records_history",
+        "ReverificationControls.test_RV02_origin_identity_survives_revision_and_current_reference_still_collides",
+        "ReverificationControls.test_RV03_removed_quarantine_leaves_active_queue_but_preserves_history",
+        "ReverificationControls.test_RV03_tombstone_removes_governing_item_and_supersedes_exceptions",
+        "ReverificationControls.test_RV04_locked_receipts_are_not_rebound_by_unrelated_intake",
+        "ReverificationControls.test_RV05_profile_withdrawal_is_effective_dated_and_can_be_reintroduced",
+        "ReverificationControls.test_RV06_untyped_new_knowledge_refused_and_legacy_requirement_unsatisfied",
+        "ReverificationControls.test_RV07_activity_and_account_types_constrain_treatment",
+        "ReverificationControls.test_RV08_new_candidate_invalidates_distinct_decision_without_statement_dependency",
+        "ReverificationControls.test_RV09_restoring_population_keeps_the_original_rejection",
+        "ReverificationControls.test_RV09_survivor_cites_exclusion_and_dispositioner_cannot_review",
+        "ReverificationControls.test_RV10_semantic_rule_authors_retained_but_different_category_author_not_barred",
+        "ReverificationControls.test_RV11_freshness_schema_and_explicit_no_evidence_approval_are_audited",
+        "ReverificationControls.test_RV12_revised_receipt_requires_independent_acceptance_and_discloses_history",
+        "ReverificationControls.test_RV13_quarantined_prior_statement_cannot_replace_frozen_continuity",
+        "ReverificationControls.test_RV13_statement_limits_are_visible_and_waiver_requires_approved_rule",
+        "ReverificationControls.test_RV14_alias_preview_contains_normalization_and_collision_ids",
+        "ReverificationControls.test_RV15_distinct_purchases_requires_document_for_every_candidate",
+        "ReverificationControls.test_RV16_inventory_and_patch_cover_every_changed_runtime_file",
+        "ReverificationControls.test_RV17_finalized_packages_have_supersession_and_one_governing_version"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_reverification_gate.py": {
+      "baseline_methods": 5,
+      "retained_methods": [
+        "ReverificationGate.test_RT14b_fails_when_either_initial_disposition_is_refused",
+        "ReverificationGate.test_RT14b_fails_when_initial_D1_is_ineligible",
+        "ReverificationGate.test_all_independent_control_assertions_with_explicit_current_setup",
+        "ReverificationGate.test_original_inputs_and_archives_unchanged",
+        "ReverificationGate.test_unmodified_independent_probes_with_unchanged_setup"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_review_corrections_rb.py": {
+      "baseline_methods": 6,
+      "retained_methods": [
+        "ReviewCorrectionsRB.test_PR15_second_client_state_has_no_first_client_name",
+        "ReviewCorrectionsRB.test_RB01_late_link_quarantines_previously_admitted_or_approved_destination",
+        "ReviewCorrectionsRB.test_RB01_unresolved_link_then_predecessor_then_resolution_keeps_entire_quarantine",
+        "ReviewCorrectionsRB.test_RB02_repointed_receipt_and_statement_replacements_need_independent_acceptance",
+        "ReviewCorrectionsRB.test_RB03_equivalent_vendor_and_receipt_rules_keep_authors_across_scope_and_key",
+        "ReviewCorrectionsRB.test_RB04_prior_restatement_waits_for_all_own_period_acceptances_and_revocation_reblocks"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_review_corrections_rc.py": {
+      "baseline_methods": 6,
+      "retained_methods": [
+        "ReviewCorrectionsRC.test_RC01_withdrawal_then_fresh_or_late_claim_and_relock",
+        "ReviewCorrectionsRC.test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal",
+        "ReviewCorrectionsRC.test_RC02_unchanged_chain_adds_no_bindings_moves_or_accounting_events",
+        "ReviewCorrectionsRC.test_RC03_open_target_clears_unresolved_without_quarantine",
+        "ReviewCorrectionsRC.test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced",
+        "ReviewCorrectionsRC.test_RC03_pending_cycle_is_not_linked"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_reviewer_cases.py": {
+      "baseline_methods": 1,
+      "retained_methods": [
+        "ReviewerCases.test_independent_validation_runner"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_reviewer_probes.py": {
+      "baseline_methods": 26,
+      "retained_methods": [
+        "ReviewerProbes.test_P01_contributor_cannot_review_colleague_run",
+        "ReviewerProbes.test_P02_identity_kind_not_name_controls_review",
+        "ReviewerProbes.test_P03_stale_occurrence_redispatched",
+        "ReviewerProbes.test_P04_unfit_mandate_does_not_stop_others",
+        "ReviewerProbes.test_P05_one_governing_artifact_across_occurrences",
+        "ReviewerProbes.test_P06_unicode_vendor_never_collapses_to_another",
+        "ReviewerProbes.test_P07_stale_source_revision_cannot_replace_newer",
+        "ReviewerProbes.test_P08_duplicate_journals",
+        "ReviewerProbes.test_P08_no_effect_journal",
+        "ReviewerProbes.test_P08_unbound_journal_support",
+        "ReviewerProbes.test_P09_lock_preserves_review_and_blocks_new_dispatch",
+        "ReviewerProbes.test_P10_second_period_does_not_strand_first",
+        "ReviewerProbes.test_P11_transport_change_does_not_invalidate_accounting",
+        "ReviewerProbes.test_P12_close_considers_open_preparation_exceptions",
+        "ReviewerProbes.test_P13_statement_population_swap_detected",
+        "ReviewerProbes.test_P14_decisions_cannot_be_repeated_or_overwritten",
+        "ReviewerProbes.test_P15_receipt_tolerance_is_explicit_client_policy",
+        "ReviewerProbes.test_P16_unrelated_receipt_keeps_approved_journal",
+        "ReviewerProbes.test_concurrent_duplicate_approvals_commit_one_decision",
+        "ReviewerProbes.test_concurrent_ticks_and_skipped_occurrences",
+        "ReviewerProbes.test_expired_partial_slot_is_recorded_as_skipped",
+        "ReviewerProbes.test_handlers_only_receive_declared_sources_and_accounting_code_changes_stale",
+        "ReviewerProbes.test_journal_document_does_not_invalidate_card_review",
+        "ReviewerProbes.test_mandate_issuer_is_recorded_contributor",
+        "ReviewerProbes.test_reused_artifact_keeps_review_and_dispute_requires_third_reviewer",
+        "ReviewerProbes.test_unicode_alias_validation_and_accents"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_synthetic_month.py": {
+      "baseline_methods": 1,
+      "retained_methods": [
+        "SyntheticMonth.test_full_teaching_month_and_isolated_second_client"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    },
+    "tests/test_validation.py": {
+      "baseline_methods": 1,
+      "retained_methods": [
+        "ValidationCase.test_separate_regression_cases"
+      ],
+      "new_methods": [],
+      "byte_identical": true
+    }
+  },
+  "files": [
+    {
+      "file": "AGENTS.md",
+      "status": "modified",
+      "baseline_sha256": "025830e9ab69bcd25ff22223146dff7a071c661379ba39121318d13022ccbd4c",
+      "initial_working_sha256": "025830e9ab69bcd25ff22223146dff7a071c661379ba39121318d13022ccbd4c",
+      "sha256": "a3e9f425b2e3941a9380a2ef1bb6811c335b18d59133a17c8fd622f8e7a33b32",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "CODEX_RD_CORRECTIONS_PROMPT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4ae020a6d2111d4db33bd30d909f4968c60b89e8114ba044189f21d3e66c913f",
+      "sha256": "4ae020a6d2111d4db33bd30d909f4968c60b89e8114ba044189f21d3e66c913f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "DECISIONS.md",
+      "status": "modified",
+      "baseline_sha256": "c8f64874c7251f22bbdf262f9f5d042caa0bd3314d0ec3301aee148616e795d4",
+      "initial_working_sha256": "c8f64874c7251f22bbdf262f9f5d042caa0bd3314d0ec3301aee148616e795d4",
+      "sha256": "772ac2c18fcf4c3c60778d1e179a7508f2b38fb0e562f3588a8d9ed6763ef132",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "FABLE_RD_CORRECTIONS_HANDOFF.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "5316dd7c5ea0c4e36a819666756cb73ab6f4b1d3eadd904cb21a8108d9edff97",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "FABLE_RD_REVIEW_PROMPT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "13db1078aa5045474b44976a3f9fcde08219f623e90d9575e134205ee7992f34",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "Makefile",
+      "status": "modified",
+      "baseline_sha256": "c1d0764477db8ba43e851c925f92edca3f93214abecb0ea4201a7f97af6df3c9",
+      "initial_working_sha256": "c1d0764477db8ba43e851c925f92edca3f93214abecb0ea4201a7f97af6df3c9",
+      "sha256": "154a78a0abd083e41a872448bc60b8a2f7a1d61bb449e5a4bcbea6a9291d39c9",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "PROGRESS.md",
+      "status": "modified",
+      "baseline_sha256": "007f45e0e134cd60e6811b55c6caefe3907586bd5e5d7133cc7c124f88f2ee42",
+      "initial_working_sha256": "007f45e0e134cd60e6811b55c6caefe3907586bd5e5d7133cc7c124f88f2ee42",
+      "sha256": "3137fc734e7a53014aefc7327172fefb07648ad68f8a6068fd465b96b11ea187",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "REVIEW_FREEZE.md",
+      "status": "modified",
+      "baseline_sha256": "0199d6f38ee32d4fe2caabc929da4a1fc96e43c08a06ebb758140b359ab7263f",
+      "initial_working_sha256": "0199d6f38ee32d4fe2caabc929da4a1fc96e43c08a06ebb758140b359ab7263f",
+      "sha256": "cd9ac56c04f73b5bea55299a6c1fa4697a74068f8c8d2a0a250a95f548103dd9",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "START_HERE.md",
+      "status": "modified",
+      "baseline_sha256": "f4b725be77c9685501fc2c3cb342bfe27e527d27c4705f5187b91eb9d7eb7f85",
+      "initial_working_sha256": "f4b725be77c9685501fc2c3cb342bfe27e527d27c4705f5187b91eb9d7eb7f85",
+      "sha256": "947d139a421350b065ed81daecd788f8e53e5fae335f7704d2067a93f8bbf63c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "accounting_agent/service.py",
+      "status": "modified",
+      "baseline_sha256": "a2ce2e5f020b71d6a9ff31b8869dacc4193a961ea905bdf74ffae07bc52a8309",
+      "initial_working_sha256": "a2ce2e5f020b71d6a9ff31b8869dacc4193a961ea905bdf74ffae07bc52a8309",
+      "sha256": "ea9b4eb9fccc185b8d8b581de96d36d60d28600dce5cf856b14dd7d72195d495",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "accounting_agent/source_control.py",
+      "status": "modified",
+      "baseline_sha256": "c3d96afd0f0348866fcd15c05091df01fbdcb49ebbae3fe0a4b07ba08115b6b9",
+      "initial_working_sha256": "c3d96afd0f0348866fcd15c05091df01fbdcb49ebbae3fe0a4b07ba08115b6b9",
+      "sha256": "67e69811c97e805fbb9aec44259f98948cd4b522a112fc7e0fe0aad48decdaa6",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/CONNECTION_READINESS.md",
+      "status": "modified",
+      "baseline_sha256": "3b214fca273290d34e414b59d0f5dd091de9f1f7b3def1fb75655836a279ede5",
+      "initial_working_sha256": "3b214fca273290d34e414b59d0f5dd091de9f1f7b3def1fb75655836a279ede5",
+      "sha256": "1e523b54f4707723c2832bcb4a85a43410d6c7bb6c12769e7e0459c67d76dca2",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/INDEPENDENT_VERIFICATION_RESULTS.json",
+      "status": "modified",
+      "baseline_sha256": "b68b12f7f19aef0e69cb259b92967c01453d23756df1ed05d515cec2af2a5a77",
+      "initial_working_sha256": "b68b12f7f19aef0e69cb259b92967c01453d23756df1ed05d515cec2af2a5a77",
+      "sha256": "eb7ee061bc007ca5a58af7f8f44aa5068cc65214b28a1370fd2b063dfa4460c0",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/PRODUCT_REQUIREMENTS.md",
+      "status": "modified",
+      "baseline_sha256": "d55063e25857b2a66606f8e2a255ccf68e427b330d6cba97bde79ad014a663f9",
+      "initial_working_sha256": "d55063e25857b2a66606f8e2a255ccf68e427b330d6cba97bde79ad014a663f9",
+      "sha256": "bcbfdedfe5675ed72dac5c77cfbdd71acc58ed3c32cd856a94fbdc243a6ac997",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/RD_CORRECTIONS_REPORT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "47c8bdabe0aa462c1b349447420755938f426aae4e01d6141f83830076993d4a",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/archive-integrity.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "76e2dbb50a8fd617b58fbcd53401c45682f79dc52bc8c6353633bf996712ae4c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/baseline-order-search.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "3bf9a61485f539337befaa3be5f783047c4244d0d4aa22b864fd5c3f0cb64474",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/baseline-order-search.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/baseline-order-search.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "628e15cbf321d0c5ab33e288f4c2b94d5b5e1615ad0d06f92d5c8906fb383960",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/baseline-rc-probes.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "5d65f6dfe3c4273d43c93ab6ad18a787cc60a37dce0a6596522610694cde26a5",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/baseline-rc-probes.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/baseline-rc-probes.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "4023b44eb086f21978a90342c24a0a9fe2dc1107692692ad618347f0a61e4806",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/environment.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "47cd59a3c76f2a95bc2d8e50c3ffe7ffff1fee0daff6df7abd67ee7c98c05f06",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/execution-results.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "b252be953f5eb1ca33d203cae224811b848ca31f880635c4ef750dc22b7da974",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/exit-codes.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "1a3072854c1487a823fb0fe79c3a3dfecc797af06d9089c720d2c5a12a0fa9fb",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/fault-candidate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "3c92266d9b60f10565b8301de83b3251ff44c3da0fdfb72f856a5c15e9ac6a68",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-acceptance-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "ce8febdc136778fd9251235880e53f7f221eaed8e64fa936c84b39eda9ee769e",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-acceptance-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-acceptance-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "5a407980f0e7cb5dd9a28dab3288baf411a19b048c4497105baa9ca2e16e3775",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-archive-and-git-preservation.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "1456ec7e9c592278b84e9c6a6f84903570f23ebf521ddd40a5adbd7c665d7b01",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-archive-and-git-preservation.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-archive-and-git-preservation.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "c49eae67da72c5e1ed5c72d217d1c5f81a8786992d3e1cdb7f1b6a6ac9160517",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-batch2-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "8eba67171c5d208f3bfbb45fad3540077ee59dd3f459958862c3ed7ead5590b4",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-batch2-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-batch2-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "b15bba55018ecbd264d21dd257e94d8cbb068fb2373739e95e9465a05f84a22e",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-make-check.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "32d36267386e8e64eafc02c38050d62c830862ddaac1f16c8bcbf22f2bf822d5",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-make-check.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-make-check.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-make-test.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "0a58d3b1e395202067f13eaa40bf191bba7ca6d2848256b5dfac3423f107349e",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-make-test.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "dc0dfb49ffb3d92b7fe92489ce9c3f355ee14685c4cf6d78ae416837aebb4b12",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-make-test.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "4cee8569de82dc754e80a1041a8f83299201efd21f53a26aa32353bc553eb0ee",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-ra-probes-direct.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "8abc72caba2cfc89f90131a3beab7ef85061205315e3cd157ec527b3b77613ff",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-ra-probes-direct.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-ra-probes-direct.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "199ab894a3f441b68667cec7c6d5ac7b1041548e1d2c02f38621217515c65e06",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rb-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "6342a92967a305b09978a346d40ae77a6bc63748297ad13b677474296f70dd3a",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rb-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "98ecdb4f8a737b5e266d0e676bc639a725eee598a62b6f2991a908b3226e8dd8",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rb-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d5a6d3518fe110c63c045b7667776616c25e983b805bbce23700f972b22870ae",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rb-probes-direct.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "f0601968b8b22cde77c2edf7e4eef73d415ae49c2d2f0c66df614c50d4040289",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rb-probes-direct.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rb-probes-direct.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "59b0ff3563fb6438815c352116ae8f1bc15b81c816e84db5ff8af9dd8bb01806",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rb-register-faults.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "6a0c62025de911562c22a5ba7d00d394b4a0e7aaae7158480cef5cfdef34d9a4",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rb-register-faults.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rb-register-faults.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "2dd4b1e9ea160021081a4b4e18f33dfeac354e9cb3551d38f6bf84953a05af54",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rc-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "7ff6610712db87a654d048985db359be5788cb9d1b2a71945f3faab98d681def",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rc-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rc-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a1ad2c8112bb75645143a35b794903fcf2c59d19f88a7163002f3404298d54b5",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rc-register-faults.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "21e09839e5801ff381f63cd66ed57b3b4faad143b1b1eeadd463bc63511910dd",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rc-register-faults.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rc-register-faults.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "3a1d62a7a1b5b567ebb8103af1c632d1dea884d13d24cd3d984bbab6d5ddc3e3",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rd-gate-current.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a02d28c4a2b71e9e90ad38ab15d4d1a1cff802ed1fb3ec708845373aa96e9f72",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rd-gate-current.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rd-gate-current.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "f64bcb07a8169e6a06a1e667bb63c9bf539741b3ef56901ef702183c369c90df",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rd-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "590a4b5b01f03d116e45d7cc7c734ee4fc490f9f820268017f06218c773d5351",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rd-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-rd-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "f64bcb07a8169e6a06a1e667bb63c9bf539741b3ef56901ef702183c369c90df",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-register-counts.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "92266eeb52c4cf30f405b269afa8de610941fd727e9a41e9d39dfc05bcbd3177",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-register-counts.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-register-counts.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "f705e3c13876cc1182b9cf600cdbd766c0b53c0d83f6b8376f7499cbcf578776",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-reverification-gate.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "b61a9832c068dec1718024e005e2da853659943931bfb0cee603bde6fdc04140",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-reverification-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/final-reverification-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "21847aa6699904b9573f2613fddf2a158f0920dce495f9ec22207121d2a3c6d3",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/finalize-documents.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "f46d61cfed4e632ed03a8480898aa740811b2b047be480049859b71835105d0f",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/finalize-documents.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/finalize-documents.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "140c9349c3786a68a1b47d66e6e208899ef5264976816e399f979e3bac7d162e",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/git-history-before.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "bec62a7c5cbb047730e382bd0c46d02f325bd5da54b6ddbed61c5e608c074bcb",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/git-history-final.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "bec62a7c5cbb047730e382bd0c46d02f325bd5da54b6ddbed61c5e608c074bcb",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/initial-files.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "df5d72e08681b9be38317398f687681698ff8222e2d6ff715ac99addacfe728c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/input-checksums.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "2b2fe9702636fcef959ad8f8e9ea3181672d4d7a3a0784262685ffdb9231807b",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/inventory-before-patch-check.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a41c84e9905a48a74f1d40696ced22f2efa498fcc9e1a6d69a4c5bd40d090c81",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/inventory-before-patch-check.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/inventory-before-patch-check.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "c2fff68ea6232276eb42865255b7daee741e83691185d9a016fca56f9354423b",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/journal-scope-reading.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e4e5c7bf4eea8b15af4557099d14cf559ae91f29f1ad613907327ea92f335ef0",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/loopback-check.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "339a477b9286db246b133d21e47790eab2319af3ce23d1af00514e1e8b0a862a",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/loopback-check.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "32201e7f9d2ea1272630a5b1e215e6511653100a3e0423b47a5ed551706e283f",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/loopback-check.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/preflight-hashes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a538e625a890eab36dc2c56fe1fa80c8cb504959d88f78a2de7a6ebc75819001",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/prepare-inventory.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d0f5f7154d59c29a5186b498ee615582eb8ceb5fa5949347fcac4a66246b0c95",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/prepare-inventory.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/prepare-inventory.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "50b4ac938f8f11f0eb539e8eb1b5bf0ce33bfcda2d31274e1c6965b2947bd74d",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/preservation.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a4338b8fb0a6d89c7eaaa70062c975a24846f7486149e90e7666a47d2f22f837",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/prv-unit-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "aca4c37fac703f800befd4bdc23df77bd67da69f29fc2c53db391abf3b786a4c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/prv-unit-after.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "05cffcf78adee20e93ef98cfce3f844eae1286a2cbfa0f0435702f06309c4bf7",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/prv-unit-after.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/prv-unit-before.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "07a14f290c278d66d9ded9ed713379c3b8fad10105fcb9281e4274b477abb94d",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/prv-unit-before.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "161c67254201ed437a50131287e47d669ecbc2fc111c50a143a0b434ec361d59",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/prv-unit-before.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-gate-fault-unit-final.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "2b3e9730df7c9689f605d634f4dd22a66692f9c768a5d25fa02df0916312930c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-gate-fault-unit-final.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "1e7e69f116f16c88353201fe09ec0934c5ad35691ad63c0adc7d137b2b0fb087",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-gate-fault-unit-final.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-order-search-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "c70f3916c3fe6cf6daa0af945cf0d1892e324359f69b04f5b3e6cc221e748844",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-order-search-after.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-order-search-after.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "0120e13d93c095b814d4114733a37dd09062520b3c571abcbeee8083913d574b",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-rc-probes-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e8ca52825cedcec5e6bff801831d1de765ff83df9ac7db64a87319caec0462a7",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-rc-probes-after.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-rc-probes-after.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "1965137bfc8199994033d27c53d5184eb7e3ea118f7cfaf9fe82d2823f57849c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "c79d92ccb60983725ac888338cabacfb1f4d60893e3b51290e6dae66594a9b3b",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-after.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "ab3cc5f467e72fc514597d644b0feecd9dce47cfabd5fb6554d2ad9954464820",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-after.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-before-final.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "2be665d075a5875ca2039f4a30645d2bf374779fdd08124105e4c3b73b2d1f84",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-before-final.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "76e27627c0c1a3c1c67b200ac55d7e07e2943973bf44f275087c83361b2fcbc9",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-before-final.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-before.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "7d05859c0624feadaf291ef428f15b91444f2c535547e319dcd4d740ef94c572",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-before.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "8883173fe5ca0a07ee7f70900ab007cc1418a6ab7898399de3edf52ac83553f4",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-before.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-final.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "24bcd95f6e3ea9167dd290d8197c89adc7bd836dab1a97c3273c6ab7a7db48c3",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-final.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "125db2570fde0a23d0f95f8a44e62fdef278a3986097c2dc61bf0eb28c72882c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd-unit-final.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd01-unit-after-payload-correction.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "48e72bfb846297993424e2c349d9ad94ee8dd4dddbe50b2aeb3e4c45d032841e",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd01-unit-after-payload-correction.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "53a96cda6cb55666c0213b69fa6a61e0671cd55b2bc740bc71ea5297ce3b5abd",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd01-unit-after-payload-correction.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd01-unit-after.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "4df2ed77c8d3df6ff1fadc825369378fdd6f81187aa28db58f816afd8f8cb912",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd01-unit-after.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "8e0c9fc025e77af2254bee9746fe5dca6dde4534ecc5a3a5562ba44c687c691c",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/rd01-unit-after.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/register-after-prv11-13.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "0fbdab4bcdbd2163a41c05f0fd96da776c6cfd0067aab47917ad698afef916a9",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/register-after-prv11-13.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/register-after-prv11-13.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/returned-response-integrity.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "c85686769cf0df796fd935d923709cb963f3c2af71eb63d426df3f155b4f9020",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/run.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "38795c4e87bce8f726d5ea666cf00f5bd19f9b14fa6eb04a1ac7d56c3e3ad533",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/source-patch-check.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "d2d252a1406fa3aff00fd2c7fcee51f2bad9282aa1f325ce830cd68c3d9e9d57",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/source-patch-check.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/source-patch-check.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a6d7ea986f79fd3a046bf6e3d147a7bb42e428d2bb63bc8dcb93dfa19c418b32",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "docs/corrections_rd/tested-source-sha256.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "367e4655554374e5fe66919d6a4b28770c9ef562feadbdbd01d9f34872c2f752",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_REPORT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "73dabfb8294e66fe143109a6c58378a02c597097ea63cf67a1ed06de1c3983a0",
+      "sha256": "73dabfb8294e66fe143109a6c58378a02c597097ea63cf67a1ed06de1c3983a0",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_RESULTS.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f5f4ea014b692253ceb7c2b7cc9a43830d81301436c0beae055dc30206e89f76",
+      "sha256": "f5f4ea014b692253ceb7c2b7cc9a43830d81301436c0beae055dc30206e89f76",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/FABLE_RC_CORRECTIONS.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "bc33d6d3fcacdbae2ed145339bec27bf5d414cf9655c5cb99f67e41cce7e8d47",
+      "sha256": "bc33d6d3fcacdbae2ed145339bec27bf5d414cf9655c5cb99f67e41cce7e8d47",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/baseline-v2-source-rc-probes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "a344c618a11c8d423f8d5df8d408aa4c9684ad5e74d0c4bb725d371ed9373342",
+      "sha256": "a344c618a11c8d423f8d5df8d408aa4c9684ad5e74d0c4bb725d371ed9373342",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/01-fable-rb-probes.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/01-fable-rb-probes.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "59b0ff3563fb6438815c352116ae8f1bc15b81c816e84db5ff8af9dd8bb01806",
+      "sha256": "59b0ff3563fb6438815c352116ae8f1bc15b81c816e84db5ff8af9dd8bb01806",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/02-fable-ra-probes.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/02-fable-ra-probes.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "bf7183975a8ba532db43f5bf89234c6f7f16ad26ae883c8bc19e9f4762740fc4",
+      "sha256": "bf7183975a8ba532db43f5bf89234c6f7f16ad26ae883c8bc19e9f4762740fc4",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/03-make-test.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "01eac89be03baf732cceab403d6888b52b16ca62ed5670a3620b2daf1321165d",
+      "sha256": "01eac89be03baf732cceab403d6888b52b16ca62ed5670a3620b2daf1321165d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/03-make-test.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4cee8569de82dc754e80a1041a8f83299201efd21f53a26aa32353bc553eb0ee",
+      "sha256": "4cee8569de82dc754e80a1041a8f83299201efd21f53a26aa32353bc553eb0ee",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/04-make-check.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/04-make-check.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+      "sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/05-make-batch2-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/05-make-batch2-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "80e5eaeb449718f72fd8fe20691c474c03c4ba7076743d598d10996d7dea7a90",
+      "sha256": "80e5eaeb449718f72fd8fe20691c474c03c4ba7076743d598d10996d7dea7a90",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/06-make-reverification-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/06-make-reverification-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "ceb4b72458d3956c8c22e06286b3524d574e3b27d9d140790a877e1fff608042",
+      "sha256": "ceb4b72458d3956c8c22e06286b3524d574e3b27d9d140790a877e1fff608042",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/07-make-acceptance-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/07-make-acceptance-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "71f93fdc3cdbe2282484b39b680d4d2292f06a8d7af26a495bd87b8abafc70b3",
+      "sha256": "71f93fdc3cdbe2282484b39b680d4d2292f06a8d7af26a495bd87b8abafc70b3",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/08-make-rb-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "33bb3c35c5b950fb95ada1522197196ea43103b90f1cbdaa93d28d49f973f6a2",
+      "sha256": "33bb3c35c5b950fb95ada1522197196ea43103b90f1cbdaa93d28d49f973f6a2",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/08-make-rb-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "6150083220058748950fcd5e09a2d16c8598b8dae510fba11365fb8671ed3355",
+      "sha256": "6150083220058748950fcd5e09a2d16c8598b8dae510fba11365fb8671ed3355",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/09-make-rc-gate.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/09-make-rc-gate.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "a1ad2c8112bb75645143a35b794903fcf2c59d19f88a7163002f3404298d54b5",
+      "sha256": "a1ad2c8112bb75645143a35b794903fcf2c59d19f88a7163002f3404298d54b5",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/10-check-product-requirements-json.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/10-check-product-requirements-json.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f705e3c13876cc1182b9cf600cdbd766c0b53c0d83f6b8376f7499cbcf578776",
+      "sha256": "f705e3c13876cc1182b9cf600cdbd766c0b53c0d83f6b8376f7499cbcf578776",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/11-register-faults.stderr.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/11-register-faults.stdout.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "2dd4b1e9ea160021081a4b4e18f33dfeac354e9cb3551d38f6bf84953a05af54",
+      "sha256": "2dd4b1e9ea160021081a4b4e18f33dfeac354e9cb3551d38f6bf84953a05af54",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/commands/exit-codes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "fa1545a0f0b2d2f643461fcb69750d2e8ebbcb99cf96b507a8e9c809e699aec2",
+      "sha256": "fa1545a0f0b2d2f643461fcb69750d2e8ebbcb99cf96b507a8e9c809e699aec2",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/diff-vs-v2.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "ee49ddbf137e86538467ca026b29edd2ccb2ffc133c76e4293bdaed5ef44be05",
+      "sha256": "ee49ddbf137e86538467ca026b29edd2ccb2ffc133c76e4293bdaed5ef44be05",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/exit-codes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "342742c6b3ba40c4071477deec28fc5aa46131dbc56d9275d4ba49d331bd12cd",
+      "sha256": "342742c6b3ba40c4071477deec28fc5aa46131dbc56d9275d4ba49d331bd12cd",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/fable-ra-probes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "97621465998bc8c5373d67344e093a6b4aeff7c66894239a44152d6f4a9235c3",
+      "sha256": "97621465998bc8c5373d67344e093a6b4aeff7c66894239a44152d6f4a9235c3",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/fable-rb-probes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "59b0ff3563fb6438815c352116ae8f1bc15b81c816e84db5ff8af9dd8bb01806",
+      "sha256": "59b0ff3563fb6438815c352116ae8f1bc15b81c816e84db5ff8af9dd8bb01806",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/fable-rc-probes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "1965137bfc8199994033d27c53d5184eb7e3ea118f7cfaf9fe82d2823f57849c",
+      "sha256": "1965137bfc8199994033d27c53d5184eb7e3ea118f7cfaf9fe82d2823f57849c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/make-acceptance-gate.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "f9ea2ee0737b591d5af51600e336cb6f89c1bebe9680ddc6116d1d2ee4d008f6",
+      "sha256": "f9ea2ee0737b591d5af51600e336cb6f89c1bebe9680ddc6116d1d2ee4d008f6",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/make-batch2-gate.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "dd0584e9f38b99ff1e179c10a343460a5c8c986b760299c68ce27ce199536e43",
+      "sha256": "dd0584e9f38b99ff1e179c10a343460a5c8c986b760299c68ce27ce199536e43",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/make-rc-gate.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "a1ad2c8112bb75645143a35b794903fcf2c59d19f88a7163002f3404298d54b5",
+      "sha256": "a1ad2c8112bb75645143a35b794903fcf2c59d19f88a7163002f3404298d54b5",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/make-reverification-gate.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "27eb09cd6e987f4b44bc9372d1664ffcce005933dee03cb5886137b6c7809af4",
+      "sha256": "27eb09cd6e987f4b44bc9372d1664ffcce005933dee03cb5886137b6c7809af4",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/make-test.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "911a4461a03733bc76404ca9582b9f08dec8af8e2fea346993faf422fcdc1512",
+      "sha256": "911a4461a03733bc76404ca9582b9f08dec8af8e2fea346993faf422fcdc1512",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/order-search.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "ccbc5bd4abdd3ef5192f194cc0403ec3af1e8adc8f57b34f3a354ef3a12195af",
+      "sha256": "ccbc5bd4abdd3ef5192f194cc0403ec3af1e8adc8f57b34f3a354ef3a12195af",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experiment/order-search.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "0120e13d93c095b814d4114733a37dd09062520b3c571abcbeee8083913d574b",
+      "sha256": "0120e13d93c095b814d4114733a37dd09062520b3c571abcbeee8083913d574b",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/experimental-correction-rd.patch",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "9e62102431ca295731206dd418ee7cffc7d205f5457991585fb6d2fca41b53e7",
+      "sha256": "9e62102431ca295731206dd418ee7cffc7d205f5457991585fb6d2fca41b53e7",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/fable-rc-register-faults.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "3b2c84d27de722c7c1ad828c96b459ada5a7667831f13c7c41a8c2aae579b29a",
+      "sha256": "3b2c84d27de722c7c1ad828c96b459ada5a7667831f13c7c41a8c2aae579b29a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/integrity-1.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "9751b703037888bb70f73161e877c500c661c11cf3837f48a3ab518252beadcd",
+      "sha256": "9751b703037888bb70f73161e877c500c661c11cf3837f48a3ab518252beadcd",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/inventory-hashes.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "77bbbf691e71ee39b832b3c5e407dd20f704e0ec8fe28a9ad54e6eb806828c53",
+      "sha256": "77bbbf691e71ee39b832b3c5e407dd20f704e0ec8fe28a9ad54e6eb806828c53",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/order-search-rc-source.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "0835e05eecd0a26c72a3ab23ca9bcbd7aa585e79a33d1d540df9ad9aea160995",
+      "sha256": "0835e05eecd0a26c72a3ab23ca9bcbd7aa585e79a33d1d540df9ad9aea160995",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/order-search-rc-source.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "628e15cbf321d0c5ab33e288f4c2b94d5b5e1615ad0d06f92d5c8906fb383960",
+      "sha256": "628e15cbf321d0c5ab33e288f4c2b94d5b5e1615ad0d06f92d5c8906fb383960",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/order-search-v2-source.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "921b17715af64374e1fccb5429644af8856dc0e4e4de9976497d2f86d1b3fc44",
+      "sha256": "921b17715af64374e1fccb5429644af8856dc0e4e4de9976497d2f86d1b3fc44",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/order-search-v2-source.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "838edb72d0674567b7c312fb6cf2cb9cf54ac9c55fa048635e53c0014b308ea2",
+      "sha256": "838edb72d0674567b7c312fb6cf2cb9cf54ac9c55fa048635e53c0014b308ea2",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/preservation.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "cef233c84315497d191a52d46cefa24357257db00f238f7eaae87298bb19a7a0",
+      "sha256": "cef233c84315497d191a52d46cefa24357257db00f238f7eaae87298bb19a7a0",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/prv-checks.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "65db0635afca1ac7021cbc2c3e9a070f23c9c9fb054a9858300642f455156a19",
+      "sha256": "65db0635afca1ac7021cbc2c3e9a070f23c9c9fb054a9858300642f455156a19",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/rc-gate-negative-control.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e66c63df70a2690fad3c274e56c442959cec8f0bea58243fae8dda465ca817d7",
+      "sha256": "e66c63df70a2690fad3c274e56c442959cec8f0bea58243fae8dda465ca817d7",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/returned-inputs-check.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "033c7d5ac7791c3f3647cc8f8cd8b630f461ffe984b8be34c8d8701c8fb1a5f7",
+      "sha256": "033c7d5ac7791c3f3647cc8f8cd8b630f461ffe984b8be34c8d8701c8fb1a5f7",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/scripts/build_results.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "3ceb702d82ce377fcf80a2f7ba38e0c56233d0ac1ec0ac59a036024764c36405",
+      "sha256": "3ceb702d82ce377fcf80a2f7ba38e0c56233d0ac1ec0ac59a036024764c36405",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/scripts/fable_rc_register_faults.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "d6651a107f90d0231785256d69983b61cfd06889bd09b84e74c2494547b749ca",
+      "sha256": "d6651a107f90d0231785256d69983b61cfd06889bd09b84e74c2494547b749ca",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/scripts/integrity.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "64ad85da927f0d94d363d29ce479630403dd4a29a4db5d7bb856383104cb569d",
+      "sha256": "64ad85da927f0d94d363d29ce479630403dd4a29a4db5d7bb856383104cb569d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/scripts/inventory.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "fba5ae9a91f15dde20e37a386ffca3875241de52c8d9357b7dec42e112a87373",
+      "sha256": "fba5ae9a91f15dde20e37a386ffca3875241de52c8d9357b7dec42e112a87373",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/scripts/preservation.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "6f5153a254dca0362d5127da4e6c81a55905bfa6ce7e44cea8f97789ca46109d",
+      "sha256": "6f5153a254dca0362d5127da4e6c81a55905bfa6ce7e44cea8f97789ca46109d",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/scripts/prv_checks.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "e59462ed0116eea9d46d871cfeab72e7c2e08ca41aff4df2271c84032b629623",
+      "sha256": "e59462ed0116eea9d46d871cfeab72e7c2e08ca41aff4df2271c84032b629623",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/scripts/run_all.sh",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "51c1fa199b9a6519e8a7418c8ab532a70d4aa2da4b0bfb57a09ea83f14b175e3",
+      "sha256": "51c1fa199b9a6519e8a7418c8ab532a70d4aa2da4b0bfb57a09ea83f14b175e3",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/evidence/versions.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "de2f96c1b4c0268e6b6a397884c8d38062acffb5d59a1db1f18675632c7affd0",
+      "sha256": "de2f96c1b4c0268e6b6a397884c8d38062acffb5d59a1db1f18675632c7affd0",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_output.txt",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4023b44eb086f21978a90342c24a0a9fe2dc1107692692ad618347f0a61e4806",
+      "sha256": "4023b44eb086f21978a90342c24a0a9fe2dc1107692692ad618347f0a61e4806",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "12f7b5063077decc26dc8c56b6c0cd32d0d675b218c05bedd520b01a5d754fb5",
+      "sha256": "12f7b5063077decc26dc8c56b6c0cd32d0d675b218c05bedd520b01a5d754fb5",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_ACCEPTANCE/fable_rc_order_search.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "0e2f17b9700b07be16cbf33e6471ea5281af843de67d891fdf846c7004b3d54a",
+      "sha256": "0e2f17b9700b07be16cbf33e6471ea5281af843de67d891fdf846c7004b3d54a",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_AND_PRV_CORRECTIONS_PACKAGE_CHECK.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "6a86b24d8336480da77f6c26e0f002ef1dd983b85eb73ddc74297cd3140bc48c",
+      "sha256": "6a86b24d8336480da77f6c26e0f002ef1dd983b85eb73ddc74297cd3140bc48c",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.REVIEW_MANIFEST.json",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "2cd170c68e3acd2231fd429a6c7b4393bef1ca00922391ee9b85bbfceef54d77",
+      "sha256": "2cd170c68e3acd2231fd429a6c7b4393bef1ca00922391ee9b85bbfceef54d77",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "9a85c78a40fd9b5f675b4d135274808056b34097ad907e38e962bf25b0762454",
+      "sha256": "9a85c78a40fd9b5f675b4d135274808056b34097ad907e38e962bf25b0762454",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip.sha256",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4c75753078f6a09e3fb33e9e1b5745033f9f49f82cd6e5acdd91a1bf4497120b",
+      "sha256": "4c75753078f6a09e3fb33e9e1b5745033f9f49f82cd6e5acdd91a1bf4497120b",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_RESPONSE.zip",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "1c47259742cfed78a2dcd2059c8cdadb72787df208d9d9232ddd8946bcfcbc23",
+      "sha256": "1c47259742cfed78a2dcd2059c8cdadb72787df208d9d9232ddd8946bcfcbc23",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "exports/FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_RESPONSE.zip.sha256",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": "4b87d55b28be797d0b73bab8181f70a08a40ef21a9eeeac07266246c0760bf3f",
+      "sha256": "4b87d55b28be797d0b73bab8181f70a08a40ef21a9eeeac07266246c0760bf3f",
+      "pre_existing_difference": true,
+      "changed_in_this_pass": false
+    },
+    {
+      "file": "scripts/build_rd_review_bundle.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "a3c9964edbcd8f2f05077d670e320bc820797236578b0bc85e6f363796e1d55d",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "scripts/check_product_requirements.py",
+      "status": "modified",
+      "baseline_sha256": "7fe22379d0e38585f63365bdf304e8e86d2a06455ad40cb15f0513deb98ec79f",
+      "initial_working_sha256": "7fe22379d0e38585f63365bdf304e8e86d2a06455ad40cb15f0513deb98ec79f",
+      "sha256": "21a7dfe8e80454c77847f0ddd68dc4227113b011f61d6ea751daaf5490451335",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "scripts/verify_rc_review.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "28ce1b5763b15ef8ead2cbf5b24e91671e3ea5c74b125610c00387fbbd1524b8",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "scripts/verify_rd_bundle.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "47f46eb9e4bbb195a610a94e4c6720cc59f1f0e3cc1552be9b1993d1a15bc7f1",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "tests/test_product_requirements.py",
+      "status": "modified",
+      "baseline_sha256": "a39a87876e565a773ae97ee259ece4c9a341ce0ed82eabff9dd2a1dbe68e6381",
+      "initial_working_sha256": "a39a87876e565a773ae97ee259ece4c9a341ce0ed82eabff9dd2a1dbe68e6381",
+      "sha256": "498941ff1e7a83d9df3277af48e37fbf4c5cf0e33260e6f62a9b049d98a8b969",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "tests/test_rd_review_gate.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "5a7fdc474841fcb0ec17b52e078b192154c3ea86649694b2b31ef7cc53bcb3ea",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    },
+    {
+      "file": "tests/test_review_corrections_rd.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "initial_working_sha256": null,
+      "sha256": "4d1aad9b49fdf9c266d0c1cdbda4600e31b5719cceba76ba524ab33b705d1445",
+      "pre_existing_difference": false,
+      "changed_in_this_pass": true
+    }
+  ]
+}

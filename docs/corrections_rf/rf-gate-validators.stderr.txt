@@ -1,0 +1,7 @@
+test_probe_validator_refuses_all_contract_faults (tests.test_rf_review_gate.RFReviewGate) ... ok
+test_order_validator_refuses_all_contract_faults (tests.test_rf_review_gate.RFReviewGate) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.128s
+
+OK

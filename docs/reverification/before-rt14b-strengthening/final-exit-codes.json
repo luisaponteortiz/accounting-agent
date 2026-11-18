@@ -1,0 +1,8 @@
+{
+  "make test": 0,
+  "make check": 0,
+  "make batch2-gate": 0,
+  "make reverification-gate": 0,
+  "python3 exports/FABLE_REVERIFICATION/fable_reverification_probes.py .": 1,
+  "python3 exports/FABLE_REVERIFICATION/evidence/static_checks.py <root> <preserved-original-input-dir> <temporary-initial-archive-root>": 0
+}

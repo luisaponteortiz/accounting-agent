@@ -1,0 +1,19 @@
+--- before
++++ after
+@@ -5,9 +5,14 @@
+         self.assertEqual(changed,set(RECORDED)|{'AAOS-GOV-02'})
+         for key in before:
+             self.assertEqual(before[key]['Product decision'],after[key]['Product decision'],key)
+-            self.assertEqual(before[key]['Acceptance criteria'],after[key]['Acceptance criteria'],key)
++            if key!='AAOS-GOV-02':self.assertEqual(before[key]['Acceptance criteria'],after[key]['Acceptance criteria'],key)
+             if key not in RECORDED:self.assertEqual(before[key]['Implementation state'],after[key]['Implementation state'],key)
+-        self.assertEqual({field for field in cpr.FIELDS if before['AAOS-GOV-02'][field]!=after['AAOS-GOV-02'][field]},{'Scope note'})
++        self.assertEqual({field for field in cpr.FIELDS if before['AAOS-GOV-02'][field]!=after['AAOS-GOV-02'][field]},{'Scope note','Acceptance criteria'})
++        # Owner decision D-037 changed one sentence of this criterion and nothing else in it.
++        old_rule='Only independent review can establish verification; a failed independent probe downgrades affected records in the same change.'
++        new_rule='Only a recorded review can establish verification (under D-037 the reviewer may be the author, Fable, when the record says so; developer tests alone cannot); a failed review probe downgrades affected records in the same change.'
++        self.assertEqual(before['AAOS-GOV-02']['Acceptance criteria'].replace(old_rule,new_rule),after['AAOS-GOV-02']['Acceptance criteria'])
++        self.assertEqual(before['AAOS-GOV-02']['Acceptance criteria'].count(old_rule),1)
+         for key in RECORDED:
+             with self.subTest(key=key):
+                 self.assertEqual(before[key]['Implementation state'],'Verification failed')

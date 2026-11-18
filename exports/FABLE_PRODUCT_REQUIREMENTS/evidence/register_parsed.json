@@ -1,0 +1,1336 @@
+{
+ "records": {
+  "AAOS-GOV-01": {
+   "title": "General accounting product scope",
+   "Description": "Support the full accounting cycle through one reusable platform: GL, AP, AR, banking/reconciliation, close, reporting/analysis. Keep non-accounting executive and business-development agents outside this project.",
+   "Business purpose": "Build accounting staff/senior preparation and execution capacity reusable for clients beyond Bird Bowl.",
+   "Priority": "Must.",
+   "Status": "Approved; the six-area design exists, full-cycle execution does not.",
+   "Dependencies": "None.",
+   "Acceptance criteria": "Each area has domain/control/extension contracts and truthful capability status; no card-only or Bird Bowl-only dependency prevents another client profile; deferred handlers cannot return fabricated success.",
+   "Target stage": "Current architecture; capability implementation progresses through the existing backlog and later assigned stages.",
+   "Trace": "U; ARCH; D-001/D-003."
+  },
+  "AAOS-GOV-02": {
+   "title": "Permanent traceable requirements",
+   "Description": "Maintain this register with stable IDs, all required fields, source/backlog traceability and retained change/rejection history.",
+   "Business purpose": "Prevent future requirements from disappearing between batches without displacing the active implementation plan.",
+   "Priority": "Must.",
+   "Status": "Implemented by this documentation change; document checks recorded in PROGRESS.md.",
+   "Dependencies": "AAOS-GOV-01.",
+   "Acceptance criteria": "All ten requested product areas and all T-01\u2013T-27 tickets have a trace; agents must consult/update the register; decisions and progress name the current gate; rejected requirements retain an explanation.",
+   "Target stage": "Current; ongoing maintenance in each relevant change.",
+   "Trace": "U; AGENTS.md; DECISIONS.md; PROGRESS.md."
+  },
+  "AAOS-GOV-03": {
+   "title": "Evidence-based release and preserved review gates",
+   "Description": "Keep developer tests, independent review, client sample validation, connected operation and human operating readiness separate; preserve original review evidence and frozen releases.",
+   "Business purpose": "Make trustworthy claims and prevent a feature or documentation change from widening authority.",
+   "Priority": "Must.",
+   "Status": "Tested for current local gates/package guards; independent RA/G0 acceptance pending.",
+   "Dependencies": "AAOS-GOV-02; AAOS-CTL-10.",
+   "Acceptance criteria": "Existing original methods/regressions and exact assertions remain; known repaired defects must pass; unavailable capabilities remain explicitly deferred; original/adapted probe differences and nonzero original commands remain disclosed; no bundle overwrite or automatic G1/Batch 3 transition.",
+   "Target stage": "Current / G0; renewed at every subsequent gate.",
+   "Trace": "FABLE; CORRECTIONS; EVIDENCE; REVIEW_FREEZE.md."
+  },
+  "AAOS-ARC-01": {
+   "title": "Shared execution and modular capabilities",
+   "Description": "Share deterministic accounting controls, tools, workflow DAGs and execution contracts while keeping client accounting knowledge/configuration separate.",
+   "Business purpose": "Add or validate a module/client without duplicating the core or redesigning the platform.",
+   "Priority": "Must.",
+   "Status": "Tested for the local runner and registered card/journal/readiness workflows; full module coverage deferred.",
+   "Dependencies": "AAOS-GOV-01.",
+   "Acceptance criteria": "Handlers use declared scoped inputs and committed dependency outputs; handler/model proposals cannot directly approve, query arbitrary client data or perform external effects; unimplemented modules return unavailable.",
+   "Target stage": "Current foundation; extend only in assigned capability tickets.",
+   "Trace": "ARCH; FABLE T-06/T-15; D-002/D-003."
+  },
+  "AAOS-ARC-02": {
+   "title": "Isolated client workspaces",
+   "Description": "Scope identities, records, policies, credentials, memory, jobs, evidence, approvals, retrieval and exports by organization/client/environment, with entity/book where accounting requires it.",
+   "Business purpose": "Reuse one codebase without exposing or mixing client information or authority.",
+   "Priority": "Must.",
+   "Status": "Tested for synthetic backend scoping; real-client storage and authentication remain deferred.",
+   "Dependencies": "AAOS-ARC-01.",
+   "Acceptance criteria": "Two clients in different periods have no cross-effects; denied object IDs/search/export/job references fail server-side; real-client storage uses validated per-client databases or a server store with enforced isolation/per-client credentials rather than assuming a scope column suffices.",
+   "Target stage": "Current synthetic controls; production isolation before real client records/G1 and hosted G2.",
+   "Trace": "U; ARCH; FABLE \u00a711/T-27; PILOT."
+  },
+  "AAOS-ARC-03": {
+   "title": "Central Supporting Strategies deployment",
+   "Description": "Support one centrally operated Accounting Agent OS deployment with isolated client workspaces and authorized firm management views.",
+   "Business purpose": "Operate multiple accounting clients without separate code forks or importing the unrelated SS agent system.",
+   "Priority": "Must.",
+   "Status": "Approved product architecture; no hosted deployment implemented.",
+   "Dependencies": "AAOS-ARC-02; AAOS-CTL-02; AAOS-CTL-12; AAOS-CTL-13; AAOS-EXE-04.",
+   "Acceptance criteria": "A second client onboards using scoped configuration on the same release; administrators and managers have explicit access; workload, storage, cost and authorization boundaries survive concurrent clients; deployment has a named company authority/owner.",
+   "Target stage": "Future / unassigned; hosting/readiness work before G2, separately authorized.",
+   "Trace": "U; LEGACY connection/release controls; FABLE \u00a711."
+  },
+  "AAOS-ARC-04": {
+   "title": "Optional independent client deployment",
+   "Description": "Allow a Bird Bowl or other client deployment from the same accounting codebase, containing only its authorized accounting modules/data and its own scoped configuration.",
+   "Business purpose": "Accommodate a client's hosting/support arrangement without creating a client-specific product fork or central-system dependency.",
+   "Priority": "Should.",
+   "Status": "Approved option; actual Bird Bowl host and support arrangement unselected.",
+   "Dependencies": "AAOS-ARC-01; AAOS-ARC-02; AAOS-BB-07; AAOS-CTL-12; AAOS-CTL-13.",
+   "Acceptance criteria": "Accounting can operate without an SS backlink; no SS executive/CRM/other-client data or shared credentials are preloaded; any later backlink names its purpose, exact data scope and authority.",
+   "Target stage": "Future / unassigned; separate hosting authorization and G2/G4 controls.",
+   "Trace": "U; PILOT deployment boundary; LEGACY \u00a76E."
+  },
+  "AAOS-ARC-05": {
+   "title": "Environment and release separation",
+   "Description": "Separate local, evaluation/sample, staging and production records, secrets, queues, budgets, grants, evidence and approvals; promote code/configuration through reviewed releases.",
+   "Business purpose": "Prevent demo identities, fixture policy or test authority from becoming operational permission.",
+   "Priority": "Must.",
+   "Status": "Deferred for hosted environments; local-only restrictions exist.",
+   "Dependencies": "AAOS-ARC-02; AAOS-CTL-02; AAOS-CTL-12.",
+   "Acceptance criteria": "Hosted startup rejects demo identity/insecure configuration; promotion does not copy live credentials, sample approval flags or enabled schedules; reviewed migrations and rollback preserve evidence/decisions/jobs and identify compatibility limits.",
+   "Target stage": "Before approved samples as applicable and any hosted G2 environment.",
+   "Trace": "LEGACY environments/release/rollback; FABLE \u00a711/T-27; D-004/D-006."
+  },
+  "AAOS-EXE-01": {
+   "title": "Durable progress and resumable work",
+   "Description": "Persist tasks, steps, dependencies, memory/checkpoints, current outcomes and historical evidence across application/worker restarts.",
+   "Business purpose": "Complete work across days without restarting from chat context or losing blocked work.",
+   "Priority": "Must.",
+   "Status": "Tested in local synthetic SQLite workflows.",
+   "Dependencies": "AAOS-ARC-01; AAOS-ARC-02.",
+   "Acceptance criteria": "A restart resumes committed work without duplicate artifacts/effects; a blocker pauses dependent work while unrelated authorized work continues; run/step/exception status explains the next required action.",
+   "Target stage": "Current / G0; production recovery separately validated.",
+   "Trace": "ARCH; FABLE T-04/T-14; LEGACY durable workflow."
+  },
+  "AAOS-EXE-02": {
+   "title": "Recurring occurrences and event wake-up",
+   "Description": "Separate each business occurrence from its execution attempts; support calendar/scheduled and evidence/dependency events with deduplication.",
+   "Business purpose": "Retry or resume legitimate routine work without double-processing or requiring a new user prompt.",
+   "Priority": "Must.",
+   "Status": "Tested with a persisted simulated clock/events; no real scheduler active.",
+   "Dependencies": "AAOS-EXE-01; AAOS-EXE-03; AAOS-CTL-04.",
+   "Acceptance criteria": "One completed execution per occurrence; held work can redispatch after its prerequisites change; unfit mandates do not stop other clients/work; missed slots and catch-up policy are explicit; retries do not reset unfinished-work limits.",
+   "Target stage": "Current simulation; live triggers only after separate schedule/event authorization and hosted readiness.",
+   "Trace": "FABLE T-04/T-10; ARCH; LEGACY recurrence controls."
+  },
+  "AAOS-EXE-03": {
+   "title": "Bounded standing authority",
+   "Description": "Use independently approved mandates naming workflow, client/environment, period selection, policy windows, fresh-evidence predicates, limits, expiry, review requirements and revocation.",
+   "Business purpose": "Permit routine authorized work autonomously while preserving consequential human decisions.",
+   "Priority": "Must.",
+   "Status": "Tested for synthetic mandates; real authority and grant lifecycle unconfigured.",
+   "Dependencies": "AAOS-KNO-04; AAOS-CTL-01; AAOS-CTL-03; AAOS-CTL-04.",
+   "Acceptance criteria": "Proposed/model-authored mandates confer no authority; stale/missing required evidence waits; a no-evidence exception needs an independent explicit reason; relevant policy change suspends for reconfirmation, unrelated/future changes do not; source arrival alone does not falsely change approved policy; expiry/revocation prevents further authorized dispatch.",
+   "Target stage": "Current / G0 controls; validated real mandates and separately authorized triggers before unattended operation/G4.",
+   "Trace": "T-10; RV-11; RA-05; EVIDENCE; PILOT."
+  },
+  "AAOS-EXE-04": {
+   "title": "Hosted unattended operation",
+   "Description": "Run authorized scheduled/event-driven accounting work on persistent hosted infrastructure without the user's computer or active chat session.",
+   "Business purpose": "Make overnight work and continuing accounting execution dependable.",
+   "Priority": "Must.",
+   "Status": "Approved product outcome; hosted runtime, schedules and monitoring are not implemented/activated.",
+   "Dependencies": "AAOS-EXE-01; AAOS-EXE-02; AAOS-EXE-03; AAOS-EXE-05; AAOS-ARC-05; AAOS-CTL-02; AAOS-CTL-13; AAOS-OBS-03.",
+   "Acceptance criteria": "A witnessed run completes its authorized portion while the user's computer is off; work/evidence survive host restart; unavailable inputs/services produce durable exceptions; health, failure notification, backup/restore and stop controls operate within the agreed authority/cost ceiling.",
+   "Target stage": "Future / unassigned; authorized hosted G2 setup, separate schedule authority, observed G4 handoff.",
+   "Trace": "U; PILOT readiness; LEGACY hosting/durable work; FABLE T-24/T-27."
+  },
+  "AAOS-EXE-05": {
+   "title": "Production retries, leases and monitoring",
+   "Description": "Classify transient failures versus deterministic accounting holds, persist bounded backoff, heartbeat/fence worker leases and keep the worker alive with observable health/errors.",
+   "Business purpose": "Avoid duplicate or silently abandoned work after faults and outages.",
+   "Priority": "Must.",
+   "Status": "Deferred; local checkpoints/leases exist, production lifecycle guarantees do not.",
+   "Dependencies": "AAOS-EXE-01; AAOS-EXE-02.",
+   "Acceptance criteria": "Transient retries retain counts/next wake; deterministic failures do not loop; a lease loser cannot commit; a failed job does not kill independent work; stalled work has a deterministic monitor and assigned escalation; recovery tests preserve one valid business result.",
+   "Target stage": "Existing Batch 3 / T-24, not authorized; hosted validation before G2/G4.",
+   "Trace": "FABLE F-18/T-24; LEGACY failure/recovery tests."
+  },
+  "AAOS-EXE-06": {
+   "title": "Pause, cancellation and operational controls",
+   "Description": "Provide distinct controls for pausing new work, stopping a run, disabling triggers/connectors and revoking authority/approvals, with durable reasons and truthful in-flight status.",
+   "Business purpose": "Let operators contain a failure or policy change without losing completed evidence or suggesting irreversible actions were undone.",
+   "Priority": "Must.",
+   "Status": "Approved; current local controls cover only parts of this operational set.",
+   "Dependencies": "AAOS-EXE-03; AAOS-CTL-03; AAOS-INT-06.",
+   "Acceptance criteria": "Each control is independently tested; pending versus dispatched/unknown outcomes remain visible; cancellation cannot claim reversal of a completed external effect; independent unaffected authorized work may continue.",
+   "Target stage": "Future / unassigned; relevant controls required before hosted/live actions.",
+   "Trace": "LEGACY stop controls/uncertain outcomes; FABLE T-24; ARCH limits."
+  },
+  "AAOS-EXE-07": {
+   "title": "Deterministic execution and optional model proposals",
+   "Description": "Declare each step deterministic, model-assisted or human. Keep math, rules, authority and supported connector execution in application-owned code; model output remains untrusted proposals.",
+   "Business purpose": "Support valid zero-model workflows and avoid making accounting execution depend on a subscription or model conversation.",
+   "Priority": "Must.",
+   "Status": "Tested for the current zero-model/no-egress path; model adapters and model evaluation deferred.",
+   "Dependencies": "AAOS-ARC-01; AAOS-KNO-04; AAOS-CTL-01; AAOS-CTL-12.",
+   "Acceptance criteria": "Deterministic approved paths run with outbound calls denied; missing model access cannot cause guessing or bypass a required model review; model requests pass trusted scope/schema/evidence/authority checks; model/critic output never becomes human approval.",
+   "Target stage": "Current deterministic foundation; any model integration requires later explicit scope/cost authorization.",
+   "Trace": "PILOT application/model roles; LEGACY \u00a76E/10; ARCH; T-09/T-10."
+  },
+  "AAOS-KNO-01": {
+   "title": "Applicable framework and reusable accounting knowledge",
+   "Description": "Represent applicable framework, basis, jurisdiction/entity/book and reusable accounting principles separately from client-specific treatments and workflows.",
+   "Business purpose": "Ground work in the right accounting context without declaring one client's treatment universal.",
+   "Priority": "Must.",
+   "Status": "Approved; framework/basis fact gates exist, a complete accounting knowledge service does not.",
+   "Dependencies": "AAOS-ARC-01; AAOS-ARC-02; AAOS-KNO-03.",
+   "Acceptance criteria": "Each applicable treatment identifies the governing client context; missing/conflicting framework/basis is held; reusable invariants are distinguished from professional judgment/client policy; no framework, threshold or tax conclusion is silently assigned to Bird Bowl or a new client.",
+   "Target stage": "Future / unassigned knowledge capability; actual facts required at G1.",
+   "Trace": "U; FABLE \u00a77/8; ARCH; FABLE_ACCOUNTING_HANDOFF.md."
+  },
+  "AAOS-KNO-02": {
+   "title": "Verified standards references",
+   "Description": "Maintain authoritative reference identity, edition/effective dates, applicable passage, verification date, reviewer and supporting evidence for standards-dependent treatments.",
+   "Business purpose": "Make accounting reasoning reviewable and prevent a model's remembered citation from becoming policy.",
+   "Priority": "Must.",
+   "Status": "Approved; no operational standards-reference verification service implemented.",
+   "Dependencies": "AAOS-KNO-01; AAOS-KNO-04; AAOS-CTL-10.",
+   "Acceptance criteria": "The accounting lead verifies references against authoritative material and applicability before reliance; expired/conflicting/unverified references are visible and cannot silently activate a rule; reference changes trigger review of dependent treatments; access/licensing restrictions are respected.",
+   "Target stage": "Future / unassigned; before relying on standards-driven live treatment.",
+   "Trace": "U; FABLE \u00a713 (review citations were not re-fetched); docs/SOURCES.md."
+  },
+  "AAOS-KNO-03": {
+   "title": "Client facts, chart and operating profile",
+   "Description": "Store separate client identity, legal entities/books, chart/types/status, dimensions, vendors/customers, systems, procedures, contacts, policies and credential references with provenance and unknown fields.",
+   "Business purpose": "Onboard any client without rebuilding shared code or filling missing facts with plausible assumptions.",
+   "Priority": "Must.",
+   "Status": "Tested for scoped proposed profiles/required-fact gates and fictional chart/entity/book; full master-data onboarding deferred.",
+   "Dependencies": "AAOS-ARC-02.",
+   "Acceptance criteria": "Capability prerequisites identify required facts; actual client-sample work cannot waive missing facts into eligibility; synthetic waivers are explanatory/exported and cannot migrate to real profiles; chart/mapping/system facts require authorized validation.",
+   "Target stage": "Current fact gates; actual profile at G1, master-data/integration extensions later assigned.",
+   "Trace": "T-11; D-004; ARCH; PILOT; FABLE questions 1\u20137/10/12\u201316."
+  },
+  "AAOS-KNO-04": {
+   "title": "Independently approved effective policies",
+   "Description": "Propose, independently approve, supersede/retire and load client policies, treatment rules, vendor mappings, receipt rules and procedure versions by effective window and relevant scope.",
+   "Business purpose": "Convert validated knowledge into controlled reusable execution without allowing a preparer/model to activate its own advice.",
+   "Priority": "Must.",
+   "Status": "Tested for synthetic profile/rule lifecycle, retirement and semantic authorship lineage.",
+   "Dependencies": "AAOS-KNO-03; AAOS-CTL-01; AAOS-CTL-04.",
+   "Acceptance criteria": "Unapproved rules cannot code approvable work; aliases/normalization/collisions are visible before approval; withdrawn mappings stop applying in their effective scope; prior relevant authors/approvers remain contributors even after cosmetic or unlinked re-proposal; item-date and workflow relevance select the applicable versions.",
+   "Target stage": "Current / G0; real policies separately validated/approved at G1.",
+   "Trace": "T-09/T-17; RV-05/RV-10/RV-14; RA-02; EVIDENCE."
+  },
+  "AAOS-KNO-05": {
+   "title": "Decisions and scoped correction history",
+   "Description": "Preserve item-specific decisions, rationale, source support, approver, effective version, correction scope and superseded guidance separately from reusable approved rules.",
+   "Business purpose": "Learn from interventions without silently generalizing a one-off accounting judgment.",
+   "Priority": "Must.",
+   "Status": "Tested for local immutable decisions/dispositions and proposed-rule separation; complete client playbook capture not validated.",
+   "Dependencies": "AAOS-KNO-04; AAOS-CTL-06; AAOS-CTL-10.",
+   "Acceptance criteria": "Every correction states single-item versus reusable scope; history survives rejection/revocation/supersession; a proposed reusable rule does not resolve an exception or authorize itself; repeat work uses only the approved applicable guidance.",
+   "Target stage": "Current controls; client knowledge capture/validation at G1/G4.",
+   "Trace": "PILOT November/handoff; T-14; ARCH; CORRECTIONS."
+  },
+  "AAOS-KNO-06": {
+   "title": "Portable operating knowledge and coverage",
+   "Description": "Export a maintained knowledge package with approved procedures, checklists, mappings, examples, decisions, support scripts/templates, operator/support guides and separate validation cases/coverage gaps.",
+   "Business purpose": "Make knowledge durable across models, hosts, staff and client deployment choices.",
+   "Priority": "Must.",
+   "Status": "Approved; inspection JSON exports exist, trusted execution import/complete portable operating package does not.",
+   "Dependencies": "AAOS-KNO-03; AAOS-KNO-04; AAOS-KNO-05; AAOS-CTL-10; AAOS-OBS-04.",
+   "Acceptance criteria": "A recipient can trace each procedure/example to approved evidence/version; teaching answers are separated from held-out cases; untested annual/unusual work has a human route; import cannot grant authority or cross client/environment boundaries; chats alone never count as validated training.",
+   "Target stage": "Future / unassigned portability work; Bird Bowl G1 validation and G4 handoff.",
+   "Trace": "PILOT portable handoff; LEGACY AT-60/AT-61; ARCH onboarding progression."
+  },
+  "AAOS-GL-01": {
+   "title": "Shared proposed-entry contract",
+   "Description": "Represent proposed accounting effects with entity/book, origin, period/date, currency, accounts, debit/credit lines, dimensions, rationale, rule/evidence references and review/external status.",
+   "Business purpose": "Let every module produce inspectable accounting effects through common validation rather than unrelated output formats.",
+   "Priority": "Must.",
+   "Status": "Tested for synthetic card/journal proposed entries; no live ledger state or posting.",
+   "Dependencies": "AAOS-KNO-03; AAOS-CTL-04; AAOS-CTL-05.",
+   "Acceptance criteria": "Entries balance exactly, use configured active accounts and identity, cannot reuse an economic source as another governing entry, and distinguish proposed/reviewed from externally posted; unsupported dimensions/currency remain held.",
+   "Target stage": "Current / G0; broader module use only as implemented/validated.",
+   "Trace": "T-15; RV-02/RV-07; ARCH; FABLE six-area matrix."
+  },
+  "AAOS-GL-02": {
+   "title": "Journal mechanical validation",
+   "Description": "Validate journal line shape/balance, entity/book/period, account status, bound supporting documents, duplicate origins and nonzero economic effect.",
+   "Business purpose": "Catch mechanical errors before an independent accounting review.",
+   "Priority": "Must.",
+   "Status": "Tested for fictional journal preparation; mechanical validity does not establish correct recognition or tax treatment.",
+   "Dependencies": "AAOS-GL-01; AAOS-CTL-08; AAOS-CTL-01.",
+   "Acceptance criteria": "Reject negative/both-sided/zero lines, unbalanced or net-no-effect entries, unsupported accounts/dimensions, duplicate/source-revision claims and unrelated/unbound documents; a balanced but unsupported journal is ineligible; journal review never posts it.",
+   "Target stage": "Current / G0.",
+   "Trace": "T-16; FV-J08\u2013FV-J10; RV-02; RA-07; ARCH."
+  },
+  "AAOS-GL-03": {
+   "title": "Classification, adjustments and account maintenance",
+   "Description": "Progressively support general transaction classification, accruals, adjustments, reversals, account-maintenance proposals and authorized ledger execution under client-specific treatment rules.",
+   "Business purpose": "Cover routine GL staff/senior work beyond the card demonstration.",
+   "Priority": "Must.",
+   "Status": "Deferred beyond demonstrated card coding/journal checks; no general adjustment/account-maintenance/posting handler.",
+   "Dependencies": "AAOS-GL-01; AAOS-GL-04; AAOS-KNO-01; AAOS-KNO-04; AAOS-INT-06.",
+   "Acceptance criteria": "Each added treatment has approved source/rationale/recognition/cutoff/dimension requirements and held-out expected results; reversals reference the originating accrual/period; material/unusual changes retain human judgment; any write has its own G3 gate.",
+   "Target stage": "Future / unassigned, capability by capability; never implied complete by GL validation.",
+   "Trace": "U; ARCH GL/close contracts; FABLE questions 8\u201310; LEGACY accounting controls."
+  },
+  "AAOS-GL-04": {
+   "title": "Trial-balance intake and rollforwards",
+   "Description": "Intake source-tied trial balances by entity/book/as-of/basis and validate balances, chart coverage and rollforwards; label projected balances separately from actual books.",
+   "Business purpose": "Supply dependable GL, subledger tie-out and reporting foundations.",
+   "Priority": "Must.",
+   "Status": "Deferred; a checklist document label is not a validated trial balance.",
+   "Dependencies": "AAOS-GL-01; AAOS-KNO-03; AAOS-CTL-10.",
+   "Acceptance criteria": "Balanced totals, known active accounts, date/basis/source provenance and movement ties are checked; reviewed unposted adjustments affect only an explicitly projected trial balance; missing/untied balances block dependent reports and control-account conclusions.",
+   "Target stage": "Existing Batch 3 / T-22, not authorized; real reporting waits for client facts and relevant gates.",
+   "Trace": "T-22; FV-RP01/FV-RP02; RA deferred enhancement DE-5; ARCH."
+  },
+  "AAOS-GL-05": {
+   "title": "Exact money and currency contract",
+   "Description": "Use exact decimal arithmetic, validated currencies/minor units and explicit original/functional-currency support and FX evidence when implemented.",
+   "Business purpose": "Prevent rounding, sign, precision or currency mixing from creating incorrect accounting effects.",
+   "Priority": "Must.",
+   "Status": "Deferred for general currency support; tested decimal-string/two-decimal USD fixtures do not meet the universal contract.",
+   "Dependencies": "AAOS-KNO-03; AAOS-KNO-04.",
+   "Acceptance criteria": "Reject floats/nonfinite/invalid precision and unsupported codes; distinguish currency-specific minor units; FX stays held without an approved method/rate/source/date; fixture sign conventions never become universal bank/provider conventions.",
+   "Target stage": "Existing Batch 3 / T-26, not authorized; broader FX treatments later assigned/validated.",
+   "Trace": "T-26; ARCH money limits; FABLE F-20; PILOT unknown policies."
+  },
+  "AAOS-AP-01": {
+   "title": "Vendor, bill and expense preparation",
+   "Description": "Support scoped vendors, bills/credit memos/expenses, invoice/receiving evidence, terms, coding, approval and subledger-to-GL controls.",
+   "Business purpose": "Prepare complete and nonduplicative liabilities and payable workpapers.",
+   "Priority": "Must.",
+   "Status": "Deferred; card expense preparation is not an implemented AP subledger.",
+   "Dependencies": "AAOS-GL-01; AAOS-GL-04; AAOS-CTL-05; AAOS-CTL-08; AAOS-KNO-04.",
+   "Acceptance criteria": "Detect vendor/invoice-number variants and duplicates across routes/ledger; validate receipt/receiving requirements and credits under approved policy; version vendor changes; tie AP control balances to the verified ledger; unknown Bird Bowl AP practices remain questions.",
+   "Target stage": "Existing Batch 3 / T-23 synthetic specification first; further AP work waits for Fable question 12, a new assignment and applicable gates.",
+   "Trace": "T-23; FV-AP01\u2013FV-AP05; ARCH AP contract; FABLE \u00a78/10."
+  },
+  "AAOS-AP-02": {
+   "title": "Payable scheduling and payment controls",
+   "Description": "Support payable aging/due-date work and payment proposals with bank-instruction change verification and distinct preparation, approval and payment authority.",
+   "Business purpose": "Improve payable operations while protecting against fraudulent or duplicate disbursement.",
+   "Priority": "Must.",
+   "Status": "Deferred; no payments or payment execution enabled.",
+   "Dependencies": "AAOS-AP-01; AAOS-CTL-01; AAOS-CTL-03; AAOS-INT-06.",
+   "Acceptance criteria": "Current liability population/terms and independently verified bank changes govern proposals; amounts/recipients are explicit; payment execution is a separate reserved capability with its own approval/design/tests/authorization and is not granted by ordinary G3 writes or T-23.",
+   "Target stage": "Future / unassigned; payment capability explicitly outside current authorization.",
+   "Trace": "U; ARCH AP contract; FABLE T-23; LEGACY reserved actions."
+  },
+  "AAOS-AR-01": {
+   "title": "Customer billing and invoice controls",
+   "Description": "Maintain scoped customers, authorized contracts/terms, service/sales evidence, invoices, credits and billing approvals.",
+   "Business purpose": "Prepare accurate, complete and timely receivables without inventing billable activity.",
+   "Priority": "Must.",
+   "Status": "Deferred; no executable AR capability.",
+   "Dependencies": "AAOS-KNO-03; AAOS-KNO-04; AAOS-GL-01; AAOS-GL-04; AAOS-CTL-08.",
+   "Acceptance criteria": "Verify existence/cutoff/accuracy and invoice uniqueness, customer and credit authority, source-to-ledger lineage and subledger control tie; no invoice execution without separately supported/approved operation; Bird Bowl AR applicability is validated first.",
+   "Target stage": "Future / unassigned; Fable question 12 and client facts required before AR implementation beyond design.",
+   "Trace": "U; ARCH AR contract; FABLE \u00a78/10."
+  },
+  "AAOS-AR-02": {
+   "title": "Cash application, aging and collection work",
+   "Description": "Match customer receipts, manage unapplied cash/disputes and produce reproducible aging and collection recommendations under approved terms.",
+   "Business purpose": "Keep balances/collections accurate and avoid double or excessive payment application.",
+   "Priority": "Must.",
+   "Status": "Deferred.",
+   "Dependencies": "AAOS-AR-01; AAOS-BNK-05; AAOS-GL-05.",
+   "Acceptance criteria": "Allocation cannot exceed receipt or invoice balances; ambiguous/short/overpayments and FX remain exceptions; aging has an explicit as-of date/policy and ties to the ledger; collection drafts never imply sending authority.",
+   "Target stage": "Future / unassigned; client fact and capability gates apply.",
+   "Trace": "U; ARCH AR contract; FABLE later-capability questions."
+  },
+  "AAOS-BNK-01": {
+   "title": "Card preparation demonstration",
+   "Description": "Demonstrate intake, vendor identification, proposed coding, duplicate detection, supporting-document checks, exceptions/dispositions and independent review through the reusable engine.",
+   "Business purpose": "Validate shared accounting execution controls on a small executable workflow.",
+   "Priority": "Must.",
+   "Status": "Tested for fictional card data; not the entire product and not a live bank feed/ledger.",
+   "Dependencies": "AAOS-KNO-04; AAOS-GL-01; AAOS-CTL-01; AAOS-CTL-05; AAOS-CTL-08; AAOS-BNK-02; AAOS-BNK-03.",
+   "Acceptance criteria": "Unknown/ambiguous vendors never receive clean approvable coding; pending, unsupported currency, missing/changed evidence and material unsupported treatments stay held; demonstrated dispositions are evidence-bound and re-preparation still needs review; approval does not post an expense.",
+   "Target stage": "Current / G0; approved client samples only under G1.",
+   "Trace": "T-02/T-13/T-14/T-15/T-17; CORRECTIONS; EVIDENCE."
+  },
+  "AAOS-BNK-02": {
+   "title": "Statement-based population completeness",
+   "Description": "Validate posted transaction populations against independently supplied statement balances/activity/counts/line IDs and available continuity/provenance.",
+   "Business purpose": "Detect omissions and substitutions that internally generated totals cannot reveal.",
+   "Priority": "Must.",
+   "Status": "Tested for explicit fictional statements/calendar periods; no claim of authentic real-source completeness.",
+   "Dependencies": "AAOS-BNK-03; AAOS-CTL-08; AAOS-CTL-09.",
+   "Acceptance criteria": "Check opening/activity/closing arithmetic and identity/population ties; disclose missing line identity, continuity or provenance checks; do not manufacture a statement from the population; corrected/replaced statements remain held until valid acceptance.",
+   "Target stage": "Current / G0; provider/account authority and real statement validation at G1/G2.",
+   "Trace": "T-13; RV-13; RA-04; EVIDENCE."
+  },
+  "AAOS-BNK-03": {
+   "title": "Ordered source lifecycle and one economic item",
+   "Description": "Retain source IDs/versions, ordering, pending-to-posted links, removals, supersession, quarantines and current heads without rewriting raw history.",
+   "Business purpose": "Avoid double counting or losing charges when providers revise, replace, remove or redeliver data.",
+   "Priority": "Must.",
+   "Status": "Tested for synthetic lifecycle and full-chain locked-origin controls; provider semantics unverified.",
+   "Dependencies": "AAOS-CTL-04; AAOS-CTL-05; AAOS-CTL-10.",
+   "Acceptance criteria": "Older/conflicting events do not overwrite newer heads; supersession chains cannot release a locked-origin charge into a second approved period; cycles refuse atomically; authorized reopen admits only the terminal replacement and retires predecessors/support with traceable history; removing a superseder does not silently restore an ancestor without an approved feed policy.",
+   "Target stage": "Current / G0; actual pending/removal/restoration semantics verified at G2.",
+   "Trace": "T-12; C-01; RV-01/RV-02/RV-03/RV-04; RA-01; U4/UC-4."
+  },
+  "AAOS-BNK-04": {
+   "title": "Reconciliation workpapers",
+   "Description": "Prepare bank/card reconciliations from authoritative statements, ledger populations, prior reconciliations, proposed adjustments and reconciling items.",
+   "Business purpose": "Establish reproducible evidence that balances and populations reconcile, rather than treating equal totals as sufficient.",
+   "Priority": "Must.",
+   "Status": "Deferred; current completeness checks are not full reconciliation.",
+   "Dependencies": "AAOS-BNK-02; AAOS-GL-01; AAOS-CLS-02; AAOS-KNO-04.",
+   "Acceptance criteria": "Show opening/activity/closing, source/ledger completeness, reviewed/unreviewed/held entries, timing items and differences; separate actual from projected balances; unposted adjustments cannot confer externally reconciled status even at zero projected difference.",
+   "Target stage": "Existing Batch 3 / T-20 for card workpaper, not authorized; broader banking reconciliation later assigned.",
+   "Trace": "T-20; FV-BK01/FV-BK05; ARCH; LEGACY fictional close controls."
+  },
+  "AAOS-BNK-05": {
+   "title": "Matching, transfers and settlements",
+   "Description": "Match economic counterpart legs across bank/card/ledger feeds with one-use allocations, transfer/transit/settlement evidence and client-approved date/currency/account rules.",
+   "Business purpose": "Avoid expensing card settlements or recording the same economic event through multiple routes/periods.",
+   "Priority": "Must.",
+   "Status": "Deferred beyond demonstrated single-item settlement dispositions; cross-period ledger/source duplicate matching not complete.",
+   "Dependencies": "AAOS-BNK-04; AAOS-GL-01; AAOS-CTL-05; AAOS-KNO-04.",
+   "Acceptance criteria": "Enforce opposite amount/direction and verified identities; ambiguous counterparts and in-transit period-end items stay held; matched legs cannot be reused; duplicate economic origin checks span relevant periods/routes; no date tolerance is invented.",
+   "Target stage": "Existing Batch 3 / T-21, not authorized; broader matching after validated workpapers/policies.",
+   "Trace": "T-21; FV-BK02\u2013FV-BK04; RV/RA deferred enhancement DE-3; ARCH."
+  },
+  "AAOS-BNK-06": {
+   "title": "Statement cycles and receipt aggregation",
+   "Description": "Accommodate approved non-calendar statement cycles/cutoff and multiple/partial document allocation policies without weakening accounting-period or completeness controls.",
+   "Business purpose": "Extend beyond the demo's calendar-cycle/exact whole-charge receipt assumptions.",
+   "Priority": "Should.",
+   "Status": "Deferred; current statements must match periods, and allowed multiple receipts are each compared with the whole charge.",
+   "Dependencies": "AAOS-BNK-02; AAOS-CTL-04; AAOS-CTL-08; AAOS-KNO-04.",
+   "Acceptance criteria": "Explicit client cutoff/date and allocation rules govern membership; allocations sum correctly without double-use; partial/aggregate support is distinguishable from a mismatch; held-out cross-month cases and missing-policy holds are tested before support is claimed.",
+   "Target stage": "Future / unassigned, after client policy validation; not silently added to current corrections.",
+   "Trace": "FABLE questions 4/5/9; RV/RA deferred enhancements DE-2/DE-4."
+  },
+  "AAOS-CLS-01": {
+   "title": "Typed close-readiness outcomes",
+   "Description": "Evaluate versioned close prerequisites against actual workflow outcomes and period/account-bound evidence, exposing stale/disputed/held/unreviewed/external work.",
+   "Business purpose": "Make close status reflect accounting completion evidence instead of filenames or elapsed dates.",
+   "Priority": "Must.",
+   "Status": "Tested for typed local readiness and preserved external/final-signoff holds; full accounting completion validation deferred.",
+   "Dependencies": "AAOS-EXE-01; AAOS-CTL-04; AAOS-CTL-06; AAOS-CLS-02.",
+   "Acceptance criteria": "A document label cannot satisfy a typed reconciliation/tie-out; deferred capabilities stay unsatisfied; original untyped requirements are not silently upgraded; trial-balance/statement document placeholders must be replaced with validated workflow/tie-out requirements when those capabilities exist.",
+   "Target stage": "Current / G0; strengthen checklist bindings as existing T-20/T-22 and later modules are authorized.",
+   "Trace": "T-19; RV-06; RA DE-5; ARCH."
+  },
+  "AAOS-CLS-02": {
+   "title": "Immutable preparation-package finalization",
+   "Description": "Finalize a versioned reviewed preparation package with governing content/hashes, decisions, contributor lineage, dispositions, controls, acknowledged unresolved items and audit reference.",
+   "Business purpose": "Hand over a stable accounting review record without erasing later changes or pretending the books are closed.",
+   "Priority": "Must.",
+   "Status": "Tested for synthetic packages, supersession links and post-finalization change reporting.",
+   "Dependencies": "AAOS-CTL-06; AAOS-CTL-07; AAOS-CTL-10; AAOS-CTL-01.",
+   "Acceptance criteria": "Refuse disputed/stale/unacknowledged blocked work; carried items/removals are explicit; retain immutable earlier package bytes with prior-version links; later changes raise a visible change event; finalization does not post, reconcile or confer final-close sign-off.",
+   "Target stage": "Current / G0; client preparation handoff under G1/G4 as authorized.",
+   "Trace": "T-18; RV-03/RV-17; EVIDENCE; ARCH."
+  },
+  "AAOS-CLS-03": {
+   "title": "Full month-end close execution",
+   "Description": "Execute the client close DAG: reconciliations, subledger ties, accruals/reversals, adjustments, reviews, verified external steps, period lock and separately assigned final human sign-off.",
+   "Business purpose": "Deliver a complete, evidenced close within actual client procedures and authority.",
+   "Priority": "Must.",
+   "Status": "Deferred; close readiness and preparation finalization are only foundations.",
+   "Dependencies": "AAOS-GL-03; AAOS-GL-04; AAOS-BNK-04; AAOS-CLS-01; AAOS-KNO-04; AAOS-AP-01 and AAOS-AR-01 where applicable to the client's books.",
+   "Acceptance criteria": "Approved checklist names applicable/missing/manual tasks and accountable reviewers; balances and required reconciliation/posting results are verified rather than inferred from prepared work; late/annual/unusual items route explicitly; calendar changes never complete the close; human final sign-off remains distinct.",
+   "Target stage": "Future / unassigned, progressively validated per client and capability; G4 only for demonstrated scope.",
+   "Trace": "U; ARCH close contract; PILOT December close; FABLE question 13; LEGACY \u00a76E."
+  },
+  "AAOS-RPT-01": {
+   "title": "Financial statements and management reports",
+   "Description": "Produce source-tied statements and management reports by approved entity/book/basis/period, report mapping and comparative definitions.",
+   "Business purpose": "Turn validated accounting records into dependable financial information.",
+   "Priority": "Must.",
+   "Status": "Deferred; no statement-generation handler; consolidation/intercompany reporting scope remains proposed until client need is confirmed.",
+   "Dependencies": "AAOS-GL-04; AAOS-CLS-01; AAOS-KNO-04; AAOS-GL-05.",
+   "Acceptance criteria": "Reports tie to the authoritative trial balance, satisfy balance/movement/rollforward checks, preserve mapping/comparative/rounding provenance and disclose missing scope/dimensions; projected adjustments never appear as actual results; unsupported consolidation/eliminations stay unavailable.",
+   "Target stage": "Future / unassigned; Fable question 14, T-22 and accepted accounting inputs precede reporting implementation.",
+   "Trace": "U; ARCH reporting contract; FABLE FV-RP01/FV-RP02/question 14; original Fable handoff."
+  },
+  "AAOS-RPT-02": {
+   "title": "Variance analysis and accounting insights",
+   "Description": "Calculate reproducible variances and prepare evidence-linked explanations/insights under reviewed management definitions.",
+   "Business purpose": "Support senior-accountant analysis without turning plausible model narratives into financial facts.",
+   "Priority": "Must.",
+   "Status": "Deferred.",
+   "Dependencies": "AAOS-RPT-01; AAOS-EXE-07; AAOS-KNO-04.",
+   "Acceptance criteria": "Period/basis/denominator and comparative versions are explicit; distinguish measured variance, hypothesis and approved explanation; missing comparatives/causal evidence are disclosed; human review precedes reliance on material interpretations; no invented forecast or business facts.",
+   "Target stage": "Future / unassigned; after verified reporting inputs and client definitions.",
+   "Trace": "U; ARCH reporting contract; FABLE question 14."
+  },
+  "AAOS-INT-01": {
+   "title": "QuickBooks Online integration",
+   "Description": "Add application-owned adapters for individually verified authorized QBO reads, reports, records and attachments, with later separately authorized writes.",
+   "Business purpose": "Connect preparation to the actual book of record without confusing ledger APIs with bank-feed UI actions.",
+   "Priority": "Must.",
+   "Status": "Deferred; no live QBO/Desktop connector, realm or migration status confirmed.",
+   "Dependencies": "AAOS-KNO-03; AAOS-CTL-02; AAOS-CTL-12; AAOS-INT-06 for later writes only.",
+   "Acceptance criteria": "Confirm ledger edition/conversion and realm; verify each operation against current official documentation/entitlements in an isolated environment; unsupported pending-feed/reconciled-status operations remain unavailable/manual; supported reads never imply write authority or a private-endpoint workaround.",
+   "Target stage": "Future / unassigned; G2 named reads, G3 each specified write.",
+   "Trace": "U; PILOT first test/intake; LEGACY accounting integration constraints; FABLE question 15."
+  },
+  "AAOS-INT-02": {
+   "title": "Bill.com integration",
+   "Description": "Support authorized BILL/Bill.com document, vendor, bill and status flows through individually verified provider capabilities.",
+   "Business purpose": "Incorporate client payable workflows without duplicating liabilities or bypassing approval/payment controls.",
+   "Priority": "Must.",
+   "Status": "Approved product integration; adapter/entitlements and client usage unverified.",
+   "Dependencies": "AAOS-AP-01 for accounting preparation; AAOS-CTL-12; AAOS-KNO-03; AAOS-INT-06 for later writes only.",
+   "Acceptance criteria": "Verify named read/attachment/status operations and provider-to-ledger identities; identify the one accounting/posting route; preserve vendor/bank changes and audit provenance; any write/payment requires its distinct authority and capability, never assumed from read access.",
+   "Target stage": "Future / unassigned; G2 reads and separately authorized later operations.",
+   "Trace": "U; LEGACY accounting systems connection packet; ARCH AP contract."
+  },
+  "AAOS-INT-03": {
+   "title": "Google Workspace and Gmail",
+   "Description": "Intake authorized accounting messages/attachments and relevant Workspace records through scoped access with source, thread, document and permission lineage.",
+   "Business purpose": "Recover accounting evidence and waiting-on-others context without exposing unrelated client/company mail.",
+   "Priority": "Must.",
+   "Status": "Approved product integration; no email/Workspace connector active.",
+   "Dependencies": "AAOS-ARC-02; AAOS-CTL-12; AAOS-CTL-08; AAOS-COM-02 for any later sending only.",
+   "Acceptance criteria": "Named mailbox/folder/document permissions and retention govern reads; replayed attachments remain identifiable; instructions in email cannot change authority or destinations; reading a thread never grants sending permission.",
+   "Target stage": "Future / unassigned; G2 named reads, separate communication permissions for any sending.",
+   "Trace": "U; LEGACY trusted-tool/data-protection controls; ARCH evidence contracts."
+  },
+  "AAOS-INT-04": {
+   "title": "Google Drive and document repository",
+   "Description": "Retrieve and organize authorized accounting documents and approved operating knowledge with file/version identity, access provenance and stable evidence references.",
+   "Business purpose": "Keep receipts, statements, workpapers and procedures retrievable without depending on chat attachments or local folders.",
+   "Priority": "Must.",
+   "Status": "Approved product integration; no Drive adapter or live document synchronization implemented.",
+   "Dependencies": "AAOS-KNO-06; AAOS-CTL-08; AAOS-CTL-09; AAOS-CTL-12; AAOS-CTL-13.",
+   "Acceptance criteria": "Scope folders/files per client and environment; detect revisions/removals/access loss without rewriting earlier evidence; copied/moved documents retain provenance; repository access does not approve accounting treatment; document writes/deletions need separate permission.",
+   "Target stage": "Future / unassigned; G2 authorized retrieval before reliance.",
+   "Trace": "U; PILOT portable knowledge; LEGACY evidence/storage/retention."
+  },
+  "AAOS-INT-05": {
+   "title": "Bank activity, statements and authorized portals",
+   "Description": "Support complete bank/card activity and statement intake from approved exports, direct/aggregator/provider routes or specifically authorized portal integration where permitted.",
+   "Business purpose": "Obtain the right source population without assuming card-only coverage or unsupported banking capabilities.",
+   "Priority": "Must.",
+   "Status": "Approved product coverage; provider/account access and portal interfaces unverified.",
+   "Dependencies": "AAOS-BNK-02; AAOS-BNK-03; AAOS-CTL-12; AAOS-INT-06 for later writes only.",
+   "Acceptance criteria": "Assess full checking versus card-only coverage and actual account types; compare direct bank/aggregator/Expensify/native QBO without presuming selection; designate one posting route per transaction, document pending/removal/sign semantics and clearing policy; portal use requires permitted access and validated controls, never bypassing authentication/provider restrictions.",
+   "Target stage": "Future / unassigned; G1 authorized local exports, G2 separately authorized reads/portals.",
+   "Trace": "U; PILOT unresolved transaction-intake choice; LEGACY connection packet; FABLE questions 2/4/15."
+  },
+  "AAOS-INT-06": {
+   "title": "Safe external execution and unknown outcomes",
+   "Description": "Gate each external effect with supported capability, current scope/approval/preconditions, durable business intent/operation ID, provider idempotency where available and verified outcome.",
+   "Business purpose": "Prevent duplicate accounting effects and false completion after a crash, timeout or permission change.",
+   "Priority": "Must.",
+   "Status": "Deferred; no external write paths exist.",
+   "Dependencies": "AAOS-CTL-01; AAOS-CTL-03; AAOS-CTL-04; AAOS-CTL-05; AAOS-EXE-05.",
+   "Acceptance criteria": "Recheck exact payload and authority immediately before dispatch; a possibly completed write becomes outcome_unknown until readback/reconciliation or human resolution; no blind resubmission or claim that queue leases alone guarantee exactly-once provider effects; revoke/denial/changed-input/fault tests pass per operation.",
+   "Target stage": "Future / unassigned; G3 named writes only; payment, sending and final close remain separately reserved.",
+   "Trace": "FABLE G3; ARCH live effects; LEGACY \u00a712/AT external-write controls."
+  },
+  "AAOS-CTL-01": {
+   "title": "Genuine independent review and segregation of duties",
+   "Description": "Require a separately authorized human independent of all relevant preparation/configuration/evidence roles for exact-version review and distinct controlled decisions.",
+   "Business purpose": "Prevent self-review or laundering authorship through reruns, cosmetic configuration changes or replacement evidence.",
+   "Priority": "Must.",
+   "Status": "Tested with explicit synthetic human/service identities and contributor lineage; real role assignments unconfirmed.",
+   "Dependencies": "AAOS-ARC-02; AAOS-CTL-06; AAOS-CTL-03.",
+   "Acceptance criteria": "Include relevant enqueuer, worker, mandate issuer, historical evidence suppliers, rule/profile authors/approvers and disposition actors; identity names do not imply kind; cosmetic/unlinked equivalent rules retain relevant authors; revised-evidence acceptance excludes old/current suppliers and remains separate from final review; unrelated contributors do not create false barriers.",
+   "Target stage": "Current / G0 controls; validated actual roles/grants before G1.",
+   "Trace": "T-03; C-03/C-04/C-06; RV-10/RV-12; RA-02/RA-03/RA-04; EVIDENCE."
+  },
+  "AAOS-CTL-02": {
+   "title": "Authenticated identity and bounded access",
+   "Description": "Replace demo role selection with verified identity, membership, kind and scoped capabilities; use bounded/paged filtered backend reads and exports.",
+   "Business purpose": "Make multi-user/client operation secure and usable beyond fixture volumes.",
+   "Priority": "Must.",
+   "Status": "Deferred; current loopback role selector is a test harness, not authentication.",
+   "Dependencies": "AAOS-ARC-02; AAOS-KNO-04.",
+   "Acceptance criteria": "A verified provider maps identities to server-side grants; hosted/second-user access rejects demo auth and unauthorized object/client references; cached views/manifests remain current on relevant generations; no giant unfiltered response leaks or substitutes for authorization.",
+   "Target stage": "Existing Batch 3 / T-27, not authorized; required before actual sample identity or non-loopback use as applicable.",
+   "Trace": "T-27; FABLE \u00a711; LEGACY identity; ARCH limits."
+  },
+  "AAOS-CTL-03": {
+   "title": "Authority-grant lifecycle",
+   "Description": "Define who may grant, change and revoke each scoped preparation/policy/review/disposition/finalization/period/operating authority, including administrator independence and emergency suspension.",
+   "Business purpose": "Prevent self-issued, obsolete or overbroad human/service permissions from becoming real accounting authority.",
+   "Priority": "Must.",
+   "Status": "Deferred for actual grants; synthetic fixtures have no full grant-revocation/admin-independence lifecycle.",
+   "Dependencies": "AAOS-ARC-02; AAOS-KNO-03.",
+   "Acceptance criteria": "Approved role matrix, independent grant administration, expiry/revocation and audit records exist; revoked grants stop future decisions/dispatch without rewriting history; no model can grant itself authority; real client configuration cannot rely on fixture grants.",
+   "Target stage": "Before G1 actual identities/authority; implementation unassigned, UC-5 remains open for that gate.",
+   "Trace": "RA UC-5; FABLE question 6/\u00a77; LEGACY approval policy; CONNECTION_READINESS.md."
+  },
+  "AAOS-CTL-04": {
+   "title": "Durable periods, cutoff and locks",
+   "Description": "Maintain accounting periods and independent open/lock/reopen history; bind source/run/entry/decision membership to approved period/cutoff rules.",
+   "Business purpose": "Prevent decisions or duplicate approvals across locked periods while retaining late evidence.",
+   "Priority": "Must.",
+   "Status": "Tested for synthetic explicit/calendar-date routing, locks and full-chain locked-origin moves; actual client cutoff unknown.",
+   "Dependencies": "AAOS-ARC-02; AAOS-CTL-03.",
+   "Acceptance criteria": "Every review transition, including revoke/resolution, refuses a locked period; lock preserves approved/finalized evidence; late/unassigned/moved sources quarantine; independent audited reopen precedes admission; a replacement chain never leaves the same expense approved in two periods; destination revisions after a valid release use the nearest admitted owner.",
+   "Target stage": "Current / G0; actual cutoff/cycle and reopen policy at G1 before client use.",
+   "Trace": "T-05; C-01/C-02; RV-01/RV-04; RA-01 and relock regression; FABLE questions 4/9."
+  },
+  "AAOS-CTL-05": {
+   "title": "Vendor identity and duplicate prevention",
+   "Description": "Preserve raw descriptors while using Unicode-safe normalized candidate identity and economic-source/duplicate controls across intake, preparation, entries and dispositions.",
+   "Business purpose": "Avoid false vendor matches, repeated expenses and removal of legitimate repeated purchases.",
+   "Priority": "Must.",
+   "Status": "Tested for current Unicode/ambiguity, idempotent replay and same-period economic-source/disposition controls; full cross-period matching deferred to AAOS-BNK-05.",
+   "Dependencies": "AAOS-KNO-04.",
+   "Acceptance criteria": "NFKC/casefold retains letters/numbers/combining marks; empty aliases cannot match; ambiguity withholds clean coding; duplicate candidates stay visible, not auto-deleted; new candidate/evidence changes lapse dependent dispositions; duplicate/replay targets must remain live and cannot mutually exclude all entries, including before re-preparation.",
+   "Target stage": "Current / G0; cross-route/period expansion under existing T-21 and future validated modules.",
+   "Trace": "T-02; C-05; RV-02/RV-08/RV-09; RA-08; EVIDENCE."
+  },
+  "AAOS-CTL-06": {
+   "title": "Governing artifacts and decision integrity",
+   "Description": "Maintain one governing preparation per workflow/period/item with immutable prior artifacts, linked runs/contributors and append-only approval/rejection/dispute/revocation/resolution history.",
+   "Business purpose": "Prevent reruns or altered provenance from displacing a valid rejection or creating multiple competing approved preparations.",
+   "Priority": "Must.",
+   "Status": "Tested for synthetic governing membership, reuse and decision state machine.",
+   "Dependencies": "AAOS-EXE-01; AAOS-CTL-10.",
+   "Acceptance criteria": "Identical content retains decisions while accumulating contributors; noncurrent artifacts cannot receive decisions; conflicts are disputed rather than last-write-wins; independent resolution is explicit; removed/moved items leave current membership but retain auditable history; package supersession is explicit.",
+   "Target stage": "Current / G0; exact-version review preserved in later modules.",
+   "Trace": "T-07; C-03; RV-03/RV-17; EVIDENCE."
+  },
+  "AAOS-CTL-07": {
+   "title": "Relevant dependency invalidation",
+   "Description": "Record declared source/policy/code dependencies and invalidate only affected work/authority, preserving unrelated client/workflow/period approvals.",
+   "Business purpose": "Keep accounting controls sound while reducing avoidable repeat reviews and interruptions.",
+   "Priority": "Must.",
+   "Status": "Tested at workflow/period population granularity; per-item invalidation optimization deferred.",
+   "Dependencies": "AAOS-ARC-01; AAOS-KNO-04; AAOS-CTL-06.",
+   "Acceptance criteria": "Relevant changed content/policy expires affected approval/disposition; unrelated workflow/client/period or UI/transport edits do not; finalized bytes remain stable; relevant semantic policy windows govern mandates independently of evidence arrival; finer invalidation must preserve duplicate/population dependencies.",
+   "Target stage": "Current / G0; per-item efficiency improvement future / unassigned (DE-1).",
+   "Trace": "T-06; T-10; RA-05; RV/RA DE-1; ARCH. This supersedes D-005's original blanket-invalidation wording for current behavior."
+  },
+  "AAOS-CTL-08": {
+   "title": "Source traceability and document completeness",
+   "Description": "Bind each item/treatment to relevant authenticatable source/document identity, version/hash, supplier, time, account/period and approved completeness/matching policy.",
+   "Business purpose": "Ensure accounting preparation has inspectable support rather than arbitrary files or matching labels.",
+   "Priority": "Must.",
+   "Status": "Tested for structured fictional support and explicit unset matching policy; OCR/authenticity/general document extraction unimplemented.",
+   "Dependencies": "AAOS-KNO-03; AAOS-KNO-04; AAOS-CTL-10.",
+   "Acceptance criteria": "Missing/irrelevant/unsupported documents block affected work; a transaction row cannot be supporting evidence; cards use related receipts/account-cycle statements and journals named bound support; duplicate decisions cite each candidate's relevant evidence; no amount/date tolerance or statement substitution is invented when policy is unset.",
+   "Target stage": "Current / G0; real evidence acceptance and document policy at G1, adapters at G2.",
+   "Trace": "T-16/T-17; RV-15; RA-06/RA-07; FABLE question 5; ARCH."
+  },
+  "AAOS-CTL-09": {
+   "title": "Revised or replacement evidence acceptance",
+   "Description": "Detect changes to receipts/statements across versions and replacement keys; disclose earlier/current support, changed fields and suppliers and require bound non-supplier acceptance before renewed review.",
+   "Business purpose": "Prevent corrected documents from making previously unsupported work silently approvable.",
+   "Priority": "Must.",
+   "Status": "Tested in current source; independent RA acceptance and new positive-setup adaptations pending.",
+   "Dependencies": "AAOS-CTL-01; AAOS-CTL-08; AAOS-BNK-03.",
+   "Acceptance criteria": "Withdrawing/replacing a receipt or re-supplying a matching statement still creates visible holds; acceptance excludes all old/current suppliers, is item/evidence-bound and lapses on later changes; a new still-active extra receipt remains a multiple-document issue; accepted revisions still require separate final review; predecessor evidence accepted at submission can actually activate on re-preparation.",
+   "Target stage": "Current RA / G0; actual correction acceptance policy at G1.",
+   "Trace": "RV-12; RA-03/RA-04/RA-06; EVIDENCE and disclosed A03/A05/A17/X09/RT18 setups."
+  },
+  "AAOS-CTL-10": {
+   "title": "Persistent audit and inspectable evidence",
+   "Description": "Preserve scoped source snapshots, immutable historical artifacts/decisions/contributors/exceptions, lineage, reasons and audit events through corrections, migrations and exports.",
+   "Business purpose": "Reconstruct what happened, why and under whose authority without rewriting accounting history.",
+   "Priority": "Must.",
+   "Status": "Tested for local append-only history, package bytes, restart/migrations and inspection; administrator-proof external retention not implemented.",
+   "Dependencies": "AAOS-ARC-02; AAOS-EXE-01.",
+   "Acceptance criteria": "Reproduce an output from its source/policy/dependency versions; retain original independent review evidence and package hashes; current versus historical status is explicit; DB hash chains are described as inspection aids, not proof against an administrator or truncation without an external anchor.",
+   "Target stage": "Current / G0; external reliance additionally requires AAOS-CTL-11/13.",
+   "Trace": "T-07/T-18/T-25; CORRECTIONS; ARCH; LEGACY data protection."
+  },
+  "AAOS-CTL-11": {
+   "title": "Consistent exports and external audit anchoring",
+   "Description": "Export one decision-consistent scoped snapshot with stable content hash/metadata separation; verify audit head/length against a separately retained anchor and support bounded/paged inspection.",
+   "Business purpose": "Prevent evidence exports from mixing states or overstating tamper/truncation protection.",
+   "Priority": "Must.",
+   "Status": "Deferred; current full live export uses two transactions with an input guard, not an atomic decision-consistent snapshot.",
+   "Dependencies": "AAOS-CLS-02; AAOS-CTL-10.",
+   "Acceptance criteria": "Concurrent input/decision changes cannot produce mixed approval state; stable content hash excludes volatile export metadata; altered or truncated audit fails comparison with an external anchor; history is complete through pagination; actual external retention/WORM policy is selected before relying on that guarantee.",
+   "Target stage": "Existing Batch 3 / T-25, not authorized; external audit/retention infrastructure separately agreed before operational reliance.",
+   "Trace": "T-25; FABLE F-19/\u00a711; ARCH limits; RA remaining limitations."
+  },
+  "AAOS-CTL-12": {
+   "title": "Credentials, privacy and untrusted content",
+   "Description": "Use scoped secret references, least-privilege access, redaction and validated document/display handling; treat imported text/model output as data, never authority.",
+   "Business purpose": "Protect client credentials and financial information and resist prompt injection, unsafe uploads and cross-client disclosure.",
+   "Priority": "Must.",
+   "Status": "Deferred for real secret/credential lifecycle and comprehensive threat validation; local DOM/no-egress/scope checks cover only demo boundaries.",
+   "Dependencies": "AAOS-ARC-02; AAOS-CTL-02.",
+   "Acceptance criteria": "No secrets in prompts/source/fixtures/normal logs/exports; rotate/revoke scoped credentials; verify file types/size and sanitize rendering; do not execute imported scripts/macros; imported instructions cannot expand tools/scope/destinations; client data cannot enter public telemetry; no shared firm credential copy to a client host by default.",
+   "Target stage": "Before actual records/credentials and any hosted G2 connection; implementation scope later assigned.",
+   "Trace": "U; LEGACY \u00a714; PILOT deployment; ARCH local boundaries."
+  },
+  "AAOS-CTL-13": {
+   "title": "Backup, restore, retention and supported infrastructure",
+   "Description": "Provide encrypted scoped evidence/state backups, restore drills, retention/deletion rules, private persistent artifact storage and supported runtime/database operation under agreed administration.",
+   "Business purpose": "Preserve client records and recover decisions, unfinished work and evidence after host or operator failure.",
+   "Priority": "Must.",
+   "Status": "Deferred for operational infrastructure; local backup/migration tests do not establish production recovery.",
+   "Dependencies": "AAOS-ARC-02; AAOS-ARC-05; AAOS-CTL-12; AAOS-EXE-01.",
+   "Acceptance criteria": "Restore evidence, decisions, packages, grants and pending work into the correct environment without replaying effects; document retention/recovery targets and deletion authority; validate storage/worker concurrency and schema migrations; choose supported runtime before hosting; justify any store/stack migration against Fable's triggers rather than rewriting speculatively.",
+   "Target stage": "Before real evidence reliance and hosted G2; recovery verified again for G4.",
+   "Trace": "FABLE \u00a711; LEGACY release/rollback/storage; PILOT Jeff/support; D-002."
+  },
+  "AAOS-BB-01": {
+   "title": "November knowledge capture",
+   "Description": "Capture the planned November 2026 workflow inputs, sequence, accounts/calculations, outputs, review points, exceptions and Luis's interventions into proposed durable procedures/decisions.",
+   "Business purpose": "Preserve actual client accounting knowledge instead of relying on chat memory or invented mappings.",
+   "Priority": "Must.",
+   "Status": "Approved pilot plan; real capture/processing is not evidenced as completed.",
+   "Dependencies": "AAOS-KNO-03; AAOS-KNO-04; AAOS-KNO-05; AAOS-GOV-03.",
+   "Acceptance criteria": "Separate proven client logic, model suggestions, temporary choices and unresolved facts; each intervention names correction scope/evidence/rationale/version; accounting lead validates before reusable approval; real records only after G1 authorization.",
+   "Target stage": "G1 approved local samples; actual calendar completion depends on available records, not a presumed deadline.",
+   "Trace": "PILOT November capture; LEGACY AT-60; U."
+  },
+  "AAOS-BB-02": {
+   "title": "Independent December validation and gaps",
+   "Description": "Validate approved procedures on new December 2026 cases and independently reviewed expected outcomes, separated from teaching examples.",
+   "Business purpose": "Determine whether the process generalizes before operating handoff.",
+   "Priority": "Must.",
+   "Status": "Approved plan; independent real-client validation not performed.",
+   "Dependencies": "AAOS-BB-01; AAOS-KNO-06; AAOS-OBS-04.",
+   "Acceptance criteria": "Include relevant missing evidence, duplicates, changed descriptions, splits, revisions and exceptions without supplying teaching answers; record disagreements and approved revisions; retain annual/unusual/untested coverage gaps with human routes; no synthetic success substitutes for this result.",
+   "Target stage": "G1 validation before G2; continuing coverage evidence for G4.",
+   "Trace": "PILOT December validation; FABLE G1/G2; LEGACY AT-60/AT-61."
+  },
+  "AAOS-BB-03": {
+   "title": "Theresa's ordinary workflow and escalation",
+   "Description": "Capture Theresa's actual tasks, sequence, information needs, preparation/review limits and escalation routes; provide and test an operator guide.",
+   "Business purpose": "Enable daily operation without Luis prompting each step while retaining appropriate judgment and support.",
+   "Priority": "Must.",
+   "Status": "Approved goal; Theresa's actual role/authority and observed workflow are unverified.",
+   "Dependencies": "AAOS-BB-02; AAOS-KNO-06; AAOS-CTL-03; AAOS-BB-07.",
+   "Acceptance criteria": "Theresa performs the assigned workflow from input to review using the guide, explains when/how to escalate and identifies unclear context; record actual assistance/time; a fixture named Theresa or an API test cannot count as her teach-back or approval.",
+   "Target stage": "G1 discovery/validation; observed G4 operating handoff.",
+   "Trace": "U; PILOT Theresa/readiness; LEGACY AT-61; FABLE G4/question 17."
+  },
+  "AAOS-BB-04": {
+   "title": "Sales and deposit process capture",
+   "Description": "Discover and document Bird Bowl's relevant sales evidence, sales-to-ledger workflow, cash/card receipts, deposits/settlements, timing differences and related review/closing dependencies.",
+   "Business purpose": "Onboard actual operating flows that a card-only demonstration cannot cover.",
+   "Priority": "Must.",
+   "Status": "Approved discovery requirement; actual systems, totals, allocation/fee/tax treatment and procedures unknown.",
+   "Dependencies": "AAOS-KNO-03; AAOS-BB-01; AAOS-BNK-05; AAOS-KNO-04.",
+   "Acceptance criteria": "Identify sources, responsible people, reconciliation boundaries and one posting route; independently validate observed procedures and known reviewed examples; exceptions/timing/fees/refunds remain questions until supported; store any approved treatment only in the client workspace, with no invented Bird Bowl financial facts.",
+   "Target stage": "G1 authorized knowledge capture; execution capabilities future / unassigned after prerequisites are validated.",
+   "Trace": "U's explicit onboarding scope; PILOT procedure-capture method; ARCH banking/GL contracts. Existing pilot does not supply the actual sales/deposit procedure."
+  },
+  "AAOS-BB-05": {
+   "title": "Payroll and tip process capture",
+   "Description": "Discover the relevant payroll/tip inputs, liability/expense/clearing treatment, allocations, source-to-ledger reconciliation, review and close interfaces under actual authorized procedures.",
+   "Business purpose": "Preserve these onboarding needs without guessing payroll policies or expanding into unauthorized payroll execution.",
+   "Priority": "Must.",
+   "Status": "Approved discovery requirement; providers, calculations, tax/tip rules, amounts and authority unknown.",
+   "Dependencies": "AAOS-KNO-03; AAOS-KNO-04; AAOS-BB-01; AAOS-CTL-08.",
+   "Acceptance criteria": "Accounting lead validates source completeness, reconciliation and approved examples; procedure names preparer/reviewer and manual responsibilities; missing legal/payroll/tip treatment remains a question for qualified validation; no payroll run, payment or filing capability is activated by knowledge capture.",
+   "Target stage": "G1 authorized discovery; any accounting preparation module later assigned separately; payroll execution outside this task.",
+   "Trace": "U; PILOT capture/validation controls; FABLE question 8 mentions meals/tips but provides no actual payroll policy."
+  },
+  "AAOS-BB-06": {
+   "title": "Actual close and unattended readiness",
+   "Description": "Capture Bird Bowl's real close checklist/calendar and demonstrate the agent's bounded unattended portion plus required human review and final sign-off responsibilities.",
+   "Business purpose": "Establish dependable operation through accounting results and observed effort rather than a calendar promise or job-title claim.",
+   "Priority": "Must.",
+   "Status": "Approved goal; actual close/operating readiness not demonstrated.",
+   "Dependencies": "AAOS-BB-02; AAOS-BB-03; AAOS-CLS-03; AAOS-EXE-04; AAOS-OBS-01; AAOS-BB-07.",
+   "Acceptance criteria": "December close waits for necessary records, possibly January 2027; no automatic January 1 deployment; measure complete supported work, required/missed exceptions, independence of blocked tasks and all recurring human work; human release identifies exactly which validated workflows may operate.",
+   "Target stage": "G1 close discovery; G4 demonstrated workflow scope after applicable capability gates.",
+   "Trace": "U; PILOT readiness; LEGACY AT-61; FABLE questions 13/17/G4."
+  },
+  "AAOS-BB-07": {
+   "title": "Hosting, support, ownership and engagement agreement",
+   "Description": "Resolve proposed roles for Theresa (operations), Jeff (technical support), SS/Luis (accounting oversight), and the relevant client/company owners, including host, administrators, credentials, data/asset rights, billing and maintenance scope.",
+   "Business purpose": "Avoid turning a proposed support model into assumed authority, an engagement or an ownership transfer.",
+   "Priority": "Must.",
+   "Status": "Proposed operating arrangement; responsibilities/commercial terms have not been agreed.",
+   "Dependencies": "AAOS-KNO-03; AAOS-CTL-03; AAOS-CTL-12; AAOS-OBS-03. Deployment-option selection is part of this agreement, not a prerequisite to designing those options.",
+   "Acceptance criteria": "Named parties agree accounting versus technical escalation, authority, platform/runtime/jobs/storage, backup/recovery, changes requiring accounting review, optional model payer and support/co-management terms; authorized company/entity and any asset reuse/licensing boundaries are recorded; no inherited credentials or cost commitments.",
+   "Target stage": "Before any authorized hosting/G2 and operating handoff/G4; discussion can precede implementation.",
+   "Trace": "PILOT proposed responsibilities/deployment; LEGACY company authority/funding/asset boundaries; FABLE question 16."
+  },
+  "AAOS-BRF-01": {
+   "title": "Actionable Morning Briefing",
+   "Description": "Present completed overnight, needs attention, waiting on others, continuing automatically, today's priorities and estimated human review time, with evidence/current-state links and an explicit reporting window.",
+   "Business purpose": "Let a human understand progress and make necessary accounting decisions quickly without prompting each task.",
+   "Priority": "Must.",
+   "Status": "Approved product requirement; no implemented Morning Briefing.",
+   "Dependencies": "AAOS-EXE-01; AAOS-EXE-02; AAOS-EXE-03; AAOS-OBS-01; AAOS-OBS-02; AAOS-BRF-03.",
+   "Acceptance criteria": "All six sections appear, including honest empty/unavailable states; reporting cutoff/timezone and stale/failed-run coverage are visible; each status/priority is tied to work/evidence/deadline/authority rather than invented completion; estimates state assumptions; no digest hides critical exceptions or treats silence as consent.",
+   "Target stage": "Future / unassigned; local briefing may later precede hosting, but true overnight completion requires authorized AAOS-EXE-04 operation.",
+   "Trace": "U; accounting-app adaptation of LEGACY briefing/inbox concepts. No Executive Director agent dependency."
+  },
+  "AAOS-BRF-02": {
+   "title": "Management-wide and individual-client views",
+   "Description": "Provide authorized firm-management aggregation and scoped individual-client Morning Briefings/work views from the same accounting platform.",
+   "Business purpose": "Manage a portfolio efficiently while showing each client/operator only permitted records and responsibilities.",
+   "Priority": "Must.",
+   "Status": "Approved; management-wide briefing and real permissions not implemented.",
+   "Dependencies": "AAOS-BRF-01; AAOS-ARC-02; AAOS-ARC-03; AAOS-CTL-02.",
+   "Acceptance criteria": "Aggregates/drill-downs include only granted clients; unauthorized counts, names, totals and export references do not leak; client views cannot reach other-client/company data; a standalone client deploy needs no central connection; tests cover permitted and denied management/client access.",
+   "Target stage": "Future / unassigned; hosted views require authenticated identity/isolation before G2.",
+   "Trace": "U; PILOT backend deployment boundary; LEGACY consolidated inbox/access principles."
+  },
+  "AAOS-BRF-03": {
+   "title": "Review, exception and waiting inbox",
+   "Description": "Consolidate decisions/exceptions by cause with owner, age, evidence, recommendation, exact decision scope, allowed responses, waiting party and work that can continue.",
+   "Business purpose": "Reduce unnecessary interruptions without concealing blockers or bundling unrelated permissions.",
+   "Priority": "Must.",
+   "Status": "Approved full inbox; local item review/exception UI and evidence-bound dispositions are tested subsets.",
+   "Dependencies": "AAOS-EXE-01; AAOS-CTL-01; AAOS-CTL-06; AAOS-CTL-08; AAOS-CTL-09.",
+   "Acceptance criteria": "Group repeat alerts while retaining per-item approve/reject/defer/revise controls; genuine urgency/deadlines and escalation policy govern interruption; no external notification is claimed without verified channel evidence; unresolved items remain visible and independent work continues; no response grants authority.",
+   "Target stage": "Current local review subset; complete operational inbox future / unassigned, notification permission separate.",
+   "Trace": "U; T-14; LEGACY inbox/exception concepts; PILOT workflow readiness."
+  },
+  "AAOS-OBS-01": {
+   "title": "Work, accuracy, exceptions and human effort",
+   "Description": "Measure task coverage/completion, accounting accuracy, defects/missed exceptions/false positives, required versus unnecessary interruptions and human preparation/review/correction/training/maintenance time.",
+   "Business purpose": "Determine whether the system releases dependable capacity rather than merely increasing task counts or hiding errors.",
+   "Priority": "Must.",
+   "Status": "Approved; test/gate logs exist, a real operating scorecard and baseline do not.",
+   "Dependencies": "AAOS-EXE-01; AAOS-CTL-10; AAOS-OBS-04.",
+   "Acceptance criteria": "Metrics identify sample, denominator, period, source and uncertainty; held/deferred tasks are not counted completed; all recurring human effort is included in net time released; saved capacity is not automatically cash payroll savings or revenue; thresholds are agreed before a real pilot, not invented here.",
+   "Target stage": "Future / unassigned instrumentation; baseline before G1/G2 and measured evidence before G4.",
+   "Trace": "U; PILOT readiness/effort; LEGACY autonomy/economics/scorecard."
+  },
+  "AAOS-OBS-02": {
+   "title": "Estimated human review time",
+   "Description": "Estimate review time per item/package/briefing using observed comparable work and current complexity/exception state; record actual time separately to calibrate estimates.",
+   "Business purpose": "Plan daily attention and review capacity honestly.",
+   "Priority": "Must.",
+   "Status": "Approved; estimator/time-capture capability not implemented.",
+   "Dependencies": "AAOS-OBS-01; AAOS-EXE-01.",
+   "Acceptance criteria": "Display estimate/as-of/method/confidence or unknown when no basis exists; totals do not double-count grouped work; track actual/estimated variance and necessary review even on routine work; synthetic estimates never become observed client time.",
+   "Target stage": "Future / unassigned, needed for the complete AAOS-BRF-01.",
+   "Trace": "U; LEGACY review-capacity/measurement principles; PILOT human effort."
+  },
+  "AAOS-OBS-03": {
+   "title": "Model, infrastructure and human cost controls",
+   "Description": "Measure gross model usage, cash cost after credits, infrastructure/vendor costs and human effort; enforce approved per-run/environment/client/company allocations, concurrency and bounded work limits before paid use.",
+   "Business purpose": "Make autonomous operation economically accountable and prevent retries or multiple environments from bypassing spending limits.",
+   "Priority": "Must.",
+   "Status": "Approved; no paid calls/services activated and no production budget enforcement proven.",
+   "Dependencies": "AAOS-EXE-03; AAOS-EXE-05; AAOS-CTL-10; AAOS-ARC-05.",
+   "Acceptance criteria": "Missing live budgets block spend; reserve estimates before calls and reconcile actual usage; retries/resumptions share limits and cannot reset counters; environment allocations fit the company ceiling; distinguish credits from owned budgets and estimates from invoices; proposed legacy numeric limits require explicit adoption, not silent client policy.",
+   "Target stage": "Future / unassigned; configured/tested before any authorized model/hosting/vendor expense.",
+   "Trace": "U; LEGACY \u00a713/pilot economics; PILOT separate model/hosting costs; FABLE G2."
+  },
+  "AAOS-OBS-04": {
+   "title": "Independent validation and realistic evaluation",
+   "Description": "Maintain teaching/regression/adversarial/held-out accounting cases, exact blocker expectations and operational fault tests; evaluate any model assistance separately from deterministic fixtures.",
+   "Business purpose": "Detect plausible but incorrect accounting and avoid treating a demonstration as independent business proof.",
+   "Priority": "Must.",
+   "Status": "Tested for current synthetic regression/reviewer/control suites; real-client/model/operational evaluation deferred.",
+   "Dependencies": "AAOS-GOV-03; AAOS-KNO-05; AAOS-CTL-10.",
+   "Acceptance criteria": "Positive paths prove their preconditions and exact eligible/blocker outcomes; missing initial decisions/eligibility fail before testing a later event (strengthened RT14b); new defects have regression cases; maintain original probe bytes and reviewed deltas; model evaluations measure missed issues, uncertainty, latency/cost and independent expected results without manufacturing participant UAT.",
+   "Target stage": "Current / G0; held-out G1, integration/fault G2/G3 and observed operating G4 evidence separately.",
+   "Trace": "T-01; CORRECTIONS; EVIDENCE; LEGACY AT-60/61 and live-evaluation distinctions."
+  },
+  "AAOS-COM-01": {
+   "title": "Missing-document and collection drafts",
+   "Description": "Prepare complete scoped requests for missing accounting documents and AR collection follow-ups with the underlying item/customer, evidence, recipients, attachments and unresolved questions.",
+   "Business purpose": "Help resolve blocked accounting work without making humans reconstruct the request.",
+   "Priority": "Must.",
+   "Status": "Approved future capability; no automated communication workflow implemented or authorized to send.",
+   "Dependencies": "AAOS-BRF-03; AAOS-CTL-08; AAOS-ARC-02; AAOS-KNO-03.",
+   "Acceptance criteria": "Source facts/customer balances and missing documents are verified; choose only authorized recipients with no cross-client attachment leakage; unsupported claims stay questions; a reviewed/exported draft is labeled draft, not delivered; collection-specific drafts wait for validated AAOS-AR-02 balances/terms.",
+   "Target stage": "Future / unassigned; draft-only stage can be assigned before sending, with approved sample/data access.",
+   "Trace": "U; LEGACY accounting package draft questions/human-sent communications; ARCH AR contract."
+  },
+  "AAOS-COM-02": {
+   "title": "Controlled drafting and sending permissions",
+   "Description": "Model read, draft, approve and send permissions separately by client/channel/recipient/purpose, with exact content/attachment approval, bounded standing authority where expressly approved and auditable delivery state.",
+   "Business purpose": "Enable future communication assistance without sending unapproved financial information or treating draft approval as a general communications mandate.",
+   "Priority": "Must.",
+   "Status": "Approved product direction; sending remains deferred and prohibited in the current build.",
+   "Dependencies": "AAOS-COM-01; AAOS-CTL-01; AAOS-CTL-02; AAOS-CTL-03; AAOS-CTL-12; AAOS-INT-06.",
+   "Acceptance criteria": "Human-sent/exported drafts stay the default until a separate sending capability, policy and authorization are approved; exact sender/recipients/body/attachments and current scope are checked; denied/revoked/changed payload blocks send; uncertain delivery is reconciled without blind retry; human-reported sending is distinguished from provider-verified delivery; silence grants nothing.",
+   "Target stage": "Future / unassigned, separate action-specific authorization beyond ordinary accounting G3 writes; no automatic-send permission from this register.",
+   "Trace": "U's future communication scope; LEGACY human-sent boundary/uncertain outcomes; FABLE reserved actions."
+  }
+ },
+ "deps": {
+  "AAOS-GOV-01": [],
+  "AAOS-GOV-02": [
+   "AAOS-GOV-01"
+  ],
+  "AAOS-GOV-03": [
+   "AAOS-CTL-10",
+   "AAOS-GOV-02"
+  ],
+  "AAOS-ARC-01": [
+   "AAOS-GOV-01"
+  ],
+  "AAOS-ARC-02": [
+   "AAOS-ARC-01"
+  ],
+  "AAOS-ARC-03": [
+   "AAOS-ARC-02",
+   "AAOS-CTL-02",
+   "AAOS-CTL-12",
+   "AAOS-CTL-13",
+   "AAOS-EXE-04"
+  ],
+  "AAOS-ARC-04": [
+   "AAOS-ARC-01",
+   "AAOS-ARC-02",
+   "AAOS-BB-07",
+   "AAOS-CTL-12",
+   "AAOS-CTL-13"
+  ],
+  "AAOS-ARC-05": [
+   "AAOS-ARC-02",
+   "AAOS-CTL-02",
+   "AAOS-CTL-12"
+  ],
+  "AAOS-EXE-01": [
+   "AAOS-ARC-01",
+   "AAOS-ARC-02"
+  ],
+  "AAOS-EXE-02": [
+   "AAOS-CTL-04",
+   "AAOS-EXE-01",
+   "AAOS-EXE-03"
+  ],
+  "AAOS-EXE-03": [
+   "AAOS-CTL-01",
+   "AAOS-CTL-03",
+   "AAOS-CTL-04",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-EXE-04": [
+   "AAOS-ARC-05",
+   "AAOS-CTL-02",
+   "AAOS-CTL-13",
+   "AAOS-EXE-01",
+   "AAOS-EXE-02",
+   "AAOS-EXE-03",
+   "AAOS-EXE-05",
+   "AAOS-OBS-03"
+  ],
+  "AAOS-EXE-05": [
+   "AAOS-EXE-01",
+   "AAOS-EXE-02"
+  ],
+  "AAOS-EXE-06": [
+   "AAOS-CTL-03",
+   "AAOS-EXE-03",
+   "AAOS-INT-06"
+  ],
+  "AAOS-EXE-07": [
+   "AAOS-ARC-01",
+   "AAOS-CTL-01",
+   "AAOS-CTL-12",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-KNO-01": [
+   "AAOS-ARC-01",
+   "AAOS-ARC-02",
+   "AAOS-KNO-03"
+  ],
+  "AAOS-KNO-02": [
+   "AAOS-CTL-10",
+   "AAOS-KNO-01",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-KNO-03": [
+   "AAOS-ARC-02"
+  ],
+  "AAOS-KNO-04": [
+   "AAOS-CTL-01",
+   "AAOS-CTL-04",
+   "AAOS-KNO-03"
+  ],
+  "AAOS-KNO-05": [
+   "AAOS-CTL-06",
+   "AAOS-CTL-10",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-KNO-06": [
+   "AAOS-CTL-10",
+   "AAOS-KNO-03",
+   "AAOS-KNO-04",
+   "AAOS-KNO-05",
+   "AAOS-OBS-04"
+  ],
+  "AAOS-GL-01": [
+   "AAOS-CTL-04",
+   "AAOS-CTL-05",
+   "AAOS-KNO-03"
+  ],
+  "AAOS-GL-02": [
+   "AAOS-CTL-01",
+   "AAOS-CTL-08",
+   "AAOS-GL-01"
+  ],
+  "AAOS-GL-03": [
+   "AAOS-GL-01",
+   "AAOS-GL-04",
+   "AAOS-INT-06",
+   "AAOS-KNO-01",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-GL-04": [
+   "AAOS-CTL-10",
+   "AAOS-GL-01",
+   "AAOS-KNO-03"
+  ],
+  "AAOS-GL-05": [
+   "AAOS-KNO-03",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-AP-01": [
+   "AAOS-CTL-05",
+   "AAOS-CTL-08",
+   "AAOS-GL-01",
+   "AAOS-GL-04",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-AP-02": [
+   "AAOS-AP-01",
+   "AAOS-CTL-01",
+   "AAOS-CTL-03",
+   "AAOS-INT-06"
+  ],
+  "AAOS-AR-01": [
+   "AAOS-CTL-08",
+   "AAOS-GL-01",
+   "AAOS-GL-04",
+   "AAOS-KNO-03",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-AR-02": [
+   "AAOS-AR-01",
+   "AAOS-BNK-05",
+   "AAOS-GL-05"
+  ],
+  "AAOS-BNK-01": [
+   "AAOS-BNK-02",
+   "AAOS-BNK-03",
+   "AAOS-CTL-01",
+   "AAOS-CTL-05",
+   "AAOS-CTL-08",
+   "AAOS-GL-01",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-BNK-02": [
+   "AAOS-BNK-03",
+   "AAOS-CTL-08",
+   "AAOS-CTL-09"
+  ],
+  "AAOS-BNK-03": [
+   "AAOS-CTL-04",
+   "AAOS-CTL-05",
+   "AAOS-CTL-10"
+  ],
+  "AAOS-BNK-04": [
+   "AAOS-BNK-02",
+   "AAOS-CLS-02",
+   "AAOS-GL-01",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-BNK-05": [
+   "AAOS-BNK-04",
+   "AAOS-CTL-05",
+   "AAOS-GL-01",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-BNK-06": [
+   "AAOS-BNK-02",
+   "AAOS-CTL-04",
+   "AAOS-CTL-08",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-CLS-01": [
+   "AAOS-CLS-02",
+   "AAOS-CTL-04",
+   "AAOS-CTL-06",
+   "AAOS-EXE-01"
+  ],
+  "AAOS-CLS-02": [
+   "AAOS-CTL-01",
+   "AAOS-CTL-06",
+   "AAOS-CTL-07",
+   "AAOS-CTL-10"
+  ],
+  "AAOS-CLS-03": [
+   "AAOS-AP-01",
+   "AAOS-AR-01",
+   "AAOS-BNK-04",
+   "AAOS-CLS-01",
+   "AAOS-GL-03",
+   "AAOS-GL-04",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-RPT-01": [
+   "AAOS-CLS-01",
+   "AAOS-GL-04",
+   "AAOS-GL-05",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-RPT-02": [
+   "AAOS-EXE-07",
+   "AAOS-KNO-04",
+   "AAOS-RPT-01"
+  ],
+  "AAOS-INT-01": [
+   "AAOS-CTL-02",
+   "AAOS-CTL-12",
+   "AAOS-INT-06",
+   "AAOS-KNO-03"
+  ],
+  "AAOS-INT-02": [
+   "AAOS-AP-01",
+   "AAOS-CTL-12",
+   "AAOS-INT-06",
+   "AAOS-KNO-03"
+  ],
+  "AAOS-INT-03": [
+   "AAOS-ARC-02",
+   "AAOS-COM-02",
+   "AAOS-CTL-08",
+   "AAOS-CTL-12"
+  ],
+  "AAOS-INT-04": [
+   "AAOS-CTL-08",
+   "AAOS-CTL-09",
+   "AAOS-CTL-12",
+   "AAOS-CTL-13",
+   "AAOS-KNO-06"
+  ],
+  "AAOS-INT-05": [
+   "AAOS-BNK-02",
+   "AAOS-BNK-03",
+   "AAOS-CTL-12",
+   "AAOS-INT-06"
+  ],
+  "AAOS-INT-06": [
+   "AAOS-CTL-01",
+   "AAOS-CTL-03",
+   "AAOS-CTL-04",
+   "AAOS-CTL-05",
+   "AAOS-EXE-05"
+  ],
+  "AAOS-CTL-01": [
+   "AAOS-ARC-02",
+   "AAOS-CTL-03",
+   "AAOS-CTL-06"
+  ],
+  "AAOS-CTL-02": [
+   "AAOS-ARC-02",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-CTL-03": [
+   "AAOS-ARC-02",
+   "AAOS-KNO-03"
+  ],
+  "AAOS-CTL-04": [
+   "AAOS-ARC-02",
+   "AAOS-CTL-03"
+  ],
+  "AAOS-CTL-05": [
+   "AAOS-KNO-04"
+  ],
+  "AAOS-CTL-06": [
+   "AAOS-CTL-10",
+   "AAOS-EXE-01"
+  ],
+  "AAOS-CTL-07": [
+   "AAOS-ARC-01",
+   "AAOS-CTL-06",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-CTL-08": [
+   "AAOS-CTL-10",
+   "AAOS-KNO-03",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-CTL-09": [
+   "AAOS-BNK-03",
+   "AAOS-CTL-01",
+   "AAOS-CTL-08"
+  ],
+  "AAOS-CTL-10": [
+   "AAOS-ARC-02",
+   "AAOS-EXE-01"
+  ],
+  "AAOS-CTL-11": [
+   "AAOS-CLS-02",
+   "AAOS-CTL-10"
+  ],
+  "AAOS-CTL-12": [
+   "AAOS-ARC-02",
+   "AAOS-CTL-02"
+  ],
+  "AAOS-CTL-13": [
+   "AAOS-ARC-02",
+   "AAOS-ARC-05",
+   "AAOS-CTL-12",
+   "AAOS-EXE-01"
+  ],
+  "AAOS-BB-01": [
+   "AAOS-GOV-03",
+   "AAOS-KNO-03",
+   "AAOS-KNO-04",
+   "AAOS-KNO-05"
+  ],
+  "AAOS-BB-02": [
+   "AAOS-BB-01",
+   "AAOS-KNO-06",
+   "AAOS-OBS-04"
+  ],
+  "AAOS-BB-03": [
+   "AAOS-BB-02",
+   "AAOS-BB-07",
+   "AAOS-CTL-03",
+   "AAOS-KNO-06"
+  ],
+  "AAOS-BB-04": [
+   "AAOS-BB-01",
+   "AAOS-BNK-05",
+   "AAOS-KNO-03",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-BB-05": [
+   "AAOS-BB-01",
+   "AAOS-CTL-08",
+   "AAOS-KNO-03",
+   "AAOS-KNO-04"
+  ],
+  "AAOS-BB-06": [
+   "AAOS-BB-02",
+   "AAOS-BB-03",
+   "AAOS-BB-07",
+   "AAOS-CLS-03",
+   "AAOS-EXE-04",
+   "AAOS-OBS-01"
+  ],
+  "AAOS-BB-07": [
+   "AAOS-CTL-03",
+   "AAOS-CTL-12",
+   "AAOS-KNO-03",
+   "AAOS-OBS-03"
+  ],
+  "AAOS-BRF-01": [
+   "AAOS-BRF-03",
+   "AAOS-EXE-01",
+   "AAOS-EXE-02",
+   "AAOS-EXE-03",
+   "AAOS-OBS-01",
+   "AAOS-OBS-02"
+  ],
+  "AAOS-BRF-02": [
+   "AAOS-ARC-02",
+   "AAOS-ARC-03",
+   "AAOS-BRF-01",
+   "AAOS-CTL-02"
+  ],
+  "AAOS-BRF-03": [
+   "AAOS-CTL-01",
+   "AAOS-CTL-06",
+   "AAOS-CTL-08",
+   "AAOS-CTL-09",
+   "AAOS-EXE-01"
+  ],
+  "AAOS-OBS-01": [
+   "AAOS-CTL-10",
+   "AAOS-EXE-01",
+   "AAOS-OBS-04"
+  ],
+  "AAOS-OBS-02": [
+   "AAOS-EXE-01",
+   "AAOS-OBS-01"
+  ],
+  "AAOS-OBS-03": [
+   "AAOS-ARC-05",
+   "AAOS-CTL-10",
+   "AAOS-EXE-03",
+   "AAOS-EXE-05"
+  ],
+  "AAOS-OBS-04": [
+   "AAOS-CTL-10",
+   "AAOS-GOV-03",
+   "AAOS-KNO-05"
+  ],
+  "AAOS-COM-01": [
+   "AAOS-ARC-02",
+   "AAOS-BRF-03",
+   "AAOS-CTL-08",
+   "AAOS-KNO-03"
+  ],
+  "AAOS-COM-02": [
+   "AAOS-COM-01",
+   "AAOS-CTL-01",
+   "AAOS-CTL-02",
+   "AAOS-CTL-03",
+   "AAOS-CTL-12",
+   "AAOS-INT-06"
+  ]
+ },
+ "status_lead": {
+  "AAOS-GOV-01": "Approved",
+  "AAOS-GOV-02": "Implemented",
+  "AAOS-GOV-03": "Tested",
+  "AAOS-ARC-01": "Tested",
+  "AAOS-ARC-02": "Tested",
+  "AAOS-ARC-03": "Approved",
+  "AAOS-ARC-04": "Approved",
+  "AAOS-ARC-05": "Deferred",
+  "AAOS-EXE-01": "Tested",
+  "AAOS-EXE-02": "Tested",
+  "AAOS-EXE-03": "Tested",
+  "AAOS-EXE-04": "Approved",
+  "AAOS-EXE-05": "Deferred",
+  "AAOS-EXE-06": "Approved",
+  "AAOS-EXE-07": "Tested",
+  "AAOS-KNO-01": "Approved",
+  "AAOS-KNO-02": "Approved",
+  "AAOS-KNO-03": "Tested",
+  "AAOS-KNO-04": "Tested",
+  "AAOS-KNO-05": "Tested",
+  "AAOS-KNO-06": "Approved",
+  "AAOS-GL-01": "Tested",
+  "AAOS-GL-02": "Tested",
+  "AAOS-GL-03": "Deferred",
+  "AAOS-GL-04": "Deferred",
+  "AAOS-GL-05": "Deferred",
+  "AAOS-AP-01": "Deferred",
+  "AAOS-AP-02": "Deferred",
+  "AAOS-AR-01": "Deferred",
+  "AAOS-AR-02": "Deferred",
+  "AAOS-BNK-01": "Tested",
+  "AAOS-BNK-02": "Tested",
+  "AAOS-BNK-03": "Tested",
+  "AAOS-BNK-04": "Deferred",
+  "AAOS-BNK-05": "Deferred",
+  "AAOS-BNK-06": "Deferred",
+  "AAOS-CLS-01": "Tested",
+  "AAOS-CLS-02": "Tested",
+  "AAOS-CLS-03": "Deferred",
+  "AAOS-RPT-01": "Deferred",
+  "AAOS-RPT-02": "Deferred",
+  "AAOS-INT-01": "Deferred",
+  "AAOS-INT-02": "Approved",
+  "AAOS-INT-03": "Approved",
+  "AAOS-INT-04": "Approved",
+  "AAOS-INT-05": "Approved",
+  "AAOS-INT-06": "Deferred",
+  "AAOS-CTL-01": "Tested",
+  "AAOS-CTL-02": "Deferred",
+  "AAOS-CTL-03": "Deferred",
+  "AAOS-CTL-04": "Tested",
+  "AAOS-CTL-05": "Tested",
+  "AAOS-CTL-06": "Tested",
+  "AAOS-CTL-07": "Tested",
+  "AAOS-CTL-08": "Tested",
+  "AAOS-CTL-09": "Tested",
+  "AAOS-CTL-10": "Tested",
+  "AAOS-CTL-11": "Deferred",
+  "AAOS-CTL-12": "Deferred",
+  "AAOS-CTL-13": "Deferred",
+  "AAOS-BB-01": "Approved",
+  "AAOS-BB-02": "Approved",
+  "AAOS-BB-03": "Approved",
+  "AAOS-BB-04": "Approved",
+  "AAOS-BB-05": "Approved",
+  "AAOS-BB-06": "Approved",
+  "AAOS-BB-07": "Proposed",
+  "AAOS-BRF-01": "Approved",
+  "AAOS-BRF-02": "Approved",
+  "AAOS-BRF-03": "Approved",
+  "AAOS-OBS-01": "Approved",
+  "AAOS-OBS-02": "Approved",
+  "AAOS-OBS-03": "Approved",
+  "AAOS-OBS-04": "Tested",
+  "AAOS-COM-01": "Approved",
+  "AAOS-COM-02": "Approved"
+ }
+}

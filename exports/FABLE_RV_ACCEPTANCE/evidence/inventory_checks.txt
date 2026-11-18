@@ -1,0 +1,13 @@
+1. correction pass: baseline exports/FABLE_CORRECTIONS_AND_BATCH_2_REVIEW_BUNDLE.zip
+   runtime/test files changed (computed): 31 | removed: [] | web assets among them: ['accounting_agent/web/app.js', 'accounting_agent/web/index.html']
+   inventory entries: 42 | computed changes not listed: [] | listed current-hash mismatches: [] | listed baseline-hash mismatches: []
+   patch files: 42 | computed changes not in patch: []
+2. cumulative since Batch 1: baseline exports/FABLE_BATCH_1_REVIEW_BUNDLE.zip
+   runtime/test files changed (computed): 41 | removed: [] | web assets among them: ['accounting_agent/web/app.js', 'accounting_agent/web/index.html']
+   inventory entries: 55 | computed changes not listed: [] | listed current-hash mismatches: [] | listed baseline-hash mismatches: []
+   patch files: 55 | computed changes not in patch: []
+3. platform and HTTP test methods retained, by baseline
+   initial 0.1.0 bundle         methods 40 | still present 40 | with fewer assertions now: []
+   Batch 1 baseline archive     methods 41 | still present 41 | with fewer assertions now: []
+   reviewed Batch 2 checkpoint  methods 43 | still present 43 | with fewer assertions now: []
+   test methods defined now: 136 | expected-failure or skip markers: 0

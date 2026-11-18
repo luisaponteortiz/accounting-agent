@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-16",
+  "purpose": "Exact RB/PR independent verification prompt and administrative V2 packaging only",
+  "previous_correction_bundle": "exports/FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "previous_correction_bundle_sha256": "2b47c3f47d5a20461e5a78f67317c1707269d0b4d85998a3ddb795292f26014d",
+  "frozen_combined_bundle_sha256": "b154db10b8cee32066f089f0f878e7d2d3a3f33ca44e7831318f66faccaf61ea",
+  "prompt_file": "FABLE_RB_REVIEW_PROMPT.md",
+  "prompt_sha256": "85d57d6c18bc492159909a9839f1384f40f2380f9c332b074593b6e3207c0808",
+  "changed_administrative_documents": [
+    {
+      "path": "DECISIONS.md",
+      "before_sha256": "366f7d543d04bf8f8eb07ce87a1c9b898dc93996f8cb1e560dcba6f5dd7d7774",
+      "after_sha256": "f9b1d97d2c249245df27d37e3df2067a2128ad6a3746a53f5732d5793e860979"
+    },
+    {
+      "path": "FABLE_RB_CORRECTIONS_HANDOFF.md",
+      "before_sha256": "01f2873a0aeab11f7575e27cbbd5cf533a39a5c1efad902eabdd5b16b14287ed",
+      "after_sha256": "34dafd57875344ecb6e633983388c6bed85c5ca0699335f559eb0c075a110a93"
+    },
+    {
+      "path": "PROGRESS.md",
+      "before_sha256": "b41b3aeb45764fce34f862329065500ddfbf54e6a9469a51c0f3fe5b441c8167",
+      "after_sha256": "21503394490084dae286e9b61b8d770d2732216fff67a6569e96213bf6a3f57b"
+    },
+    {
+      "path": "README.md",
+      "before_sha256": "9be350d3827aa0bcb17ed5c1229edc11a87bb17269151b55f5300020b5d7e26e",
+      "after_sha256": "996be207a1cedb2edd29c56f02f1b34610573f6fb083db404daa6b6a123876b6"
+    }
+  ],
+  "unchanged_source_test_script_review_reference_files": 77,
+  "accounting_source_tests_fixtures_gate_assertions_changed": false,
+  "requirements_register_changed": false,
+  "unchanged_requirements_sha256": "4b62c91bbee3cdfa2d3cdad899e238c1e201250cdfecf6cbe16fef7bac3b1f49",
+  "runtime_validation": "Prior complete 174-test and gate checkpoint is retained. No complete test suite or accounting gate rerun for prompt packaging.",
+  "new_check": {
+    "command": "make check",
+    "exit": 0,
+    "log": "docs/corrections_rb/V2-packaging-check.txt"
+  },
+  "generated_artifacts": "Refresh change inventory/documentation patch and new archive manifest; the source-and-tests patch must remain identical.",
+  "authority": "No new independent acceptance, G0, Batch 3 or live operating authority"
+}

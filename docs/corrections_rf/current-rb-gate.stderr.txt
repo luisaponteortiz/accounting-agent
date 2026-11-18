@@ -1,0 +1,23 @@
+test_all_14_unmodified_independent_probes_report_OK (tests.test_ra_review_gate.RAReviewGate) ... ok
+test_combined_frozen_submission_cannot_be_overwritten (tests.test_ra_review_gate.RAReviewGate) ... ok
+test_returned_inputs_and_submitted_archives_remain_unchanged (tests.test_ra_review_gate.RAReviewGate) ... ERROR
+
+======================================================================
+ERROR: test_returned_inputs_and_submitted_archives_remain_unchanged (tests.test_ra_review_gate.RAReviewGate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-gates/tests/test_ra_review_gate.py", line 23, in test_returned_inputs_and_submitted_archives_remain_unchanged
+    self.assertEqual(hashlib.sha256((ROOT/name).read_bytes()).hexdigest(),expected,name)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1249, in read_bytes
+    with self.open(mode='rb') as f:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1242, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1110, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/aaos-rf-gates/exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_RESPONSE.zip'
+
+----------------------------------------------------------------------
+Ran 3 tests in 16.308s
+
+FAILED (errors=1)
+make: *** [rb-gate] Error 1

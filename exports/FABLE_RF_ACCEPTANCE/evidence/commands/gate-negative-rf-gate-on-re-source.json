@@ -1,0 +1,1 @@
+{"label":"gate-negative-rf-gate-on-re-source","cwd":"/private/tmp/claude-501/rf/base_re","argv":"python3 scripts/verify_re_acceptance_review.py","started_utc":"2026-11-17T02:18:28Z","elapsed_seconds":173,"exit_code":1}

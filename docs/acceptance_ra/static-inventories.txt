@@ -1,0 +1,4 @@
+docs/batch2 : complete; no omitted runtime/test files or mismatched hashes; 41 baseline methods retained; 63 listed changes
+docs/reverification : complete; no omitted runtime/test files or mismatched hashes; 43 baseline methods retained; 51 listed changes
+docs/acceptance_ra : complete; no omitted runtime/test files or mismatched hashes; 43 baseline methods retained; 27 listed changes
+All 57 preserved input/archive hashes match. No expected failure markers: True

@@ -1,0 +1,74 @@
+test_RC01_withdrawal_then_fresh_or_late_claim_and_relock (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... test_RC02_unchanged_chain_adds_no_bindings_moves_or_accounting_events (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+test_RC03_open_target_clears_unresolved_without_quarantine (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... FAIL
+test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... test_RC03_pending_cycle_is_not_linked (tests.test_review_corrections_rc.ReviewCorrectionsRC) ... ok
+
+======================================================================
+FAIL: test_RC01_withdrawal_then_fresh_or_late_claim_and_relock (tests.test_review_corrections_rc.ReviewCorrectionsRC) (late_claim=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 56, in test_RC01_withdrawal_then_fresh_or_late_claim_and_relock
+    self.assertTrue(any(e['source_key'] == f.CARD+':A1' and e['reason'] == 'LATE_ACTIVITY_IN_LOCKED_PERIOD'
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RC01_withdrawal_then_fresh_or_late_claim_and_relock (tests.test_review_corrections_rc.ReviewCorrectionsRC) (late_claim=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 56, in test_RC01_withdrawal_then_fresh_or_late_claim_and_relock
+    self.assertTrue(any(e['source_key'] == f.CARD+':A1' and e['reason'] == 'LATE_ACTIVITY_IN_LOCKED_PERIOD'
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal (tests.test_review_corrections_rc.ReviewCorrectionsRC) (terminal_approved=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 89, in test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal
+    state = self.held(o, f.CARD+':B1', f.CARD+':C1', 'receipt-C1')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 29, in held
+    self.assertTrue(set(keys) <= held, (keys, held))
+AssertionError: False is not true : (('demo_card_001:B1', 'demo_card_001:C1', 'receipt-C1'), {'demo_card_001:B1'})
+
+======================================================================
+FAIL: test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal (tests.test_review_corrections_rc.ReviewCorrectionsRC) (terminal_approved=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 89, in test_RC02_middle_late_link_rechecks_eligible_and_approved_terminal
+    state = self.held(o, f.CARD+':B1', f.CARD+':C1', 'receipt-C1')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 29, in held
+    self.assertTrue(set(keys) <= held, (keys, held))
+AssertionError: False is not true : (('demo_card_001:B1', 'demo_card_001:C1', 'receipt-C1'), {'demo_card_001:B1'})
+
+======================================================================
+FAIL: test_RC03_open_target_clears_unresolved_without_quarantine (tests.test_review_corrections_rc.ReviewCorrectionsRC)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 135, in test_RC03_open_target_clears_unresolved_without_quarantine
+    self.assertEqual(ctx['unresolved_transitions'], {})
+AssertionError: {'demo_card_001:Y': {'snapshot_id': 9, 'target_key': 'demo_card_001:X'}} != {}
+- {'demo_card_001:Y': {'snapshot_id': 9, 'target_key': 'demo_card_001:X'}}
++ {}
+
+======================================================================
+FAIL: test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced (tests.test_review_corrections_rc.ReviewCorrectionsRC) (replaced_first=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 121, in test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced
+    self.held(o, f.CARD+':Y')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 29, in held
+    self.assertTrue(set(keys) <= held, (keys, held))
+AssertionError: False is not true : (('demo_card_001:Y',), {'receipt-X', 'demo_card_001:X'})
+
+======================================================================
+FAIL: test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced (tests.test_review_corrections_rc.ReviewCorrectionsRC) (replaced_first=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 124, in test_RC03_pending_claim_resolves_before_or_after_claimant_is_replaced
+    self.held(o, f.CARD+':X', f.CARD+':Z', 'receipt-Z')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rc.py", line 29, in held
+    self.assertTrue(set(keys) <= held, (keys, held))
+AssertionError: False is not true : (('demo_card_001:X', 'demo_card_001:Z', 'receipt-Z'), {'receipt-X', 'demo_card_001:X'})
+
+----------------------------------------------------------------------
+Ran 6 tests in 3.938s
+
+FAILED (failures=7)

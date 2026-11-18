@@ -1,0 +1,132 @@
+[
+  {
+    "label": "consecutive-make-test-1",
+    "exit_code": 0,
+    "expected_methods": 241,
+    "reported_counts": [
+      [
+        "241",
+        "987.984"
+      ]
+    ],
+    "HTTP_methods_executed": 11,
+    "HTTP_setup": [
+      {
+        "class": "test_http.HTTPCase",
+        "total_seconds": 2.424715,
+        "worker_wait_seconds": 2.268372,
+        "setup_failed": false
+      }
+    ],
+    "start_load_average": [
+      2.11181640625,
+      2.94140625,
+      3.875
+    ],
+    "elapsed_seconds": 988.615
+  },
+  {
+    "label": "consecutive-make-test-2",
+    "exit_code": 0,
+    "expected_methods": 241,
+    "reported_counts": [
+      [
+        "241",
+        "987.862"
+      ]
+    ],
+    "HTTP_methods_executed": 11,
+    "HTTP_setup": [
+      {
+        "class": "test_http.HTTPCase",
+        "total_seconds": 2.413763,
+        "worker_wait_seconds": 2.259996,
+        "setup_failed": false
+      }
+    ],
+    "start_load_average": [
+      3.34521484375,
+      3.1982421875,
+      3.27783203125
+    ],
+    "elapsed_seconds": 988.438
+  },
+  {
+    "label": "consecutive-make-test-3",
+    "exit_code": 0,
+    "expected_methods": 241,
+    "reported_counts": [
+      [
+        "241",
+        "994.556"
+      ]
+    ],
+    "HTTP_methods_executed": 11,
+    "HTTP_setup": [
+      {
+        "class": "test_http.HTTPCase",
+        "total_seconds": 2.507561,
+        "worker_wait_seconds": 2.355119,
+        "setup_failed": false
+      }
+    ],
+    "start_load_average": [
+      3.13525390625,
+      3.10205078125,
+      3.099609375
+    ],
+    "elapsed_seconds": 995.153
+  },
+  {
+    "label": "consecutive-make-test-4",
+    "exit_code": 0,
+    "expected_methods": 241,
+    "reported_counts": [
+      [
+        "241",
+        "1007.017"
+      ]
+    ],
+    "HTTP_methods_executed": 11,
+    "HTTP_setup": [
+      {
+        "class": "test_http.HTTPCase",
+        "total_seconds": 2.592605,
+        "worker_wait_seconds": 2.436205,
+        "setup_failed": false
+      }
+    ],
+    "start_load_average": [
+      3.271484375,
+      3.38330078125,
+      3.20263671875
+    ],
+    "elapsed_seconds": 1007.497
+  },
+  {
+    "label": "consecutive-make-test-5",
+    "exit_code": 0,
+    "expected_methods": 241,
+    "reported_counts": [
+      [
+        "241",
+        "1008.262"
+      ]
+    ],
+    "HTTP_methods_executed": 11,
+    "HTTP_setup": [
+      {
+        "class": "test_http.HTTPCase",
+        "total_seconds": 2.291841,
+        "worker_wait_seconds": 2.117719,
+        "setup_failed": false
+      }
+    ],
+    "start_load_average": [
+      3.20849609375,
+      3.32373046875,
+      3.259765625
+    ],
+    "elapsed_seconds": 1008.844
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "command": "make check",
+    "exit": 0,
+    "elapsed_seconds": 0.75,
+    "log": "docs/corrections_rb/final-check.txt"
+  },
+  {
+    "command": "make batch2-gate",
+    "exit": 0,
+    "elapsed_seconds": 84.12,
+    "log": "docs/corrections_rb/final-batch2-gate.txt"
+  },
+  {
+    "command": "make reverification-gate",
+    "exit": 0,
+    "elapsed_seconds": 50.83,
+    "log": "docs/corrections_rb/final-reverification-gate.txt"
+  },
+  {
+    "command": "make acceptance-gate",
+    "exit": 0,
+    "elapsed_seconds": 46.44,
+    "log": "docs/corrections_rb/final-acceptance-gate.txt"
+  },
+  {
+    "command": "make rb-gate",
+    "exit": 0,
+    "elapsed_seconds": 28.68,
+    "log": "docs/corrections_rb/final-rb-gate.txt"
+  }
+]

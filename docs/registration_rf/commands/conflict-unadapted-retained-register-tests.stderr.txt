@@ -1,0 +1,107 @@
+test_PRV02_nonexistent_test_ticket_and_arbitrary_token_are_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV03_failed_verdict_cannot_be_promoted (tests.test_product_requirements.ProductRequirements) ... test_PRV03_self_asserted_independent_verification_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV04_shared_web_and_python_are_checked_but_fixtures_are_exempt (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV05_approved_cannot_depend_unconditionally_on_proposed (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV06_unstarted_or_deferred_dependency_needs_local_condition (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV07_scope_disposition_must_match_table (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV08_stray_dependency_punctuation_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV10_every_shared_field_except_trace_uses_client_section_terms (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV12_both_reviewer_authority_files_are_hash_pinned (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV12_omitted_changed_and_invented_results_cannot_promote_records (tests.test_product_requirements.ProductRequirements) ... test_PRV12_stale_checkpoint_metadata_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV13_terms_must_include_the_display_name_in_the_client_heading (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (tests.test_product_requirements.ProductRequirements) ... FAIL
+test_PRV15_result_row_swaps_and_reversal_are_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_current_register_has_split_states_and_all_backlog_tickets (tests.test_product_requirements.ProductRequirements) ... ok
+test_dependency_cycle_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_developer_tested_without_named_tests_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_duplicate_id_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_established_id_cannot_be_silently_renamed (tests.test_product_requirements.ProductRequirements) ... ok
+test_independent_verification_requires_review_and_checkpoint (tests.test_product_requirements.ProductRequirements) ... ok
+test_missing_backlog_ticket_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_missing_field_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_mixed_implementation_state_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_shared_criteria_cannot_impose_first_client_facts (tests.test_product_requirements.ProductRequirements) ... ok
+test_unknown_dependency_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF) ... FAIL
+test_fourth_changed_verdict_controls_even_with_matching_project_results (tests.test_product_requirements_rf.ProductRequirementsRF) ... FAIL
+test_fourth_results_and_report_are_hash_pinned (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused (tests.test_product_requirements_rf.ProductRequirementsRF) ... test_results_following_an_altered_and_repinned_older_authority_are_rejected (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+
+======================================================================
+FAIL: test_PRV03_failed_verdict_cannot_be_promoted (tests.test_product_requirements.ProductRequirements) (state='Developer-tested')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements.py", line 81, in test_PRV03_failed_verdict_cannot_be_promoted
+    self.rejects(self.changed_field('AAOS-BNK-03','Implementation state',state),'independent Verification failed cannot be promoted')
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements.py", line 17, in rejects
+    with self.assertRaisesRegex(ValueError,message):validate_register(text,ROOT)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_PRV03_failed_verdict_cannot_be_promoted (tests.test_product_requirements.ProductRequirements) (state='Independently verified')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements.py", line 81, in test_PRV03_failed_verdict_cannot_be_promoted
+    self.rejects(self.changed_field('AAOS-BNK-03','Implementation state',state),'independent Verification failed cannot be promoted')
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements.py", line 17, in rejects
+    with self.assertRaisesRegex(ValueError,message):validate_register(text,ROOT)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_PRV03_failed_verdict_cannot_be_promoted (tests.test_product_requirements.ProductRequirements) (state='Implemented')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements.py", line 81, in test_PRV03_failed_verdict_cannot_be_promoted
+    self.rejects(self.changed_field('AAOS-BNK-03','Implementation state',state),'independent Verification failed cannot be promoted')
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements.py", line 17, in rejects
+    with self.assertRaisesRegex(ValueError,message):validate_register(text,ROOT)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_PRV12_omitted_changed_and_invented_results_cannot_promote_records (tests.test_product_requirements.ProductRequirements) (identifier='AAOS-BNK-03', state='Independently verified')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements.py", line 150, in test_PRV12_omitted_changed_and_invented_results_cannot_promote_records
+    validate_register(text,root)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (tests.test_product_requirements.ProductRequirements)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements.py", line 218, in test_PRV14_third_authority_is_pinned_and_latest_verdict_controls
+    with self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):validate_register(self.text,root)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements_rf.py", line 37, in test_fourth_authority_wins_and_all_older_authorities_cannot_override
+    self.assertTrue(all(r['report_path']==REPORT for r in original.values()))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_fourth_changed_verdict_controls_even_with_matching_project_results (tests.test_product_requirements_rf.ProductRequirementsRF)
+----------------------------------------------------------------------
+ValueError: Independent results disagree with reviewer verdict: AAOS-KNO-04
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements_rf.py", line 62, in test_fourth_changed_verdict_controls_even_with_matching_project_results
+    with self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):cpr.validate_register(self.text,root)
+AssertionError: "independent Verification failed cannot be promoted" does not match "Independent results disagree with reviewer verdict: AAOS-KNO-04"
+
+======================================================================
+FAIL: test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused (tests.test_product_requirements_rf.ProductRequirementsRF) (fault='changed')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-luis--claude-spares-spare-nI79ST/fa3e6eac-7b47-4039-b7e7-e4d310e4b30f/scratchpad/vC/tests/test_product_requirements_rf.py", line 78, in test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused
+    with self.subTest(fault=fault),self.assertRaisesRegex(ValueError,'reviewer|Independent'):cpr.validate_register(self.text,root)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 31 tests in 61.119s
+
+FAILED (failures=8)

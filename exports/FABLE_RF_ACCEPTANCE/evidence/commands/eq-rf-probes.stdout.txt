@@ -1,0 +1,468 @@
+
+=== G1a [RF-01] claim-free older / same-order conflicting message, retained (twice), then re-sent with the first claim: sequence and timestamp order, known and unknown target, eligible and approved row, claim outside and inside the row data
+    assert [sequence outside known eligible older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence outside known eligible older] re-sent with the claim: changed=True   yes
+    assert [sequence outside known eligible older] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence outside known eligible older] source versions added: 0               yes
+    assert [sequence outside known eligible older] claim recorded exactly once            yes
+    assert [sequence outside known eligible older] earlier history is an unchanged prefix yes
+    assert [sequence outside known eligible older] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence outside known eligible older] known target: linked and held with its receipt straight after the claim yes
+    assert [sequence outside known eligible older] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence outside known eligible older] November approval of A1 governs; nothing approved twice yes
+    assert [sequence outside known eligible older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence outside known eligible older] audit chain verifies                   yes
+    assert [sequence outside known eligible same-order-conflict] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence outside known eligible same-order-conflict] re-sent with the claim: changed=True yes
+    assert [sequence outside known eligible same-order-conflict] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence outside known eligible same-order-conflict] source versions added: 0 yes
+    assert [sequence outside known eligible same-order-conflict] claim recorded exactly once yes
+    assert [sequence outside known eligible same-order-conflict] earlier history is an unchanged prefix yes
+    assert [sequence outside known eligible same-order-conflict] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence outside known eligible same-order-conflict] known target: linked and held with its receipt straight after the claim yes
+    assert [sequence outside known eligible same-order-conflict] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence outside known eligible same-order-conflict] November approval of A1 governs; nothing approved twice yes
+    assert [sequence outside known eligible same-order-conflict] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence outside known eligible same-order-conflict] audit chain verifies     yes
+    assert [sequence outside known approved older] Q approved and governing before the late claim yes
+    assert [sequence outside known approved older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence outside known approved older] the claim-free old message leaves the approval governing yes
+    assert [sequence outside known approved older] re-sent with the claim: changed=True   yes
+    assert [sequence outside known approved older] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence outside known approved older] source versions added: 0               yes
+    assert [sequence outside known approved older] claim recorded exactly once            yes
+    assert [sequence outside known approved older] earlier history is an unchanged prefix yes
+    assert [sequence outside known approved older] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence outside known approved older] known target: linked and held with its receipt straight after the claim yes
+    assert [sequence outside known approved older] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence outside known approved older] November approval of A1 governs; nothing approved twice yes
+    assert [sequence outside known approved older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence outside known approved older] audit chain verifies                   yes
+    assert [sequence outside known approved same-order-conflict] Q approved and governing before the late claim yes
+    assert [sequence outside known approved same-order-conflict] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence outside known approved same-order-conflict] the claim-free old message leaves the approval governing yes
+    assert [sequence outside known approved same-order-conflict] re-sent with the claim: changed=True yes
+    assert [sequence outside known approved same-order-conflict] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence outside known approved same-order-conflict] source versions added: 0 yes
+    assert [sequence outside known approved same-order-conflict] claim recorded exactly once yes
+    assert [sequence outside known approved same-order-conflict] earlier history is an unchanged prefix yes
+    assert [sequence outside known approved same-order-conflict] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence outside known approved same-order-conflict] known target: linked and held with its receipt straight after the claim yes
+    assert [sequence outside known approved same-order-conflict] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence outside known approved same-order-conflict] November approval of A1 governs; nothing approved twice yes
+    assert [sequence outside known approved same-order-conflict] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence outside known approved same-order-conflict] audit chain verifies     yes
+    assert [sequence outside unknown eligible older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence outside unknown eligible older] re-sent with the claim: changed=True yes
+    assert [sequence outside unknown eligible older] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence outside unknown eligible older] source versions added: 0             yes
+    assert [sequence outside unknown eligible older] claim recorded exactly once          yes
+    assert [sequence outside unknown eligible older] earlier history is an unchanged prefix yes
+    assert [sequence outside unknown eligible older] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence outside unknown eligible older] unknown target: no link yet, recorded as unresolved yes
+    assert [sequence outside unknown eligible older] unknown target: blocked as unresolved, not eligible, approval refused yes
+    assert [sequence outside unknown eligible older] target arrives: linked and held with its receipt at once, without a re-send yes
+    assert [sequence outside unknown eligible older] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence outside unknown eligible older] November approval of A1 governs; nothing approved twice yes
+    assert [sequence outside unknown eligible older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence outside unknown eligible older] audit chain verifies                 yes
+    assert [sequence outside unknown eligible same-order-conflict] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence outside unknown eligible same-order-conflict] re-sent with the claim: changed=True yes
+    assert [sequence outside unknown eligible same-order-conflict] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence outside unknown eligible same-order-conflict] source versions added: 0 yes
+    assert [sequence outside unknown eligible same-order-conflict] claim recorded exactly once yes
+    assert [sequence outside unknown eligible same-order-conflict] earlier history is an unchanged prefix yes
+    assert [sequence outside unknown eligible same-order-conflict] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence outside unknown eligible same-order-conflict] unknown target: no link yet, recorded as unresolved yes
+    assert [sequence outside unknown eligible same-order-conflict] unknown target: blocked as unresolved, not eligible, approval refused yes
+    assert [sequence outside unknown eligible same-order-conflict] target arrives: linked and held with its receipt at once, without a re-send yes
+    assert [sequence outside unknown eligible same-order-conflict] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence outside unknown eligible same-order-conflict] November approval of A1 governs; nothing approved twice yes
+    assert [sequence outside unknown eligible same-order-conflict] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence outside unknown eligible same-order-conflict] audit chain verifies   yes
+    assert [sequence outside unknown approved older] Q approved and governing before the late claim yes
+    assert [sequence outside unknown approved older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence outside unknown approved older] the claim-free old message leaves the approval governing yes
+    assert [sequence outside unknown approved older] re-sent with the claim: changed=True yes
+    assert [sequence outside unknown approved older] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence outside unknown approved older] source versions added: 0             yes
+    assert [sequence outside unknown approved older] claim recorded exactly once          yes
+    assert [sequence outside unknown approved older] earlier history is an unchanged prefix yes
+    assert [sequence outside unknown approved older] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence outside unknown approved older] unknown target: no link yet, recorded as unresolved yes
+    assert [sequence outside unknown approved older] unknown target: blocked as unresolved, not eligible, approval refused yes
+    assert [sequence outside unknown approved older] target arrives: linked and held with its receipt at once, without a re-send yes
+    assert [sequence outside unknown approved older] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence outside unknown approved older] November approval of A1 governs; nothing approved twice yes
+    assert [sequence outside unknown approved older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence outside unknown approved older] audit chain verifies                 yes
+    assert [sequence outside unknown approved same-order-conflict] Q approved and governing before the late claim yes
+    assert [sequence outside unknown approved same-order-conflict] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence outside unknown approved same-order-conflict] the claim-free old message leaves the approval governing yes
+    assert [sequence outside unknown approved same-order-conflict] re-sent with the claim: changed=True yes
+    assert [sequence outside unknown approved same-order-conflict] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence outside unknown approved same-order-conflict] source versions added: 0 yes
+    assert [sequence outside unknown approved same-order-conflict] claim recorded exactly once yes
+    assert [sequence outside unknown approved same-order-conflict] earlier history is an unchanged prefix yes
+    assert [sequence outside unknown approved same-order-conflict] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence outside unknown approved same-order-conflict] unknown target: no link yet, recorded as unresolved yes
+    assert [sequence outside unknown approved same-order-conflict] unknown target: blocked as unresolved, not eligible, approval refused yes
+    assert [sequence outside unknown approved same-order-conflict] target arrives: linked and held with its receipt at once, without a re-send yes
+    assert [sequence outside unknown approved same-order-conflict] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence outside unknown approved same-order-conflict] November approval of A1 governs; nothing approved twice yes
+    assert [sequence outside unknown approved same-order-conflict] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence outside unknown approved same-order-conflict] audit chain verifies   yes
+    assert [sequence inside known eligible older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence inside known eligible older] re-sent with the claim: changed=True    yes
+    assert [sequence inside known eligible older] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence inside known eligible older] source versions added: 1                yes
+    assert [sequence inside known eligible older] claim recorded exactly once             yes
+    assert [sequence inside known eligible older] earlier history is an unchanged prefix  yes
+    assert [sequence inside known eligible older] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence inside known eligible older] known target: linked and held with its receipt straight after the claim yes
+    assert [sequence inside known eligible older] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence inside known eligible older] November approval of A1 governs; nothing approved twice yes
+    assert [sequence inside known eligible older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence inside known eligible older] audit chain verifies                    yes
+    assert [sequence inside known approved older] Q approved and governing before the late claim yes
+    assert [sequence inside known approved older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence inside known approved older] the claim-free old message leaves the approval governing yes
+    assert [sequence inside known approved older] re-sent with the claim: changed=True    yes
+    assert [sequence inside known approved older] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence inside known approved older] source versions added: 1                yes
+    assert [sequence inside known approved older] claim recorded exactly once             yes
+    assert [sequence inside known approved older] earlier history is an unchanged prefix  yes
+    assert [sequence inside known approved older] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence inside known approved older] known target: linked and held with its receipt straight after the claim yes
+    assert [sequence inside known approved older] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence inside known approved older] November approval of A1 governs; nothing approved twice yes
+    assert [sequence inside known approved older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence inside known approved older] audit chain verifies                    yes
+    assert [sequence inside unknown eligible older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence inside unknown eligible older] re-sent with the claim: changed=True  yes
+    assert [sequence inside unknown eligible older] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence inside unknown eligible older] source versions added: 1              yes
+    assert [sequence inside unknown eligible older] claim recorded exactly once           yes
+    assert [sequence inside unknown eligible older] earlier history is an unchanged prefix yes
+    assert [sequence inside unknown eligible older] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence inside unknown eligible older] unknown target: no link yet, recorded as unresolved yes
+    assert [sequence inside unknown eligible older] unknown target: blocked as unresolved, not eligible, approval refused yes
+    assert [sequence inside unknown eligible older] target arrives: linked and held with its receipt at once, without a re-send yes
+    assert [sequence inside unknown eligible older] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence inside unknown eligible older] November approval of A1 governs; nothing approved twice yes
+    assert [sequence inside unknown eligible older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence inside unknown eligible older] audit chain verifies                  yes
+    assert [sequence inside unknown approved older] Q approved and governing before the late claim yes
+    assert [sequence inside unknown approved older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [sequence inside unknown approved older] the claim-free old message leaves the approval governing yes
+    assert [sequence inside unknown approved older] re-sent with the claim: changed=True  yes
+    assert [sequence inside unknown approved older] governing head unchanged (same snapshot, amount, order) yes
+    assert [sequence inside unknown approved older] source versions added: 1              yes
+    assert [sequence inside unknown approved older] claim recorded exactly once           yes
+    assert [sequence inside unknown approved older] earlier history is an unchanged prefix yes
+    assert [sequence inside unknown approved older] no approval governs in December straight after the claim (before any new run) yes
+    assert [sequence inside unknown approved older] unknown target: no link yet, recorded as unresolved yes
+    assert [sequence inside unknown approved older] unknown target: blocked as unresolved, not eligible, approval refused yes
+    assert [sequence inside unknown approved older] target arrives: linked and held with its receipt at once, without a re-send yes
+    assert [sequence inside unknown approved older] after preparation: held under November with its receipt, no December artifact yes
+    assert [sequence inside unknown approved older] November approval of A1 governs; nothing approved twice yes
+    assert [sequence inside unknown approved older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [sequence inside unknown approved older] audit chain verifies                  yes
+    assert [timestamp outside known eligible older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [timestamp outside known eligible older] re-sent with the claim: changed=True  yes
+    assert [timestamp outside known eligible older] governing head unchanged (same snapshot, amount, order) yes
+    assert [timestamp outside known eligible older] source versions added: 0              yes
+    assert [timestamp outside known eligible older] claim recorded exactly once           yes
+    assert [timestamp outside known eligible older] earlier history is an unchanged prefix yes
+    assert [timestamp outside known eligible older] no approval governs in December straight after the claim (before any new run) yes
+    assert [timestamp outside known eligible older] known target: linked and held with its receipt straight after the claim yes
+    assert [timestamp outside known eligible older] after preparation: held under November with its receipt, no December artifact yes
+    assert [timestamp outside known eligible older] November approval of A1 governs; nothing approved twice yes
+    assert [timestamp outside known eligible older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [timestamp outside known eligible older] audit chain verifies                  yes
+    assert [timestamp outside known eligible same-order-conflict] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [timestamp outside known eligible same-order-conflict] re-sent with the claim: changed=True yes
+    assert [timestamp outside known eligible same-order-conflict] governing head unchanged (same snapshot, amount, order) yes
+    assert [timestamp outside known eligible same-order-conflict] source versions added: 0 yes
+    assert [timestamp outside known eligible same-order-conflict] claim recorded exactly once yes
+    assert [timestamp outside known eligible same-order-conflict] earlier history is an unchanged prefix yes
+    assert [timestamp outside known eligible same-order-conflict] no approval governs in December straight after the claim (before any new run) yes
+    assert [timestamp outside known eligible same-order-conflict] known target: linked and held with its receipt straight after the claim yes
+    assert [timestamp outside known eligible same-order-conflict] after preparation: held under November with its receipt, no December artifact yes
+    assert [timestamp outside known eligible same-order-conflict] November approval of A1 governs; nothing approved twice yes
+    assert [timestamp outside known eligible same-order-conflict] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [timestamp outside known eligible same-order-conflict] audit chain verifies    yes
+    assert [timestamp outside known approved older] Q approved and governing before the late claim yes
+    assert [timestamp outside known approved older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [timestamp outside known approved older] the claim-free old message leaves the approval governing yes
+    assert [timestamp outside known approved older] re-sent with the claim: changed=True  yes
+    assert [timestamp outside known approved older] governing head unchanged (same snapshot, amount, order) yes
+    assert [timestamp outside known approved older] source versions added: 0              yes
+    assert [timestamp outside known approved older] claim recorded exactly once           yes
+    assert [timestamp outside known approved older] earlier history is an unchanged prefix yes
+    assert [timestamp outside known approved older] no approval governs in December straight after the claim (before any new run) yes
+    assert [timestamp outside known approved older] known target: linked and held with its receipt straight after the claim yes
+    assert [timestamp outside known approved older] after preparation: held under November with its receipt, no December artifact yes
+    assert [timestamp outside known approved older] November approval of A1 governs; nothing approved twice yes
+    assert [timestamp outside known approved older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [timestamp outside known approved older] audit chain verifies                  yes
+    assert [timestamp outside known approved same-order-conflict] Q approved and governing before the late claim yes
+    assert [timestamp outside known approved same-order-conflict] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [timestamp outside known approved same-order-conflict] the claim-free old message leaves the approval governing yes
+    assert [timestamp outside known approved same-order-conflict] re-sent with the claim: changed=True yes
+    assert [timestamp outside known approved same-order-conflict] governing head unchanged (same snapshot, amount, order) yes
+    assert [timestamp outside known approved same-order-conflict] source versions added: 0 yes
+    assert [timestamp outside known approved same-order-conflict] claim recorded exactly once yes
+    assert [timestamp outside known approved same-order-conflict] earlier history is an unchanged prefix yes
+    assert [timestamp outside known approved same-order-conflict] no approval governs in December straight after the claim (before any new run) yes
+    assert [timestamp outside known approved same-order-conflict] known target: linked and held with its receipt straight after the claim yes
+    assert [timestamp outside known approved same-order-conflict] after preparation: held under November with its receipt, no December artifact yes
+    assert [timestamp outside known approved same-order-conflict] November approval of A1 governs; nothing approved twice yes
+    assert [timestamp outside known approved same-order-conflict] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [timestamp outside known approved same-order-conflict] audit chain verifies    yes
+    assert [timestamp outside unknown eligible older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [timestamp outside unknown eligible older] re-sent with the claim: changed=True yes
+    assert [timestamp outside unknown eligible older] governing head unchanged (same snapshot, amount, order) yes
+    assert [timestamp outside unknown eligible older] source versions added: 0            yes
+    assert [timestamp outside unknown eligible older] claim recorded exactly once         yes
+    assert [timestamp outside unknown eligible older] earlier history is an unchanged prefix yes
+    assert [timestamp outside unknown eligible older] no approval governs in December straight after the claim (before any new run) yes
+    assert [timestamp outside unknown eligible older] unknown target: no link yet, recorded as unresolved yes
+    assert [timestamp outside unknown eligible older] unknown target: blocked as unresolved, not eligible, approval refused yes
+    assert [timestamp outside unknown eligible older] target arrives: linked and held with its receipt at once, without a re-send yes
+    assert [timestamp outside unknown eligible older] after preparation: held under November with its receipt, no December artifact yes
+    assert [timestamp outside unknown eligible older] November approval of A1 governs; nothing approved twice yes
+    assert [timestamp outside unknown eligible older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [timestamp outside unknown eligible older] audit chain verifies                yes
+    assert [timestamp outside unknown eligible same-order-conflict] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [timestamp outside unknown eligible same-order-conflict] re-sent with the claim: changed=True yes
+    assert [timestamp outside unknown eligible same-order-conflict] governing head unchanged (same snapshot, amount, order) yes
+    assert [timestamp outside unknown eligible same-order-conflict] source versions added: 0 yes
+    assert [timestamp outside unknown eligible same-order-conflict] claim recorded exactly once yes
+    assert [timestamp outside unknown eligible same-order-conflict] earlier history is an unchanged prefix yes
+    assert [timestamp outside unknown eligible same-order-conflict] no approval governs in December straight after the claim (before any new run) yes
+    assert [timestamp outside unknown eligible same-order-conflict] unknown target: no link yet, recorded as unresolved yes
+    assert [timestamp outside unknown eligible same-order-conflict] unknown target: blocked as unresolved, not eligible, approval refused yes
+    assert [timestamp outside unknown eligible same-order-conflict] target arrives: linked and held with its receipt at once, without a re-send yes
+    assert [timestamp outside unknown eligible same-order-conflict] after preparation: held under November with its receipt, no December artifact yes
+    assert [timestamp outside unknown eligible same-order-conflict] November approval of A1 governs; nothing approved twice yes
+    assert [timestamp outside unknown eligible same-order-conflict] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [timestamp outside unknown eligible same-order-conflict] audit chain verifies  yes
+    assert [timestamp outside unknown approved older] Q approved and governing before the late claim yes
+    assert [timestamp outside unknown approved older] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [timestamp outside unknown approved older] the claim-free old message leaves the approval governing yes
+    assert [timestamp outside unknown approved older] re-sent with the claim: changed=True yes
+    assert [timestamp outside unknown approved older] governing head unchanged (same snapshot, amount, order) yes
+    assert [timestamp outside unknown approved older] source versions added: 0            yes
+    assert [timestamp outside unknown approved older] claim recorded exactly once         yes
+    assert [timestamp outside unknown approved older] earlier history is an unchanged prefix yes
+    assert [timestamp outside unknown approved older] no approval governs in December straight after the claim (before any new run) yes
+    assert [timestamp outside unknown approved older] unknown target: no link yet, recorded as unresolved yes
+    assert [timestamp outside unknown approved older] unknown target: blocked as unresolved, not eligible, approval refused yes
+    assert [timestamp outside unknown approved older] target arrives: linked and held with its receipt at once, without a re-send yes
+    assert [timestamp outside unknown approved older] after preparation: held under November with its receipt, no December artifact yes
+    assert [timestamp outside unknown approved older] November approval of A1 governs; nothing approved twice yes
+    assert [timestamp outside unknown approved older] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [timestamp outside unknown approved older] audit chain verifies                yes
+    assert [timestamp outside unknown approved same-order-conflict] Q approved and governing before the late claim yes
+    assert [timestamp outside unknown approved same-order-conflict] claim-free old message: kept once as evidence, changed=False both times, head unchanged yes
+    assert [timestamp outside unknown approved same-order-conflict] the claim-free old message leaves the approval governing yes
+    assert [timestamp outside unknown approved same-order-conflict] re-sent with the claim: changed=True yes
+    assert [timestamp outside unknown approved same-order-conflict] governing head unchanged (same snapshot, amount, order) yes
+    assert [timestamp outside unknown approved same-order-conflict] source versions added: 0 yes
+    assert [timestamp outside unknown approved same-order-conflict] claim recorded exactly once yes
+    assert [timestamp outside unknown approved same-order-conflict] earlier history is an unchanged prefix yes
+    assert [timestamp outside unknown approved same-order-conflict] no approval governs in December straight after the claim (before any new run) yes
+    assert [timestamp outside unknown approved same-order-conflict] unknown target: no link yet, recorded as unresolved yes
+    assert [timestamp outside unknown approved same-order-conflict] unknown target: blocked as unresolved, not eligible, approval refused yes
+    assert [timestamp outside unknown approved same-order-conflict] target arrives: linked and held with its receipt at once, without a re-send yes
+    assert [timestamp outside unknown approved same-order-conflict] after preparation: held under November with its receipt, no December artifact yes
+    assert [timestamp outside unknown approved same-order-conflict] November approval of A1 governs; nothing approved twice yes
+    assert [timestamp outside unknown approved same-order-conflict] repeats of the claim message and of the claim-free message: changed=False, no lifecycle row added yes
+    assert [timestamp outside unknown approved same-order-conflict] audit chain verifies  yes
+    variants: 20
+--> G1a OK
+
+=== G1b [RF-01 / clause 7] clause 7 still governs: a retained message re-sent with a DIFFERENT claim is a second claim (not applied); a second claim after a first claim that came by the retained path leaves the first standing
+    assert [first claim linked] claim-free old message retained with changed=False; re-sent with a different target: changed=True yes
+    assert [first claim linked] recorded as a conflict for P, once                        yes
+    assert [first claim linked] head unchanged; no link, move or binding row added; no source version added yes
+    assert [first claim linked] after P (replacing locked A1) arrives: no link P->Q, Q not moved into the hold yes
+    assert [first claim linked] Q carries the conflict blocker and cannot be approved     yes
+    assert [first claim linked] repeat adds nothing                                       yes
+    assert [first claim waiting] claim-free old message retained with changed=False; re-sent with a different target: changed=True yes
+    assert [first claim waiting] recorded as a conflict for P, once                       yes
+    assert [first claim waiting] head unchanged; no link, move or binding row added; no source version added yes
+    assert [first claim waiting] after P (replacing locked A1) arrives: no link P->Q, Q not moved into the hold yes
+    assert [first claim waiting] Q carries the conflict blocker and cannot be approved    yes
+    assert [first claim waiting] repeat adds nothing                                      yes
+    assert [retained first claim] Q linked to P and held with its receipt                 yes
+    assert [retained first claim] newer message naming B: changed=True, recorded as a conflict yes
+    assert [retained first claim] first claim stands: still held under November with its receipt, not linked to B yes
+    assert [retained first claim] B is not retired and Q has no December artifact         yes
+    assert [retained first claim] audit chain verifies                                    yes
+--> G1b OK
+
+=== G1c [RF-01 / clause 4] the claimant of an unknown target is replaced by Z, approved before or after the retained claim; when the target arrives nothing stays approved twice
+    settlement_verified on Z: ('ok', 1)
+    independent approval of Z: ('ok', None)
+    assert [Z approved before the claim] Z approved in December before any claim exists   yes
+    assert [Z approved before the claim] claim recorded, waiting for P                    yes
+    [Z approved before the claim] while P has not arrived, the approval of Z governs: True (UC-20, owner observation; not counted)
+    assert [Z approved before the claim] P arrives: Q links to P without a re-send        yes
+    assert [Z approved before the claim] P arrives: the December approval of Z stops governing at once (before any new run) yes
+    assert [Z approved before the claim] P arrives: Z and its receipt are held under locked November at once yes
+    [Z approved before the claim] Z None | links [('demo_card_001:Q', 'demo_card_001:Z'), ('demo_card_001:A1', 'demo_card_001:P'), ('demo_card_001:P', 'demo_card_001:Q')] | held ['demo_card_001:P', 'demo_card_001:Z', 'receipt-P', 'receipt-Z'] | finalize December: ('refused', 409, 'Package control remains open')
+    assert [Z approved before the claim] NOT approved twice: A1 in locked November and Z (or Q) in open December yes
+    assert [Z approved before the claim] December does not finalize without acknowledgement yes
+    assert [Z approved before the claim] audit chain verifies                             yes
+    assert [Z arrives after the claim] claim recorded, waiting for P                      yes
+    settlement_verified on Z: ('ok', 1)
+    independent approval of Z: ('ok', None)
+    [Z arrives after the claim] while P has not arrived, Z can be approved: True (UC-20, owner observation; not counted)
+    assert [Z arrives after the claim] P arrives: Q links to P without a re-send          yes
+    assert [Z arrives after the claim] P arrives: the December approval of Z stops governing at once (before any new run) yes
+    assert [Z arrives after the claim] P arrives: Z and its receipt are held under locked November at once yes
+    [Z arrives after the claim] Z None | links [('demo_card_001:Q', 'demo_card_001:Z'), ('demo_card_001:A1', 'demo_card_001:P'), ('demo_card_001:P', 'demo_card_001:Q')] | held ['demo_card_001:P', 'demo_card_001:Z', 'receipt-P', 'receipt-Z'] | finalize December: ('refused', 409, 'Package control remains open')
+    assert [Z arrives after the claim] NOT approved twice: A1 in locked November and Z (or Q) in open December yes
+    assert [Z arrives after the claim] December does not finalize without acknowledgement yes
+    assert [Z arrives after the claim] audit chain verifies                               yes
+--> G1c NOTE
+
+=== G1d [RF-01] removed head: the claimant was withdrawn by the feed before the retained message is re-sent with the claim; the claim is linked and holds the row when it comes back
+    assert [known] Q withdrawn by the feed (head removed)                                 yes
+    assert [known] the retained older message re-sent with the claim: changed=True, recorded once, withdrawal still governs yes
+    assert [known] the withdrawn claimant is linked to P                                  yes
+    assert [known] Q re-sent after the withdrawal, without the claim: held under locked November with its receipt at once yes
+    assert [known] no December artifact, nothing approved twice                           yes
+    assert [known] audit chain verifies                                                   yes
+    assert [unknown] Q withdrawn by the feed (head removed)                               yes
+    assert [unknown] the retained older message re-sent with the claim: changed=True, recorded once, withdrawal still governs yes
+    assert [unknown] the withdrawn claimant is linked to P                                yes
+    assert [unknown] Q re-sent after the withdrawal, without the claim: held under locked November with its receipt at once yes
+    assert [unknown] no December artifact, nothing approved twice                         yes
+    assert [unknown] audit chain verifies                                                 yes
+--> G1d OK
+
+=== G1e [RF-01 / clauses 4, 6] the target arrives after the claimant row and its receipt were revised without the claim; later versions that omit the claim do not withdraw it
+    assert retained message re-sent with the claim for an unknown target: recorded        yes
+    assert row revised without the claim (clause 6): still blocked as unresolved, approval refused yes
+    assert receipt revised: still blocked as unresolved, approval refused                 yes
+    assert P arrives after both revisions: the revised row is linked and held with its receipt at once; head unchanged yes
+    assert a later version without the claim stays held with its receipt; no December artifact yes
+    assert nothing approved twice; audit verifies                                         yes
+--> G1e OK
+
+=== G1f [RF-01] several retained versions: the claim arrives on the oldest of two claim-free retained messages, and on a retained message whose data differs from the governing row
+    assert [oldest-of-two] changed=True, no source version added, head unchanged, declared once yes
+    assert [oldest-of-two] linked and held with its receipt at once                       yes
+    assert [oldest-of-two] no December artifact; governing amount still 40.00             yes
+    assert [different-data] changed=True, no source version added, head unchanged, declared once yes
+    assert [different-data] linked and held with its receipt at once                      yes
+    assert [different-data] no December artifact; governing amount still 40.00            yes
+--> G1f OK
+
+=== G1g [RF-01 / clause 5] a message without any order value (legacy arrival) against a row governed by a sequence number: claim-free first, then with the claim; repeats
+    [unordered message, same data] claim-free: {'changed': False, 'generation': 4, 'replay': False} then {'changed': False, 'generation': 4, 'replay': False} | source versions added: 0 then 0 | head unchanged: True
+    assert [unordered message, same data] never replaces the governing row                yes
+    [unordered message, different data] claim-free: {'changed': False, 'generation': 4, 'replay': False} then {'changed': False, 'generation': 4, 'replay': False} | source versions added: 1 then 1 | head unchanged: True
+    assert [unordered message, different data] never replaces the governing row           yes
+    observation: an identical repeat of an unordered message with different data adds one more retained source version each time (changed=False).
+    assert unordered message with different data, now carrying the first claim: changed=True, declared once, head unchanged yes
+    assert applied: linked and held with its receipt at once                              yes
+    assert repeat of the claim message: changed=False; no binding, move, link, event, decision or head change yes
+    observation: the repeat added 1 retained source version(s).
+    assert no December artifact; nothing approved twice; audit verifies                   yes
+--> G1g NOTE
+
+=== G2a [RF-02] three people select in turn (first, confirming, replacing): all three stay contributors of the row, its revision, its replacement and the replacement of that; none can approve or finalize; an independent person can; earlier records unchanged
+    assert [row] three selections recorded (choose B2, confirm B2, replace by B)          yes
+    assert [row] earlier selection records are byte-identical after each later one        yes
+    assert [row] Q is eligible and pending                                                yes
+    assert [row] all three selectors are contributors of Q                                yes
+    assert [row] selector re-disposition-and-review is refused as reviewer of Q           yes
+    assert [row] selector re-disposition-and-review-2 is refused as reviewer of Q         yes
+    assert [row] selector re-disposition-and-lock is refused as reviewer of Q             yes
+    assert [row] selector re-disposition-and-review is refused as finalizer               yes
+    assert [row] selector re-disposition-and-lock is refused as finalizer                 yes
+    assert [row] an independent reviewer approves Q                                       yes
+    assert [row] an independent finalizer finalizes December                              yes
+    assert [row] selection records still byte-identical; audit verifies                   yes
+    assert [revision] three selections recorded (choose B2, confirm B2, replace by B)     yes
+    assert [revision] earlier selection records are byte-identical after each later one   yes
+    assert [revision] Q is eligible and pending                                           yes
+    assert [revision] all three selectors are contributors of Q                           yes
+    assert [revision] selector re-disposition-and-review is refused as reviewer of Q      yes
+    assert [revision] selector re-disposition-and-review-2 is refused as reviewer of Q    yes
+    assert [revision] selector re-disposition-and-lock is refused as reviewer of Q        yes
+    assert [revision] selector re-disposition-and-review is refused as finalizer          yes
+    assert [revision] selector re-disposition-and-lock is refused as finalizer            yes
+    assert [revision] an independent reviewer approves Q                                  yes
+    assert [revision] an independent finalizer finalizes December                         yes
+    assert [revision] selection records still byte-identical; audit verifies              yes
+    assert [replacement] three selections recorded (choose B2, confirm B2, replace by B)  yes
+    assert [replacement] earlier selection records are byte-identical after each later one yes
+    assert [replacement] Z is eligible and pending                                        yes
+    assert [replacement] all three selectors are contributors of Z                        yes
+    assert [replacement] selector re-disposition-and-review is refused as reviewer of Z   yes
+    assert [replacement] selector re-disposition-and-review-2 is refused as reviewer of Z yes
+    assert [replacement] selector re-disposition-and-lock is refused as reviewer of Z     yes
+    assert [replacement] selector re-disposition-and-review is refused as finalizer       yes
+    assert [replacement] selector re-disposition-and-lock is refused as finalizer         yes
+    assert [replacement] an independent reviewer approves Z                               yes
+    assert [replacement] an independent finalizer finalizes December                      yes
+    assert [replacement] selection records still byte-identical; audit verifies           yes
+    assert [second replacement] three selections recorded (choose B2, confirm B2, replace by B) yes
+    assert [second replacement] earlier selection records are byte-identical after each later one yes
+    assert [second replacement] W is eligible and pending                                 yes
+    assert [second replacement] all three selectors are contributors of W                 yes
+    assert [second replacement] selector re-disposition-and-review is refused as reviewer of W yes
+    assert [second replacement] selector re-disposition-and-review-2 is refused as reviewer of W yes
+    assert [second replacement] selector re-disposition-and-lock is refused as reviewer of W yes
+    assert [second replacement] selector re-disposition-and-review is refused as finalizer yes
+    assert [second replacement] selector re-disposition-and-lock is refused as finalizer  yes
+    assert [second replacement] an independent reviewer approves W                        yes
+    assert [second replacement] an independent finalizer finalizes December               yes
+    assert [second replacement] selection records still byte-identical; audit verifies    yes
+--> G2a OK
+
+=== G2b [RF-02] a person who approved the row as an independent reviewer and LATER records the selection: the earlier approval is not revived, and that person cannot approve again
+    assert DR approves Q as an independent reviewer (one claim, linked to B)              yes
+    assert second claim: the approval stops governing at once                             yes
+    DR records the selection (first target stands): ('ok', 3)
+    Q after the selection: {'id': 23, 'eligible': True, 'status': 'pending', 'blockers': []} | contributors: ['re-disposition-and-review', 'rv-dispositioner', 'rv-policy-approver', 'rv-preparer', 'rv-preparer-2', 'rv-worker']
+    assert the earlier approval by DR does not govern after the selection                 yes
+    assert DR is a contributor and is refused as reviewer                                 yes
+    assert an independent reviewer approves                                               yes
+--> G2b OK
+
+=== G2c [RF-02] ordinary dispositions keep their rule: signature of contributors after a first and a superseding ordinary disposition by different people (compare the printed line between checkpoints)
+    ORDINARY-RULE-SIGNATURE [["after DR settlement_verified", "ok", ["re-disposition-and-review", "rv-policy-approver", "rv-preparer", "rv-preparer-2", "rv-worker"], []], ["after receipt revision", ["rv-policy-approver", "rv-preparer", "rv-preparer-2", "rv-worker"], ["EVIDENCE_REVISED_REQUIRES_REVIEW", "SOURCE_TRANSITION_REQUIRES_REVIEW"]], ["after DR2 revised_evidence_accepted", "ok", ["re-disposition-and-review-2", "rv-policy-approver", "rv-preparer", "rv-preparer-2", "rv-worker"], ["SOURCE_TRANSITION_REQUIRES_REVIEW"]], ["after DR2 settlement_verified", "ok", ["re-disposition-and-review-2", "rv-policy-approver", "rv-preparer", "rv-preparer-2", "rv-worker"], []], ["DR may approve", "ok", "DR2 may approve", "refused", "REV3 may approve", "refused"]]
+--> G2c OK
+
+=== G2d [RF-02] a selection for one row does not make its author a contributor of an unrelated row in the same period, nor of a row in another period
+    assert selection recorded                                                             yes
+    assert the selector is not a contributor of the unrelated December row U              yes
+    assert the selector is not a contributor of the locked November row A2                yes
+    U: {'id': 18, 'eligible': True, 'status': 'pending', 'blockers': []} | DR approves U: ('ok', None)
+    assert the selector may approve the unrelated row U (ordinary independence unchanged) yes
+    assert the selector is a contributor of Q and refused there                           yes
+    B2 (selected target, retired by the link): None | B (de-selected target): None | contributors of B: None
+--> G2d OK
+
+SUMMARY
+  G1a   RF-01                  OK
+  G1b   RF-01_/_clause_7       OK
+  G1c   RF-01_/_clause_4       NOTE
+  G1d   RF-01                  OK
+  G1e   RF-01_/_clauses_4,_6   OK
+  G1f   RF-01                  OK
+  G1g   RF-01_/_clause_5       NOTE
+  G2a   RF-02                  OK
+  G2b   RF-02                  OK
+  G2c   RF-02                  OK
+  G2d   RF-02                  OK
+
+11 probes: 9 OK, 2 NOTE, 0 WEAK, 0 ERROR
+
+RF-03 EQUIVALENCE {"calls_in_transaction": 52, "calls_autocommit": 0, "mismatches": 0, "current_evaluations_delivered": 50, "current_evaluations_full": 88, "calls_where_shortcut_saved_work": 38, "autocommit_calls_that_reused": 0} wrapped_script_exit=0

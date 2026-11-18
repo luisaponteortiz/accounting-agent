@@ -1,0 +1,12 @@
+Fable RV acceptance probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[U1] (UC-1) a mandate is not suspended merely because new evidence falls after a rule date that was already approved
+    no policy changed after approval; evidence dated 25 November arrived -> mandate: ('active', 1, None) | runs: [(1, 'prepared_with_exceptions')]
+    -> OK
+
+====================================================================================================
+U1    UC-1         OK     a mandate is not suspended merely because new evidence falls after a rule date that was already approved
+
+Verdict counts: {'OK': 1}
+Acceptance gate: PASS

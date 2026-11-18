@@ -1,0 +1,59 @@
+--- exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py	2026-11-15 17:57:44
++++ review/fable_rv_acceptance_probes.py	2026-11-15 18:47:32
+@@ -1,3 +1,4 @@
++# RA-04 positive-setup adaptation; original independent file remains unchanged.
+ """Fable acceptance probes for the RV-01 to RV-17 corrections (Accounting Agent OS).
+ 
+ Usage (from anywhere):
+@@ -232,6 +233,16 @@
+     a = gov(os_, key, period)
+     return attempt(os_.disposition, who or DISP, workflow, period, key, code, choice, payload or {},
+                    support(a, choice == 'distinct_purchases') if evidence is None else evidence, 'Fictional probe disposition', **kw)
++
++
++def accept_statement_revision(os_, key, period='2026-11'):
++    """Positive fixture only: assert the hold, then obtain explicit human acceptance."""
++    a=gov(os_,key,period)
++    assert a is not None and 'EVIDENCE_REVISED_REQUIRES_REVIEW' in a['blockers'], brief(a)
++    assert any(r.get('source_kind')=='statement' for r in a['payload']['data']['evidence_revisions']), 'Statement revision must be disclosed'
++    result=dispose(os_,key,'EVIDENCE_REVISED_REQUIRES_REVIEW','revised_evidence_accepted',period=period)
++    assert result[0]=='ok',result
++    run(os_,'card_preparation',period)
+ 
+ 
+ def lines_of(a):
+@@ -291,7 +302,7 @@
+     print('    before:', {k: gov(os_, CARD + ':' + k)['blockers'] for k in ('P1', 'V1')})
+     stale = show('finalize while P1 and V1 are held, no acknowledgement', attempt(os_.finalize_package, FIN, '2026-11', 'card_preparation', 'x'))
+     gone = [dict(copy.deepcopy(rows[4]), as_of=2, tombstone=True, removal_reason='feed_removed'), dict(copy.deepcopy(rows[5]), as_of=2, tombstone=True, removal_reason='voided')]
+-    os_.intake(PREP, packet('b2', gone + [stmt(rows[:4])])); run(os_, 'card_preparation')
++    os_.intake(PREP, packet('b2', gone + [stmt(rows[:4])])); run(os_, 'card_preparation'); accept_statement_revision(os_,CARD+':A1'); accept_statement_revision(os_,CARD+':A2')
+     for k in ('A1', 'A2'):
+         review(os_, REV, gov(os_, CARD + ':' + k), 'approve')
+     st = os_.export(PREP)
+@@ -414,7 +425,7 @@
+     p3 = copy.deepcopy(PROFILE); p3['version'] = 'probe-v3-metro-again'
+     sid3 = os_.onboard(PREP, p3, effective_from='2026-12-15'); os_.approve_profile_version(CTRL2, sid3, 'probe: reintroduce Metro from 15 December')
+     more = dec + [tx('M3', '2026-12-20', '35.00', desc='METRO REPAIR DEMO'), rc('M3', '2026-12-20', '35.00', vendor='METRO REPAIR DEMO')]
+-    os_.intake(PREP, packet('dec2', more[2:] + [stmt(more, DEC, opening='100.00')])); both()
++    os_.intake(PREP, packet('dec2', more[2:] + [stmt(more, DEC, opening='100.00')])); both(); accept_statement_revision(os_,CARD+':M3','2026-12')
+     m2b, m3 = gov(os_, CARD + ':M2', '2026-12'), gov(os_, CARD + ':M3', '2026-12')
+     print('    reintroduced from 15 December -> M2 (5 Dec):', m2b['blockers'], '| M3 (20 Dec):', brief(m3), m3['payload']['data']['vendor'])
+     ok = (pre == (True, True) and own[0] == 'refused' and m1['eligible'] and m1['payload']['data']['vendor']['id'] == 'demo_metro' and 'UNKNOWN_VENDOR' in m2['blockers']
+@@ -685,6 +696,7 @@
+     os_.intake(PREP, packet('more', more + [stmt(base + more)]))
+     stale = show('finalize again while every item is stale, with acknowledgement', attempt(os_.finalize_package, FIN, '2026-11', 'card_preparation', 'x', 'acknowledged'))
+     run(os_, 'card_preparation')
++    for item in ('A1','A2','A3'):accept_statement_revision(os_,CARD+':'+item)
+     for k in ('A1', 'A2', 'A3'):
+         review(os_, REV, gov(os_, CARD + ':' + k), 'approve')
+     p2 = os_.finalize_package(FIN, '2026-11', 'card_preparation', 'probe handover two')
+@@ -737,7 +749,7 @@
+     os_, rows = duplicate_pair()
+     dispose(os_, CARD + ':D2', 'POSSIBLE_DUPLICATE', 'duplicate_of', {'duplicate_of': CARD + ':D1'}); run(os_, 'card_preparation')
+     gone = [dict(copy.deepcopy(rows[0]), tombstone=True, removal_reason='voided'), dict(copy.deepcopy(rows[1]), tombstone=True, removal_reason='voided')]
+-    os_.intake(PREP, packet('void-d1', gone + [stmt(rows[2:])])); run(os_, 'card_preparation')
++    os_.intake(PREP, packet('void-d1', gone + [stmt(rows[2:])])); run(os_, 'card_preparation'); accept_statement_revision(os_,CARD+':D2')
+     d2 = gov(os_, CARD + ':D2'); print('    D2 was excluded as a duplicate of D1; D1 is then voided -> D2:', brief(d2), '| entry:', lines_of(d2))
+     restored = d2['eligible'] and lines_of(d2) is not None
+     o2, rows2 = duplicate_pair()

@@ -1,0 +1,11 @@
+................
+----------------------------------------------------------------------
+Ran 16 tests in 22.323s
+
+OK
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/docs/corrections_re/http_setup_after_feed_diagnostic.py", line 12, in <module>
+    HTTPCase.setUpClass();print('HTTP setup passed')
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_http.py", line 31, in setUpClass
+    else:raise AssertionError('Background worker failed to finish')
+AssertionError: Background worker failed to finish

@@ -1,0 +1,16 @@
+Fable RV acceptance probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[A10] (RV-10) a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not
+    cosmetic re-proposal linked by supersedes: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    contributors without the supersedes link: ['rv-policy-approver', 'rv-policy-approver-2', 'rv-preparer', 'rv-reviewer', 'rv-worker']
+    same cosmetic re-proposal with no supersedes link: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    version 1 had a different category: its author approves (should be allowed): ('ok', None)
+    identical receipt policy re-proposed by a colleague: author of version 1 approves: ('refused', 403, 'Independent human review required')
+    -> OK
+
+====================================================================================================
+A10   RV-10        OK     a cosmetic re-proposal keeps the earlier rule author in the item lineage; a different historical category does not
+
+Verdict counts: {'OK': 1}
+Acceptance gate: PASS

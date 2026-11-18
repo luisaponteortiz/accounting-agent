@@ -1,0 +1,11 @@
+# RD/PRV correction handoff — 16 November 2026
+
+The one authorized pass covers RD-01/RD-02 and PRV-11–PRV-13 only. The new review ZIP is `exports/FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip`; use its adjacent checksum, manifest and package check. The exact independent-review prompt is `FABLE_RD_REVIEW_PROMPT.md`.
+
+Developer results: 205 tests OK, including all eleven HTTP tests; every required gate and new `make rd-gate` passes. The unchanged RC suite has 15 OK / X08 NOTE; all 120 delivery orders have zero double approval. Earlier probes retain 16 OK / two policy NOTE and 14 OK. Reviewer cases remain 29 PASS / 10 FIXED / 21 DEFERRED-OK; older acceptance allows U4 alone. Register fault scripts agree on 37/37 and 44/44; G16/G17/G18/G44 reject. Pre-correction failures, intermediate test-development corrections, raw logs, exit codes and scope limits are in `docs/corrections_rd/RD_CORRECTIONS_REPORT.md`.
+
+The fix records unchanged late claims and persists unresolved claims by scoped identity through later revisions/re-sends. The owner has not decided the feed semantics; the stronger control records and retains claims. No schema/API/probe adaptation. Re-evaluation remains card transactions only; journal UC-9 is reading-only/NOT_RUN, with source evidence supplied for a separate reproduction. Policy notes remain unchanged.
+
+Three requirements remain Verification failed pending independent RD verification. RC-01–03/PRV-01–10 acceptance is attributed only to Fable's 9a85c78a…2454 checkpoint, including Q02 exact-chain acceptance binding. Every BB-01/02 field, D-016/D-017, all six named Proposed records, all 192 earlier methods, 484 protected inputs and 14 earlier archives are preserved. Five commits remain unchanged at HEAD 5a12ab0; no commit added.
+
+Review `changed-files.json` and `source-and-tests.patch` against the RC/PRV ZIP. The patch applies and reproduces all ten changed code/test/script/Makefile files exactly. The finalized ZIP is separately checked in clean extraction; results/logs are adjacent `_FINAL_VERIFICATION` outputs to avoid rebuilding the archive with its own validation evidence. Developer execution is not independent acceptance. Human G0, G1–G4, Batch 3, Proposed/deferred capabilities and live actions remain closed. Await independent results and a new assignment.

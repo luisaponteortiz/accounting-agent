@@ -1,0 +1,6 @@
+test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (tests.test_product_requirements.ProductRequirements) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 5.609s
+
+OK

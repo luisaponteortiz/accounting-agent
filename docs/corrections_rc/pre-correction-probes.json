@@ -1,0 +1,4 @@
+{
+  "command": "python3 exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py .",
+  "exit_code": 1
+}

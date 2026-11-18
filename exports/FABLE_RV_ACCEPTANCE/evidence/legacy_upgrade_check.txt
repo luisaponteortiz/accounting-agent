@@ -1,0 +1,7 @@
+old version wrote: checklist ['trial_balance', 'card_statement', 'bank_reconciliation', 'ap_tieout', 'ar_tieout'] | mandate [(1, 'active', 1, '{}')] | mandate runs 1
+old exit 0
+corrected version reads the same database -> mandate: [(1, 'needs_reconfirmation', 0, 'Empty legacy freshness requires explicit replacement authority')] | migration events: ['legacy_mandate_suspended'] | runs dispatched by the next tick: []
+earlier artifacts and evidence byte-identical: True | audit chain verifies: True | audit rows before/after: 29 30
+legacy untyped checklist evaluated: [('trial_balance', False, 'UNTYPED_REQUIREMENT'), ('card_statement', False, 'UNTYPED_REQUIREMENT'), ('bank_reconciliation', False, 'UNTYPED_REQUIREMENT'), ('ap_tieout', False, 'UNTYPED_REQUIREMENT'), ('ar_tieout', False, 'UNTYPED_REQUIREMENT')] | blockers: ['EXTERNAL_STEPS_UNVERIFIED', 'FINAL_CLOSE_SIGNOFF_REQUIRED', 'MISSING_CLOSE_EVIDENCE']
+legacy upgrade result: PASS
+new exit 0

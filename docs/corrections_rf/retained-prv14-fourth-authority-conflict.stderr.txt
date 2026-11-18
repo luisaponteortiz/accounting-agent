@@ -1,0 +1,18 @@
+test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (tests.test_product_requirements.ProductRequirements) ... FAIL
+
+======================================================================
+FAIL: test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (tests.test_product_requirements.ProductRequirements)
+----------------------------------------------------------------------
+ValueError: Independent results disagree with reviewer verdict: AAOS-KNO-04
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/aaos-rf-register-conflict/tests/test_product_requirements.py", line 211, in test_PRV14_third_authority_is_pinned_and_latest_verdict_controls
+    with self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):validate_register(self.text,root)
+AssertionError: "independent Verification failed cannot be promoted" does not match "Independent results disagree with reviewer verdict: AAOS-KNO-04"
+
+----------------------------------------------------------------------
+Ran 1 test in 3.009s
+
+FAILED (failures=1)

@@ -1,0 +1,65 @@
+=== 05_cases_batch2_gate: python3 review/run_fable_validation_cases.py . review/FABLE_VALIDATION_CASES.json --batch2-gate ===
+PASS          FV-C01   
+PASS          FV-C02   
+PASS          FV-C03   
+PASS          FV-C04   
+PASS          FV-C05   
+PASS          FV-C06   
+PASS          FV-C07   
+PASS          FV-C08   
+PASS          FV-C09   
+PASS          FV-C10   
+PASS          FV-C11   
+PASS          FV-C12   
+PASS          FV-C13   
+PASS          FV-C14   
+FIXED         FV-C15   meets required outcome
+PASS          FV-C16   
+PASS          FV-C17   
+PASS          FV-C18   
+PASS          FV-C19   
+PASS          FV-J01   
+PASS          FV-J02   
+PASS          FV-J03   
+PASS          FV-J04   
+PASS          FV-J05   
+PASS          FV-J06   
+PASS          FV-J07   
+FIXED         FV-J08   meets required outcome
+FIXED         FV-J09   meets required outcome
+FIXED         FV-J10   meets required outcome
+PASS          FV-CL01  
+FIXED         FV-CL02  meets required outcome
+FIXED         FV-R01   meets required outcome
+PASS          FV-R02   
+FIXED         FV-R03   meets required outcome
+FIXED         FV-R04   meets required outcome
+FIXED         FV-RC01  meets required outcome
+FIXED         FV-RC02  meets required outcome
+PASS          FV-RC03  
+DEFERRED-OK   FV-AP01  refused (403)
+DEFERRED-OK   FV-AP02  refused (403)
+DEFERRED-OK   FV-AP03  refused (403)
+DEFERRED-OK   FV-AP04  refused (403)
+DEFERRED-OK   FV-AP05  refused (403)
+DEFERRED-OK   FV-AR01  refused (403)
+DEFERRED-OK   FV-AR02  refused (403)
+DEFERRED-OK   FV-AR03  refused (403)
+DEFERRED-OK   FV-AR04  refused (403)
+DEFERRED-OK   FV-BK01  refused (403)
+DEFERRED-OK   FV-BK02  refused (403)
+DEFERRED-OK   FV-BK03  refused (403)
+DEFERRED-OK   FV-BK04  refused (403)
+DEFERRED-OK   FV-BK05  refused (403)
+DEFERRED-OK   FV-CL03  refused (403)
+PASS          FV-CL04  
+DEFERRED-OK   FV-GL01  refused (403)
+DEFERRED-OK   FV-RP01  refused (403)
+DEFERRED-OK   FV-RP02  refused (403)
+DEFERRED-OK   FV-RP03  refused (403)
+DEFERRED-OK   FV-RP04  refused (403)
+DEFERRED-OK   FV-RP05  refused (403)
+
+Summary: DEFERRED-OK=21, FIXED=10, PASS=29
+Batch 2 gate: PASS
+=== exit code: 0 ===

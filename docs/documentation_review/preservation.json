@@ -1,0 +1,113 @@
+{
+ "protected_inputs_of_the_rf_pass": {
+  "count": 1198,
+  "unchanged": 1198,
+  "differences": []
+ },
+ "earlier_archives": {
+  "count": 16,
+  "unchanged": 16,
+  "differences": []
+ },
+ "rf_and_re_archives": {
+  "exports/FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip": true,
+  "exports/FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_RESPONSE.zip": true,
+  "exports/FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip": true,
+  "exports/FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_RESPONSE.zip": true
+ },
+ "delivered_rf_bundle_members_against_working_project": {
+  "members": 1791,
+  "identical": 1775,
+  "changed": [
+   "AGENTS.md",
+   "DECISIONS.md",
+   "FABLE_ACCOUNTING_HANDOFF.md",
+   "PROGRESS.md",
+   "README.md",
+   "REVIEW_FREEZE.md",
+   "START_HERE.md",
+   "docs/ARCHITECTURE.md",
+   "docs/CAPABILITY_CONTRACTS.md",
+   "docs/CONNECTION_READINESS.md",
+   "docs/INDEPENDENT_VERIFICATION_RESULTS.json",
+   "docs/PRODUCT_REQUIREMENTS.md",
+   "scripts/check_product_requirements.py",
+   "tests/test_product_requirements.py",
+   "tests/test_product_requirements_rf.py"
+  ],
+  "not_in_working_project": [
+   "REVIEW_MANIFEST.json"
+  ]
+ },
+ "returned_rf_response_files_against_working_copies": {
+  "files": 298,
+  "identical": 298,
+  "differences": []
+ },
+ "git": {
+  "branch": "review/fable-rc-acceptance",
+  "head": "5af9a6194bc39e2f303cc6b43b0b59094118b8e4",
+  "commits": 10,
+  "staged": [],
+  "tracked_modified": [
+   "DECISIONS.md",
+   "docs/PRODUCT_REQUIREMENTS.md"
+  ],
+  "history_identical_to_rf_preflight": true
+ },
+ "register": {
+  "ids_and_order_retained": true,
+  "records": 88,
+  "records_changed": [
+   "AAOS-BNK-03",
+   "AAOS-CTL-04",
+   "AAOS-GOV-02",
+   "AAOS-GOV-03"
+  ],
+  "fields_changed": {
+   "AAOS-GOV-02": [
+    "Scope note",
+    "Acceptance criteria"
+   ],
+   "AAOS-GOV-03": [
+    "Implementation state",
+    "Scope note",
+    "Evidence"
+   ],
+   "AAOS-BNK-03": [
+    "Implementation state",
+    "Scope note",
+    "Evidence"
+   ],
+   "AAOS-CTL-04": [
+    "Implementation state",
+    "Scope note",
+    "Evidence"
+   ]
+  },
+  "every_product_decision_and_acceptance_criterion_unchanged": false,
+  "implementation_states_changed": {
+   "AAOS-GOV-03": [
+    "Verification failed",
+    "Independently verified"
+   ],
+   "AAOS-BNK-03": [
+    "Verification failed",
+    "Independently verified"
+   ],
+   "AAOS-CTL-04": [
+    "Verification failed",
+    "Independently verified"
+   ]
+  },
+  "four_earlier_verified_BB01_BB02_and_six_proposed_identical": true,
+  "acceptance_criteria_changed_against_the_rf_checkpoint": [
+   "AAOS-GOV-02"
+  ],
+  "product_decisions_changed_against_the_rf_checkpoint": []
+ },
+ "decision_log_rf_checkpoint_bytes_are_prefix": true,
+ "new_protected_inventory": {
+  "note": "unchanged from docs/registration_rf/input-checksums.json (1,506 entries); not duplicated here"
+ }
+}

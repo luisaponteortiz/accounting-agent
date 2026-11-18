@@ -1,0 +1,9 @@
+{
+  "command": [
+    "python3",
+    "--version"
+  ],
+  "exit_code": 0,
+  "time_utc": "2026-11-16T06:48:38.925806+00:00",
+  "platform": "macOS-26.5.2-x86_64-i386-64bit"
+}

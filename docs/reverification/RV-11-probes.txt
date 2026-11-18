@@ -1,0 +1,21 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RT10a] (T-10) mandates: independent approval, fixed target period, fresh-evidence wait and wake-up, suspension on policy change
+    issuer approves own mandate: ('refused', 403, 'Mandate issuer cannot approve')
+    tick while the mandate is only proposed -> runs: [] | occurrences: 0
+    tick with no fresh evidence -> runs: [] | occurrences: [('awaiting_evidence', 'Fresh evidence required')]
+    after fresh evidence arrives -> mandate runs (id, period, status, mandate): [(1, '2026-11', 'awaiting_review', 1)] | occurrences: [('completed', True)]
+    tick after a bound policy change -> runs: [] | mandate: ('needs_reconfirmation', 0, 'Bound policy changed; independent reconfirmation required')
+    -> OK
+
+[RT10b] (T-10) a mandate must state what fresh evidence it needs before it can dispatch
+    create a mandate with an empty freshness predicate: ('refused', 400, 'Nonempty freshness predicate required')
+    -> OK
+
+====================================================================================================
+RT10a  T-10       OK     mandates: independent approval, fixed target period, fresh-evidence wait and wake-up, suspension on policy change
+RT10b  T-10       OK     a mandate must state what fresh evidence it needs before it can dispatch
+
+Verdict counts: {'OK': 2}
+Re-verification gate: PASS

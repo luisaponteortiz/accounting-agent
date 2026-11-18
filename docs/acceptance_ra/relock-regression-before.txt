@@ -1,0 +1,14 @@
+test_RA06_transition_disposition_with_predecessor_evidence_takes_effect (tests.test_acceptance_corrections.AcceptanceCorrections) ... FAIL
+
+======================================================================
+FAIL: test_RA06_transition_disposition_with_predecessor_evidence_takes_effect (tests.test_acceptance_corrections.AcceptanceCorrections)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_acceptance_corrections.py", line 110, in test_RA06_transition_disposition_with_predecessor_evidence_takes_effect
+    self.assertIsNotNone(f.gov(o,f.CARD+':A1Y','2026-12'))
+AssertionError: unexpectedly None
+
+----------------------------------------------------------------------
+Ran 1 test in 0.934s
+
+FAILED (failures=1)

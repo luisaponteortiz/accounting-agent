@@ -1,0 +1,834 @@
+{
+  "checkpoint": "FABLE_RA_CORRECTIONS",
+  "scope": "Local fictional preparation only; RA-01..RA-08; no Batch 3 or live authority",
+  "environment": {
+    "python": "3.9.6",
+    "sqlite": "3.51.0"
+  },
+  "baseline": {
+    "matching_frozen_working_files": 243,
+    "original_exit_code": 1,
+    "counts": {
+      "OK": 16,
+      "WEAK": 4,
+      "NOTE": 4
+    },
+    "frozen_reviewed_archive_sha256": "247c1cfd31a2128573b5ae29d633c0d9e74bb076a38a5fc3d9844b6748cc1c75",
+    "evidence": "docs/acceptance_ra/baseline-independent-probes.txt"
+  },
+  "implementation_order": [
+    "RA-01",
+    "RA-03",
+    "RA-04",
+    "RA-02",
+    "RA-06",
+    "RA-05",
+    "RA-07",
+    "RA-08"
+  ],
+  "commands": [
+    {
+      "command": "make test",
+      "exit_code": 0,
+      "result": "154 tests OK",
+      "seconds": 375.164,
+      "evidence": "docs/acceptance_ra/final-tests.txt"
+    },
+    {
+      "command": "make check",
+      "exit_code": 0,
+      "result": "Offline syntax/JSON/profile/registry/DOM checks PASS",
+      "evidence": "docs/acceptance_ra/final-check.txt"
+    },
+    {
+      "command": "make batch2-gate",
+      "exit_code": 0,
+      "result": {
+        "PASS": 29,
+        "FIXED": 10,
+        "DEFERRED-OK": 21
+      },
+      "evidence": "docs/acceptance_ra/final-batch2-gate.txt"
+    },
+    {
+      "command": "make reverification-gate",
+      "exit_code": 0,
+      "result": "27 unchanged originals and 35 current-setup OK; frozen corrective checkpoint PASS",
+      "evidence": "docs/acceptance_ra/final-reverification-gate.txt"
+    },
+    {
+      "command": "make acceptance-gate",
+      "exit_code": 0,
+      "result": "20 compatible originals (19 OK/U4 NOTE); 24 current-setup (23 OK/U4 NOTE)",
+      "evidence": "docs/acceptance_ra/final-acceptance-gate.txt"
+    },
+    {
+      "command": "python3 exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py .",
+      "exit_code": 1,
+      "result": "Disclosed statement-setup incompatibilities; original full command NOT PASS",
+      "evidence": "docs/acceptance_ra/current-original-acceptance-probes.txt"
+    },
+    {
+      "command": "python3 exports/FABLE_REVERIFICATION/fable_reverification_probes.py .",
+      "exit_code": 1,
+      "result": "Preserved older original setup incompatibilities plus RT18 statement acceptance; NOT PASS",
+      "evidence": "docs/acceptance_ra/current-original-rv-probes.txt"
+    }
+  ],
+  "tickets": [
+    {
+      "id": "RA-01",
+      "priority": "P1",
+      "title": "A second supersession step releases a charge that is quarantined behind a locked period",
+      "developer_status": "PASS_WITH_DISCLOSED_CURRENT_SETUP",
+      "independent_acceptance": "PENDING",
+      "acceptance_assertions": [
+        "Probe X01 reports OK: while November is locked, December has no governing artifact for A1Y.",
+        "state.source_exceptions lists A1X, A1Y and both receipts with SOURCE_MOVED_FROM_LOCKED_PERIOD; export.source_move_history has a blocked row for each.",
+        "After reopen and re-preparation: November has no governing A1, December has exactly one governing item for the charge (A1Y) carrying SOURCE_TRANSITION_REQUIRES_REVIEW, and A1X is not a governing item anywhere.",
+        "Probes A01, RN02 and RN02b are unchanged."
+      ],
+      "regression_methods": [
+        "test_RA01_entire_chain_and_receipts_remain_blocked_until_reopen",
+        "test_RA01_supersession_cycle_is_refused_without_mutation"
+      ],
+      "independent_probe": "X01"
+    },
+    {
+      "id": "RA-02",
+      "priority": "P2",
+      "title": "The author of a rule is dropped from the item lineage when a colleague re-proposes the same rule without the optional supersedes link",
+      "developer_status": "PASS_WITH_DISCLOSED_CURRENT_SETUP",
+      "independent_acceptance": "PENDING",
+      "acceptance_assertions": [
+        "Probe A10 reports OK: the unlinked cosmetic re-proposal leaves the author of version 1 refused with 403.",
+        "The different-category case in A10 is still allowed, and RN05b, RN04, RN05 are unchanged."
+      ],
+      "regression_methods": [
+        "test_RA02_unlinked_rule_identity_preserves_semantic_authors_without_unrelated_scope",
+        "test_RA02_unlinked_identical_receipt_policy_retains_author"
+      ],
+      "independent_probe": "A10"
+    },
+    {
+      "id": "RA-03",
+      "priority": "P2",
+      "title": "Replacing a receipt under a new key avoids the revised-evidence hold",
+      "developer_status": "PASS_WITH_DISCLOSED_CURRENT_SETUP",
+      "independent_acceptance": "PENDING",
+      "acceptance_assertions": [
+        "Probe X12k reports OK: after the replacement the item carries EVIDENCE_REVISED_REQUIRES_REVIEW and evidence_revisions names receipt-A1 version 1 and the amount change.",
+        "The supplier of either receipt cannot accept; a granted non-supplier can; probe A12 is unchanged.",
+        "A second receipt added for a charge whose first receipt is unchanged is not reported as a revision (it remains a multiple-receipt question)."
+      ],
+      "regression_methods": [
+        "test_RA03_replacement_key_discloses_old_receipt_and_keeps_both_suppliers_independent",
+        "test_RA03_additional_receipt_is_multiple_support_until_the_original_is_withdrawn"
+      ],
+      "independent_probe": "X12k"
+    },
+    {
+      "id": "RA-04",
+      "priority": "P2",
+      "title": "A statement re-supplied to agree with the population is neither held nor disclosed as revised",
+      "developer_status": "PASS_WITH_DISCLOSED_CURRENT_SETUP",
+      "independent_acceptance": "PENDING",
+      "acceptance_assertions": [
+        "Probe X12s reports OK: after the re-supplied statement the items are not eligible, or the revision is disclosed on the item or the workpaper.",
+        "A supplier of any statement version cannot accept the revision; a granted non-supplier can, and final review stays separate.",
+        "Probes A13, RT13 and RT13n and cases FV-C08, FV-C09, FV-C19 are unchanged."
+      ],
+      "regression_methods": [
+        "test_RA04_statement_revision_holds_each_item_and_requires_non_supplier_acceptance",
+        "test_RA04_statement_replacement_key_preserves_revision_control"
+      ],
+      "independent_probe": "X12s"
+    },
+    {
+      "id": "RA-05",
+      "priority": "P3",
+      "title": "A mandate is suspended as if policy had changed when new evidence falls after the date of a rule that was already approved",
+      "developer_status": "PASS_WITH_DISCLOSED_CURRENT_SETUP",
+      "independent_acceptance": "PENDING",
+      "acceptance_assertions": [
+        "Probe U1 reports OK: the mandate stays active and one run is dispatched.",
+        "Probe RT10a is unchanged: a rule approved after the mandate still suspends it."
+      ],
+      "regression_methods": [
+        "test_RA05_preapproved_midperiod_rules_do_not_suspend_on_fresh_evidence",
+        "test_RA05_future_retirement_does_not_change_prior_period_authority"
+      ],
+      "independent_probe": "U1"
+    },
+    {
+      "id": "RA-06",
+      "priority": "P3",
+      "title": "A disposition that cites the predecessor snapshots listed in the artifact is accepted but never takes effect",
+      "developer_status": "PASS_WITH_DISCLOSED_CURRENT_SETUP",
+      "independent_acceptance": "PENDING",
+      "acceptance_assertions": [
+        "In probe X01 the first disposition (citing predecessors) clears SOURCE_TRANSITION_REQUIRES_REVIEW once RA-01 is fixed and the origin is reopened; or it is refused with a message naming the reference."
+      ],
+      "regression_methods": [
+        "test_RA06_transition_disposition_with_predecessor_evidence_takes_effect"
+      ],
+      "independent_probe": "X01"
+    },
+    {
+      "id": "RA-07",
+      "priority": "P3",
+      "title": "A transaction row belonging to a different item counts as supporting evidence",
+      "developer_status": "PASS_WITH_DISCLOSED_CURRENT_SETUP",
+      "independent_acceptance": "PENDING",
+      "acceptance_assertions": [
+        "Probe A14 reports OK: the disposition citing only another item's transaction row is refused.",
+        "Probes A07, A08, A09, M1 and M2 are unchanged."
+      ],
+      "regression_methods": [
+        "test_RA07_unrelated_rows_and_receipts_cannot_support_vendor_coding"
+      ],
+      "independent_probe": "A14"
+    },
+    {
+      "id": "RA-08",
+      "priority": "P3",
+      "title": "Two charges can each be excluded as a duplicate of the other, leaving no proposed entry for either",
+      "developer_status": "PASS_WITH_DISCLOSED_CURRENT_SETUP",
+      "independent_acceptance": "PENDING",
+      "acceptance_assertions": [
+        "Probe X09 reports OK: the second, circular disposition is refused."
+      ],
+      "regression_methods": [
+        "test_RA08_circular_duplicate_and_replay_exclusions_are_refused_before_reprepare"
+      ],
+      "independent_probe": "X09"
+    }
+  ],
+  "validation_cases": {
+    "summary": {
+      "PASS": 29,
+      "FIXED": 10,
+      "DEFERRED-OK": 21
+    },
+    "cases": [
+      {
+        "id": "FV-C01",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C02",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C03",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C04",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C05",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C06",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C07",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C08",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C09",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C10",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C11",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C12",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C13",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C14",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C15",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-C16",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C17",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C18",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-C19",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J01",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J02",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J03",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J04",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J05",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J06",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J07",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-J08",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-J09",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-J10",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-CL01",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-CL02",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-R01",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-R02",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-R03",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-R04",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-RC01",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-RC02",
+        "stage": "executable_now_fails_until_fix",
+        "status": "FIXED",
+        "detail": "meets required outcome"
+      },
+      {
+        "id": "FV-RC03",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-AP01",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AP02",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AP03",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AP04",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AP05",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AR01",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AR02",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AR03",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-AR04",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-BK01",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-BK02",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-BK03",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-BK04",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-BK05",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-CL03",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-CL04",
+        "stage": "executable_now",
+        "status": "PASS",
+        "detail": ""
+      },
+      {
+        "id": "FV-GL01",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-RP01",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-RP02",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-RP03",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-RP04",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      },
+      {
+        "id": "FV-RP05",
+        "stage": "future_module_specification",
+        "status": "DEFERRED-OK",
+        "detail": "refused (403)"
+      }
+    ]
+  },
+  "acceptance_original_compatible": {
+    "A04": "OK",
+    "A01": "OK",
+    "A02": "OK",
+    "A06": "OK",
+    "A07": "OK",
+    "A08": "OK",
+    "A09": "OK",
+    "A10": "OK",
+    "A11": "OK",
+    "A12": "OK",
+    "A13": "OK",
+    "A14": "OK",
+    "X01": "OK",
+    "X12k": "OK",
+    "X12s": "OK",
+    "X15": "OK",
+    "U1": "OK",
+    "U4": "NOTE",
+    "M1": "OK",
+    "M2": "OK"
+  },
+  "acceptance_current_setup": {
+    "A04": "OK",
+    "A03": "OK",
+    "A01": "OK",
+    "A02": "OK",
+    "A05": "OK",
+    "A06": "OK",
+    "A07": "OK",
+    "A08": "OK",
+    "A09": "OK",
+    "A10": "OK",
+    "A11": "OK",
+    "A12": "OK",
+    "A13": "OK",
+    "A14": "OK",
+    "A17": "OK",
+    "X01": "OK",
+    "X09": "OK",
+    "X12k": "OK",
+    "X12s": "OK",
+    "X15": "OK",
+    "U1": "OK",
+    "U4": "NOTE",
+    "M1": "OK",
+    "M2": "OK"
+  },
+  "acceptance_full_original": {
+    "A04": "OK",
+    "A03": "WEAK",
+    "A01": "OK",
+    "A02": "OK",
+    "A05": "WEAK",
+    "A06": "OK",
+    "A07": "OK",
+    "A08": "OK",
+    "A09": "OK",
+    "A10": "OK",
+    "A11": "OK",
+    "A12": "OK",
+    "A13": "OK",
+    "A14": "OK",
+    "A17": "ERROR",
+    "X01": "OK",
+    "X09": "WEAK",
+    "X12k": "OK",
+    "X12s": "OK",
+    "X15": "OK",
+    "U1": "OK",
+    "U4": "NOTE",
+    "M1": "OK",
+    "M2": "OK"
+  },
+  "older_original_compatible": {
+    "RN01": "OK",
+    "RN02b": "OK",
+    "RN04": "OK",
+    "RN05": "OK",
+    "RN05b": "OK",
+    "RN06": "OK",
+    "RT09a": "OK",
+    "RT09b": "OK",
+    "RT09c": "OK",
+    "RT09d": "OK",
+    "RT11": "OK",
+    "RT12b": "OK",
+    "RT12c": "OK",
+    "RT12d": "OK",
+    "RT10a": "OK",
+    "RT10b": "OK",
+    "RT13": "OK",
+    "RT13n": "OK",
+    "RT14c": "OK",
+    "RT14d": "OK",
+    "RT14e": "OK",
+    "RT14f": "OK",
+    "RT15": "OK",
+    "RT16": "OK",
+    "RT17": "OK",
+    "RT19a": "OK",
+    "RT19b": "OK"
+  },
+  "older_current_setup": {
+    "RN01": "OK",
+    "RN02": "OK",
+    "RN02b": "OK",
+    "RN03": "OK",
+    "RN04": "OK",
+    "RN05": "OK",
+    "RN05b": "OK",
+    "RN06": "OK",
+    "RN07": "OK",
+    "RT09a": "OK",
+    "RT09b": "OK",
+    "RT09c": "OK",
+    "RT09d": "OK",
+    "RT11": "OK",
+    "RT12a": "OK",
+    "RT12b": "OK",
+    "RT12c": "OK",
+    "RT12d": "OK",
+    "RT10a": "OK",
+    "RT10b": "OK",
+    "RT13": "OK",
+    "RT13n": "OK",
+    "RT14a": "OK",
+    "RT14b": "OK",
+    "RT14c": "OK",
+    "RT14d": "OK",
+    "RT14e": "OK",
+    "RT14f": "OK",
+    "RT15": "OK",
+    "RT16": "OK",
+    "RT17": "OK",
+    "RT18": "OK",
+    "RT19a": "OK",
+    "RT19b": "OK",
+    "RG0": "OK"
+  },
+  "older_full_original": {
+    "RN01": "OK",
+    "RN02": "ERROR",
+    "RN02b": "OK",
+    "RN03": "ERROR",
+    "RN04": "OK",
+    "RN05": "OK",
+    "RN05b": "OK",
+    "RN06": "OK",
+    "RN07": "ERROR",
+    "RT09a": "OK",
+    "RT09b": "OK",
+    "RT09c": "OK",
+    "RT09d": "OK",
+    "RT11": "OK",
+    "RT12a": "WEAK",
+    "RT12b": "OK",
+    "RT12c": "OK",
+    "RT12d": "OK",
+    "RT10a": "OK",
+    "RT10b": "OK",
+    "RT13": "OK",
+    "RT13n": "OK",
+    "RT14a": "WEAK",
+    "RT14b": "OK",
+    "RT14c": "OK",
+    "RT14d": "OK",
+    "RT14e": "OK",
+    "RT14f": "OK",
+    "RT15": "OK",
+    "RT16": "OK",
+    "RT17": "OK",
+    "RT18": "WEAK",
+    "RT19a": "OK",
+    "RT19b": "OK",
+    "RG0": "WEAK"
+  },
+  "adaptations": {
+    "status": "PENDING_INDEPENDENT_JUDGMENT",
+    "new_positive_setups": [
+      "A03",
+      "A05",
+      "A17",
+      "X09"
+    ],
+    "older_positive_setup": [
+      "RT18"
+    ],
+    "reason": "RA-04 requires independently accepted statement changes before positive eligibility/review. All original verdicts remain; all 24 new-probe assignments are unchanged. Original files stay byte-identical.",
+    "previous_seven_adaptations_and_RT14b": "Accepted by Fable at frozen RV checkpoint; retained unchanged in substance.",
+    "explanation": "docs/acceptance_ra/probe-adaptations.md",
+    "patches": [
+      "docs/acceptance_ra/acceptance-probe-adaptations.patch",
+      "docs/acceptance_ra/older-RT18-adaptation.patch"
+    ]
+  },
+  "new_RA_regression_methods": 13,
+  "new_acceptance_gate_methods": 5,
+  "preserved_input_archive_hashes": 57,
+  "new_independent_files": 27,
+  "retained_original_platform_http_methods": {
+    "initial": 40,
+    "batch1": 41,
+    "reviewed_batch2": 43,
+    "missing": []
+  },
+  "extra_regression": {
+    "case": "Valid move followed by former-origin relock and destination revision",
+    "before": "Reproduced false quarantine",
+    "after": "Nearest admitted owner preserves destination routing",
+    "evidence": [
+      "docs/acceptance_ra/relock-regression-before.txt",
+      "docs/acceptance_ra/final-RA-regressions.txt"
+    ]
+  },
+  "teaching_month": {
+    "referral": {
+      "approvals": 10,
+      "held": [
+        "TX-007",
+        "TX-009",
+        "TX-011"
+      ],
+      "original_TX009_receipt_unchanged": true,
+      "impact": {
+        "DEMO_OFFICE_SUPPLIES": "311.00",
+        "DEMO_REPAIRS": "200.00",
+        "DEMO_CARD_LIABILITY": "-211.00",
+        "DEMO_CASH": "-300.00"
+      }
+    },
+    "accepted_revised_support": {
+      "approvals": 11,
+      "held": [
+        "TX-007",
+        "TX-011"
+      ],
+      "impact": {
+        "DEMO_OFFICE_SUPPLIES": "391.00",
+        "DEMO_REPAIRS": "200.00",
+        "DEMO_CARD_LIABILITY": "-291.00",
+        "DEMO_CASH": "-300.00"
+      }
+    },
+    "net": "0.00",
+    "quarantine": [
+      "TX-008",
+      "receipt-TX-008"
+    ],
+    "preparation_packages": 2,
+    "period_status": "locked",
+    "second_client_isolation": "PASS in independent M1/current service walkthrough"
+  },
+  "remaining_note": "U4: visible non-restoration when a superseder is withdrawn; explicitly permitted by Fable, not an assigned defect.",
+  "unresolved": "Independent RA acceptance and review of the four new positive setups/older RT18; literal original full commands remain nonzero as disclosed.",
+  "G0": "NOT_ACCEPTED",
+  "G1_G4": "CLOSED",
+  "Batch3": "NOT_AUTHORIZED"
+}

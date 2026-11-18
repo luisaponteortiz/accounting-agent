@@ -1,0 +1,1387 @@
+[
+  {
+    "label": "baseline-rd-probes",
+    "command": [
+      "python3",
+      "exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py",
+      "."
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:43:32.486803+00:00",
+    "elapsed_seconds": 17.246,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "baseline-rd-probes.stdout.txt",
+    "stderr": "baseline-rd-probes.stderr.txt"
+  },
+  {
+    "label": "baseline-extended-orders",
+    "command": [
+      "python3",
+      "exports/FABLE_RD_ACCEPTANCE/fable_rd_order_search.py",
+      "."
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:43:32.502456+00:00",
+    "elapsed_seconds": 285.287,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "baseline-extended-orders.stdout.txt",
+    "stderr": "baseline-extended-orders.stderr.txt"
+  },
+  {
+    "label": "contract-unit-before",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:49:42.919863+00:00",
+    "elapsed_seconds": 11.925,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "contract-unit-before.stdout.txt",
+    "stderr": "contract-unit-before.stderr.txt"
+  },
+  {
+    "label": "re01-probes-after",
+    "command": [
+      "python3",
+      "exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py",
+      ".",
+      "E03",
+      "E03c"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:50:10.496245+00:00",
+    "elapsed_seconds": 2.544,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "re01-probes-after.stdout.txt",
+    "stderr": "re01-probes-after.stderr.txt"
+  },
+  {
+    "label": "contract-unit-after",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:53:09.965350+00:00",
+    "elapsed_seconds": 19.688,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "contract-unit-after.stdout.txt",
+    "stderr": "contract-unit-after.stderr.txt"
+  },
+  {
+    "label": "re02-probes-after",
+    "command": [
+      "python3",
+      "exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py",
+      ".",
+      "Y01",
+      "Y02",
+      "Y03",
+      "Y04",
+      "Y06",
+      "E01",
+      "E02",
+      "E03",
+      "E03c",
+      "E04",
+      "E05",
+      "E06"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:55:40.424661+00:00",
+    "elapsed_seconds": 17.52,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "re02-probes-after.stdout.txt",
+    "stderr": "re02-probes-after.stderr.txt"
+  },
+  {
+    "label": "y05-adapted-after",
+    "command": [
+      "python3",
+      "review/fable_rd_feed_contract_probes.py",
+      ".",
+      "Y05"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:55:41.664456+00:00",
+    "elapsed_seconds": 2.422,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "y05-adapted-after.stdout.txt",
+    "stderr": "y05-adapted-after.stderr.txt"
+  },
+  {
+    "label": "retained-rd-units",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_review_corrections_rd",
+      "tests.test_review_corrections_rc",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:56:56.583050+00:00",
+    "elapsed_seconds": 13.554,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "retained-rd-units.stdout.txt",
+    "stderr": "retained-rd-units.stderr.txt"
+  },
+  {
+    "label": "extended-orders-after",
+    "command": [
+      "python3",
+      "exports/FABLE_RD_ACCEPTANCE/fable_rd_order_search.py",
+      ".",
+      "--json",
+      "docs/corrections_re/extended-orders-after-results.json"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:56:57.713699+00:00",
+    "elapsed_seconds": 305.136,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "extended-orders-after.stdout.txt",
+    "stderr": "extended-orders-after.stderr.txt"
+  },
+  {
+    "label": "rc-probes-after",
+    "command": [
+      "python3",
+      "exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py",
+      "."
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:56:57.728158+00:00",
+    "elapsed_seconds": 29.094,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "rc-probes-after.stdout.txt",
+    "stderr": "rc-probes-after.stderr.txt"
+  },
+  {
+    "label": "contract-unit-expanded",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T18:58:13.574402+00:00",
+    "elapsed_seconds": 21.041,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "contract-unit-expanded.stdout.txt",
+    "stderr": "contract-unit-expanded.stderr.txt"
+  },
+  {
+    "label": "prv-unit-before",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_product_requirements.ProductRequirements.test_PRV15_result_row_swaps_and_reversal_are_rejected",
+      "tests.test_product_requirements.ProductRequirements.test_PRV14_third_authority_is_pinned_and_latest_verdict_controls",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:00:42.122250+00:00",
+    "elapsed_seconds": 5.474,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "prv-unit-before.stdout.txt",
+    "stderr": "prv-unit-before.stderr.txt"
+  },
+  {
+    "label": "contract-unit-final",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:00:43.330856+00:00",
+    "elapsed_seconds": 21.634,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "contract-unit-final.stdout.txt",
+    "stderr": "contract-unit-final.stderr.txt"
+  },
+  {
+    "label": "register-after-re-prv",
+    "command": [
+      "make",
+      "check"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:02:41.518118+00:00",
+    "elapsed_seconds": 1.494,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "register-after-re-prv.stdout.txt",
+    "stderr": "register-after-re-prv.stderr.txt"
+  },
+  {
+    "label": "sticky-hold-unit-before",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract.FeedContract.test_clause8_plain_date_revision_cannot_release_locked_late_activity",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:06:19.986139+00:00",
+    "elapsed_seconds": 0.805,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "sticky-hold-unit-before.stdout.txt",
+    "stderr": "sticky-hold-unit-before.stderr.txt"
+  },
+  {
+    "label": "contract-and-retained-unit-final",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract",
+      "tests.test_review_corrections_rd",
+      "tests.test_review_corrections_rc",
+      "tests.test_periods",
+      "tests.test_reverification_controls",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:06:41.674689+00:00",
+    "elapsed_seconds": 53.706,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "contract-and-retained-unit-final.stdout.txt",
+    "stderr": "contract-and-retained-unit-final.stderr.txt"
+  },
+  {
+    "label": "prv-unit-after",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_product_requirements",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:06:42.855751+00:00",
+    "elapsed_seconds": 35.936,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "prv-unit-after.stdout.txt",
+    "stderr": "prv-unit-after.stderr.txt"
+  },
+  {
+    "label": "locked-second-claim-contract-check",
+    "command": [
+      "python3",
+      "/tmp/aaos_re_locked_claim.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:09:05.996839+00:00",
+    "elapsed_seconds": 0.691,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "locked-second-claim-contract-check.stdout.txt",
+    "stderr": "locked-second-claim-contract-check.stderr.txt"
+  },
+  {
+    "label": "candidate-batch2-gate",
+    "command": [
+      "make",
+      "batch2-gate"
+    ],
+    "cwd": "/tmp/aaos-re-gates",
+    "started_utc": "2026-11-16T19:11:15.002019+00:00",
+    "elapsed_seconds": 158.028,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-batch2-gate.stdout.txt",
+    "stderr": "candidate-batch2-gate.stderr.txt"
+  },
+  {
+    "label": "candidate-reverification-gate",
+    "command": [
+      "make",
+      "reverification-gate"
+    ],
+    "cwd": "/tmp/aaos-re-gates",
+    "started_utc": "2026-11-16T19:11:15.002076+00:00",
+    "elapsed_seconds": 89.434,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-reverification-gate.stdout.txt",
+    "stderr": "candidate-reverification-gate.stderr.txt"
+  },
+  {
+    "label": "candidate-rc-gate",
+    "command": [
+      "make",
+      "rc-gate"
+    ],
+    "cwd": "/tmp/aaos-re-gates",
+    "started_utc": "2026-11-16T19:11:15.003192+00:00",
+    "elapsed_seconds": 43.631,
+    "exit_code": 2,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-rc-gate.stdout.txt",
+    "stderr": "candidate-rc-gate.stderr.txt"
+  },
+  {
+    "label": "candidate-rb-gate",
+    "command": [
+      "make",
+      "rb-gate"
+    ],
+    "cwd": "/tmp/aaos-re-gates",
+    "started_utc": "2026-11-16T19:11:15.027965+00:00",
+    "elapsed_seconds": 53.174,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-rb-gate.stdout.txt",
+    "stderr": "candidate-rb-gate.stderr.txt"
+  },
+  {
+    "label": "candidate-acceptance-gate",
+    "command": [
+      "make",
+      "acceptance-gate"
+    ],
+    "cwd": "/tmp/aaos-re-gates",
+    "started_utc": "2026-11-16T19:11:15.051392+00:00",
+    "elapsed_seconds": 87.224,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-acceptance-gate.stdout.txt",
+    "stderr": "candidate-acceptance-gate.stderr.txt"
+  },
+  {
+    "label": "candidate-rd-gate",
+    "command": [
+      "make",
+      "rd-gate"
+    ],
+    "cwd": "/tmp/aaos-re-gates",
+    "started_utc": "2026-11-16T19:11:15.087364+00:00",
+    "elapsed_seconds": 173.82,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-rd-gate.stdout.txt",
+    "stderr": "candidate-rd-gate.stderr.txt"
+  },
+  {
+    "label": "candidate-rb-register-faults",
+    "command": [
+      "python3",
+      "exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py",
+      "."
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:11:15.113448+00:00",
+    "elapsed_seconds": 111.569,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-rb-register-faults.stdout.txt",
+    "stderr": "candidate-rb-register-faults.stderr.txt"
+  },
+  {
+    "label": "candidate-re-gate",
+    "command": [
+      "make",
+      "re-gate"
+    ],
+    "cwd": "/tmp/aaos-re-gates",
+    "started_utc": "2026-11-16T19:11:15.140746+00:00",
+    "elapsed_seconds": 371.187,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-re-gate.stdout.txt",
+    "stderr": "candidate-re-gate.stderr.txt"
+  },
+  {
+    "label": "candidate-make-test",
+    "command": [
+      "make",
+      "test"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:11:56.187041+00:00",
+    "elapsed_seconds": 1096.847,
+    "exit_code": 2,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-make-test.stdout.txt",
+    "stderr": "candidate-make-test.stderr.txt"
+  },
+  {
+    "label": "inventory-prepare",
+    "command": [
+      "python3",
+      "scripts/build_re_review_bundle.py",
+      "--prepare"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:15:23.695229+00:00",
+    "elapsed_seconds": 5.83,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "inventory-prepare.stdout.txt",
+    "stderr": "inventory-prepare.stderr.txt"
+  },
+  {
+    "label": "candidate-rc-register-faults",
+    "command": [
+      "python3",
+      "exports/FABLE_RC_ACCEPTANCE/evidence/scripts/fable_rc_register_faults.py",
+      "/tmp/aaos-re-faults"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:19:44.905223+00:00",
+    "elapsed_seconds": 37.949,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-rc-register-faults.stdout.txt",
+    "stderr": "candidate-rc-register-faults.stderr.txt"
+  },
+  {
+    "label": "n01e-regression-after",
+    "command": [
+      "python3",
+      "exports/FABLE_RB_ACCEPTANCE/fable_rb_acceptance_probes.py",
+      ".",
+      "N01e"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:21:02.083714+00:00",
+    "elapsed_seconds": 1.276,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "n01e-regression-after.stdout.txt",
+    "stderr": "n01e-regression-after.stderr.txt"
+  },
+  {
+    "label": "candidate-rd-register-faults",
+    "command": [
+      "python3",
+      "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/fable_rd_register_faults.py",
+      "/tmp/aaos-re-faults"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:24:04.589986+00:00",
+    "elapsed_seconds": 19.635,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "candidate-rd-register-faults.stdout.txt",
+    "stderr": "candidate-rd-register-faults.stderr.txt"
+  },
+  {
+    "label": "rc-gate-after-repeat-fix",
+    "command": [
+      "make",
+      "rc-gate"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:24:05.798403+00:00",
+    "elapsed_seconds": 27.184,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "rc-gate-after-repeat-fix.stdout.txt",
+    "stderr": "rc-gate-after-repeat-fix.stderr.txt"
+  },
+  {
+    "label": "selected-late-target-before",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract.FeedContract.test_selected_target_in_locked_late_activity_quarantines_the_claimant",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:28:40.195741+00:00",
+    "elapsed_seconds": 1.101,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "selected-late-target-before.stdout.txt",
+    "stderr": "selected-late-target-before.stderr.txt"
+  },
+  {
+    "label": "contract-unit-after-hold-completion",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract",
+      "tests.test_review_corrections_rd",
+      "tests.test_review_corrections_rc",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:28:59.436892+00:00",
+    "elapsed_seconds": 32.54,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "contract-unit-after-hold-completion.stdout.txt",
+    "stderr": "contract-unit-after-hold-completion.stderr.txt"
+  },
+  {
+    "label": "descendant-selection-lineage-before",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract.FeedContract.test_target_selector_cannot_review_a_descendant_using_their_selection",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:42:58.926531+00:00",
+    "elapsed_seconds": 1.19,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "descendant-selection-lineage-before.stdout.txt",
+    "stderr": "descendant-selection-lineage-before.stderr.txt"
+  },
+  {
+    "label": "descendant-selection-lineage-after",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract.FeedContract.test_target_selector_cannot_review_a_descendant_using_their_selection",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:46:17.323491+00:00",
+    "elapsed_seconds": 1.286,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "descendant-selection-lineage-after.stdout.txt",
+    "stderr": "descendant-selection-lineage-after.stderr.txt"
+  },
+  {
+    "label": "current-contract-unit",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract",
+      "tests.test_review_corrections_rd",
+      "tests.test_review_corrections_rc",
+      "tests.test_product_requirements",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:46:39.039304+00:00",
+    "elapsed_seconds": 70.415,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-contract-unit.stdout.txt",
+    "stderr": "current-contract-unit.stderr.txt"
+  },
+  {
+    "label": "current-make-check",
+    "command": [
+      "make",
+      "check"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:46:40.236646+00:00",
+    "elapsed_seconds": 1.583,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-make-check.stdout.txt",
+    "stderr": "current-make-check.stderr.txt"
+  },
+  {
+    "label": "current-full-make-test",
+    "command": [
+      "make",
+      "test"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:46:51.940593+00:00",
+    "elapsed_seconds": 1101.913,
+    "exit_code": 2,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-full-make-test.stdout.txt",
+    "stderr": "current-full-make-test.stderr.txt"
+  },
+  {
+    "label": "current-batch2-gate",
+    "command": [
+      "make",
+      "batch2-gate"
+    ],
+    "cwd": "/tmp/aaos-re-current-gates",
+    "started_utc": "2026-11-16T19:47:58.959753+00:00",
+    "elapsed_seconds": 125.082,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-batch2-gate.stdout.txt",
+    "stderr": "current-batch2-gate.stderr.txt"
+  },
+  {
+    "label": "current-rc-gate",
+    "command": [
+      "make",
+      "rc-gate"
+    ],
+    "cwd": "/tmp/aaos-re-current-gates",
+    "started_utc": "2026-11-16T19:48:00.153796+00:00",
+    "elapsed_seconds": 27.013,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-rc-gate.stdout.txt",
+    "stderr": "current-rc-gate.stderr.txt"
+  },
+  {
+    "label": "current-rd-gate",
+    "command": [
+      "make",
+      "rd-gate"
+    ],
+    "cwd": "/tmp/aaos-re-current-gates",
+    "started_utc": "2026-11-16T19:48:27.291429+00:00",
+    "elapsed_seconds": 130.785,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-rd-gate.stdout.txt",
+    "stderr": "current-rd-gate.stderr.txt"
+  },
+  {
+    "label": "current-reverification-gate",
+    "command": [
+      "make",
+      "reverification-gate"
+    ],
+    "cwd": "/tmp/aaos-re-current-gates",
+    "started_utc": "2026-11-16T19:50:04.169630+00:00",
+    "elapsed_seconds": 53.359,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-reverification-gate.stdout.txt",
+    "stderr": "current-reverification-gate.stderr.txt"
+  },
+  {
+    "label": "check-after-boundary-disclosure",
+    "command": [
+      "make",
+      "check"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:50:20.729925+00:00",
+    "elapsed_seconds": 1.521,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "check-after-boundary-disclosure.stdout.txt",
+    "stderr": "check-after-boundary-disclosure.stderr.txt"
+  },
+  {
+    "label": "current-re-gate",
+    "command": [
+      "make",
+      "re-gate"
+    ],
+    "cwd": "/tmp/aaos-re-current-gates",
+    "started_utc": "2026-11-16T19:50:38.208185+00:00",
+    "elapsed_seconds": 324.353,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-re-gate.stdout.txt",
+    "stderr": "current-re-gate.stderr.txt"
+  },
+  {
+    "label": "current-acceptance-gate",
+    "command": [
+      "make",
+      "acceptance-gate"
+    ],
+    "cwd": "/tmp/aaos-re-current-gates",
+    "started_utc": "2026-11-16T19:50:57.653277+00:00",
+    "elapsed_seconds": 53.223,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-acceptance-gate.stdout.txt",
+    "stderr": "current-acceptance-gate.stderr.txt"
+  },
+  {
+    "label": "current-rb-gate",
+    "command": [
+      "make",
+      "rb-gate"
+    ],
+    "cwd": "/tmp/aaos-re-current-gates",
+    "started_utc": "2026-11-16T19:51:51.004820+00:00",
+    "elapsed_seconds": 31.238,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-rb-gate.stdout.txt",
+    "stderr": "current-rb-gate.stderr.txt"
+  },
+  {
+    "label": "preservation-check",
+    "command": [
+      "python3",
+      "scripts/verify_re_preservation.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:52:49.355677+00:00",
+    "elapsed_seconds": 3.22,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "preservation-check.stdout.txt",
+    "stderr": "preservation-check.stderr.txt"
+  },
+  {
+    "label": "preservation-byte-boundaries",
+    "command": [
+      "python3",
+      "scripts/verify_re_preservation.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:53:43.301103+00:00",
+    "elapsed_seconds": 3.24,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "preservation-byte-boundaries.stdout.txt",
+    "stderr": "preservation-byte-boundaries.stderr.txt"
+  },
+  {
+    "label": "inventory-before-package",
+    "command": [
+      "python3",
+      "scripts/build_re_review_bundle.py",
+      "--prepare"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:53:44.505575+00:00",
+    "elapsed_seconds": 5.229,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "inventory-before-package.stdout.txt",
+    "stderr": "inventory-before-package.stderr.txt"
+  },
+  {
+    "label": "source-patch-check",
+    "command": [
+      "python3",
+      "scripts/verify_re_patch.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:55:10.639968+00:00",
+    "elapsed_seconds": 7.108,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "source-patch-check.stdout.txt",
+    "stderr": "source-patch-check.stderr.txt"
+  },
+  {
+    "label": "current-http-diagnostic",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_http",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T19:59:39.312465+00:00",
+    "elapsed_seconds": 5.706,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "current-http-diagnostic.stdout.txt",
+    "stderr": "current-http-diagnostic.stderr.txt"
+  },
+  {
+    "label": "http-after-empty-selection-shortcut",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_http",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:01:05.140730+00:00",
+    "elapsed_seconds": 8.657,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "http-after-empty-selection-shortcut.stdout.txt",
+    "stderr": "http-after-empty-selection-shortcut.stderr.txt"
+  },
+  {
+    "label": "selection-lineage-after-shortcut",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract.FeedContract.test_target_selector_cannot_review_a_descendant_using_their_selection",
+      "tests.test_feed_contract.FeedContract.test_target_decision_persists_through_revision_and_retains_review_contributor",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:01:06.370743+00:00",
+    "elapsed_seconds": 2.581,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "selection-lineage-after-shortcut.stdout.txt",
+    "stderr": "selection-lineage-after-shortcut.stderr.txt"
+  },
+  {
+    "label": "final-full-make-test",
+    "command": [
+      "make",
+      "test"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:01:42.647552+00:00",
+    "elapsed_seconds": 704.041,
+    "exit_code": 2,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "final-full-make-test.stdout.txt",
+    "stderr": "final-full-make-test.stderr.txt"
+  },
+  {
+    "label": "final-source-patch-check",
+    "command": [
+      "python3",
+      "scripts/verify_re_patch.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:02:19.483051+00:00",
+    "elapsed_seconds": 7.171,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "final-source-patch-check.stdout.txt",
+    "stderr": "final-source-patch-check.stderr.txt"
+  },
+  {
+    "label": "final-preservation-check",
+    "command": [
+      "python3",
+      "scripts/verify_re_preservation.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:02:20.696692+00:00",
+    "elapsed_seconds": 3.237,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "final-preservation-check.stdout.txt",
+    "stderr": "final-preservation-check.stderr.txt"
+  },
+  {
+    "label": "final-make-check",
+    "command": [
+      "make",
+      "check"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:03:42.016844+00:00",
+    "elapsed_seconds": 1.595,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "final-make-check.stdout.txt",
+    "stderr": "final-make-check.stderr.txt"
+  },
+  {
+    "label": "final-locked-home-boundary",
+    "command": [
+      "python3",
+      "docs/corrections_re/locked_second_claim_reproduction.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:04:45.620185+00:00",
+    "elapsed_seconds": 0.639,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "final-locked-home-boundary.stdout.txt",
+    "stderr": "final-locked-home-boundary.stderr.txt"
+  },
+  {
+    "label": "feed-plus-http-isolation",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract",
+      "tests.test_http",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:07:18.676578+00:00",
+    "elapsed_seconds": 27.244,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "feed-plus-http-isolation.stdout.txt",
+    "stderr": "feed-plus-http-isolation.stderr.txt"
+  },
+  {
+    "label": "http-after-feed-state-diagnostic",
+    "command": [
+      "python3",
+      "docs/corrections_re/http_setup_after_feed_diagnostic.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:09:08.971512+00:00",
+    "elapsed_seconds": 29.25,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "http-after-feed-state-diagnostic.stdout.txt",
+    "stderr": "http-after-feed-state-diagnostic.stderr.txt"
+  },
+  {
+    "label": "feed-and-http-after-unclaimed-shortcut",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_feed_contract",
+      "tests.test_http",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:10:12.682857+00:00",
+    "elapsed_seconds": 28.505,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "feed-and-http-after-unclaimed-shortcut.stdout.txt",
+    "stderr": "feed-and-http-after-unclaimed-shortcut.stderr.txt"
+  },
+  {
+    "label": "verified-full-make-test",
+    "command": [
+      "make",
+      "test"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:11:35.792189+00:00",
+    "elapsed_seconds": 1031.303,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-full-make-test.stdout.txt",
+    "stderr": "verified-full-make-test.stderr.txt"
+  },
+  {
+    "label": "verified-source-patch-check",
+    "command": [
+      "python3",
+      "scripts/verify_re_patch.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:12:06.835924+00:00",
+    "elapsed_seconds": 7.329,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-source-patch-check.stdout.txt",
+    "stderr": "verified-source-patch-check.stderr.txt"
+  },
+  {
+    "label": "verified-preservation-check",
+    "command": [
+      "python3",
+      "scripts/verify_re_preservation.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:12:07.950818+00:00",
+    "elapsed_seconds": 3.234,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-preservation-check.stdout.txt",
+    "stderr": "verified-preservation-check.stderr.txt"
+  },
+  {
+    "label": "verified-locked-home-boundary",
+    "command": [
+      "python3",
+      "docs/corrections_re/locked_second_claim_reproduction.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:12:35.559656+00:00",
+    "elapsed_seconds": 0.659,
+    "exit_code": 1,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-locked-home-boundary.stdout.txt",
+    "stderr": "verified-locked-home-boundary.stderr.txt"
+  },
+  {
+    "label": "verified-batch2-gate",
+    "command": [
+      "make",
+      "batch2-gate"
+    ],
+    "cwd": "/tmp/aaos-re-verified-gates",
+    "started_utc": "2026-11-16T20:16:15.080159+00:00",
+    "elapsed_seconds": 110.042,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-batch2-gate.stdout.txt",
+    "stderr": "verified-batch2-gate.stderr.txt"
+  },
+  {
+    "label": "verified-rc-gate",
+    "command": [
+      "make",
+      "rc-gate"
+    ],
+    "cwd": "/tmp/aaos-re-verified-gates",
+    "started_utc": "2026-11-16T20:16:16.277228+00:00",
+    "elapsed_seconds": 26.523,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-rc-gate.stdout.txt",
+    "stderr": "verified-rc-gate.stderr.txt"
+  },
+  {
+    "label": "verified-make-check",
+    "command": [
+      "make",
+      "check"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:16:17.405174+00:00",
+    "elapsed_seconds": 1.541,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-make-check.stdout.txt",
+    "stderr": "verified-make-check.stderr.txt"
+  },
+  {
+    "label": "verified-rd-gate",
+    "command": [
+      "make",
+      "rd-gate"
+    ],
+    "cwd": "/tmp/aaos-re-verified-gates",
+    "started_utc": "2026-11-16T20:16:42.928370+00:00",
+    "elapsed_seconds": 126.817,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-rd-gate.stdout.txt",
+    "stderr": "verified-rd-gate.stderr.txt"
+  },
+  {
+    "label": "verified-reverification-gate",
+    "command": [
+      "make",
+      "reverification-gate"
+    ],
+    "cwd": "/tmp/aaos-re-verified-gates",
+    "started_utc": "2026-11-16T20:18:05.249330+00:00",
+    "elapsed_seconds": 53.078,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-reverification-gate.stdout.txt",
+    "stderr": "verified-reverification-gate.stderr.txt"
+  },
+  {
+    "label": "verified-re-gate",
+    "command": [
+      "make",
+      "re-gate"
+    ],
+    "cwd": "/tmp/aaos-re-verified-gates",
+    "started_utc": "2026-11-16T20:18:49.872991+00:00",
+    "elapsed_seconds": 315.024,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-re-gate.stdout.txt",
+    "stderr": "verified-re-gate.stderr.txt"
+  },
+  {
+    "label": "verified-acceptance-gate",
+    "command": [
+      "make",
+      "acceptance-gate"
+    ],
+    "cwd": "/tmp/aaos-re-verified-gates",
+    "started_utc": "2026-11-16T20:18:58.463673+00:00",
+    "elapsed_seconds": 50.83,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-acceptance-gate.stdout.txt",
+    "stderr": "verified-acceptance-gate.stderr.txt"
+  },
+  {
+    "label": "verified-rb-gate",
+    "command": [
+      "make",
+      "rb-gate"
+    ],
+    "cwd": "/tmp/aaos-re-verified-gates",
+    "started_utc": "2026-11-16T20:19:49.419929+00:00",
+    "elapsed_seconds": 30.486,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "verified-rb-gate.stdout.txt",
+    "stderr": "verified-rb-gate.stderr.txt"
+  },
+  {
+    "label": "owner-clarification-probe",
+    "command": [
+      "python3",
+      "docs/corrections_re/locked_second_claim_reproduction.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:28:50.050476+00:00",
+    "elapsed_seconds": 0.747,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "owner-clarification-probe.stdout.txt",
+    "stderr": "owner-clarification-probe.stderr.txt"
+  },
+  {
+    "label": "check-after-owner-clarification",
+    "command": [
+      "make",
+      "check"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:29:43.505305+00:00",
+    "elapsed_seconds": 1.476,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "check-after-owner-clarification.stdout.txt",
+    "stderr": "check-after-owner-clarification.stderr.txt"
+  },
+  {
+    "label": "register-tests-after-owner-clarification",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_product_requirements",
+      "-v"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:30:30.530063+00:00",
+    "elapsed_seconds": 34.029,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "register-tests-after-owner-clarification.stdout.txt",
+    "stderr": "register-tests-after-owner-clarification.stderr.txt"
+  },
+  {
+    "label": "delivery-source-patch-check",
+    "command": [
+      "python3",
+      "scripts/verify_re_patch.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:31:52.884699+00:00",
+    "elapsed_seconds": 6.801,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "delivery-source-patch-check.stdout.txt",
+    "stderr": "delivery-source-patch-check.stderr.txt"
+  },
+  {
+    "label": "delivery-preservation-check",
+    "command": [
+      "python3",
+      "scripts/verify_re_preservation.py"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:31:54.004522+00:00",
+    "elapsed_seconds": 3.127,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "delivery-preservation-check.stdout.txt",
+    "stderr": "delivery-preservation-check.stderr.txt"
+  },
+  {
+    "label": "delivery-make-check",
+    "command": [
+      "make",
+      "check"
+    ],
+    "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+    "started_utc": "2026-11-16T20:31:55.192469+00:00",
+    "elapsed_seconds": 1.362,
+    "exit_code": 0,
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "sqlite": "3.51.0",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "stdout": "delivery-make-check.stdout.txt",
+    "stderr": "delivery-make-check.stderr.txt"
+  }
+]

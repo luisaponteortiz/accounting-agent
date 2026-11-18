@@ -1,0 +1,240 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "scenario_id": "CLOSE-01",
+  "notice": "Fictional accounting fixture for software behavior. It is not a client procedure or a completed real reconciliation.",
+  "organization_id": "synthetic_ss",
+  "client_id": "synthetic_close_client",
+  "external_company_id": "synthetic_realm_001",
+  "currency": "USD",
+  "period": {
+    "start": "2026-10-01",
+    "end": "2026-10-31"
+  },
+  "procedure_version": "synthetic-close-v1",
+  "sources": {
+    "bank_statement": {
+      "snapshot_id": "close-statement-v1",
+      "account_id": "bank_001",
+      "opening_balance": "9000.00",
+      "closing_balance": "10000.00",
+      "rows": [
+        {
+          "id": "s-01",
+          "date": "2026-10-02",
+          "direction": "in",
+          "amount": "300.00",
+          "reference": "prior-period deposit"
+        },
+        {
+          "id": "s-02",
+          "date": "2026-10-12",
+          "direction": "in",
+          "amount": "1500.00",
+          "reference": "current customer receipt"
+        },
+        {
+          "id": "s-03",
+          "date": "2026-10-03",
+          "direction": "out",
+          "amount": "300.00",
+          "reference": "prior-period check"
+        },
+        {
+          "id": "s-04",
+          "date": "2026-10-20",
+          "direction": "out",
+          "amount": "300.00",
+          "reference": "current supplier payment"
+        },
+        {
+          "id": "s-05",
+          "date": "2026-10-31",
+          "direction": "out",
+          "amount": "200.00",
+          "reference": "bank service fee"
+        }
+      ]
+    },
+    "bank_ledger": {
+      "snapshot_id": "close-ledger-v1",
+      "account_id": "bank_001",
+      "opening_balance": "9000.00",
+      "closing_balance": "9500.00",
+      "rows": [
+        {
+          "id": "l-01",
+          "date": "2026-10-12",
+          "direction": "in",
+          "amount": "1500.00",
+          "reference": "current customer receipt"
+        },
+        {
+          "id": "l-02",
+          "date": "2026-10-31",
+          "direction": "in",
+          "amount": "500.00",
+          "reference": "deposit in transit"
+        },
+        {
+          "id": "l-03",
+          "date": "2026-10-20",
+          "direction": "out",
+          "amount": "300.00",
+          "reference": "current supplier payment"
+        },
+        {
+          "id": "l-04",
+          "date": "2026-10-28",
+          "direction": "out",
+          "amount": "500.00",
+          "reference": "outstanding check A"
+        },
+        {
+          "id": "l-05",
+          "date": "2026-10-29",
+          "direction": "out",
+          "amount": "700.00",
+          "reference": "outstanding check B"
+        }
+      ]
+    },
+    "prior_reconciliation": {
+      "snapshot_id": "close-prior-v1",
+      "period_end": "2026-09-30",
+      "bank_balance": "9000.00",
+      "book_balance": "9000.00",
+      "deposits_in_transit": "300.00",
+      "outstanding_checks": "300.00",
+      "note": "Both prior-period timing items clear in the current statement."
+    },
+    "required_credit_card_statement": {
+      "snapshot_id": null,
+      "account_id": "card_001",
+      "period_end": "2026-10-31",
+      "status": "missing"
+    }
+  },
+  "procedure": [
+    {
+      "id": "inventory",
+      "step": "Verify all required statements, ledger sources, periods and account identities.",
+      "requires": [],
+      "completion_rule": "Complete the inventory with explicit present, missing and invalid source findings; missing sources do not block this inventory or the available-work review package.",
+      "expected_sources": [
+        "bank_statement",
+        "bank_ledger",
+        "prior_reconciliation",
+        "required_credit_card_statement"
+      ]
+    },
+    {
+      "id": "bank_workpaper",
+      "step": "Prepare the bank reconciliation and record identified timing items and missing book items.",
+      "requires": [
+        "bank_statement",
+        "bank_ledger",
+        "prior_reconciliation"
+      ]
+    },
+    {
+      "id": "proposed_adjustments",
+      "step": "Prepare proposed adjustments for human accounting review. Do not post.",
+      "requires": [
+        "bank_workpaper"
+      ]
+    },
+    {
+      "id": "card_workpaper",
+      "step": "Prepare the card workpaper when its statement arrives.",
+      "requires": [
+        "required_credit_card_statement"
+      ]
+    },
+    {
+      "id": "review_package",
+      "step": "Assemble available work and unresolved exceptions with status per step.",
+      "requires": [
+        "inventory",
+        "bank_workpaper"
+      ]
+    },
+    {
+      "id": "final_close",
+      "step": "Require assigned human sign-off and evidence of every required external step.",
+      "requires": [
+        "card_workpaper",
+        "proposed_adjustments",
+        "review_package"
+      ]
+    }
+  ],
+  "proposed_adjustment": {
+    "id": "j-proposed-01",
+    "status": "proposed_unposted",
+    "date": "2026-10-31",
+    "currency": "USD",
+    "account_id": "bank_001",
+    "rationale": "Bank fee appears on statement and is absent from supplied posted ledger.",
+    "evidence": [
+      {
+        "snapshot_id": "close-statement-v1",
+        "locator": "rows/s-05"
+      },
+      {
+        "snapshot_id": "close-ledger-v1",
+        "locator": "complete bank account population"
+      }
+    ],
+    "lines": [
+      {
+        "account": "bank_fees",
+        "debit": "200.00",
+        "credit": "0.00"
+      },
+      {
+        "account": "bank_001",
+        "debit": "0.00",
+        "credit": "200.00"
+      }
+    ]
+  },
+  "expected": {
+    "ending_deposits_in_transit": "500.00",
+    "ending_outstanding_checks": "1200.00",
+    "adjusted_bank_balance": "9300.00",
+    "actual_book_balance_before_posting": "9500.00",
+    "unposted_adjustment_to_book": "-200.00",
+    "projected_book_balance_after_adjustment": "9300.00",
+    "actual_book_minus_adjusted_bank_difference": "200.00",
+    "projected_difference_after_adjustment": "0.00",
+    "debit_total": "200.00",
+    "credit_total": "200.00",
+    "bank_workpaper_status": "prepared_with_unposted_adjustment",
+    "full_close_status": "blocked_missing_card_statement_and_human_review",
+    "external_posting_status": "not_performed",
+    "external_reconciled_status": "not_verified"
+  },
+  "variants": [
+    {
+      "id": "ambiguous_match",
+      "mutation": "Add a second same-company/account/currency/date/direction/amount candidate for a matching exercise; update source population totals if creating a full ledger variant.",
+      "expected": "Flag ambiguity; never choose arbitrarily or reuse a matched transaction."
+    },
+    {
+      "id": "wrong_company",
+      "mutation": "Reference an otherwise matching row from a different external_company_id.",
+      "expected": "Deny scope before match or retrieval."
+    },
+    {
+      "id": "unbalanced_journal",
+      "mutation": "Change the credit from 200.00 to 199.99.",
+      "expected": "Deterministic validation rejects the journal."
+    },
+    {
+      "id": "late_source",
+      "mutation": "Supply the missing fictional card statement and the required reviewer dispositions.",
+      "expected": "Resume remaining tasks with preserved completed work and counters; do not claim external posting/reconciliation without its evidence."
+    }
+  ]
+}

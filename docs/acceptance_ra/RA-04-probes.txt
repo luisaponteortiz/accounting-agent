@@ -1,0 +1,25 @@
+Fable RV acceptance probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[A13] (RV-13) statement assurance is disclosed; missing line ids need an approved exception; a missing or quarantined prior statement cannot pass
+    no line ids -> {'id': 2, 'eligible': False, 'status': 'pending', 'blockers': ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED']}
+    workpaper discloses: {'line_identity': 'not_supplied', 'opening_continuity': 'no_prior_statement', 'statement_provenance': {'independent_verification': 'not_performed', 'provenance': 'manually_keyed', 'snapshot_id': 7, 'supplier': 'rv-preparer'}}
+    exception proposed only: ['STATEMENT_LINE_IDENTITY_NOT_VERIFIED'] | approved: {'id': 7, 'eligible': True, 'status': 'pending', 'blockers': []} | item still says line identity: not_supplied
+    October configured but no October statement on file: ['STATEMENT_PRIOR_PERIOD_MISSING']
+    late October revision quarantined: [('stmt-2026-10', 'LATE_ACTIVITY_IN_LOCKED_PERIOD')] | November opening 400.00 against the frozen 500.00: ['STATEMENT_OPENING_BALANCE_BREAK']
+    November opening 500.00 (positive control): {'id': 11, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']} verified
+    -> OK
+
+[X12s] (RV-12/RV-13) a statement re-supplied to agree with the population is disclosed as revised evidence
+    statement says purchases 90.00, population is 100.00: ['STATEMENT_CONTROL_MISMATCH']
+    preparer re-supplies the statement at 100.00 -> {'id': 7, 'eligible': False, 'status': 'pending', 'blockers': ['EVIDENCE_REVISED_REQUIRES_REVIEW']}
+    statement version relied on: [('stmt-2026-11', 2)] | revisions disclosed on the item: [{'changed_fields': ['closing_balance', 'totals'], 'current': {'hash': '4efb075949c21456a83717c461fbb1e2b6dd9c7646ca66b78e0b44bbb76c9f7e', 'snapshot_id': 9, 'source_key': 'stmt-2026-11', 'supplier': 'rv-preparer', 'version': 2}, 'earlier': {'hash': '368e60584241b425c7b16c9205c92f50500c22a232148ebe3d36df1907a045cb', 'snapshot_id': 7, 'source_key': 'stmt-2026-11', 'supplier': 'rv-preparer', 'version': 1}, 'kind': 'revised', 'source_key': 'stmt-2026-11', 'source_kind': 'statement', 'supplier': 'rv-preparer'}] | workpaper fields: ['account_id', 'evidence', 'execution', 'external_reconciliation', 'line_identity', 'opening_continuity', 'statement_provenance', 'statement_revisions', 'unreconciled_population']
+    independent approval: ('refused', 409, 'Unresolved controls block approval')
+    -> OK
+
+====================================================================================================
+A13   RV-13        OK     statement assurance is disclosed; missing line ids need an approved exception; a missing or quarantined prior statement cannot pass
+X12s  RV-12/RV-13  OK     a statement re-supplied to agree with the population is disclosed as revised evidence
+
+Verdict counts: {'OK': 2}
+Acceptance gate: PASS

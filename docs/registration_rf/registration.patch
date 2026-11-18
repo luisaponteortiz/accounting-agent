@@ -1,0 +1,662 @@
+--- a/scripts/check_product_requirements.py
++++ b/scripts/check_product_requirements.py
+@@ -27,6 +27,8 @@
+     'exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md':'e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0',
+     'exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_RESULTS.json':'fe5d0634269ddd66b850a39a9d8afef0a708311a3d02b3c2f465ab3d518312bf',
+     'exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md':'55e1606bfbd3b96cacec064d0dc72c08ba5e4a3e6beae6afbd1bc0d6f5d22080',
++    'exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_RESULTS.json':'fe543fe2b1930cc3e7d63315de298af331c6061ec4821288d94772773b778039',
++    'exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md':'90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410',
+ }
+ 
+ 
+@@ -90,7 +92,7 @@
+ 
+ 
+ def reviewer_verdicts(root):
+-    """Read the four pinned reviewer authorities in chronological order."""
++    """Read the five pinned reviewer authorities in chronological order."""
+     for name,expected in REVIEW_INPUT_HASHES.items():
+         path=root/name
+         require(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest()==expected,'Protected reviewer input hash differs: '+name)
+@@ -101,7 +103,7 @@
+         latest[row['id']]=normalized
+         history.setdefault(row['id'],[]).append(normalized)
+     # The pinned input data is chronological; each JSON contributes its verdicts.
+-    # The shipped list always includes all four authorities and their reports.
++    # The shipped list always includes all five authorities and their reports.
+     for name in REVIEW_INPUT_HASHES:
+         if not name.endswith('.json'):continue
+         authority=json.loads((root/name).read_text())
+--- a/tests/test_product_requirements.py
++++ b/tests/test_product_requirements.py
+@@ -76,9 +76,13 @@
+         self.rejects(changed,'independent review result entry required')
+ 
+     def test_PRV03_failed_verdict_cannot_be_promoted(self):
+-        for state in ('Developer-tested','Independently verified','Implemented'):
+-            with self.subTest(state=state):
+-                self.rejects(self.changed_field('AAOS-BNK-03','Implementation state',state),'independent Verification failed cannot be promoted')
++        from tests.rf_checkpoint_fixture import rf_checkpoint
++        # Historical four-authority fixture: omit only the fifth pinned inputs as data; RF-checkpoint register/results bytes.
++        with tempfile.TemporaryDirectory() as tmp,rf_checkpoint(self,tmp) as (root,text):
++            for state in ('Developer-tested','Independently verified','Implemented'):
++                with self.subTest(state=state):
++                    with self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):
++                        validate_register(self.changed_field('AAOS-BNK-03','Implementation state',state,text),root)
+ 
+     def test_PRV04_shared_web_and_python_are_checked_but_fixtures_are_exempt(self):
+         with tempfile.TemporaryDirectory() as tmp:
+@@ -132,8 +136,9 @@
+     def test_PRV12_omitted_changed_and_invented_results_cannot_promote_records(self):
+         import copy
+         import json
+-        with tempfile.TemporaryDirectory() as tmp:
+-            root=self.reviewer_fault_copy(tmp)
++        from tests.rf_checkpoint_fixture import rf_checkpoint
++        # Historical four-authority fixture: omit only the fifth pinned inputs as data; RF-checkpoint register/results bytes.
++        with tempfile.TemporaryDirectory() as tmp,rf_checkpoint(self,tmp) as (root,checkpoint_text):
+             path=root/'docs/INDEPENDENT_VERIFICATION_RESULTS.json'
+             original=json.loads(path.read_text())
+             removed=copy.deepcopy(original);removed['results'].pop(4)
+@@ -144,7 +149,7 @@
+                                           (added,'AAOS-ARC-02','Independently verified')):
+                 with self.subTest(identifier=identifier,state=state):
+                     path.write_text(json.dumps(data))
+-                    text=self.changed_field(identifier,'Implementation state',state)
++                    text=self.changed_field(identifier,'Implementation state',state,checkpoint_text)
+                     text=self.changed_field(identifier,'Evidence','independent review '+original['results'][0]['bundle_sha256']+' '+original['results'][0]['report_path']+' tests/test_platform.py',text)
+                     with self.assertRaisesRegex(ValueError,'reviewer verdict'):
+                         validate_register(text,root)
+@@ -200,10 +205,12 @@
+             path.write_bytes(original+b'\n')
+             with self.assertRaisesRegex(ValueError,'Protected reviewer input hash differs'):validate_register(self.text,root)
+             path.write_bytes(original)
+-            # Historical three-authority fixture: omit only the fourth pinned inputs as data.
++            # Historical three-authority fixture: omit only the fourth and fifth pinned inputs as data; RF-checkpoint register bytes.
++            from tests.rf_checkpoint_fixture import FIFTH,checkpoint_bytes
++            checkpoint_text=checkpoint_bytes('docs/PRODUCT_REQUIREMENTS.md').decode()
+             fourth={'exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_RESULTS.json',
+                     'exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md'}
+-            three_inputs={key:value for key,value in cpr.REVIEW_INPUT_HASHES.items() if key not in fourth}
++            three_inputs={key:value for key,value in cpr.REVIEW_INPUT_HASHES.items() if key not in fourth and key not in FIFTH}
+             with patch.dict(cpr.REVIEW_INPUT_HASHES,three_inputs,clear=True):
+                 data=json.loads(original)
+                 for row in data['register_verdicts']:
+@@ -215,5 +222,5 @@
+                     results['results']=list(cpr.reviewer_verdicts(root)[0].values())
+                 result_path.write_text(json.dumps(results))
+                 with patch.dict(cpr.REVIEW_INPUT_HASHES,{name:hashlib.sha256(changed).hexdigest()}):
+-                    with self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):validate_register(self.text,root)
+-                    validate_register(self.changed_field('AAOS-KNO-04','Implementation state','Verification failed'),root)
++                    with self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):validate_register(checkpoint_text,root)
++                    validate_register(self.changed_field('AAOS-KNO-04','Implementation state','Verification failed',checkpoint_text),root)
+--- a/tests/test_product_requirements_rf.py
++++ b/tests/test_product_requirements_rf.py
+@@ -28,12 +28,14 @@
+                         with self.assertRaisesRegex(ValueError,'Protected reviewer input hash differs'):cpr.validate_register(self.text,root)
+                     finally:path.write_bytes(raw)
+     def test_fourth_authority_wins_and_all_older_authorities_cannot_override(self):
+-        with tempfile.TemporaryDirectory() as t:
+-            root=self.reviewer_fault_copy(t);original=cpr.reviewer_verdicts(root)[0]
++        from tests.rf_checkpoint_fixture import rf_checkpoint
++        # Historical four-authority fixture: omit only the fifth pinned inputs as data; RF-checkpoint register/results bytes.
++        with tempfile.TemporaryDirectory() as t,rf_checkpoint(self,t) as (root,text):
++            original=cpr.reviewer_verdicts(root)[0]
+             current=original['AAOS-KNO-04']
+             # Cite the fourth accepted checkpoint: the injected older failure
+             # intentionally invalidates the real register's earlier citation.
+-            fixture_text=self.changed_field('AAOS-KNO-04','Evidence','independent review '+current['bundle_sha256']+' '+current['report_path']+' tests/test_product_requirements_rf.py')
++            fixture_text=self.changed_field('AAOS-KNO-04','Evidence','independent review '+current['bundle_sha256']+' '+current['report_path']+' tests/test_product_requirements_rf.py',text)
+             self.assertTrue(all(r['report_path']==REPORT for r in original.values()))
+             for name in ('exports/FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_CORRECTIONS.json','exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_RESULTS.json','exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json'):
+                 path=root/name;raw=path.read_bytes();data=json.loads(raw)
+@@ -49,8 +51,10 @@
+                         self.assertEqual(cpr.reviewer_verdicts(root)[0],original);cpr.validate_register(fixture_text,root)
+                 finally:path.write_bytes(raw)
+     def test_fourth_changed_verdict_controls_even_with_matching_project_results(self):
+-        with tempfile.TemporaryDirectory() as t:
+-            root=self.reviewer_fault_copy(t);path=root/FOURTH;data=json.loads(path.read_text())
++        from tests.rf_checkpoint_fixture import rf_checkpoint
++        # Historical four-authority fixture: omit only the fifth pinned inputs as data; RF-checkpoint register/results bytes.
++        with tempfile.TemporaryDirectory() as t,rf_checkpoint(self,t) as (root,text):
++            path=root/FOURTH;data=json.loads(path.read_text())
+             for row in data['register_verdicts']:
+                 if row['id']=='AAOS-KNO-04':row['state']='Verification failed'
+             raw=json.dumps(data).encode();path.write_bytes(raw)
+@@ -59,11 +63,13 @@
+                 if row['id']=='AAOS-KNO-04':row['state']='Verification failed'
+             results.write_text(json.dumps(d))
+             with patch.dict(cpr.REVIEW_INPUT_HASHES,{FOURTH:hashlib.sha256(raw).hexdigest()}):
+-                with self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):cpr.validate_register(self.text,root)
+-                cpr.validate_register(self.changed_field('AAOS-KNO-04','Implementation state','Verification failed'),root)
++                with self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):cpr.validate_register(text,root)
++                cpr.validate_register(self.changed_field('AAOS-KNO-04','Implementation state','Verification failed',text),root)
+     def test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused(self):
+-        with tempfile.TemporaryDirectory() as t:
+-            root=self.reviewer_fault_copy(t);path=root/'docs/INDEPENDENT_VERIFICATION_RESULTS.json';original=json.loads(path.read_text())
++        from tests.rf_checkpoint_fixture import rf_checkpoint
++        # Historical four-authority fixture: omit only the fifth pinned inputs as data; RF-checkpoint register/results bytes.
++        with tempfile.TemporaryDirectory() as t,rf_checkpoint(self,t) as (root,text):
++            path=root/'docs/INDEPENDENT_VERIFICATION_RESULTS.json';original=json.loads(path.read_text())
+             for fault in ('stale','missing','extra','duplicate','changed','swapped','reversed'):
+                 d=copy.deepcopy(original)
+                 if fault=='stale':
+@@ -75,7 +81,7 @@
+                 elif fault=='swapped':d['results'][0],d['results'][1]=d['results'][1],d['results'][0]
+                 else:d['results'].reverse()
+                 path.write_text(json.dumps(d))
+-                with self.subTest(fault=fault),self.assertRaisesRegex(ValueError,'reviewer|Independent'):cpr.validate_register(self.text,root)
++                with self.subTest(fault=fault),self.assertRaisesRegex(ValueError,'reviewer|Independent'):cpr.validate_register(text,root)
+ 
+     def test_results_following_an_altered_and_repinned_older_authority_are_rejected(self):
+         with tempfile.TemporaryDirectory() as t:
+--- a/docs/INDEPENDENT_VERIFICATION_RESULTS.json
++++ b/docs/INDEPENDENT_VERIFICATION_RESULTS.json
+@@ -1,60 +1,60 @@
+ {
+-  "authority": "Derived exactly from four hash-pinned reviewer authorities in chronological order; latest verdict wins per record and the original seven-row order is enforced. Developer passes cannot amend verdicts.",
++  "authority": "Derived exactly from five hash-pinned reviewer authorities in chronological order; latest verdict wins per record and the original seven-row order is enforced. Developer passes cannot amend verdicts.",
+   "results": [
+     {
+       "id": "AAOS-KNO-04",
+       "state": "Independently verified",
+-      "report_path": "exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md",
+-      "report_sha256": "55e1606bfbd3b96cacec064d0dc72c08ba5e4a3e6beae6afbd1bc0d6f5d22080",
+-      "bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
++      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
++      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
++      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+       "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+     },
+     {
+       "id": "AAOS-CTL-01",
+       "state": "Independently verified",
+-      "report_path": "exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md",
+-      "report_sha256": "55e1606bfbd3b96cacec064d0dc72c08ba5e4a3e6beae6afbd1bc0d6f5d22080",
+-      "bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
++      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
++      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
++      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+       "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+     },
+     {
+       "id": "AAOS-BNK-02",
+       "state": "Independently verified",
+-      "report_path": "exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md",
+-      "report_sha256": "55e1606bfbd3b96cacec064d0dc72c08ba5e4a3e6beae6afbd1bc0d6f5d22080",
+-      "bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
++      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
++      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
++      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+       "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+     },
+     {
+       "id": "AAOS-CTL-09",
+       "state": "Independently verified",
+-      "report_path": "exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md",
+-      "report_sha256": "55e1606bfbd3b96cacec064d0dc72c08ba5e4a3e6beae6afbd1bc0d6f5d22080",
+-      "bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
++      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
++      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
++      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+       "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+     },
+     {
+       "id": "AAOS-BNK-03",
+-      "state": "Verification failed",
+-      "report_path": "exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md",
+-      "report_sha256": "55e1606bfbd3b96cacec064d0dc72c08ba5e4a3e6beae6afbd1bc0d6f5d22080",
+-      "bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
++      "state": "Independently verified",
++      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
++      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
++      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+       "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+     },
+     {
+       "id": "AAOS-CTL-04",
+-      "state": "Verification failed",
+-      "report_path": "exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md",
+-      "report_sha256": "55e1606bfbd3b96cacec064d0dc72c08ba5e4a3e6beae6afbd1bc0d6f5d22080",
+-      "bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
++      "state": "Independently verified",
++      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
++      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
++      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+       "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+     },
+     {
+       "id": "AAOS-GOV-03",
+-      "state": "Verification failed",
+-      "report_path": "exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md",
+-      "report_sha256": "55e1606bfbd3b96cacec064d0dc72c08ba5e4a3e6beae6afbd1bc0d6f5d22080",
+-      "bundle_sha256": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
++      "state": "Independently verified",
++      "report_path": "exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md",
++      "report_sha256": "90deaea5eb0efa9fbc3b7ff7d20505f9623012552578a5070b832ea516df2410",
++      "bundle_sha256": "c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd",
+       "scope": "Synthetic local preparation controls at the reviewed bundle hash only. No client accounting policy, reconciliation completion, close or operating readiness. No human G0, G1-G4 or Batch 3 authority. Developer passes are not independent acceptance."
+     }
+   ]
+--- a/docs/PRODUCT_REQUIREMENTS.md
++++ b/docs/PRODUCT_REQUIREMENTS.md
+@@ -1,6 +1,6 @@
+ # Accounting Agent OS — product requirements register
+ 
+-Established 15 November 2026. Current register: **88 retained requirements**, updated 16 November 2026. Owner: the product owner, with accounting validation by the assigned accounting lead. This is the authoritative register of product scope, requirements and their current disposition. It preserves the complete accounting product vision across development batches. It is not a replacement implementation backlog, an accounting-policy approval, or permission to connect, spend, send, deploy, pay or post.
++Established 15 November 2026. Current register: **88 retained requirements**, updated 17 November 2026. Owner: the product owner, with accounting validation by the assigned accounting lead. This is the authoritative register of product scope, requirements and their current disposition. It preserves the complete accounting product vision across development batches. It is not a replacement implementation backlog, an accounting-policy approval, or permission to connect, spend, send, deploy, pay or post.
+ 
+ **Accounting Agent OS is a universal, reusable accounting execution platform. Bird Bowl is its first client implementation, not its product boundary.** Shared code must accommodate additional clients through isolated configuration and progressively validated capabilities. No Bird Bowl policy, industry assumption, system choice, currency, jurisdiction or workflow becomes a universal default merely because it appears in a pilot. Universal architecture does not mean every accounting treatment or client is supported today.
+ 
+@@ -61,11 +61,11 @@
+ 
+ ## Current evidence and corrective priority
+ 
+-**RE-02, RE-03, PRV-14 and PRV-15 independently accepted; RE-01/RB-01 not accepted; Batch 3 closed.** Fable's immutable RE review at checkpoint SHA-256 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae accepted those bounded assertions under the unchanged owner contract D-026/D-029. RF-01 (C2d/C2f) records an unapplied first claim on an already retained message; 40 of 480 stepwise orders double-approved a charge. RF-02 concerns earlier target selectors' review independence; RF-03 concerns the unchanged five-second HTTP setup deadline. CODEX_RF_CORRECTIONS_PROMPT.md authorizes only these repairs and PRV-16. Journals remain outside the contract and real provider confirmation remains G2 work.
++**RF-01, RF-02, RF-03 and PRV-16 independently accepted, with RE-01/RB-01; no corrective ticket; human G0 not granted; Batch 3 closed.** Fable's immutable [RF review](../exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md) at checkpoint SHA-256 c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd accepted those bounded assertions under the unchanged owner contract D-026/D-029 and the single-method exception D-031. Its 21 unmodified RE probes report 19 OK with C9c/C9g NOTE; its 15 new probes report 12 OK and three NOTE; 3,120 stepwise delivery orders show zero double approvals, unauthorized releases or audit failures; five consecutive complete make test runs passed 241 methods with the unchanged five-second HTTP deadline. The earlier RE review at 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae accepted RE-02, RE-03, PRV-14 and PRV-15. Every conclusion covers synthetic local preparation controls only, principally two periods and one card account. Journals remain outside the contract, the target-selection HTTP route was not independently probed beyond the developer tests, and real provider confirmation remains G2 work.
+ 
+-AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 stay Verification failed for RF-01 until independent verification of the RF checkpoint, including all 21 RE probes (19 OK/C9c+C9g NOTE), all 480 stepwise orders, retained 336/120 orders and all retained gates. Four previously verified scopes retain their bounded citations. [Independent results](INDEPENDENT_VERIFICATION_RESULTS.json) are derived from four pinned reviewer authorities, latest verdict winning per record in the original seven-row order. [RF developer report](corrections_rf/RF_CORRECTIONS_REPORT.md) records developer evidence and any conflicts or execution limits; passing developer tests cannot raise the failed verdicts or grant G0/G1–G4, Batch 3 or live authority.
++AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 are recorded Independently verified for that reviewed checkpoint and scope by the owner-assigned registration of 17 November 2026 (D-033/D-034). Four previously verified scopes retain their bounded citations. [Independent results](INDEPENDENT_VERIFICATION_RESULTS.json) are derived from five pinned reviewer authorities, latest verdict winning per record in the original seven-row order. The [registration record](registration_rf/RF_REGISTRATION_REPORT.md) lists the six retained register-test methods adapted under D-033, the new five-authority tests and the older fault-script expectations that the fifth authority makes obsolete. Independent verification of these controls is not human G0 acceptance and grants no G1–G4, Batch 3 or live authority.
+ 
+-D-026/D-029 are unchanged. U4 and UC-14 remain open. UC-17 (a de-selected first target stays retired), UC-18 (exact batch replay adds no supplier record), and UC-20 (a live replacement of a waiting claimant has only the ordinary transition blocker until the target arrives) are open observations for the owner, outside this pass. X08, N02c/UC-10, N04e/UC-11, C9c and C9g stay NOTE; journal UC-9 remains reading only. D-016/D-017 and every AAOS-BB-01/02 field remain unchanged; ONB-01, ONB-02, INT-07, GL-06, BNK-07 and RPT-03 remain Proposed. All earlier archives, sidecars and original review inputs remain immutable.
++D-026/D-029 are unchanged. U4 and UC-14 remain open. UC-17 (a de-selected first target stays retired), UC-18 (exact batch replay adds no supplier record), and UC-20 (a live replacement of a waiting claimant has only the ordinary transition blocker until the target arrives) are open observations for the owner, outside this pass. UC-21 (an identical repeat of a retired open-period row adds source versions), UC-22 (unordered repeats against an ordered governing row add evidence), UC-23 (a selector also contributes to the card run's period-level artifacts), UC-24 (a database prepared at the RE checkpoint shows open-period approvals as stale until re-prepared) and UC-25 (failed-record citation text is not checked; the D-031 fixture derives its rows from the checker) are new owner observations from the RF review; none is a corrective ticket and none is decided here. X08, N02c/UC-10, N04e/UC-11, C9c and C9g stay NOTE; journal UC-9 remains reading only. D-016/D-017 and every AAOS-BB-01/02 field remain unchanged; ONB-01, ONB-02, INT-07, GL-06, BNK-07 and RPT-03 remain Proposed. All earlier archives, sidecars and original review inputs remain immutable.
+ 
+ ## Product scope and governance
+ 
+@@ -91,7 +91,7 @@
+ - **Priority:** Must
+ - **Product decision:** Approved
+ - **Implementation state:** Developer-tested
+-- **Scope note:** The permanent register and executable checks enforce actual evidence, report-backed independent verdicts, adjacent conditional dependencies, disposition consistency and client boundaries; this is documentation governance, not operational accounting acceptance. Independent verdicts are derived from four hash-pinned reviewer machine-readable files, with later conclusions taking precedence; client display-name removal is rejected. The checker enforces the original seven-result row order, including swaps and reversal.
++- **Scope note:** The permanent register and executable checks enforce actual evidence, report-backed independent verdicts, adjacent conditional dependencies, disposition consistency and client boundaries; this is documentation governance, not operational accounting acceptance. Independent verdicts are derived from five hash-pinned reviewer machine-readable files, with later conclusions taking precedence; client display-name removal is rejected. The checker enforces the original seven-result row order, including swaps and reversal.
+ - **Evidence:** [tests/test_product_requirements.py](../tests/test_product_requirements.py); [register checker](../scripts/check_product_requirements.py), PR-04/PR-17.
+ - **Needed for:** G0 controls
+ - **Dependencies:** AAOS-GOV-01 for later full-cycle execution only
+@@ -105,9 +105,9 @@
+ - **Business purpose:** Make trustworthy claims and prevent a feature or documentation change from widening authority.
+ - **Priority:** Must
+ - **Product decision:** Approved
+-- **Implementation state:** Verification failed
+-- **Scope note:** Independent Fable RE review accepted RE-02, RE-03, PRV-14 and PRV-15 at checkpoint 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae under unchanged D-026/D-029. RE-01/RB-01 remains not accepted for RF-01: C2d/C2f WEAK and 40/480 stepwise orders double-approved. RF-01–RF-03 and PRV-16 developer corrections require independent re-verification at the new checkpoint; this record remains Verification failed. RF re-verification requires 21 RE probes with only C9c/C9g NOTE, 480 orders with zero double/released/audit failures, retained probes/gates, and five consecutive complete make test passes with the unchanged HTTP deadline. D-029 preserves frozen-home approval while blocking the incoming version until authorized reopen; the contested blocker survives reopen. Developer evidence grants no readiness or operating authority.
+-- **Evidence:** [independent review](../exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae; RE-02/RE-03 and PRV-14/PRV-15 accepted; RF-01 C2d/C2f WEAK, 40/480 double. [tests/test_review_corrections_rf.py](../tests/test_review_corrections_rf.py), [tests/test_rf_review_gate.py](../tests/test_rf_review_gate.py), [tests/test_product_requirements_rf.py](../tests/test_product_requirements_rf.py) and [RF developer report](corrections_rf/RF_CORRECTIONS_REPORT.md) are developer repair evidence only. Independent RF acceptance pending.
++- **Implementation state:** Independently verified
++- **Scope note:** Independent Fable RF review accepted RF-01, RF-02, RF-03 and PRV-16, and RE-01/RB-01, at checkpoint c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd under unchanged D-026/D-029, with no corrective ticket. This record is Independently verified for that reviewed checkpoint and for synthetic local preparation controls only: fictional card rows and receipts, principally two periods and one card account; journals excluded; the target-selection HTTP route was not independently probed beyond the developer tests. Reviewed criterion: known repaired defects must pass. Recorded by the owner-assigned registration of 17 November 2026 (D-033/D-034). Owner observations UC-21 to UC-25 are recorded and open with U4, UC-14, UC-17, UC-18 and UC-20; C9c/C9g remain NOTE. Real-provider behaviour remains a G2 confirmation. No client accounting policy, reconciliation completion, close, human G0, readiness or operating authority is verified.
++- **Evidence:** [independent review](../exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md) (exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd; RB-01 accepted at this checkpoint through RF-01 (C2d, C2f); all 227 earlier methods present, 226 unchanged and one rewritten under D-031; every retained gate passes; five consecutive complete make test runs pass 241 methods (RF-03). Earlier [RE independent review](../exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md) at 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae accepted RE-02/RE-03 and PRV-14/PRV-15 and recorded the RF-01 failure now repaired. Developer evidence: [tests/test_review_corrections_rf.py](../tests/test_review_corrections_rf.py), [tests/test_rf_review_gate.py](../tests/test_rf_review_gate.py), [tests/test_product_requirements_rf.py](../tests/test_product_requirements_rf.py), [tests/test_product_requirements_rf_registration.py](../tests/test_product_requirements_rf_registration.py), [RF developer report](corrections_rf/RF_CORRECTIONS_REPORT.md), [registration record](registration_rf/RF_REGISTRATION_REPORT.md).
+ - **Needed for:** G0 controls
+ - **Dependencies:** AAOS-GOV-02; AAOS-CTL-10.
+ - **Acceptance criteria:** Existing original methods/regressions and exact assertions remain; known repaired defects must pass; unavailable capabilities remain explicitly deferred; original/adapted probe differences and nonzero original commands remain disclosed; no bundle overwrite or automatic G1/Batch 3 transition.
+@@ -591,9 +591,9 @@
+ - **Business purpose:** Avoid double counting or losing charges when providers revise, replace, remove or redeliver data.
+ - **Priority:** Must
+ - **Product decision:** Approved
+-- **Implementation state:** Verification failed
+-- **Scope note:** Independent Fable RE review accepted RE-02, RE-03, PRV-14 and PRV-15 at checkpoint 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae under unchanged D-026/D-029. RE-01/RB-01 remains not accepted for RF-01: C2d/C2f WEAK and 40/480 stepwise orders double-approved. RF-01–RF-03 and PRV-16 developer corrections require independent re-verification at the new checkpoint; this record remains Verification failed. RF re-verification requires 21 RE probes with only C9c/C9g NOTE, 480 orders with zero double/released/audit failures, retained probes/gates, and five consecutive complete make test passes with the unchanged HTTP deadline. D-029 preserves frozen-home approval while blocking the incoming version until authorized reopen; the contested blocker survives reopen. Developer evidence grants no readiness or operating authority.
+-- **Evidence:** [independent review](../exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae; RE-02/RE-03 and PRV-14/PRV-15 accepted; RF-01 C2d/C2f WEAK, 40/480 double. [tests/test_review_corrections_rf.py](../tests/test_review_corrections_rf.py), [tests/test_rf_review_gate.py](../tests/test_rf_review_gate.py), [tests/test_product_requirements_rf.py](../tests/test_product_requirements_rf.py) and [RF developer report](corrections_rf/RF_CORRECTIONS_REPORT.md) are developer repair evidence only. Independent RF acceptance pending.
++- **Implementation state:** Independently verified
++- **Scope note:** Independent Fable RF review accepted RF-01, RF-02, RF-03 and PRV-16, and RE-01/RB-01, at checkpoint c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd under unchanged D-026/D-029, with no corrective ticket. This record is Independently verified for that reviewed checkpoint and for synthetic local preparation controls only: fictional card rows and receipts, principally two periods and one card account; journals excluded; the target-selection HTTP route was not independently probed beyond the developer tests. Reviewed criterion: one charge approved in two periods, for every delivery order within the feed contract of D-026. Recorded by the owner-assigned registration of 17 November 2026 (D-033/D-034). Owner observations UC-21 to UC-25 are recorded and open with U4, UC-14, UC-17, UC-18 and UC-20; C9c/C9g remain NOTE. Real-provider behaviour remains a G2 confirmation. No client accounting policy, reconciliation completion, close, human G0, readiness or operating authority is verified.
++- **Evidence:** [independent review](../exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md) (exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd; RF-01 accepted: C2d and C2f OK; 21 RE probes 19 OK with C9c and C9g NOTE; reviewer probes G1a–G1h OK (G1c and G1g NOTE); 480 original and 2,640 further stepwise orders with 0 double approvals, 0 releases and 0 unlinked first claims; 12 supplied RD probes and adapted Y05 OK; 336 and 120 supplied orders 0 double. Earlier [RE independent review](../exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md) at 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae accepted RE-02/RE-03 and PRV-14/PRV-15 and recorded the RF-01 failure now repaired. Developer evidence: [tests/test_review_corrections_rf.py](../tests/test_review_corrections_rf.py), [tests/test_rf_review_gate.py](../tests/test_rf_review_gate.py), [tests/test_product_requirements_rf.py](../tests/test_product_requirements_rf.py), [tests/test_product_requirements_rf_registration.py](../tests/test_product_requirements_rf_registration.py), [RF developer report](corrections_rf/RF_CORRECTIONS_REPORT.md), [registration record](registration_rf/RF_REGISTRATION_REPORT.md).
+ - **Needed for:** G0 controls
+ - **Dependencies:** AAOS-CTL-04; AAOS-CTL-05; AAOS-CTL-10.
+ - **Acceptance criteria:** Older/conflicting events do not overwrite newer heads; supersession chains cannot release a locked-origin charge into a second approved period; cycles refuse atomically; authorized reopen admits only the terminal replacement and retires predecessors/support with traceable history; removing a superseder does not silently restore an ancestor without an approved feed policy. These controls must hold for every delivery order within the feed contract of D-026, including a link declared on a source already admitted to another period and an unresolved link resolved later; no same-period source-move rows are created. This includes an ancestor withdrawn after the lock, a link declared on a source whose replacement is already admitted, and an unresolved claim whose target arrives without the claimant being re-sent. Any prior transition acceptance lapses when the resolved chain changes; reopening admits only the terminal source with a fresh transition hold. This also holds including a claim declared by re-sending an unchanged row before its target arrives, and a claimant revised or re-sent without its claim while the claim is unresolved. Recording a newly declared claim immediately adds both transition blockers and ends any earlier open-period governing approval before its target arrives; D-029 preserves an approval already frozen in its own period while blocking the incoming version until authorized reopen; repeating that unresolved claim is a source-lifecycle no-op. Claims persist by identity; self-supersession and cycle refusals stay atomic. A second different target is recorded without applying it or moving the claimant, whether the first claim is linked or pending; further different targets join the open question. Only a recorded authorized non-supplier disposition naming a declared target with supporting evidence may resolve that question; identical repeats add no source lifecycle rows. The highest provider order governs row data while a claim on an older or conflicting retained message is still recorded.
+@@ -912,9 +912,9 @@
+ - **Business purpose:** Prevent decisions or duplicate approvals across locked periods while retaining late evidence.
+ - **Priority:** Must
+ - **Product decision:** Approved
+-- **Implementation state:** Verification failed
+-- **Scope note:** Independent Fable RE review accepted RE-02, RE-03, PRV-14 and PRV-15 at checkpoint 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae under unchanged D-026/D-029. RE-01/RB-01 remains not accepted for RF-01: C2d/C2f WEAK and 40/480 stepwise orders double-approved. RF-01–RF-03 and PRV-16 developer corrections require independent re-verification at the new checkpoint; this record remains Verification failed. RF re-verification requires 21 RE probes with only C9c/C9g NOTE, 480 orders with zero double/released/audit failures, retained probes/gates, and five consecutive complete make test passes with the unchanged HTTP deadline. D-029 preserves frozen-home approval while blocking the incoming version until authorized reopen; the contested blocker survives reopen. Developer evidence grants no readiness or operating authority.
+-- **Evidence:** [independent review](../exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae; RE-02/RE-03 and PRV-14/PRV-15 accepted; RF-01 C2d/C2f WEAK, 40/480 double. [tests/test_review_corrections_rf.py](../tests/test_review_corrections_rf.py), [tests/test_rf_review_gate.py](../tests/test_rf_review_gate.py), [tests/test_product_requirements_rf.py](../tests/test_product_requirements_rf.py) and [RF developer report](corrections_rf/RF_CORRECTIONS_REPORT.md) are developer repair evidence only. Independent RF acceptance pending.
++- **Implementation state:** Independently verified
++- **Scope note:** Independent Fable RF review accepted RF-01, RF-02, RF-03 and PRV-16, and RE-01/RB-01, at checkpoint c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd under unchanged D-026/D-029, with no corrective ticket. This record is Independently verified for that reviewed checkpoint and for synthetic local preparation controls only: fictional card rows and receipts, principally two periods and one card account; journals excluded; the target-selection HTTP route was not independently probed beyond the developer tests. Reviewed criterion: a replacement chain never leaves the same expense approved in two periods. Recorded by the owner-assigned registration of 17 November 2026 (D-033/D-034). Owner observations UC-21 to UC-25 are recorded and open with U4, UC-14, UC-17, UC-18 and UC-20; C9c/C9g remain NOTE. Real-provider behaviour remains a G2 confirmation. No client accounting policy, reconciliation completion, close, human G0, readiness or operating authority is verified.
++- **Evidence:** [independent review](../exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md) (exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md), reviewed bundle SHA-256 c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd; as AAOS-BNK-03, RF-01 accepted (C2d, C2f, G1a–G1h; 3,120 stepwise orders, 0 double, 0 released); clause 8 holds in every delivery tried; RF-02 accepted (C9h, G2a–G2f). Earlier [RE independent review](../exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md) at 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae accepted RE-02/RE-03 and PRV-14/PRV-15 and recorded the RF-01 failure now repaired. Developer evidence: [tests/test_review_corrections_rf.py](../tests/test_review_corrections_rf.py), [tests/test_rf_review_gate.py](../tests/test_rf_review_gate.py), [tests/test_product_requirements_rf.py](../tests/test_product_requirements_rf.py), [tests/test_product_requirements_rf_registration.py](../tests/test_product_requirements_rf_registration.py), [RF developer report](corrections_rf/RF_CORRECTIONS_REPORT.md), [registration record](registration_rf/RF_REGISTRATION_REPORT.md).
+ - **Needed for:** G1 approved samples
+ - **Dependencies:** AAOS-ARC-02; AAOS-CTL-03 before G1 real authority only
+ - **Acceptance criteria:** Every review transition, including revoke/resolution, refuses a locked period; lock preserves approved/finalized evidence; late/unassigned/moved sources quarantine; independent audited reopen precedes admission; a replacement chain never leaves the same expense approved in two periods; destination revisions after a valid release use the nearest admitted owner. The prohibition holds for every delivery order within the feed contract of D-026, including a link declared after destination admission/approval and an unresolved link resolved later; affected destination approval ceases governing and an approved-source event names it. This includes an ancestor withdrawn after the lock, a link declared on a source whose replacement is already admitted, and an unresolved claim whose target arrives without the claimant being re-sent. Any prior transition acceptance lapses when the resolved chain changes; reopening admits only the terminal source with a fresh transition hold. This also holds including a claim declared by re-sending an unchanged row before its target arrives, and a claimant revised or re-sent without its claim while the claim is unresolved. Recording a newly declared claim immediately adds both transition blockers and ends any earlier open-period governing approval before its target arrives; D-029 preserves an approval already frozen in its own period while blocking the incoming version until authorized reopen; repeating that unresolved claim is a source-lifecycle no-op. Claims persist by identity; self-supersession and cycle refusals stay atomic. A second different target is recorded without applying it or moving the claimant, whether the first claim is linked or pending; further different targets join the open question. Only a recorded authorized non-supplier disposition naming a declared target with supporting evidence may resolve that question; identical repeats add no source lifecycle rows. The highest provider order governs row data while a claim on an older or conflicting retained message is still recorded. Provider messages alone never release a locked-period hold. Release requires an authorized reopen or an authorized target disposition by the same person holding both disposition and lock authority; reopen does not clear a contested-claim blocker. Selecting a target never approves the item.
+@@ -1465,7 +1465,7 @@
+ | T-09 | AAOS-KNO-04, AAOS-CTL-01 | Tested synthetic rule/profile lifecycle; RA-02 accepted for original scope; RB-03 fails new scope/key coverage until re-verification. |
+ | T-10 | AAOS-EXE-03 | Tested synthetic period/freshness/policy authority; RA-05 independently accepted within its tested scope; broader real operation remains gated. |
+ | T-11 | AAOS-KNO-03 | Tested required facts and explicit demo-only waivers. |
+-| T-12 | AAOS-BNK-03, AAOS-CTL-04 | RE-02/RE-03 and PRV-14/15 accepted independently at 4890b297…98ae; RE-01/RB-01 stays unaccepted for RF-01 (C2d/C2f, 40/480 double). D-026/D-029 unchanged. RF-01–RF-03/PRV-16 developer repairs require independent 21-probe/480-order and retained-gate verification; no readiness authority. |
++| T-12 | AAOS-BNK-03, AAOS-CTL-04 | RF-01–RF-03 and PRV-16, with RE-01/RB-01, accepted independently at c002b861…e7cd (21 RE probes 19 OK/C9c+C9g NOTE, 3,120 stepwise orders with zero double/released/audit failures, retained gates, five complete make test runs); RE-02/RE-03 and PRV-14/15 accepted earlier at 4890b297…98ae. D-026/D-029 unchanged. Recorded Independently verified for that checkpoint and synthetic scope only (D-033/D-034); UC-21–UC-25 open for the owner; no human G0 or readiness authority. |
+ | T-13 | AAOS-BNK-02 | Tested fictional statement/population controls; non-calendar cycles deferred. |
+ | T-14 | AAOS-BRF-03, AAOS-CTL-08, AAOS-CTL-09, AAOS-CTL-05 | Tested scoped exceptions/dispositions; RA-06/07/08 accepted; RB-02/RB-04 replacement/continuity routes await independent re-verification. |
+ | T-15 | AAOS-GL-01 | Tested synthetic shared proposed entries; actual ledger execution absent. |
+@@ -1488,13 +1488,13 @@
+ | --- | --- |
+ | C-01–C-06 | AAOS-CTL-01/04/05/06, AAOS-BNK-03. Later reviews reopened the locked-origin control; RA-01 failed at late-link arrival paths (RB-01); the response now requires independent re-verification. Preserve every original method and new failure-path regression. |
+ | RV-01–RV-17 | AAOS-CTL-01/05/06/08/09/10, AAOS-KNO-04, AAOS-BNK-02/03, AAOS-EXE-03, AAOS-CLS-01/02, AAOS-GOV-03. Fable accepted 14; RV-01/10/12 had new routes requiring RA-01/02/03/04. Seven earlier adaptations and strengthened RT14b accepted; do not claim all 17 were independently accepted. |
+-| RA-01 | AAOS-BNK-03, AAOS-CTL-04: RE-02/RE-03 and PRV-14/15 accepted independently at 4890b297…98ae; RE-01/RB-01 stays unaccepted for RF-01 (C2d/C2f, 40/480 double). D-026/D-029 unchanged. RF-01–RF-03/PRV-16 developer repairs require independent 21-probe/480-order and retained-gate verification; no readiness authority. |
++| RA-01 | AAOS-BNK-03, AAOS-CTL-04: RF-01–RF-03 and PRV-16, with RE-01/RB-01, accepted independently at c002b861…e7cd (21 RE probes 19 OK/C9c+C9g NOTE, 3,120 stepwise orders with zero double/released/audit failures, retained gates, five complete make test runs); RE-02/RE-03 and PRV-14/15 accepted earlier at 4890b297…98ae. D-026/D-029 unchanged. Recorded Independently verified for that checkpoint and synthetic scope only (D-033/D-034); UC-21–UC-25 open for the owner; no human G0 or readiness authority. |
+ | RA-03, RA-04 | AAOS-CTL-09, AAOS-BNK-02: replacement receipt keys and revised/replaced statements held/disclosed/independently accepted. |
+ | RA-02 | AAOS-KNO-04, AAOS-CTL-01: relevant approved semantic rule authors survive absent optional links. |
+ | RA-06, RA-05 | AAOS-CTL-08/09, AAOS-EXE-03: the same predecessor references activate dispositions; relevant policy windows do not depend on current source arrival. |
+ | RA-07, RA-08 | AAOS-CTL-08/05: related supporting documents only; a duplicate exclusion must retain a live survivor. |
+ | RA completion | Five RA corrections accepted; RB-01–RB-04 require correction and independent re-verification. Developer tests alone do not restore acceptance. Preserve `make test`, `make check`, `make batch2-gate`, `make reverification-gate`, `make acceptance-gate`, original review bytes and disclosed setup differences. Only U4 is a permitted NOTE in the maintained RA gate. |
+-| RB-01 | AAOS-BNK-03, AAOS-CTL-04: RE-02/RE-03 and PRV-14/15 accepted independently at 4890b297…98ae; RE-01/RB-01 stays unaccepted for RF-01 (C2d/C2f, 40/480 double). D-026/D-029 unchanged. RF-01–RF-03/PRV-16 developer repairs require independent 21-probe/480-order and retained-gate verification; no readiness authority. |
++| RB-01 | AAOS-BNK-03, AAOS-CTL-04: RF-01–RF-03 and PRV-16, with RE-01/RB-01, accepted independently at c002b861…e7cd (21 RE probes 19 OK/C9c+C9g NOTE, 3,120 stepwise orders with zero double/released/audit failures, retained gates, five complete make test runs); RE-02/RE-03 and PRV-14/15 accepted earlier at 4890b297…98ae. D-026/D-029 unchanged. Recorded Independently verified for that checkpoint and synthetic scope only (D-033/D-034); UC-21–UC-25 open for the owner; no human G0 or readiness authority. |
+ | RB-02 | AAOS-CTL-09, AAOS-BNK-02: replaced support includes re-pointed old keys, not only withdrawals; old/current suppliers remain independent of acceptance. |
+ | RB-03 | AAOS-KNO-04, AAOS-CTL-01: semantic rule history follows coverage across general/item scope and new keys; unrelated values/descriptions/scopes do not bar review. |
+ | RB-04 | AAOS-BNK-02, AAOS-CTL-09: disclose prior-statement revisions; continuity depends on active own-period acceptance for all relying items; revocation invalidates dependents. |
+@@ -1557,3 +1557,5 @@
+ | 2026-11-16 | PRV-14 records RD acceptance and RE failures, incorporates owner feed contract D-026, adds the third pinned reviewer authority and updates exact RE re-verification scope; PRV-15 enforces the existing seven-row order. No state/product decision or BB-01/02 field changes. | CODEX_RE_CORRECTIONS_PROMPT.md; immutable RD review; D-026/D-027; docs/corrections_re/. |
+ 
+ | 2026-11-16 | PRV-16 records RE-02/RE-03/PRV-14/15 acceptance and RF-01 continued failure, pins the fourth reviewer authority with latest-wins derivation and preserves seven-row order. Scope/evidence and crosswalk updated; every acceptance criterion, state, product decision and BB-01/02 field unchanged. | CODEX_RF_CORRECTIONS_PROMPT.md; immutable RE review; D-030; docs/corrections_rf/. |
++
++| 2026-11-17 | Registered the returned independent RF review: AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 recorded Independently verified for checkpoint c002b861…e7cd and its synthetic scope; RF results and report pinned as the fifth reviewer authority with latest-wins derivation and the original seven-row order; AAOS-GOV-02 scope note, current-evidence text and crosswalk updated. Every acceptance criterion and product decision, the four earlier verified records, BB-01/02 and the six Proposed records unchanged. No G0, gate or operating change. | Owner assignment and clarification D-033; immutable RF review; D-034; docs/registration_rf/. |
+--- a/DECISIONS.md
++++ b/DECISIONS.md
+@@ -174,3 +174,31 @@
+ 
+ 
+ - **D-032 — RF/PRV developer validation and delivery (16 November 2026; developer record, not an owner decision; AAOS-GOV-02/03, AAOS-BNK-03, AAOS-CTL-04):** Five consecutive isolated complete make test runs passed 241 methods each, all eleven HTTP methods each time, no skips/expected failures, and unchanged source hashes. HTTP worker wait inside those suites was 2.268372, 2.259996, 2.355119, 2.436205 and 2.117719 seconds; tests/test_http.py and its five-second deadline remain byte-identical. The unchanged Fable timing script measured RF 2.23–2.70 seconds against RD 4.21–5.46 under comparable load. Unmodified baseline probes/search reproduced 16 OK/3 NOTE/2 WEAK and 40 double in 480; corrected probes give 19 OK/C9c+C9g NOTE and final rf-gate gives zero double/released/audit failures in 480. All nine required targets pass; retained 336/120 orders, exact RC/RB/RA verdicts, 29 PASS/10 FIXED/21 DEFERRED-OK cases and sole older U4 NOTE remain. RF-01 has 40 variants and 72 invariant permutations; RF-02 retains selection authors across confirmation, replacement, revision, live/historical ancestry; RF-03 equals the full computation inside transactions and preserves autocommit recomputation. PRV-16 fourth-authority faults cover all three older re-pinned inputs. Original register faults remain 37/37 and 44/44; original RD faults give 34/37 (H22–H24 obsolete) and original RE faults give 29/35 (J14/J15/J16/J18/J22/J25 obsolete under fourth-authority precedence); every original remains unchanged and exact outputs/reasons are retained. All 227 earlier methods remain present, 226 unchanged and only the D-031 method rewritten with its first hash test on real four-authority inputs and second half using only pinned-input data for a three-authority fixture, without bypassing validation. Complete method texts/diff are in the RF report. All 1,198 protected inputs, specified archives/sidecars, schema, Y05, every acceptance criterion/state/product decision, four verified scopes, BB-01/02, six Proposed records and prior decision-log prefix remain unchanged. Ten commits at 5af9a6194bc39e2f303cc6b43b0b59094118b8e4 on review/fable-rc-acceptance are preserved; no commit is added. Deliver the new RF/PRV label with complete inventory, reproducible source/test patch, raw logs, manifest/checksum and exact independent prompt. These are developer results; three affected states remain Verification failed. D-026/D-029 and UC-17/18/20/U4/UC-14 remain unchanged/open; journals remain excluded. No human G0/G1–G4, Batch 3, readiness or live authority. After delivery await independent results and a new assignment.
++
++
++## D-033 — Owner assignment and clarification: RF result registration and six retained register-test methods — 17 November 2026
++
++The owner's assignment, given with the RF checkpoint handoff of 17 November 2026:
++
++> Let's move this project forward and complete it
++
++Before any project file was changed, the registration was tried in a disposable copy. Six retained register-test methods fail once AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 are recorded Independently verified, because they assume a record that is still failed or that the RE review is the newest authority. The conflict, the six method names and the proposed conditions were reported to the owner, with this question:
++
++> Authorize the RF registration, including adapting the six named retained test methods?
++
++The owner answered:
++
++> Yes, authorize
++
++The conditions put to the owner with that question, which bind this exception:
++
++- Only these six methods; their names stay and their assertions are unchanged:
++  - tests/test_product_requirements.py: test_PRV03_failed_verdict_cannot_be_promoted; test_PRV12_omitted_changed_and_invented_results_cannot_promote_records; test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (second half only; its first half still runs against the real pins).
++  - tests/test_product_requirements_rf.py: test_fourth_authority_wins_and_all_older_authorities_cannot_override; test_fourth_changed_verdict_controls_even_with_matching_project_results; test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused.
++- Each adapted method runs on a historical fixture made of data only: the fifth (RF) pinned inputs are left out of the checker's pin table, and the register and derived-results bytes are those of the delivered RF checkpoint, read from the immutable RF bundle and checked against their recorded hashes. Nothing is stubbed, bypassed or special-cased.
++- The other 235 of the 241 methods remain textually unchanged. No probe and no original fault case is edited.
++- Separate new methods test the unmodified five-authority configuration: the fifth pins, latest-wins in both directions, each older authority altered and re-pinned, results that follow the fourth authority, the seven-row order, and the three records' citations.
++- Latest-wins is not weakened. The shipped checker always reads all five authorities; the four- and three-authority paths exist only through the tests' fixture.
++- The registration records the three verdicts for the RF checkpoint and scope only. Human G0, UC-21 to UC-25 and every later gate remain the owner's separate decisions.
++
++This is not a general test-edit exception. D-026, D-029 and D-031 are unchanged.
+--- a/PROGRESS.md
++++ b/PROGRESS.md
+@@ -1,3 +1,11 @@
++# RF result registration — 17 November 2026
++
++The independent RF review returned with **RF-01, RF-02, RF-03, PRV-16 and RE-01/RB-01 accepted and no corrective ticket** at checkpoint c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd. Under the owner's assignment and clarification D-033, that review is now registered: its results file and report are the fifth hash-pinned reviewer authority, the seven derived results follow it in the original order, and **AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 are recorded Independently verified for that checkpoint and its synthetic scope**. The register now holds seven Independently verified records and none Verification failed. No application source, schema, probe, gate or HTTP test changed.
++
++Six retained register-test methods conflicted with a fifth authority and were adapted only as D-033 allows: names and assertions kept, each run on a data-only historical fixture read from the immutable RF bundle. The other 235 of 241 methods are textually unchanged, and nine new methods test the real five-authority configuration. Original fault scripts are unchanged; more of their cases are now obsolete because they presume the three records are failed. Exact results, the before/after method texts and each obsolete case are in [the registration record](docs/registration_rf/RF_REGISTRATION_REPORT.md); D-034 records the validation.
++
++**Human G0 has not been accepted.** It is the accounting owner's separate decision. Owner observations UC-21 to UC-25 are open with U4, UC-14, UC-17, UC-18 and UC-20. Journals, real-provider confirmation, G1 sample processing, Batch 3, deferred/Proposed capabilities and all live actions remain closed. D-016/D-017, every BB-01/02 field, every acceptance criterion and product decision, and all delivered archives and reviewer inputs are unchanged. Ten commits at HEAD 5af9a6194bc39e2f303cc6b43b0b59094118b8e4 on review/fable-rc-acceptance are preserved; no commit added. Read [HANDOFF_RF_REGISTRATION_2026-11-17.md](HANDOFF_RF_REGISTRATION_2026-11-17.md) next. The histories below are earlier checkpoints.
++
+ # RF/PRV developer checkpoint — 16 November 2026
+ 
+ RF-01–RF-03 and PRV-16 are developer validated under CODEX_RF_CORRECTIONS_PROMPT.md and the unchanged D-026/D-029 contract. Five consecutive complete make test runs passed **241 methods each**, including all eleven HTTP methods each time, with no skips or expected failures. In-suite worker setup was **2.12–2.44 seconds**, without changing the five-second deadline. All nine required targets pass, including the exact new rf-gate: **19 OK/C9c+C9g NOTE, 480 orders and zero double/released/audit failures**. The unmodified baseline reproduced 16 OK/3 NOTE/2 WEAK and 40/480 double. Retained 336/120 orders, all probe contracts, 29 PASS/10 FIXED/21 DEFERRED-OK cases and U4-only older acceptance NOTE remain intact.
+--- a/docs/CONNECTION_READINESS.md
++++ b/docs/CONNECTION_READINESS.md
+@@ -1,13 +1,13 @@
+ # Connection and release readiness
+ 
+-**Local fictional preparation only. Human G0 has not been accepted.** The independent RE review accepted RE-02/RE-03 and PRV-14/15 at 4890b297…98ae under unchanged D-026/D-029; RE-01/RB-01 remains unaccepted for RF-01. The assigned RF-01–RF-03/PRV-16 pass requires a new independent checkpoint. Three requirements remain Verification failed. D-016/D-017 and all client/readiness gates are unchanged. No real-provider confirmation, client processing, Batch 3 or live authority is granted.
++**Local fictional preparation only. Human G0 has not been accepted.** The independent RF review accepted RF-01–RF-03, PRV-16 and RE-01/RB-01 at c002b861…e7cd under unchanged D-026/D-029, with no corrective ticket. AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 are recorded Independently verified for that checkpoint and its synthetic scope (D-033/D-034); no requirement is Verification failed. Human G0 is the next gate and remains the accounting owner's separate decision; owner observations UC-21–UC-25 are open with U4, UC-14, UC-17, UC-18 and UC-20. D-016/D-017 and all client/readiness gates are unchanged. No real-provider confirmation, client processing, Batch 3 or live authority is granted.
+ 
+ [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) preserves the universal product vision, including centralized isolated client workspaces, optional independent deployment, hosted autonomy, briefings and integrations. Its product statuses do not change this release checklist or any Fable gate. Each new client still requires its own approved facts, policies, access and validated workflows; Bird Bowl is the first implementation, not a constraint on the reusable core.
+ 
+ - [x] Shared scoped execution, persistent evidence/state and synthetic preparation workflows
+ - [x] C-01–C-06 and assigned Batch 2 controls, with RV correction source and regression evidence
+ - [x] Independent review inputs preserved; source and test changes exposed for review
+-- [ ] Fable independent verification of RF-01–RF-03 and PRV-16 under unchanged D-026/D-029; RE-02/RE-03 and PRV-14/15 already accepted; RD-01/RD-02 and PRV-11–PRV-13 already accepted; RC-01–03, PRV-01–10, RB-02–04 and five earlier statement setups already accepted
++- [x] Fable independent verification of RF-01–RF-03 and PRV-16 under unchanged D-026/D-029, accepted at c002b861…e7cd with no corrective ticket and registered 17 November 2026; RE-02/RE-03 and PRV-14/15 already accepted; RD-01/RD-02 and PRV-11–PRV-13 already accepted; RC-01–03, PRV-01–10, RB-02–04 and five earlier statement setups already accepted
+ - [ ] Human G0 acceptance based on that independent verification
+ - [ ] Written actual client facts/policies/authority and authorization for approved G1 samples
+ - [ ] Accounting lead acceptance on a held-out client sample month
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -1,8 +1,8 @@
+ # Accounting Agent OS project instructions
+ 
+-## Current authorization — 16 November 2026
++## Current authorization — 17 November 2026
+ 
+-The user authorizes one RF/PRV correction pass under CODEX_RF_CORRECTIONS_PROMPT.md, which governs over the review ticket file. Reproduce first; correct RF-01, RF-02 and RF-03 in order and apply PRV-16. D-026 and D-029 remain unchanged; journals and real-provider confirmation remain excluded. Preserve every original reviewer input/archive/sidecar and all 227 retained test methods. D-031 authorizes only test_PRV14_third_authority_is_pinned_and_latest_verdict_controls to be rewritten: first half on real four-authority pins unchanged, second half on a three-authority fixture formed only by omitting fourth pinned inputs as data; same validation/assertions, no stubs or bypasses. Other 226 methods and every earlier probe/fault case remain unchanged. Show complete before/after text and diff; shipped checker always reads all four authorities; new methods cover fourth-authority precedence, pins, older-result rejection and order. Do not edit tests/test_http.py or its five-second deadline. RF-03 requires equivalent computation, RD-level setup cost and five consecutive complete make test passes; stop and explain if that cannot be achieved without weakening a control. Stay on review/fable-rc-acceptance; preserve all ten commits at HEAD 5af9a6194bc39e2f303cc6b43b0b59094118b8e4, rewrite none and add no commit. The pinned response, RE checkpoint, register and decision-log preflight hashes matched; the RF prompt remains at its initial captured hash. No schema change without stopping to explain. BNK-03, CTL-04 and GOV-03 remain Verification failed for RF-01; RE-02, RE-03, PRV-14 and PRV-15 were independently accepted at checkpoint 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae. D-016/D-017, every BB-01/02 field and the six unratified Proposed records are unchanged. UC-17, UC-18 and UC-20 remain open with U4/UC-14; expected NOTE probes stay NOTE. Earlier archive freezes remain binding; only working-file waiting is superseded for this pass. Batch 3, deferred/Proposed capabilities, readiness releases and all live actions remain closed. After delivery await independent results and a new user assignment; receipt or developer passes authorize no further implementation.
++The independent RF review accepted RF-01, RF-02, RF-03, PRV-16 and RE-01/RB-01 at checkpoint c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd with no corrective ticket. Under D-033 the owner assigned its registration: the RF results and report are the fifth pinned reviewer authority, latest verdict wins per record in the original seven-row order, and AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 are recorded Independently verified for that checkpoint and synthetic scope. D-033 authorized adapting exactly six named retained register-test methods on a data-only historical fixture; it is not a general test-edit exception, and D-031 remains limited to its one method. That registration is complete (D-034, docs/registration_rf/). **No further implementation is authorized.** Human G0 is the accounting owner's separate decision and has not been given. Await the owner's decision on G0 and on observations UC-21 to UC-25, and a new specific assignment, before changing code, tests, authority pins, register states or readiness gates. D-026 and D-029 remain unchanged; journals and real-provider confirmation remain excluded. D-016/D-017, every BB-01/02 field and the six unratified Proposed records are unchanged. U4, UC-14, UC-17, UC-18 and UC-20 remain open; expected NOTE probes stay NOTE. Stay on review/fable-rc-acceptance; preserve all ten commits at HEAD 5af9a6194bc39e2f303cc6b43b0b59094118b8e4, rewrite none and add no commit unless the owner asks. Every delivered archive, sidecar, manifest, reviewer input and earlier handoff is immutable. Do not edit tests/test_http.py or its five-second deadline. No schema change without stopping to explain. Original fault scripts stay unchanged; their cases made obsolete by a later authority are listed, never rewritten. G1 sample processing, Batch 3, deferred/Proposed capabilities, readiness releases and all live actions remain closed.
+ 
+ ## Standing project rules
+ 
+--- /dev/null
++++ b/tests/rf_checkpoint_fixture.py
+@@ -0,0 +1,40 @@
++"""Historical four-authority fixture for retained register tests.
++
++The fixture is data only: it leaves the fifth (RF) pinned inputs out of the
++checker's pin table and uses the register and derived-results bytes of the
++delivered RF checkpoint, read from the immutable review bundle and checked
++against their recorded hashes. No validation is stubbed, bypassed or
++special-cased; the shipped checker always reads all five authorities.
++"""
++from contextlib import contextmanager
++import hashlib
++from pathlib import Path
++from unittest.mock import patch
++import zipfile
++
++import scripts.check_product_requirements as cpr
++
++ROOT=Path(__file__).resolve().parents[1]
++BUNDLE='exports/FABLE_RF_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip'
++FIFTH=('exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_RESULTS.json',
++       'exports/FABLE_RF_ACCEPTANCE/FABLE_RF_ACCEPTANCE_REPORT.md')
++CHECKPOINT={
++    'docs/PRODUCT_REQUIREMENTS.md':'8a91c6ff07c512479b5c25d7b371164ed991998ec5e501401f5e1222349b680f',
++    'docs/INDEPENDENT_VERIFICATION_RESULTS.json':'4371242db8cb93155e5fbfb8003efc66b8437e036a5a5f3665852d7eaff8d515',
++}
++
++
++def checkpoint_bytes(name):
++    with zipfile.ZipFile(ROOT/BUNDLE) as bundle:raw=bundle.read(name)
++    if hashlib.sha256(raw).hexdigest()!=CHECKPOINT[name]:raise ValueError('RF checkpoint fixture hash differs: '+name)
++    return raw
++
++
++@contextmanager
++def rf_checkpoint(case,directory):
++    """Yield (project copy, register text) as they stood when RE was the latest authority."""
++    root=case.reviewer_fault_copy(directory)
++    text=checkpoint_bytes('docs/PRODUCT_REQUIREMENTS.md').decode()
++    (root/'docs/INDEPENDENT_VERIFICATION_RESULTS.json').write_bytes(checkpoint_bytes('docs/INDEPENDENT_VERIFICATION_RESULTS.json'))
++    four={key:value for key,value in cpr.REVIEW_INPUT_HASHES.items() if key not in FIFTH}
++    with patch.dict(cpr.REVIEW_INPUT_HASHES,four,clear=True):yield root,text
+--- /dev/null
++++ b/tests/test_product_requirements_rf_registration.py
+@@ -0,0 +1,193 @@
++"""RF result registration: the fifth reviewer authority on the unmodified shipped configuration."""
++import copy
++import hashlib
++import json
++from pathlib import Path
++import tempfile
++import unittest
++from unittest.mock import patch
++from tests import test_product_requirements as prior
++from tests import rf_checkpoint_fixture as fixture
++import scripts.check_product_requirements as cpr
++ROOT=Path(__file__).resolve().parents[1]
++FIFTH,REPORT=fixture.FIFTH
++RF_BUNDLE='c002b8617f10dafac0aecad2281a9d333e14ca2604b3f0b56c0b579340bde7cd'
++RE_BUNDLE='4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae'
++RE_REPORT='exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_REPORT.md'
++OLDER=('exports/FABLE_PR_REVERIFICATION/FABLE_PR_REVERIFICATION_CORRECTIONS.json',
++       'exports/FABLE_RC_ACCEPTANCE/FABLE_RC_ACCEPTANCE_RESULTS.json',
++       'exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json',
++       'exports/FABLE_RE_ACCEPTANCE/FABLE_RE_ACCEPTANCE_RESULTS.json')
++SEVEN=['AAOS-KNO-04','AAOS-CTL-01','AAOS-BNK-02','AAOS-CTL-09','AAOS-BNK-03','AAOS-CTL-04','AAOS-GOV-03']
++RECORDED=('AAOS-BNK-03','AAOS-CTL-04','AAOS-GOV-03')
++RESULTS='docs/INDEPENDENT_VERIFICATION_RESULTS.json'
++
++
++def altered(root,name,identifier,state):
++    """Write a reviewer JSON whose verdict for one record is changed; return its new hash."""
++    path=root/name;data=json.loads(path.read_text())
++    if 'register_verdicts' in data:
++        rows=[row for row in data['register_verdicts'] if row['id']==identifier]
++        if state is None:data['register_verdicts']=[row for row in data['register_verdicts'] if row['id']!=identifier]
++        else:
++            for row in rows:row['state']=state
++    else:
++        rows=[row for row in data['verification_conclusions_for_the_seven_failed_records']['records'] if row['id']==identifier]
++        for row in rows:row['conclusion']='Remains Verification failed' if state=='Verification failed' else 'May be recorded Independently verified'
++    assert rows,(name,identifier)
++    raw=json.dumps(data).encode();path.write_bytes(raw)
++    return hashlib.sha256(raw).hexdigest()
++
++
++class ProductRequirementsRFRegistration(unittest.TestCase):
++    reviewer_fault_copy=prior.ProductRequirements.reviewer_fault_copy
++    changed_field=prior.ProductRequirements.changed_field
++    @classmethod
++    def setUpClass(cls):cls.text=(ROOT/'docs/PRODUCT_REQUIREMENTS.md').read_text()
++
++    def follow(self,root):
++        """Make the project results file follow whatever the (re-pinned) authorities now say."""
++        path=root/RESULTS;data=json.loads(path.read_text())
++        data['results']=list(cpr.reviewer_verdicts(root)[0].values());path.write_text(json.dumps(data))
++
++    def test_shipped_configuration_reads_five_authorities_and_the_fifth_is_latest(self):
++        self.assertEqual([name for name in cpr.REVIEW_INPUT_HASHES if name.endswith('.json')],list(OLDER)+[FIFTH])
++        self.assertEqual(list(cpr.REVIEW_INPUT_HASHES)[-2:],[FIFTH,REPORT])
++        latest,history=cpr.reviewer_verdicts(ROOT)
++        self.assertEqual(list(latest),SEVEN)
++        for identifier,row in latest.items():
++            with self.subTest(identifier=identifier):
++                self.assertEqual((row['state'],row['report_path'],row['bundle_sha256']),('Independently verified',REPORT,RF_BUNDLE))
++                self.assertEqual(row['report_sha256'],hashlib.sha256((ROOT/REPORT).read_bytes()).hexdigest())
++        for identifier in RECORDED:
++            previous=history[identifier][-2]
++            self.assertEqual((previous['state'],previous['report_path'],previous['bundle_sha256']),('Verification failed',RE_REPORT,RE_BUNDLE))
++        self.assertEqual(json.loads((ROOT/RESULTS).read_text())['results'],list(latest.values()))
++
++    def test_fifth_results_and_report_are_hash_pinned(self):
++        with tempfile.TemporaryDirectory() as t:
++            root=self.reviewer_fault_copy(t)
++            for name in (FIFTH,REPORT):
++                with self.subTest(name=name):
++                    path=root/name;raw=path.read_bytes();path.write_bytes(raw+b'\n')
++                    try:
++                        with self.assertRaisesRegex(ValueError,'Protected reviewer input hash differs'):cpr.validate_register(self.text,root)
++                    finally:path.write_bytes(raw)
++            cpr.validate_register(self.text,root)
++
++    def test_three_recorded_scopes_cite_the_fifth_checkpoint_and_nothing_else_moved(self):
++        before=cpr.parse_register(fixture.checkpoint_bytes('docs/PRODUCT_REQUIREMENTS.md').decode());after=cpr.parse_register(self.text)
++        self.assertEqual(list(before),list(after))
++        changed={key for key in before if before[key]!=after[key]}
++        self.assertEqual(changed,set(RECORDED)|{'AAOS-GOV-02'})
++        for key in before:
++            self.assertEqual(before[key]['Product decision'],after[key]['Product decision'],key)
++            self.assertEqual(before[key]['Acceptance criteria'],after[key]['Acceptance criteria'],key)
++            if key not in RECORDED:self.assertEqual(before[key]['Implementation state'],after[key]['Implementation state'],key)
++        self.assertEqual({field for field in cpr.FIELDS if before['AAOS-GOV-02'][field]!=after['AAOS-GOV-02'][field]},{'Scope note'})
++        for key in RECORDED:
++            with self.subTest(key=key):
++                self.assertEqual(before[key]['Implementation state'],'Verification failed')
++                self.assertEqual(after[key]['Implementation state'],'Independently verified')
++                self.assertEqual({field for field in cpr.FIELDS if before[key][field]!=after[key][field]},{'Implementation state','Scope note','Evidence'})
++                self.assertIn(RF_BUNDLE,after[key]['Evidence']);self.assertIn(REPORT,after[key]['Evidence'])
++                self.assertIn(RF_BUNDLE,after[key]['Scope note'])
++                # The earlier review failed this record: citing it alone cannot carry the verified state.
++                stale=self.changed_field(key,'Evidence','independent review '+RE_BUNDLE+' '+RE_REPORT+' tests/test_product_requirements_rf.py')
++                with self.assertRaisesRegex(ValueError,'independent review entry/checkpoint differs from evidence'):cpr.validate_register(stale,ROOT)
++
++    def test_fifth_failed_verdict_cannot_be_promoted_and_a_downgrade_is_accepted_when_results_and_register_follow(self):
++        with tempfile.TemporaryDirectory() as t:
++            root=self.reviewer_fault_copy(t);new_hash=altered(root,FIFTH,'AAOS-BNK-03','Verification failed')
++            with patch.dict(cpr.REVIEW_INPUT_HASHES,{FIFTH:new_hash}):
++                self.assertEqual(cpr.reviewer_verdicts(root)[0]['AAOS-BNK-03']['state'],'Verification failed')
++                # Results that still say verified disagree with the latest authority.
++                with self.assertRaisesRegex(ValueError,'disagree with reviewer verdict'):cpr.validate_register(self.text,root)
++                self.follow(root)
++                for state in ('Independently verified','Developer-tested','Implemented'):
++                    with self.subTest(state=state),self.assertRaisesRegex(ValueError,'independent Verification failed cannot be promoted'):
++                        cpr.validate_register(self.changed_field('AAOS-BNK-03','Implementation state',state),root)
++                cpr.validate_register(self.changed_field('AAOS-BNK-03','Implementation state','Verification failed'),root)
++
++    def test_each_older_authority_altered_and_repinned_cannot_override_the_fifth(self):
++        with tempfile.TemporaryDirectory() as t:
++            root=self.reviewer_fault_copy(t);original=cpr.reviewer_verdicts(root)[0]
++            current=original['AAOS-KNO-04']
++            # Cite the fifth accepted checkpoint: the injected older failure
++            # intentionally invalidates the real register's earlier citation.
++            fixture_text=self.changed_field('AAOS-KNO-04','Evidence','independent review '+current['bundle_sha256']+' '+current['report_path']+' tests/test_product_requirements_rf_registration.py')
++            for name in OLDER:
++                with self.subTest(name=name):
++                    raw=(root/name).read_bytes();new_hash=altered(root,name,'AAOS-KNO-04','Verification failed')
++                    try:
++                        with self.assertRaisesRegex(ValueError,'Protected reviewer input hash differs'):cpr.validate_register(fixture_text,root)
++                        with patch.dict(cpr.REVIEW_INPUT_HASHES,{name:new_hash}):
++                            self.assertEqual(cpr.reviewer_verdicts(root)[0],original);cpr.validate_register(fixture_text,root)
++                    finally:(root/name).write_bytes(raw)
++            # The fourth authority still failed the three recorded scopes; re-pinned as verified it adds nothing the fifth does not control.
++            for identifier in RECORDED:
++                self.assertEqual(cpr.reviewer_verdicts(root)[1][identifier][-2]['state'],'Verification failed')
++
++    def test_results_and_register_that_follow_the_fourth_authority_are_rejected(self):
++        with tempfile.TemporaryDirectory() as t:
++            root=self.reviewer_fault_copy(t);path=root/RESULTS;current=json.loads(path.read_text())
++            checkpoint_text=fixture.checkpoint_bytes('docs/PRODUCT_REQUIREMENTS.md').decode()
++            # The whole RF-checkpoint results file (RE latest), with the current and the RF-checkpoint register.
++            path.write_bytes(fixture.checkpoint_bytes(RESULTS))
++            for text in (self.text,checkpoint_text):
++                with self.assertRaisesRegex(ValueError,'disagree with reviewer verdict'):cpr.validate_register(text,root)
++            # One row at a time, taken from the real history.
++            history=cpr.reviewer_verdicts(root)[1]
++            for identifier in SEVEN:
++                with self.subTest(identifier=identifier):
++                    data=copy.deepcopy(current);data['results']=[history[row['id']][-2] if row['id']==identifier else row for row in data['results']]
++                    path.write_text(json.dumps(data))
++                    with self.assertRaisesRegex(ValueError,'disagree with reviewer verdict: '+identifier):cpr.validate_register(self.text,root)
++            path.write_text(json.dumps(current));cpr.validate_register(self.text,root)
++            # With the results restored, a register that still follows the fourth authority's failure is consistent only as a downgrade, never as the reverse.
++            cpr.validate_register(checkpoint_text,root)
++
++    def test_record_absent_from_the_fifth_falls_back_to_the_fourth_verdict(self):
++        with tempfile.TemporaryDirectory() as t:
++            root=self.reviewer_fault_copy(t);new_hash=altered(root,FIFTH,'AAOS-BNK-03',None)
++            with patch.dict(cpr.REVIEW_INPUT_HASHES,{FIFTH:new_hash}):
++                latest=cpr.reviewer_verdicts(root)[0]
++                self.assertEqual(list(latest),SEVEN)
++                self.assertEqual((latest['AAOS-BNK-03']['state'],latest['AAOS-BNK-03']['report_path']),('Verification failed',RE_REPORT))
++                with self.assertRaisesRegex(ValueError,'disagree with reviewer verdict: AAOS-BNK-03'):cpr.validate_register(self.text,root)
++                self.follow(root)
++                with self.assertRaisesRegex(ValueError,'AAOS-BNK-03: independent Verification failed cannot be promoted'):cpr.validate_register(self.text,root)
++
++    def test_seven_row_order_and_exact_rows_are_enforced_on_five_authorities(self):
++        with tempfile.TemporaryDirectory() as t:
++            root=self.reviewer_fault_copy(t);path=root/RESULTS;original=json.loads(path.read_text())
++            self.assertEqual([row['id'] for row in original['results']],SEVEN)
++            expected={'swapped':'row order','reversed':'row order','moved':'row order','missing':'must name every reviewer verdict',
++                      'extra':'must name every reviewer verdict','duplicate':'must name every reviewer verdict','changed':'disagree with reviewer verdict',
++                      'stale-bundle':'disagree with reviewer verdict','stale-report':'Independent report hash differs|disagree with reviewer verdict'}
++            for fault,message in expected.items():
++                d=copy.deepcopy(original);rows=d['results']
++                if fault=='swapped':rows[4],rows[5]=rows[5],rows[4]
++                elif fault=='reversed':rows.reverse()
++                elif fault=='moved':rows.insert(0,rows.pop())
++                elif fault=='missing':rows.pop(4)
++                elif fault=='extra':rows.append(dict(rows[0],id='AAOS-ARC-02'))
++                elif fault=='duplicate':rows[5]=rows[4]
++                elif fault=='changed':rows[4]['state']='Verification failed'
++                elif fault=='stale-bundle':rows[4]['bundle_sha256']=RE_BUNDLE
++                else:rows[4]['report_path']=RE_REPORT
++                path.write_text(json.dumps(d))
++                with self.subTest(fault=fault),self.assertRaisesRegex(ValueError,message):cpr.validate_register(self.text,root)
++
++    def test_historical_fixture_bytes_are_hash_checked_and_leave_the_shipped_pins_alone(self):
++        pins=dict(cpr.REVIEW_INPUT_HASHES)
++        for name in fixture.CHECKPOINT:
++            with self.subTest(name=name),patch.dict(fixture.CHECKPOINT,{name:'0'*64}):
++                with self.assertRaisesRegex(ValueError,'RF checkpoint fixture hash differs'):fixture.checkpoint_bytes(name)
++        with tempfile.TemporaryDirectory() as t:
++            with fixture.rf_checkpoint(self,t) as (root,text):
++                self.assertEqual(set(pins)-set(cpr.REVIEW_INPUT_HASHES),set(fixture.FIFTH))
++                self.assertEqual({row['report_path'] for row in cpr.reviewer_verdicts(root)[0].values()},{RE_REPORT})
++                cpr.validate_register(text,root)
++        self.assertEqual(cpr.REVIEW_INPUT_HASHES,pins)
++        self.assertEqual(list(cpr.REVIEW_INPUT_HASHES),list(pins))

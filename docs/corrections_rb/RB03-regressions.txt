@@ -1,0 +1,6 @@
+test_RB03_equivalent_vendor_and_receipt_rules_keep_authors_across_scope_and_key (tests.test_review_corrections_rb.ReviewCorrectionsRB) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.239s
+
+OK

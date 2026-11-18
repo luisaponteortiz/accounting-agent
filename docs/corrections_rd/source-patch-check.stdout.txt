@@ -1,0 +1,21 @@
+patching file Makefile
+patching file 'accounting_agent/service.py'
+patching file 'accounting_agent/source_control.py'
+patching file 'scripts/build_rd_review_bundle.py'
+patching file 'scripts/check_product_requirements.py'
+patching file 'scripts/verify_rc_review.py'
+patching file 'scripts/verify_rd_bundle.py'
+patching file 'tests/test_product_requirements.py'
+patching file 'tests/test_rd_review_gate.py'
+patching file 'tests/test_review_corrections_rd.py'
+patching file Makefile
+patching file 'accounting_agent/service.py'
+patching file 'accounting_agent/source_control.py'
+patching file 'scripts/build_rd_review_bundle.py'
+patching file 'scripts/check_product_requirements.py'
+patching file 'scripts/verify_rc_review.py'
+patching file 'scripts/verify_rd_bundle.py'
+patching file 'tests/test_product_requirements.py'
+patching file 'tests/test_rd_review_gate.py'
+patching file 'tests/test_review_corrections_rd.py'
+Patch reproduces all 10 source/test/script/Makefile differences byte for byte

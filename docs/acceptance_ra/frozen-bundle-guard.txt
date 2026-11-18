@@ -1,0 +1,6 @@
+test_packager_refuses_to_overwrite_frozen_submission (tests.test_acceptance_gate.AcceptanceGate) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.109s
+
+OK

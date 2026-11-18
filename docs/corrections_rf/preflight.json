@@ -1,0 +1,15 @@
+{
+  "hashes_verified": {
+    "exports/FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_RESPONSE.zip": "e0b0a49932ca4e4f7adf4c18f21202ea85b33219b08e3bc76038778c9178cf2a",
+    "exports/FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip": "4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae",
+    "docs/PRODUCT_REQUIREMENTS.md": "97876af92ef2d6e1daba18fd8a846a27d180613884f652bcc3211dfa8e28c34c",
+    "DECISIONS.md": "cef283d295970010028b9cff76866073a3e79301ac1d30d9575b4ceb0b079626"
+  },
+  "head": "5af9a6194bc39e2f303cc6b43b0b59094118b8e4",
+  "commit_count": 10,
+  "branch": "review/fable-rc-acceptance",
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "sqlite": "3.51.0",
+  "platform": "macOS-26.5.2-x86_64-i386-64bit",
+  "protected_files": 1189
+}

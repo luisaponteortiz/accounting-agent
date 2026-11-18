@@ -1,0 +1,8 @@
+test_concurrent_workers_do_not_duplicate_artifacts (tests.test_platform.PlatformCase) ... ok
+test_concurrent_workers_do_not_duplicate_artifacts (tests.test_platform.PlatformCase) ... ok
+test_concurrent_workers_do_not_duplicate_artifacts (tests.test_platform.PlatformCase) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 5.296s
+
+OK

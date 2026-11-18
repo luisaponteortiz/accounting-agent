@@ -1,0 +1,481 @@
+{
+  "response_sha256": "97f062e5a1a36ffb995f149bd33c1cfe035453e1d6e837bbc7a9f9f636128b27",
+  "all_zip_entries_match_working_inputs": true,
+  "files": [
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/fable_rd_order_search.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/fable_rd_order_search.py",
+      "sha256": "1bb7209bebdc25a3c980cab296a4726fcddbdb0b998d67fca500f312c05e0af7"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/FABLE_RD_CORRECTIONS.json",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/FABLE_RD_CORRECTIONS.json",
+      "sha256": "d55d0075c87f7b70cb3e471d3be32ad7e24f40b62118a3f6e096f935fe62f3f5"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_probes.py",
+      "sha256": "ae7b2ac21de0ff105f2bc90eafb6b472e6e15ff9ab4f231d042c8442738d46ea"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/preservation.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/preservation.txt",
+      "sha256": "3af637d37887615e7659b68f5a7fb599fd166f1f141f10107dacc06c13226676"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/extra-exit-codes.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/extra-exit-codes.txt",
+      "sha256": "b0afc1ac964372da9abfc4b3fe4f60655fce354b115e884d2a84f69360c53d56"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/order-search-extended-rd-source.json",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/order-search-extended-rd-source.json",
+      "sha256": "4e3f0537eb6446a257c55ffcc84a72efa55278d2181c28ecd2d7c754d0f405dd"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/fable-rc-register-faults-on-rd.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/fable-rc-register-faults-on-rd.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/order-search-gate-rd-source.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/order-search-gate-rd-source.txt",
+      "sha256": "0120e13d93c095b814d4114733a37dd09062520b3c571abcbeee8083913d574b"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/versions.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/versions.txt",
+      "sha256": "c70df78327c8cafd34b63663cec0c282c2f9761a79b8502dd2acc3a1a2e316d9"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/fable-rd-gate-faults.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/fable-rd-gate-faults.txt",
+      "sha256": "96fb894c6c8d2195e05d14918dde3655b77ea97bd19e97bfd0da4cdc5f33dcf7"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/rd-gate-negative-control.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/rd-gate-negative-control.txt",
+      "sha256": "5f8349bb4adda3076d0a561c9d1d8ea1fe9e7a4de862d993505668ee93bd9b6e"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/inventory-and-states.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/inventory-and-states.txt",
+      "sha256": "9bf739c33939bb6f5961654bbc880ad87f356ffd2f223b45296b1f8effe2692c"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/fable-rc-register-faults-on-rd.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/fable-rc-register-faults-on-rd.txt",
+      "sha256": "3a1d62a7a1b5b567ebb8103af1c632d1dea884d13d24cd3d984bbab6d5ddc3e3"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/baseline/order-search.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/baseline/order-search.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/baseline/exit-codes.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/baseline/exit-codes.txt",
+      "sha256": "4c31f1300c62870d91e181bd314c6ff69958446665bd852f4c8e2e5ca9a0eee6"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/baseline/rc-probes.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/baseline/rc-probes.stdout.txt",
+      "sha256": "4023b44eb086f21978a90342c24a0a9fe2dc1107692692ad618347f0a61e4806"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/baseline/order-search.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/baseline/order-search.stdout.txt",
+      "sha256": "628e15cbf321d0c5ab33e288f4c2b94d5b5e1615ad0d06f92d5c8906fb383960"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/baseline/rc-probes.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/baseline/rc-probes.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experimental-correction-re.patch",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experimental-correction-re.patch",
+      "sha256": "743cfd78a2f98869a15c8ee1e6b710d2d7487e1ce7af9f3d30ae404adc79cacf"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/test-inventory.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/test-inventory.txt",
+      "sha256": "ad88fdf1eb2a876091ed3398f4e6d4d1506ce48b65233eb2d42ffbc725a97813"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/order-search-extended-rd-source.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/order-search-extended-rd-source.txt",
+      "sha256": "36aa32cd2d9d9f7f313e018312f0d31a09c7d1fe96dce4407f12cca89ce1a979"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/scripts/zipcheck.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/zipcheck.py",
+      "sha256": "a4ac9852bce4d0184f01ec27ba37a7bb0d356c8fd79733b23c06951ebbf66271"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/scripts/fable_rd_register_faults.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/fable_rd_register_faults.py",
+      "sha256": "010ba7b6e4bb45124944e3d4503341ea18f8b2ab0c17b4367615bdaa6c06ee3f"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/scripts/test_inventory.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/test_inventory.py",
+      "sha256": "d04d44513a3880ffc6833383defc3655a0153a2931d22616d720ecf906bcda0a"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/scripts/fable_rd_gate_faults.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/fable_rd_gate_faults.py",
+      "sha256": "68a49d1d0fc69394774fba06083dc3bcddd753b77e35be0e4e6cba366b76d8d8"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/scripts/preservation.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/preservation.py",
+      "sha256": "87dc7b452298e60087fc07153d1df863205bd5c15b0fc66f03e1bfe9cc7d3fb2"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/scripts/build_results.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/build_results.py",
+      "sha256": "2811be5119a8795414252890798d1bf9e58cda101ce07f1b0912710fd28744ce"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/scripts/manifest_check.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/manifest_check.py",
+      "sha256": "40c990a1ccc22f7313ac4f757bca8f527a48857b7e6046d8996cbd08eded50e7"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/scripts/run_cmds.sh",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/run_cmds.sh",
+      "sha256": "c073ba85c1c3e2ba0bc9b4b21651c4d0acd209b7da42f82f6bcbfc178c2e824a"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/scripts/register_diff.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/register_diff.py",
+      "sha256": "5e5d8fd3a6cc7e5f19b366d2bb5ad93b5c259d3c868a13c28f77de453504d694"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/scripts/full_check.py",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/scripts/full_check.py",
+      "sha256": "84a36fce2f65b9ed49fa6490e485e1fcc0a87f0d6bed0b974793b5c7837cb6a0"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/fable-rd-register-faults.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/fable-rd-register-faults.txt",
+      "sha256": "c1b78aba37c9b263ba2404566a2dae895c9970d380a823e8e51ff5916e178e79"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rd-probes.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rd-probes.stdout.txt",
+      "sha256": "d33d794c134b1853f70c0350c411f8a0180b2ac868cceda7276973bc54c60cd2"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/order-search.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/order-search.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/batch2-gate.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/batch2-gate.stdout.txt",
+      "sha256": "30bac693c34f5629b3d18a1e3eafe02ced74e6cc0c128f782c908b032aa72909"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/ra-probes.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/ra-probes.stdout.txt",
+      "sha256": "3b2faeeea3f5126b11fb10f10ce56a92d87181ad96ae19fa95a2ac198f512b12"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/reverification-gate.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/reverification-gate.stdout.txt",
+      "sha256": "46895e46ea34c03009f5da07138ded59901a5aa5cefaaa3e8fa9f0547e0c4466"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/acceptance-gate.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/acceptance-gate.stdout.txt",
+      "sha256": "30a9b162d015dcff6fd724b6d3b5ada27d7174dbd5ca7053bc2a386826016b8f"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/exit-codes.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/exit-codes.txt",
+      "sha256": "4168e35be31704e37b194a9488d377a3d4c7d0f0e2085e78547177a7a17d6295"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rd-extended-search.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rd-extended-search.stdout.txt",
+      "sha256": "aa50c6efe69299fd3cade6060064366d404d85d5b18e839027f8fc6d32c62c6e"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/make-test.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/make-test.stderr.txt",
+      "sha256": "a866bc3da6a0138f0ba36dce3f429d169facd063bca7fa4659f34948e9f7d0e2"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rc-probes.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rc-probes.stdout.txt",
+      "sha256": "1965137bfc8199994033d27c53d5184eb7e3ea118f7cfaf9fe82d2823f57849c"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rc-gate.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rc-gate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rb-probes.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rb-probes.stdout.txt",
+      "sha256": "59b0ff3563fb6438815c352116ae8f1bc15b81c816e84db5ff8af9dd8bb01806"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rd-probes-final.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rd-probes-final.stdout.txt",
+      "sha256": "9a011f377138a37837d5a7f7ffd06e9ef3b167859945c2e27841eff35e621bfe"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/batch2-gate.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/batch2-gate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/order-search.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/order-search.stdout.txt",
+      "sha256": "0120e13d93c095b814d4114733a37dd09062520b3c571abcbeee8083913d574b"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/acceptance-gate.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/acceptance-gate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/reverification-gate.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/reverification-gate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/ra-probes.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/ra-probes.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rd-probes.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rd-probes.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rd-extended-search.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rd-extended-search.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rc-probes.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rc-probes.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rd-extended-search.json",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rd-extended-search.json",
+      "sha256": "b346c43fb7c163cb87f9d12b8ace65629fd1b87f8e879b3b1f770d0f0701777c"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/make-test.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/make-test.stdout.txt",
+      "sha256": "4cee8569de82dc754e80a1041a8f83299201efd21f53a26aa32353bc553eb0ee"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rb-probes.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rb-probes.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/experiment/rc-gate.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/experiment/rc-gate.stdout.txt",
+      "sha256": "a1ad2c8112bb75645143a35b794903fcf2c59d19f88a7163002f3404298d54b5"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/README.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/README.txt",
+      "sha256": "db247b19182d8c2471d9c2e65c5cacfa626135aed33e4489a62f1257950ce02a"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/register-diff.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/register-diff.txt",
+      "sha256": "30d57d4f643dc70e4024227f3e620157f27e2e103f87aefcbd1d30e870eff735"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/01-rc-probes.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/01-rc-probes.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/03-rb-probes.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/03-rb-probes.stdout.txt",
+      "sha256": "59b0ff3563fb6438815c352116ae8f1bc15b81c816e84db5ff8af9dd8bb01806"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/07-batch2-gate.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/07-batch2-gate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/13-register-json.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/13-register-json.stdout.txt",
+      "sha256": "f705e3c13876cc1182b9cf600cdbd766c0b53c0d83f6b8376f7499cbcf578776"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/08-reverification-gate.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/08-reverification-gate.stdout.txt",
+      "sha256": "685fbd5bffa0d82ec3ab44d11a47f5bace542a685ed1705d3d2e4edb50dba14e"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/exit-codes.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/exit-codes.txt",
+      "sha256": "5579e7d63c6b43ee938495e11dce42412a6663945af90ef647c5de58c1b5d268"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/14-rb-register-faults.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/14-rb-register-faults.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/11-rc-gate.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/11-rc-gate.stdout.txt",
+      "sha256": "a1ad2c8112bb75645143a35b794903fcf2c59d19f88a7163002f3404298d54b5"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/12-rd-gate.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/12-rd-gate.stdout.txt",
+      "sha256": "f64bcb07a8169e6a06a1e667bb63c9bf539741b3ef56901ef702183c369c90df"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/05-make-test.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/05-make-test.stdout.txt",
+      "sha256": "4cee8569de82dc754e80a1041a8f83299201efd21f53a26aa32353bc553eb0ee"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/04-ra-probes.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/04-ra-probes.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/02-order-search.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/02-order-search.stdout.txt",
+      "sha256": "0120e13d93c095b814d4114733a37dd09062520b3c571abcbeee8083913d574b"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/09-acceptance-gate.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/09-acceptance-gate.stdout.txt",
+      "sha256": "7b1308bc675176d760a5254d5c7550556c97a76f997fef806fbceee575bf569b"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/10-rb-gate.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/10-rb-gate.stderr.txt",
+      "sha256": "e55ea61ba4a412227f027a80607b6eca2f11061a8e9c63bbe877e49913f0467d"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/06-make-check.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/06-make-check.stdout.txt",
+      "sha256": "d2d2abdce755190c57a7e8629e5aaa5294e8f516c10e6e3fec09b8fb04004c09"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/07-batch2-gate.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/07-batch2-gate.stdout.txt",
+      "sha256": "0e30b3f9eda6398d7505cbd28f765f70a392814c36c51ec0ee7267220e3ca4b8"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/03-rb-probes.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/03-rb-probes.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/01-rc-probes.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/01-rc-probes.stdout.txt",
+      "sha256": "1965137bfc8199994033d27c53d5184eb7e3ea118f7cfaf9fe82d2823f57849c"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/14-rb-register-faults.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/14-rb-register-faults.stdout.txt",
+      "sha256": "2dd4b1e9ea160021081a4b4e18f33dfeac354e9cb3551d38f6bf84953a05af54"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/13-register-json.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/13-register-json.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/08-reverification-gate.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/08-reverification-gate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/10-rb-gate.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/10-rb-gate.stdout.txt",
+      "sha256": "a9b330e166a523a5202b2566d24169f72b0bfeeff8be6eeb1a61fcc723666967"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/09-acceptance-gate.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/09-acceptance-gate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/05-make-test.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/05-make-test.stderr.txt",
+      "sha256": "779e8d02b3ced917e92eab4703b0a8de5f9133142dc2e3f0a0d76d6747a81b2e"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/12-rd-gate.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/12-rd-gate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/11-rc-gate.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/11-rc-gate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/04-ra-probes.stdout.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/04-ra-probes.stdout.txt",
+      "sha256": "0122263aa34fc5f0b61045dbb6a7072599d112ece3b60201ea99e649513db10f"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/02-order-search.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/02-order-search.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/commands/06-make-check.stderr.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/commands/06-make-check.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/integrity.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/integrity.txt",
+      "sha256": "9ca3f1f632ced1e20cd0cb26c2b83605e3dd9283c68e7fdb0e3d6bb064db0435"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/order-search-gate-rd-source.json",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/order-search-gate-rd-source.json",
+      "sha256": "ccbc5bd4abdd3ef5192f194cc0403ec3af1e8adc8f57b34f3a354ef3a12195af"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/diff-vs-rc-baseline.json",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/diff-vs-rc-baseline.json",
+      "sha256": "24c93dc34ef1e3610d0052ca3cfced13619d956fda160a2943a233c5bf5326c1"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/evidence/baseline-rc-source-rd-probes.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/evidence/baseline-rc-source-rd-probes.txt",
+      "sha256": "88d3eb91a4f41901455513ec5319ca2d1fe7c14f964a5898bbe457c86ab1fab5"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/fable_rd_acceptance_output.txt",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/fable_rd_acceptance_output.txt",
+      "sha256": "38c1d884e71e2e887a59067afe05830b8b37920fedeb3d9b3adf8e31aea71168"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_REPORT.md",
+      "sha256": "e1c1d5bca24d74e4ce0b0e9417f4a309ddeaf6f135af9ff251e0bd8378f038c0"
+    },
+    {
+      "entry": "FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json",
+      "working_file": "exports/FABLE_RD_ACCEPTANCE/FABLE_RD_ACCEPTANCE_RESULTS.json",
+      "sha256": "b4c07743d54b1a69c86a728c432e8291269f1ba17ece6195ea780bfa5851806c"
+    }
+  ]
+}

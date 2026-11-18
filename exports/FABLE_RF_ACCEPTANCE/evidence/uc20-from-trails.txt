@@ -1,0 +1,23 @@
+family                                     orders  waiting   direct survived    stopped     held
+claim-inside-row-data                         120       40        0        0         40       40
+conflict+selection-without-lock               120        0        0        0          0        0
+retained-claim+newer-conflict                 120        0        0        0          0        0
+retained-claim+older-conflict                 120        0        0        0          0        0
+retained-claim+receipt-revision               120        0        0        0          0        0
+retained-claim+replacement+revision           720      300        0        0        300      300
+retained-claim+row-revision                   120        0        0        0          0        0
+retained-claim+withdrawal+resend              720        0        0        0          0        0
+retained-claim-on-replacement                 120       30        0        0         30       30
+retained-conflict+confirming-selection        120        0        0        0          0        0
+same-order-conflict-resent                    120       40        0        0         40       40
+timestamp-order                               120       40        0        0         40       40
+TOTAL                                        2640      450        0        0        450      450
+steps read: 14640 | steps with a waiting approval: 804 | with a direct one: 0 | orders whose missing target never arrived: 0
+columns: waiting = orders with an approval given or standing while an ancestor claim waits for its target (UC-20); direct = the approved row is itself the waiting claimant;
+         survived = approval still governing at the step the target arrived; stopped = approval not governing at that step; held = and the row is held under the locked period at that step
+example ('claim-inside-row-data', 'waiting') (['Q7', 'Q6', 'Q6iP', 'Z', 'P'], 'Z', 'Z', 'P')
+example ('retained-claim+replacement+revision', 'waiting') (['Q7', 'Q6', 'Q6cP', 'Z', 'Zr', 'P'], 'Z', 'Z', 'P')
+example ('retained-claim-on-replacement', 'waiting') (['QcP', 'Z7', 'Z6', 'Z6cQ', 'P'], 'Z6cQ', 'Z', 'P')
+example ('same-order-conflict-resent', 'waiting') (['Q7', 'Q7x', 'Q7xcP', 'Z', 'P'], 'Z', 'Z', 'P')
+example ('timestamp-order', 'waiting') (['Qt7', 'Qt6', 'Qt6cP', 'Z', 'P'], 'Z', 'Z', 'P')
+{"UC20_JSON": {"claim-inside-row-data": {"orders": 120, "steps": 600, "steps_waiting": 60, "orders_waiting": 40, "orders_held_on_arrival": 40, "orders_stopped_on_arrival": 40}, "conflict+selection-without-lock": {"orders": 120, "steps": 600}, "retained-claim+newer-conflict": {"orders": 120, "steps": 600}, "retained-claim+older-conflict": {"orders": 120, "steps": 600}, "retained-claim+receipt-revision": {"orders": 120, "steps": 600}, "retained-claim+replacement+revision": {"orders": 720, "steps": 4320, "steps_waiting": 588, "orders_waiting": 300, "orders_held_on_arrival": 300, "orders_stopped_on_arrival": 300}, "retained-claim+row-revision": {"orders": 120, "steps": 600}, "retained-claim+withdrawal+resend": {"orders": 720, "steps": 4320}, "retained-claim-on-replacement": {"orders": 120, "steps": 600, "steps_waiting": 36, "orders_waiting": 30, "orders_held_on_arrival": 30, "orders_stopped_on_arrival": 30}, "retained-conflict+confirming-selection": {"orders": 120, "steps": 600}, "same-order-conflict-resent": {"orders": 120, "steps": 600, "steps_waiting": 60, "orders_waiting": 40, "orders_held_on_arrival": 40, "orders_stopped_on_arrival": 40}, "timestamp-order": {"orders": 120, "steps": 600, "steps_waiting": 60, "orders_waiting": 40, "orders_held_on_arrival": 40, "orders_stopped_on_arrival": 40}}}

@@ -1,0 +1,194 @@
+[
+ {
+  "label": "make-test",
+  "argv": "make test",
+  "exit_code": 0,
+  "elapsed_seconds": 1017.714,
+  "started_utc": "2026-11-17T17:21:12Z",
+  "load_average_before": [
+   3.8,
+   3.76,
+   3.59
+  ]
+ },
+ {
+  "label": "make-check",
+  "argv": "make check",
+  "exit_code": 0,
+  "elapsed_seconds": 1.6,
+  "started_utc": "2026-11-17T17:38:09Z",
+  "load_average_before": [
+   2.89,
+   2.52,
+   2.83
+  ]
+ },
+ {
+  "label": "make-batch2-gate",
+  "argv": "make batch2-gate",
+  "exit_code": 0,
+  "elapsed_seconds": 54.934,
+  "started_utc": "2026-11-17T17:38:11Z",
+  "load_average_before": [
+   2.82,
+   2.51,
+   2.82
+  ]
+ },
+ {
+  "label": "make-reverification-gate",
+  "argv": "make reverification-gate",
+  "exit_code": 0,
+  "elapsed_seconds": 47.128,
+  "started_utc": "2026-11-17T17:39:06Z",
+  "load_average_before": [
+   2.06,
+   2.37,
+   2.75
+  ]
+ },
+ {
+  "label": "make-acceptance-gate",
+  "argv": "make acceptance-gate",
+  "exit_code": 0,
+  "elapsed_seconds": 46.688,
+  "started_utc": "2026-11-17T17:39:53Z",
+  "load_average_before": [
+   2.29,
+   2.38,
+   2.73
+  ]
+ },
+ {
+  "label": "make-rb-gate",
+  "argv": "make rb-gate",
+  "exit_code": 0,
+  "elapsed_seconds": 28.57,
+  "started_utc": "2026-11-17T17:40:40Z",
+  "load_average_before": [
+   4.41,
+   2.98,
+   2.94
+  ]
+ },
+ {
+  "label": "make-rc-gate",
+  "argv": "make rc-gate",
+  "exit_code": 0,
+  "elapsed_seconds": 24.738,
+  "started_utc": "2026-11-17T17:41:08Z",
+  "load_average_before": [
+   3.41,
+   2.88,
+   2.9
+  ]
+ },
+ {
+  "label": "make-rd-gate",
+  "argv": "make rd-gate",
+  "exit_code": 0,
+  "elapsed_seconds": 121.05,
+  "started_utc": "2026-11-17T17:41:33Z",
+  "load_average_before": [
+   3.1,
+   2.86,
+   2.89
+  ]
+ },
+ {
+  "label": "make-re-gate",
+  "argv": "make re-gate",
+  "exit_code": 0,
+  "elapsed_seconds": 303.636,
+  "started_utc": "2026-11-17T17:43:34Z",
+  "load_average_before": [
+   2.4,
+   2.72,
+   2.83
+  ]
+ },
+ {
+  "label": "make-rf-gate",
+  "argv": "make rf-gate",
+  "exit_code": 0,
+  "elapsed_seconds": 2877.781,
+  "started_utc": "2026-11-17T17:48:38Z",
+  "load_average_before": [
+   2.2,
+   2.48,
+   2.69
+  ]
+ },
+ {
+  "label": "register-faults-F-rb",
+  "argv": "/Library/Developer/CommandLineTools/usr/bin/python3 exports/FABLE_RB_ACCEPTANCE/evidence/scripts/register_faults.py .",
+  "exit_code": 0,
+  "elapsed_seconds": 94.073,
+  "started_utc": "2026-11-17T18:36:35Z",
+  "load_average_before": [
+   5.23,
+   5.57,
+   5.01
+  ]
+ },
+ {
+  "label": "register-faults-G-rc",
+  "argv": "/Library/Developer/CommandLineTools/usr/bin/python3 exports/FABLE_RC_ACCEPTANCE/evidence/scripts/fable_rc_register_faults.py .",
+  "exit_code": 1,
+  "elapsed_seconds": 46.482,
+  "started_utc": "2026-11-17T18:38:10Z",
+  "load_average_before": [
+   6.44,
+   5.69,
+   5.1
+  ]
+ },
+ {
+  "label": "register-faults-H-rd",
+  "argv": "/Library/Developer/CommandLineTools/usr/bin/python3 exports/FABLE_RD_ACCEPTANCE/evidence/scripts/fable_rd_register_faults.py .",
+  "exit_code": 1,
+  "elapsed_seconds": 23.643,
+  "started_utc": "2026-11-17T18:38:56Z",
+  "load_average_before": [
+   5.44,
+   5.54,
+   5.07
+  ]
+ },
+ {
+  "label": "register-faults-J-re",
+  "argv": "/Library/Developer/CommandLineTools/usr/bin/python3 exports/FABLE_RE_ACCEPTANCE/evidence/scripts/fable_re_register_faults.py .",
+  "exit_code": 1,
+  "elapsed_seconds": 25.711,
+  "started_utc": "2026-11-17T18:39:20Z",
+  "load_average_before": [
+   5.0,
+   5.43,
+   5.05
+  ]
+ },
+ {
+  "label": "register-faults-K-rf",
+  "argv": "/Library/Developer/CommandLineTools/usr/bin/python3 exports/FABLE_RF_ACCEPTANCE/evidence/scripts/fable_rf_register_faults.py .",
+  "exit_code": 1,
+  "elapsed_seconds": 44.487,
+  "started_utc": "2026-11-17T18:39:45Z",
+  "load_average_before": [
+   4.47,
+   5.27,
+   5.0
+  ]
+ },
+ {
+  "label": "conflict-unadapted-retained-register-tests",
+  "argv": "/Library/Developer/CommandLineTools/usr/bin/python3 -m unittest tests.test_product_requirements tests.test_product_requirements_rf -v",
+  "exit_code": 1,
+  "elapsed_seconds": 61.398,
+  "started_utc": "2026-11-17T18:40:30Z",
+  "load_average_before": [
+   3.9,
+   5.02,
+   4.92
+  ]
+ }
+]

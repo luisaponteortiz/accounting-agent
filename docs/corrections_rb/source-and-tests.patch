@@ -1,0 +1,551 @@
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+ PYTHON ?= python3
+-.PHONY: setup demo test core-test api-test check verify-no-egress export-demo backup reviewer-test batch1-gate batch2-gate reverification-gate acceptance-gate
++.PHONY: setup demo test core-test api-test check verify-no-egress export-demo backup reviewer-test batch1-gate batch2-gate reverification-gate acceptance-gate rb-gate
+ setup:
+ 	$(PYTHON) -m accounting_agent setup
+ demo:
+@@ -37,3 +37,7 @@
+ acceptance-gate:
+ 	$(PYTHON) exports/FABLE_RV_ACCEPTANCE/fable_rv_acceptance_probes.py . A04 A01 A02 A06 A07 A08 A09 A10 A11 A12 A13 A14 X01 X12k X12s X15 U1 U4 M1 M2
+ 	$(PYTHON) review/fable_rv_acceptance_probes.py .
++
++rb-gate:
++	$(PYTHON) exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py .
++	$(PYTHON) -m unittest tests.test_ra_review_gate -v
+--- a/accounting_agent/controls.py
++++ b/accounting_agent/controls.py
+@@ -123,13 +123,16 @@
+ 
+     def applied_rule_lineage(self,db,scope,rule,item_data):
+         if rule['kind'] not in ('vendor_mapping','receipt_matching'):return [rule]
+-        # Policy identity is durable even when a proposer omits the optional link.
+-        earlier=db.execute("SELECT r.*,d.actor AS approved_by FROM policy_rules r JOIN rule_decisions d ON d.rule_id=r.id AND d.scope=r.scope AND d.decision='approve' WHERE r.scope=? AND r.kind=? AND r.rule_key=? AND r.item_key IS ? AND r.id<? ORDER BY r.id",(scope,rule['kind'],rule['rule_key'],rule['item_key'],rule['id'])).fetchall()
++        # Relevant semantic coverage survives optional links, renamed keys and a
++        # general policy re-proposed just for this item.
++        transaction=item_data.get('transaction',{})
++        item_key=transaction.get('account_id','')+':'+transaction.get('source_id','') if transaction else rule['item_key']
++        earlier=db.execute("SELECT r.*,d.actor AS approved_by FROM policy_rules r JOIN rule_decisions d ON d.rule_id=r.id AND d.scope=r.scope AND d.decision='approve' WHERE r.scope=? AND r.kind=? AND (r.item_key IS NULL OR r.item_key=?) AND r.id<? ORDER BY r.id",(scope,rule['kind'],item_key,rule['id'])).fetchall()
+         candidates={r['id']:dict(r,value=json.loads(r['value'])) for r in earlier}
+         result=[rule];seen={rule['id']};parent=rule.get('supersedes')
+         while parent and parent not in seen:
+             seen.add(parent)
+-            row=db.execute("SELECT r.*,d.actor AS approved_by FROM policy_rules r LEFT JOIN rule_decisions d ON d.rule_id=r.id AND d.scope=r.scope AND d.decision='approve' WHERE r.scope=? AND r.id=? AND r.kind=? AND r.rule_key=? AND r.item_key IS ?",(scope,parent,rule['kind'],rule['rule_key'],rule['item_key'])).fetchone()
++            row=db.execute("SELECT r.*,d.actor AS approved_by FROM policy_rules r LEFT JOIN rule_decisions d ON d.rule_id=r.id AND d.scope=r.scope AND d.decision='approve' WHERE r.scope=? AND r.id=? AND r.kind=? AND (r.item_key IS NULL OR r.item_key=?)",(scope,parent,rule['kind'],item_key)).fetchone()
+             if not row:break
+             candidates[row['id']]=dict(row,value=json.loads(row['value']))
+             parent=row['supersedes']
+--- a/accounting_agent/modules.py
++++ b/accounting_agent/modules.py
+@@ -101,6 +101,7 @@
+     profile,period=ctx['profile'],ctx['period'];issues={};packages=[]
+     statements=[s for s in ctx['sources'] if s['kind']=='statement']
+     for account in profile['card_accounts']:
++        prior_revisions=[];prior_acceptance=None
+         blockers=[];identity='not_supplied';continuity='no_prior_statement';provenance={'provenance':'not_supplied','supplier':None,'independent_verification':'not_performed'}
+         matching=[s for s in statements if s['value']['account_id']==account and s['value']['period_start']==period['start'] and s['value']['period_end']==period['end']]
+         excluded=[]
+@@ -134,9 +135,13 @@
+                 last=max(prior,key=lambda s:s['value']['period_end'])
+                 if money(last['value']['closing_balance'])!=money(c['opening_balance']):
+                     continuity='mismatch';blockers.append('STATEMENT_OPENING_BALANCE_BREAK')
++                prior_revisions=ctx.get('evidence_revisions',{}).get(last['source_key'],[])
++                prior_acceptance=ctx.get('prior_statement_acceptances',{}).get(last['source_key'])
++                if prior_revisions and not (prior_acceptance and prior_acceptance['accepted']):
++                    continuity='prior_statement_revision_unaccepted';blockers.append('STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW')
+             if any((r['value']['activity'] in ('credit','payment') and money(r['value']['amount'])>0) or (r['value']['activity'] in ('fee','interest') and money(r['value']['amount'])<0) for r in included):blockers.append('STATEMENT_ACTIVITY_SIGN_INVALID')
+         issues[account]=blockers
+-        packages.append(output('statement:'+account,'statement_workpaper',{'account_id':account,'evidence':refs([statement]) if statement else [],'statement_revisions':ctx.get('evidence_revisions',{}).get(statement['source_key'],[]) if statement else [],'unreconciled_population':excluded,'line_identity':identity,'opening_continuity':continuity,'statement_provenance':provenance,'execution':'deterministic','external_reconciliation':'not_verified'},blockers))
++        packages.append(output('statement:'+account,'statement_workpaper',{'account_id':account,'evidence':refs([statement]) if statement else [],'prior_statement_revisions':prior_revisions,'prior_statement_acceptance':prior_acceptance,'statement_revisions':ctx.get('evidence_revisions',{}).get(statement['source_key'],[]) if statement else [],'unreconciled_population':excluded,'line_identity':identity,'opening_continuity':continuity,'statement_provenance':provenance,'execution':'deterministic','external_reconciliation':'not_verified'},blockers))
+     return issues,packages
+ 
+ 
+@@ -169,7 +174,7 @@
+     receipts = [s for s in sources if s["kind"] == "receipt"]
+     controls = [s for s in sources if s['kind']=='statement']
+     account_issues,statement_workpapers=statement_checks(ctx,txs)
+-    control_details={workpaper['data']['account_id']:{key:workpaper['data'][key] for key in ('line_identity','opening_continuity','statement_provenance')} for workpaper in statement_workpapers}
++    control_details={workpaper['data']['account_id']:{key:workpaper['data'][key] for key in ('line_identity','opening_continuity','statement_provenance','prior_statement_revisions','prior_statement_acceptance')} for workpaper in statement_workpapers}
+     result = []
+     for row in txs:
+         t = row["value"]
+--- a/accounting_agent/service.py
++++ b/accounting_agent/service.py
+@@ -220,7 +220,7 @@
+         link=self.supersession_link(db,actor.scope,snapshot_id)
+         if parent_blocked:prior=parent_blocked
+         old_period=self.period(db,actor,prior['period_id']) if prior and prior['period_id'] else None
+-        moved=old_period is not None and (p is None or p['period_id']!=old_period['period_id'] or bool(link) or bool(parent_blocked))
++        moved=old_period is not None and (p is None or p['period_id']!=old_period['period_id'])
+         blocked=bool(moved and old_period['status']=='locked')
+         if p and latest and latest['admitted'] and latest['period_id']==p['period_id'] and not blocked:
+             self.apply_supersession(db,actor,snapshot_id)
+@@ -234,6 +234,7 @@
+             db.execute('INSERT INTO source_moves(scope,snapshot_id,from_period_id,to_period_id,blocked,had_approval,created) VALUES(?,?,?,?,?,?,?)',(actor.scope,snapshot_id,old_period['period_id'],p['period_id'] if p else None,int(blocked),int(had_approval),utcnow()))
+             self.store.audit(db,actor.scope,actor.id,'source_period_move',{'snapshot_id':snapshot_id,'from_period_id':old_period['period_id'],'to_period_id':p['period_id'] if p else None,'blocked':blocked,'had_recorded_approval':had_approval,'supersession_link_id':link['id'] if link else None})
+         db.execute('INSERT INTO source_periods(scope,snapshot_id,period_id,admitted,reason,created) VALUES(?,?,?,?,?,?)',(actor.scope,snapshot_id,bound_period,int(reason is None),reason,utcnow()))
++        if blocked:self.source_approval_events(db,actor,source['source_key'],snapshot_id,'APPROVED_SOURCE_REVISED')
+         if reason:self.store.audit(db,actor.scope,actor.id,'source_period_exception',{'snapshot_id':snapshot_id,'period_id':bound_period,'code':reason})
+         else:self.apply_supersession(db,actor,snapshot_id)
+ 
+@@ -316,14 +317,15 @@
+         period_status=self.period_outcomes(db,actor,selected["period_id"]) if workflow_id=="close_readiness" and selected else None
+         evidence_revisions=self.evidence_revisions(db,actor.scope,sources)
+         dispositions=self.active_dispositions(db,actor,workflow_id,selected["period_id"],sources,evidence_revisions) if selected and workflow_id else []
+-        manifest = {"unresolved_transitions":unresolved_transitions,"prior_period":prior_period,"statement_rules":statement_rules,"evidence_revisions":evidence_revisions,"stale_origins":stale_origins,"source_transitions":transitions,"period_status":period_status,"entry_claims":claims,"dispositions":dispositions,"period": {k:selected[k] for k in ("period_id","start","end")} if selected else None,
++        prior_acceptances=self.prior_statement_acceptances(db,actor,prior_period,sources) if workflow_id=='card_preparation' else {}
++        manifest = {"prior_statement_acceptances":prior_acceptances,"unresolved_transitions":unresolved_transitions,"prior_period":prior_period,"statement_rules":statement_rules,"evidence_revisions":evidence_revisions,"stale_origins":stale_origins,"source_transitions":transitions,"period_status":period_status,"entry_claims":claims,"dispositions":dispositions,"period": {k:selected[k] for k in ("period_id","start","end")} if selected else None,
+                     "profile_sections": {k:profile.get(k) for k in sorted(sections)},
+                     "workflow_permitted": workflow_id in profile['procedures'] if workflow_id else None,
+                     "sources": [{"kind":s['kind'],"key":s['source_key'],"snapshot_id":s['id'],"hash":s['hash']} for s in sources],
+                     "rules":[{"id":r["id"],"version":r["version"],"value":r["value"]} for r in sorted(applied.values(),key=lambda r:r["id"])], "capabilities":capabilities,"handler_hash":self.handler_hash,"shared_controls":SHARED_CONTROLS}
+         return {"period": selected, "scope": actor.scope, "generation": client["generation"], "profile": profile,
+                 "profile_ref": {"snapshot_id": profile_row["id"], "hash": profile_row["hash"], "version": profile["version"], "actor": profile_row["actor"]},
+-                "unresolved_transitions":unresolved_transitions,"prior_period":prior_period,"statement_rules":statement_rules,"evidence_revisions":evidence_revisions,"stale_origins":stale_origins,"source_transitions":transitions,"period_status":period_status,"entry_claims":claims,"dispositions":dispositions,"rules":list(applied.values()),"item_rules":item_rules,"sources": sources, "manifest":manifest, "fingerprint": digest(manifest)}
++                "prior_statement_acceptances":prior_acceptances,"unresolved_transitions":unresolved_transitions,"prior_period":prior_period,"statement_rules":statement_rules,"evidence_revisions":evidence_revisions,"stale_origins":stale_origins,"source_transitions":transitions,"period_status":period_status,"entry_claims":claims,"dispositions":dispositions,"rules":list(applied.values()),"item_rules":item_rules,"sources": sources, "manifest":manifest, "fingerprint": digest(manifest)}
+ 
+     def intake(self, actor, packet):
+         self.authorize(actor, ("preparer",))
+@@ -565,6 +567,8 @@
+                         if ancestor['approved_by']:lineage.add((ancestor['approved_by'],'rule_approver:'+str(ancestor['id'])))
+                 for d in run_ctx['dispositions']:
+                     if d['item_key']==result['item_key'] or d['id'] in result['data'].get('disposition_ids',[]):lineage.add((d['actor'],'disposition:'+str(d['id'])))
++                for acceptance in (result['data'].get('prior_statement_acceptance') or {}).get('acceptances',[]):
++                    lineage.add((acceptance['actor'],'prior_statement_revision_acceptance:'+str(acceptance['id'])))
+                 cap=CAPABILITIES[job['capability']]
+                 waived={}
+                 for fact in cap.requires_client_facts:
+@@ -824,7 +828,7 @@
+             audit = [dict(a) for a in db.execute("SELECT * FROM audit WHERE scope=? ORDER BY id DESC LIMIT 100", (actor.scope,))]
+             mandates = [dict(m) for m in db.execute("SELECT * FROM mandates WHERE scope=? ORDER BY id DESC", (actor.scope,))]
+             return {"synthetic": True, "environment": "local", "mode": "demo", "scope": actor.scope,
+-                    "notice": "Fictional sandbox; actual Bird Bowl accounting policies remain unconfigured.",
++                    "notice": "Fictional sandbox; actual client accounting policies remain unconfigured.",
+                     "periods": [dict(p) for p in db.execute("SELECT * FROM periods WHERE scope=? ORDER BY start",(actor.scope,))],
+                     "source_exceptions": [dict(b) for b in db.execute("SELECT b.*,s.source_key FROM source_periods b JOIN snapshots s ON s.id=b.snapshot_id WHERE b.scope=? AND b.reason IS NOT NULL AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=b.snapshot_id) AND EXISTS(SELECT 1 FROM source_heads h WHERE h.scope=b.scope AND h.snapshot_id=b.snapshot_id AND h.removed=0)",(actor.scope,))],
+                     "profile": ctx["profile"], "fingerprint": ctx["fingerprint"], "generation": ctx["generation"],
+--- a/accounting_agent/source_control.py
++++ b/accounting_agent/source_control.py
+@@ -74,11 +74,12 @@
+         for source in sources:
+             if source['kind'] not in ('receipt','document','statement'):continue
+             changes=[]
+-            for earlier in db.execute('SELECT s.*,h.removed FROM snapshots s LEFT JOIN source_heads h ON h.scope=s.scope AND h.kind=s.kind AND h.source_key=s.source_key WHERE s.scope=? AND s.kind=? AND s.id<? ORDER BY s.id',(scope,source['kind'],source['id'])):
++            for earlier in db.execute('SELECT s.*,h.removed,current.payload AS head_payload FROM snapshots s LEFT JOIN source_heads h ON h.scope=s.scope AND h.kind=s.kind AND h.source_key=s.source_key LEFT JOIN snapshots current ON current.id=h.snapshot_id WHERE s.scope=? AND s.kind=? AND s.id<? ORDER BY s.id',(scope,source['kind'],source['id'])):
+                 same_key=earlier['source_key']==source['source_key']
+                 value=json.loads(earlier['payload'])
+                 identity_fields={'receipt':('account_id','transaction_source_id'),'statement':('account_id','period_start','period_end')}.get(source['kind'])
+-                replaced=bool(not same_key and earlier['removed'] and identity_fields and all(value.get(k)==source['value'].get(k) for k in identity_fields))
++                head_value=json.loads(earlier['head_payload']) if earlier['head_payload'] else {}
++                replaced=bool(not same_key and identity_fields and all(value.get(k)==source['value'].get(k) for k in identity_fields) and (earlier['removed'] or any(head_value.get(k)!=source['value'].get(k) for k in identity_fields)))
+                 if not same_key and not replaced:continue
+                 fields=sorted(k for k in set(value)|set(source['value']) if value.get(k)!=source['value'].get(k))
+                 if not fields:continue
+@@ -92,12 +93,39 @@
+         ancestors=self.supersession_refs(db,scope,snapshot_id)
+         return (row['kind'],ancestors[-1]['source_key'] if ancestors else row['source_key'])
+ 
++    def prior_statement_acceptances(self,db,actor,period,sources):
++        """Bind continuity to active, item-bound revision acceptance in its own period."""
++        if not period:return {}
++        prior=self.period_sources(db,actor,period['period_id'])
++        revisions=self.evidence_revisions(db,actor.scope,prior)
++        accepted=self.active_dispositions(db,actor,'card_preparation',period['period_id'],prior,revisions)
++        result={}
++        for statement in sources:
++            if statement['kind']!='statement' or statement['value']['period_end']!=period['end'] or not revisions.get(statement['source_key']):continue
++            value=statement['value']
++            items={s['source_key'] for s in prior if s['kind']=='transaction' and s['value']['account_id']==value['account_id'] and value['period_start']<=s['value']['date']<=value['period_end']}
++            decisions=[d for d in accepted if d['choice']=='revised_evidence_accepted' and d['item_key'] in items and statement['id'] in d['payload'].get('revision_snapshot_ids',[])]
++            covered={d['item_key'] for d in decisions}
++            result[statement['source_key']]={'period_id':period['period_id'],'statement_snapshot_id':statement['id'],'accepted':bool(items) and items<=covered,'relying_item_keys':sorted(items),'accepted_item_keys':sorted(covered),'acceptances':[{'id':d['id'],'actor':d['actor'],'item_key':d['item_key']} for d in decisions]}
++        return result
++
+     def source_origin(self,db,scope,snapshot_id):
+         """Resolve admitted or quarantined origins across the entire identity chain."""
++        owners=[]
+         for sid in [snapshot_id]+[r['snapshot_id'] for r in self.supersession_refs(db,scope,snapshot_id)]:
+             source=db.execute('SELECT kind,source_key FROM snapshots WHERE scope=? AND id=?',(scope,sid)).fetchone()
++            head=db.execute('SELECT removed FROM source_heads WHERE scope=? AND kind=? AND source_key=?',(scope,source['kind'],source['source_key'])).fetchone()
+             blocked=db.execute("SELECT b.period_id FROM source_heads h JOIN source_periods b ON b.snapshot_id=h.snapshot_id JOIN periods p ON p.scope=b.scope AND p.period_id=b.period_id WHERE h.scope=? AND h.kind=? AND h.source_key=? AND b.id=(SELECT MAX(x.id) FROM source_periods x WHERE x.snapshot_id=h.snapshot_id) AND b.reason='SOURCE_MOVED_FROM_LOCKED_PERIOD' AND p.status='locked'",(scope,source['kind'],source['source_key'])).fetchone()
+             admitted=db.execute('SELECT b.period_id,p.status FROM snapshots s JOIN source_periods b ON b.snapshot_id=s.id JOIN periods p ON p.scope=b.scope AND p.period_id=b.period_id WHERE s.scope=? AND s.kind=? AND s.source_key=? AND b.admitted=1 ORDER BY s.version DESC,b.id DESC LIMIT 1',(scope,source['kind'],source['source_key'])).fetchone()
++            owners.append((source,head,blocked,admitted))
++        # A late link must not hide a still-live locked ancestor behind this
++        # identity's earlier destination admission. Removed ancestors have already
++        # been released, and must not resurrect a former origin after relocking.
++        for source,head,blocked,admitted in owners[1:]:
++            if head and not head['removed']:
++                if blocked:return dict(blocked,source_key=source['source_key'])
++                if admitted and admitted['status']=='locked':return dict(admitted,source_key=source['source_key'])
++        for source,head,blocked,admitted in owners:
+             if blocked:return dict(blocked,source_key=source['source_key'])
+             if admitted:return dict(admitted,source_key=source['source_key'])
+         return None
+--- a/scripts/check.py
++++ b/scripts/check.py
+@@ -33,3 +33,11 @@
+     for name in re.findall(r'`((?:gl|ap|ar|banking|close|evidence|package|reporting)\.[a-z_][a-z0-9_.]*)`',doc.read_text()):
+         assert name in CAPABILITIES, (str(doc),name)
+ print('PASS: capability IDs named in implementation documentation exist in the registry.')
++
++from scripts.check_product_requirements import validate_register
++register=validate_register((ROOT/'docs/PRODUCT_REQUIREMENTS.md').read_text(),ROOT)
++print('PASS: product requirements schema/evidence/dependencies/crosswalk/client boundaries; %d records, %d tickets.'%(register['requirements'],register['backlog_tickets']))
++for path in (ROOT/'accounting_agent').glob('*.py'):
++    if path.name=='demo.py':continue
++    assert not re.search(r'bird[\W_]*bowl',path.read_text(),re.I),('Client name in shared module',str(path))
++print('PASS: shared Python modules contain no pilot client name; demo/config/fixtures remain isolated.')
+--- /dev/null
++++ b/scripts/check_product_requirements.py
+@@ -0,0 +1,103 @@
++"""Repeatable product-register schema, traceability and client-boundary checks."""
++import argparse
++from collections import Counter
++import json
++from pathlib import Path
++import re
++import zipfile
++
++ROOT=Path(__file__).resolve().parents[1]
++FIELDS=('Description','Business purpose','Priority','Product decision','Implementation state',
++        'Scope note','Evidence','Needed for','Dependencies','Acceptance criteria','Target stage','Trace')
++PRODUCT_DECISIONS={'Proposed','Approved','Rejected','Superseded'}
++IMPLEMENTATION_STATES={'Not started','Deferred','Implemented','Developer-tested','Independently verified','Verification failed'}
++NEEDED_FOR={'G0 controls','G1 approved samples','G2 hosted reads','G3 specified writes',
++            'G4 operating handoff','Second client','Platform maturity','Product decision'}
++HEADER=re.compile(r'^### (AAOS-[A-Z]+-\d{2}) — ([^\n]+)',re.M)
++REFERENCE=re.compile(r'AAOS-[A-Z]+-\d{2}')
++CONDITIONAL=re.compile(r'\b(for real|for (?:later|hosted|live)|before G[12]|only|where applicable|when authorized)\b',re.I)
++
++
++def require(condition,message):
++    if not condition:raise ValueError(message)
++
++
++def parse_register(text):
++    records={};headings=list(HEADER.finditer(text))
++    require(bool(headings),'No requirement records')
++    for index,heading in enumerate(headings):
++        identifier=heading.group(1)
++        require(identifier not in records,'Duplicate requirement ID: '+identifier)
++        body=text[heading.end():headings[index+1].start() if index+1<len(headings) else len(text)].split('\n## ',1)[0]
++        record={'id':identifier,'title':heading.group(2)}
++        for field in FIELDS:
++            values=re.findall(r'^- \*\*'+re.escape(field)+r':\*\*\s*([^\n]*)',body,re.M)
++            require(len(values)==1 and bool(values[0].strip()),identifier+': missing or repeated field '+field)
++            record[field]=values[0].strip()
++        records[identifier]=record
++    return records
++
++
++def validate_register(text,root=ROOT):
++    root=Path(root);records=parse_register(text)
++    all_ids=set(records)
++    with zipfile.ZipFile(root/'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip') as checkpoint:
++        original_ids={m.group(1) for m in HEADER.finditer(checkpoint.read('documentation_addendum/docs/PRODUCT_REQUIREMENTS.md').decode())}
++    require(original_ids<=all_ids,'Previously established requirement IDs removed or renamed: '+', '.join(sorted(original_ids-all_ids)))
++    unknown=set(REFERENCE.findall(text))-all_ids
++    require(not unknown,'Unknown requirement dependency/reference: '+', '.join(sorted(unknown)))
++    graph={}
++    for identifier,record in records.items():
++        require(record['Priority'] in {'Must','Should','Could'},identifier+': invalid priority')
++        require(record['Product decision'] in PRODUCT_DECISIONS,identifier+': invalid product decision')
++        state=record['Implementation state']
++        require(state in IMPLEMENTATION_STATES,identifier+': invalid implementation state')
++        require(record['Needed for'] in NEEDED_FOR,identifier+': invalid needed-for value')
++        graph[identifier]=REFERENCE.findall(record['Dependencies'])
++        if state in {'Implemented','Developer-tested','Independently verified','Verification failed'}:
++            require(bool(re.search(r'(?:tests/test_[\w]+\.py|\bR[B0-9][\w-]*|\bPR-\d+)',record['Evidence'])),identifier+': named test/probe evidence required')
++        if state=='Independently verified':
++            require('independent review' in record['Evidence'].lower() and re.search(r'\b[a-f0-9]{64}\b',record['Evidence']),identifier+': independent review and checkpoint evidence required')
++        if state in {'Developer-tested','Independently verified'}:
++            for clause in record['Dependencies'].split(';'):
++                for dep in REFERENCE.findall(clause):
++                    require(records[dep]['Implementation state']!='Deferred' or CONDITIONAL.search(clause),identifier+': unconditional deferred dependency '+dep)
++        if not identifier.startswith('AAOS-BB-') and identifier not in {'AAOS-GOV-01','AAOS-ARC-04','AAOS-KNO-01'}:
++            for field in ('Acceptance criteria','Scope note','Target stage'):
++                require(not re.search(r'bird[\W_]*bowl|\bexpensify\b|\bdesktop\b',record[field],re.I),identifier+': client-specific fact in shared '+field)
++    visited=set();active=[]
++    def visit(identifier):
++        require(identifier not in active,'Dependency cycle: '+' -> '.join(active+[identifier]))
++        if identifier in visited:return
++        active.append(identifier)
++        for dep in graph[identifier]:visit(dep)
++        active.pop();visited.add(identifier)
++    for identifier in records:visit(identifier)
++    backlog=json.loads((root/'review/FABLE_IMPLEMENTATION_BACKLOG.json').read_text())
++    expected={ticket['id'] for ticket in backlog['tickets']}
++    rows=re.findall(r'^\| (T-\d{2}) \| ([^|]+)\|',text,re.M)
++    require(len(rows)==len({key for key,_ in rows}),'Duplicate backlog crosswalk ticket')
++    require({key for key,_ in rows}==expected,'Backlog crosswalk missing or unknown tickets: '+str(sorted(expected^{key for key,_ in rows})))
++    for ticket,refs in rows:require(bool(REFERENCE.search(refs)),ticket+': no requirement crosswalk references')
++    for target in re.findall(r'\[[^\]]+\]\(([^)]+)\)',text):
++        if re.match(r'^[a-z]+:',target):continue
++        target=target.split('#')[0].strip('<>')
++        if target:require((root/'docs'/target).exists(),'Missing evidence/source link: '+target)
++    return {'requirements':len(records),'backlog_tickets':len(rows),
++            'product_decision_counts':dict(sorted(Counter(r['Product decision'] for r in records.values()).items())),
++            'implementation_state_counts':dict(sorted(Counter(r['Implementation state'] for r in records.values()).items())),
++            'needed_for_counts':dict(sorted(Counter(r['Needed for'] for r in records.values()).items())),
++            'priority_counts':dict(sorted(Counter(r['Priority'] for r in records.values()).items())),
++            'structure_dependencies_crosswalk_links_client_boundaries':'PASS'}
++
++
++def main():
++    parser=argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--json',action='store_true',help='Print reproducible field-value counts as JSON')
++    args=parser.parse_args()
++    try:result=validate_register((ROOT/'docs/PRODUCT_REQUIREMENTS.md').read_text())
++    except (ValueError,OSError,KeyError) as exc:parser.exit(1,'FAIL: '+str(exc)+'\n')
++    print(json.dumps(result,indent=2) if args.json else 'PASS: product requirements — %d records, %d backlog tickets; schema, evidence, dependencies, crosswalk, links and client boundaries.'%(result['requirements'],result['backlog_tickets']))
++
++
++if __name__=='__main__':main()
+--- /dev/null
++++ b/tests/test_product_requirements.py
+@@ -0,0 +1,56 @@
++"""Fault injection for the product register gate, not copies of document prose."""
++from pathlib import Path
++import re
++import unittest
++
++from scripts.check_product_requirements import validate_register
++
++ROOT=Path(__file__).resolve().parents[1]
++
++
++class ProductRequirements(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls):cls.text=(ROOT/'docs/PRODUCT_REQUIREMENTS.md').read_text()
++
++    def rejects(self,text,message):
++        with self.assertRaisesRegex(ValueError,message):validate_register(text,ROOT)
++
++    def test_current_register_has_split_states_and_all_backlog_tickets(self):
++        result=validate_register(self.text,ROOT)
++        self.assertGreaterEqual(result['requirements'],76)
++        self.assertEqual(result['backlog_tickets'],27)
++        self.assertEqual(sum(result['implementation_state_counts'].values()),result['requirements'])
++
++    def test_duplicate_id_is_rejected(self):
++        self.rejects(self.text.replace('### AAOS-GOV-02 —','### AAOS-GOV-01 —',1),'Duplicate requirement')
++
++    def test_missing_field_is_rejected(self):
++        self.rejects(self.text.replace('- **Evidence:**','- **Omitted evidence:**',1),'missing or repeated field Evidence')
++
++    def test_unknown_dependency_is_rejected(self):
++        self.rejects(self.text.replace('- **Dependencies:** None.','- **Dependencies:** AAOS-BOGUS-99.',1),'Unknown requirement')
++
++    def test_dependency_cycle_is_rejected(self):
++        self.rejects(self.text.replace('- **Dependencies:** None.','- **Dependencies:** AAOS-GOV-02.',1),'Dependency cycle')
++
++    def test_missing_backlog_ticket_is_rejected(self):
++        self.rejects(re.sub(r'^\| T-27 \|.*\n','',self.text,flags=re.M),'Backlog crosswalk')
++
++    def test_mixed_implementation_state_is_rejected(self):
++        self.rejects(self.text.replace('- **Implementation state:** Developer-tested','- **Implementation state:** Developer-tested and Deferred',1),'invalid implementation state')
++
++    def test_developer_tested_without_named_tests_is_rejected(self):
++        start=self.text.index('- **Implementation state:** Developer-tested')
++        evidence=self.text.index('- **Evidence:**',start);end=self.text.index('\n',evidence)
++        self.rejects(self.text[:evidence]+'- **Evidence:** Claims only'+self.text[end:],'named test/probe evidence')
++
++    def test_shared_criteria_cannot_impose_first_client_facts(self):
++        start=self.text.index('### AAOS-ARC-01 —')
++        criterion=self.text.index('- **Acceptance criteria:**',start)+len('- **Acceptance criteria:**')
++        self.rejects(self.text[:criterion]+' Bird Bowl-only policy;'+self.text[criterion:],'client-specific fact')
++
++    def test_established_id_cannot_be_silently_renamed(self):
++        self.rejects(self.text.replace('AAOS-INT-04','AAOS-INT-44'),'Previously established requirement IDs')
++
++    def test_independent_verification_requires_review_and_checkpoint(self):
++        self.rejects(self.text.replace('- **Implementation state:** Developer-tested','- **Implementation state:** Independently verified',1),'independent review and checkpoint')
+--- /dev/null
++++ b/tests/test_ra_review_gate.py
+@@ -0,0 +1,31 @@
++"""Run Fable's latest 14 probes unchanged; none may remain a NOTE or failure."""
++import hashlib
++import json
++from pathlib import Path
++import re
++import subprocess
++import sys
++import unittest
++
++ROOT=Path(__file__).resolve().parents[1]
++
++
++class RAReviewGate(unittest.TestCase):
++    def test_all_14_unmodified_independent_probes_report_OK(self):
++        result=subprocess.run([sys.executable,str(ROOT/'exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py'),str(ROOT)],capture_output=True,text=True)
++        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
++        rows=dict(re.findall(r'(?m)^(R\d+[a-z]?)\s+\S+\s+(OK|WEAK|ERROR|NOTE)\s',result.stdout))
++        self.assertEqual(set(rows),{'R01a','R01b','R01c','R01d','R03a','R03b','R04a','R04b','R04c','R02a','R02b','R05','R07','R08'})
++        self.assertEqual(set(rows.values()),{'OK'},result.stdout)
++
++    def test_returned_inputs_and_submitted_archives_remain_unchanged(self):
++        for name,expected in json.loads((ROOT/'docs/corrections_rb/input-checksums.json').read_text()).items():
++            self.assertEqual(hashlib.sha256((ROOT/name).read_bytes()).hexdigest(),expected,name)
++
++    def test_combined_frozen_submission_cannot_be_overwritten(self):
++        path=ROOT/'exports/FABLE_RA_AND_PRODUCT_REQUIREMENTS_REVIEW_BUNDLE.zip'
++        before=hashlib.sha256(path.read_bytes()).hexdigest()
++        result=subprocess.run([sys.executable,str(ROOT/'scripts/build_review_bundle.py'),'FABLE_RA_AND_PRODUCT_REQUIREMENTS'],capture_output=True,text=True)
++        self.assertNotEqual(result.returncode,0)
++        self.assertIn('Frozen review submission cannot be overwritten',result.stderr)
++        self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),before)
+--- /dev/null
++++ b/tests/test_review_corrections_rb.py
+@@ -0,0 +1,150 @@
++"""New failure paths from Fable's RB review; all records are disposable fiction."""
++import copy
++import importlib.util
++import json
++from pathlib import Path
++import sys
++import unittest
++from unittest.mock import patch
++
++from accounting_agent.service import AccountingOS
++
++ROOT=Path(__file__).resolve().parents[1]
++
++
++class ReviewCorrectionsRB(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls):
++        path=ROOT/'exports/FABLE_RA_ACCEPTANCE/fable_ra_acceptance_probes.py'
++        spec=importlib.util.spec_from_file_location('rb_fixtures',path)
++        cls.f=importlib.util.module_from_spec(spec)
++        with patch.object(sys,'argv',[str(path),str(ROOT)]):spec.loader.exec_module(cls.f)
++
++    @classmethod
++    def tearDownClass(cls):cls.f.TMP.cleanup()
++
++    def test_RB01_late_link_quarantines_previously_admitted_or_approved_destination(self):
++        f=self.f
++        for approved in (False,True):
++            with self.subTest(destination_approved=approved):
++                o=f.approved_locked_november()
++                rows=[f.tx('B1','2026-12-02','40.00'),f.rc('B1','2026-12-02','40.00')]
++                o.intake(f.PREP2,f.packet('plain',rows+[f.stmt(rows,f.DEC,opening='100.00')]))
++                f.run(o,'card_preparation','2026-12',f.PREP2)
++                a=f.gov(o,f.CARD+':B1','2026-12');self.assertTrue(a['eligible'])
++                if approved:self.assertEqual(f.review(o,f.REV2,a,'approve')[0],'ok')
++                o.intake(f.PREP2,f.packet('claim',[f.sup('B1','2026-12-02','40.00','A1')]))
++                f.run(o,'card_preparation','2026-12',f.PREP2)
++                self.assertIsNone(f.gov(o,f.CARD+':B1','2026-12'))
++                self.assertEqual(f.gov(o,f.CARD+':A1')['review_status'],'approve')
++                state=o.export(f.PREP)
++                held={x['source_key'] for x in state['source_exceptions'] if x['reason']=='SOURCE_MOVED_FROM_LOCKED_PERIOD' and x['period_id']=='2026-11'}
++                self.assertTrue({f.CARD+':B1','receipt-B1'}<=held)
++                self.assertTrue(any(m['blocked'] and m['had_approval'] and m['from_period_id']=='2026-11' and m['to_period_id']=='2026-12' for m in state['source_move_history']))
++                if approved:
++                    self.assertTrue(any(e['item_key']==f.CARD+':B1' and e['period_id']=='2026-12' and e['code'].startswith('APPROVED_SOURCE_') for e in state['accounting_events']))
++                self.assertTrue(any(e['code']=='ITEM_LEFT_POPULATION' and e['item_key']==f.CARD+':B1' for e in state['accounting_events']))
++                o.reopen_period(f.PADMIN,'2026-11','Review fictional late link')
++                f.run(o,'card_preparation','2026-11');f.run(o,'card_preparation','2026-12',f.PREP2)
++                self.assertIsNone(f.gov(o,f.CARD+':A1'))
++                terminal=f.gov(o,f.CARD+':B1','2026-12')
++                self.assertIn('SOURCE_TRANSITION_REQUIRES_REVIEW',terminal['blockers'])
++                self.assertEqual(len([a for a in f.arts(o,None,'2026-12') if a['governing'] and a['kind']=='card_proposal']),1)
++                self.assertTrue(all(m['from_period_id']!=m['to_period_id'] for m in o.export(f.PREP)['source_move_history']))
++                self.assertTrue(o.verify_audit(f.PREP))
++
++    def test_RB01_unresolved_link_then_predecessor_then_resolution_keeps_entire_quarantine(self):
++        f=self.f;o=f.approved_locked_november()
++        rows=[f.sup('A1Y','2026-12-03','40.00','A1X'),f.rc('A1Y','2026-12-03','40.00')]
++        o.intake(f.PREP2,f.packet('terminal-first',rows+[f.stmt(rows,f.DEC,opening='100.00')]))
++        f.run(o,'card_preparation','2026-12',f.PREP2)
++        self.assertFalse(f.gov(o,f.CARD+':A1Y','2026-12')['eligible'])
++        o.intake(f.PREP2,f.packet('middle-later',[f.sup('A1X','2026-12-02','40.00','A1'),f.rc('A1X','2026-12-02','40.00')]))
++        o.intake(f.PREP2,f.packet('resolve',[rows[0]]));f.run(o,'card_preparation','2026-12',f.PREP2)
++        self.assertIsNone(f.gov(o,f.CARD+':A1Y','2026-12'))
++        held={e[0] for e in f.exceptions_of(o) if e[1:] == ('2026-11','SOURCE_MOVED_FROM_LOCKED_PERIOD')}
++        self.assertTrue({f.CARD+':A1X',f.CARD+':A1Y','receipt-A1X','receipt-A1Y'}<=held)
++
++    def test_RB02_repointed_receipt_and_statement_replacements_need_independent_acceptance(self):
++        f=self.f
++        for kind in ('receipt','statement'):
++            with self.subTest(kind=kind):
++                if kind=='receipt':
++                    o,rows=f.mismatch_november()
++                    away=f.rc('A1-VOID','2026-11-03','39.99',key='receipt-A1')
++                    replacement=f.rc('A1','2026-11-03','40.00',key='receipt-A1-new',content='Corrected fictional support')
++                    earlier_key='receipt-A1';changed_field='amount'
++                else:
++                    o,rows=f.short_statement()
++                    away=f.stmt(rows,period=('2027-01','2027-01-01','2027-01-31'),key='stmt-2026-11',totals=f.WRONG,closing_balance='90.00')
++                    replacement=f.stmt(rows,key='stmt-2026-11-new')
++                    earlier_key='stmt-2026-11';changed_field='totals'
++                o.intake(f.PREP2,f.packet('repoint-and-replace',[away,replacement]));f.run(o,'card_preparation')
++                a=f.gov(o,f.CARD+':A1');revisions=a['payload']['data']['evidence_revisions']
++                self.assertIn('EVIDENCE_REVISED_REQUIRES_REVIEW',a['blockers'])
++                self.assertTrue(any(r['earlier']['source_key']==earlier_key and r['earlier']['version']==1 and changed_field in r['changed_fields'] for r in revisions))
++                self.assertEqual(f.review(o,f.REV,a,'approve')[0],'refused')
++                if kind=='statement':
++                    self.assertTrue(f.workpaper(o)['payload']['data']['statement_revisions'])
++                    self.assertIn('EVIDENCE_REVISED_REQUIRES_REVIEW',f.gov(o,f.CARD+':A2')['blockers'])
++                for supplier in (f.PREP,f.PREP2):
++                    o.grant_authority(f.ADMIN,supplier.id,['disposition'],'Probe supplier refusal')
++                    self.assertEqual(f.dispose(o,f.CARD+':A1','EVIDENCE_REVISED_REQUIRES_REVIEW','revised_evidence_accepted',who=f.human(supplier.id,'reviewer'))[:2],('refused',403))
++                self.assertEqual(f.dispose(o,f.CARD+':A1','EVIDENCE_REVISED_REQUIRES_REVIEW','revised_evidence_accepted')[0],'ok')
++                f.run(o,'card_preparation');a=f.gov(o,f.CARD+':A1');self.assertTrue(a['eligible'])
++                o.grant_authority(f.ADMIN,f.DISP.id,['review'],'Probe acceptance is not final review')
++                self.assertEqual(f.review(o,f.DISP,a,'approve')[:2],('refused',403))
++                self.assertEqual(f.review(o,f.REV,a,'approve')[0],'ok')
++                revised=copy.deepcopy(replacement);revised['data']['content']='Fictional support edited again'
++                o.intake(f.PREP2,f.packet('next-revision',[revised]));f.run(o,'card_preparation')
++                self.assertIn('EVIDENCE_REVISED_REQUIRES_REVIEW',f.gov(o,f.CARD+':A1')['blockers'])
++
++    def test_RB03_equivalent_vendor_and_receipt_rules_keep_authors_across_scope_and_key(self):
++        f=self.f
++        for kind,key,value in (('vendor_mapping','demo_acme',f.ACME),('receipt_matching','default',f.RM)):
++            for route in ('item_scope','new_key'):
++                with self.subTest(kind=kind,route=route):
++                    options={'item2':f.CARD+':A1'} if route=='item_scope' else {'key2':key+'-replacement','end1':'2026-11-02','start2':'2026-11-03'}
++                    o,a=f.rule_case(f.REV4,value,dict(value),kind=kind,key=key,**options)
++                    self.assertIn(f.REV4.id,a['contributors'])
++                    self.assertEqual(f.review(o,f.REV4,a,'approve')[:2],('refused',403))
++                    self.assertEqual(f.review(o,f.REV2,a,'approve')[0],'ok')
++
++    def test_RB04_prior_restatement_waits_for_all_own_period_acceptances_and_revocation_reblocks(self):
++        f=self.f;o=f.new_os(periods=(f.NOV,f.DEC));rows=f.clean_november(o)
++        dec=[f.tx('D1','2026-12-05','15.00'),f.rc('D1','2026-12-05','15.00')]
++        o.intake(f.PREP,f.packet('dec',dec+[f.stmt(dec,f.DEC,opening='120.00')]))
++        f.run(o,'card_preparation','2026-12')
++        self.assertIn('STATEMENT_OPENING_BALANCE_BREAK',f.gov(o,f.CARD+':D1','2026-12')['blockers'])
++        o.intake(f.PREP2,f.packet('restate',[f.stmt(rows,opening='20.00')]))
++        f.run(o,'card_preparation');f.run(o,'card_preparation','2026-12')
++        wp=f.workpaper(o,'2026-12');data=wp['payload']['data']
++        self.assertTrue(data['prior_statement_revisions'])
++        self.assertEqual(data['opening_continuity'],'prior_statement_revision_unaccepted')
++        self.assertIn('STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW',wp['blockers'])
++        self.assertFalse(f.gov(o,f.CARD+':D1','2026-12')['eligible'])
++        decision=f.dispose(o,f.CARD+':A1','EVIDENCE_REVISED_REQUIRES_REVIEW','revised_evidence_accepted')
++        self.assertEqual(decision[0],'ok')
++        f.run(o,'card_preparation','2026-12')
++        self.assertFalse(f.gov(o,f.CARD+':D1','2026-12')['eligible'])
++        self.assertEqual(f.dispose(o,f.CARD+':A2','EVIDENCE_REVISED_REQUIRES_REVIEW','revised_evidence_accepted')[0],'ok')
++        f.run(o,'card_preparation');f.run(o,'card_preparation','2026-12')
++        d=f.gov(o,f.CARD+':D1','2026-12');self.assertTrue(d['eligible'])
++        self.assertEqual(f.workpaper(o,'2026-12')['payload']['data']['opening_continuity'],'verified')
++        o.grant_authority(f.ADMIN,f.DISP.id,['review'],'Prior acceptance is preparation lineage')
++        self.assertEqual(f.review(o,f.DISP,d,'approve')[:2],('refused',403))
++        self.assertEqual(f.review(o,f.REV,d,'approve')[0],'ok')
++        o.revoke_disposition(f.DISP,decision[1],'Withdraw fictional prior acceptance')
++        f.run(o,'card_preparation','2026-12')
++        current=f.gov(o,f.CARD+':D1','2026-12')
++        self.assertIn('STATEMENT_PRIOR_REVISION_REQUIRES_REVIEW',current['blockers'])
++        self.assertNotEqual(current['review_status'],'approve')
++        self.assertTrue(o.verify_audit(f.PREP))
++
++    def test_PR15_second_client_state_has_no_first_client_name(self):
++        f=self.f;client='second_fictional_client';actor=f.human('neutral-preparer','preparer',client)
++        o=AccountingOS(Path(f.TMP.name)/'neutral.sqlite3',[actor.scope])
++        profile=copy.deepcopy(f.PROFILE)
++        profile.update(client_id=client,name='Second fictional client',notice='Fictional client configuration')
++        o.onboard(actor,profile)
++        self.assertNotIn('Bird Bowl',json.dumps(o.state(actor)))

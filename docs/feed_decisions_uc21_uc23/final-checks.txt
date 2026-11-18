@@ -1,0 +1,102 @@
+Final checks in the working project for D-038 (UC-21, UC-22, UC-23); the working project matches the clone on which the full validation ran (all 107 tested files identical).
+Run 2026-11-17 after the validation run finished at 22:51Z.
+
+$ make check
+python3 scripts/check.py
+PASS: Python syntax, JSON parsing, executable profile validation, workflow DAG/tool registration, DOM text rendering checks.
+No external linter/typechecker/JS compiler installed; these checks are not a claim of those tools passing.
+PASS: capability IDs named in implementation documentation exist in the registry.
+PASS: product requirements schema/evidence/dependencies/crosswalk/client boundaries; 88 records, 27 tickets.
+PASS: shared application/web files contain no client-specific names/choices from the client section; demo/config/fixtures remain isolated.
+exit 0
+
+$ python3 scripts/check_documentation.py
+PASS: documentation review — 10 current documents agree with the code, the register, the readiness checklist and each other.
+exit 0
+
+$ python3 -m unittest tests.test_feed_repeat_decisions tests.test_documentation_review tests.test_product_requirements tests.test_product_requirements_rf tests.test_product_requirements_rf_registration tests.test_re_review_gate.REReviewGate.test_all_protected_inputs_unchanged_and_contract_exact -v
+test_UC21_a_first_claim_on_the_repeated_message_is_still_recorded_and_applied (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC21_boundary_a_newer_order_value_or_different_data_is_still_recorded (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC21_boundary_a_resend_that_omits_the_rows_claim_is_a_later_omission_not_a_repeat (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC21_boundary_a_row_whose_live_replacement_is_held_is_still_recorded_and_held (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC21_boundary_restoration_cases_keep_their_earlier_behaviour (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC21_identical_repeat_of_a_row_retired_by_a_live_replacement_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC21_repeat_through_a_chain_of_replacements_changes_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC22_anomaly_is_visible_in_state_and_export_and_the_message_never_governs (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC22_claim_on_an_unordered_message_applies_once_and_its_repeat_adds_nothing (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC22_each_distinct_unordered_message_is_kept_and_flagged_once (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC22_messages_that_are_not_mixed_ordering_raise_no_anomaly (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_UC22_unordered_message_with_different_data_is_kept_once_and_flagged_once (tests.test_feed_repeat_decisions.FeedRepeatDecisions) ... ok
+test_capability_status_must_match_the_registry (tests.test_documentation_review.DocumentationReview) ... ok
+test_checker_runs_as_a_script_and_reports_the_same_facts (tests.test_documentation_review.DocumentationReview) ... ok
+test_code_names_routes_and_identifiers_must_exist_in_the_code (tests.test_documentation_review.DocumentationReview) ... ok
+test_current_documents_pass_every_check (tests.test_documentation_review.DocumentationReview) ... ok
+test_current_sections_name_the_latest_review_and_carry_no_stale_status (tests.test_documentation_review.DocumentationReview) ... ok
+test_every_feed_contract_code_in_the_source_must_be_described (tests.test_documentation_review.DocumentationReview) ... ok
+test_human_g0_status_must_agree_with_the_readiness_checklist (tests.test_documentation_review.DocumentationReview) ... ok
+test_links_and_decision_references_must_resolve (tests.test_documentation_review.DocumentationReview) ... ok
+test_readme_gates_must_match_the_makefile (tests.test_documentation_review.DocumentationReview) ... ok
+test_register_figures_in_the_readme_and_header_must_match_the_register (tests.test_documentation_review.DocumentationReview) ... ok
+test_stated_test_count_must_equal_the_suite (tests.test_documentation_review.DocumentationReview) ... ok
+test_verification_rule_is_stated_consistently_and_cites_its_decision (tests.test_documentation_review.DocumentationReview) ... ok
+test_PRV02_nonexistent_test_ticket_and_arbitrary_token_are_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV03_failed_verdict_cannot_be_promoted (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV03_self_asserted_independent_verification_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV04_shared_web_and_python_are_checked_but_fixtures_are_exempt (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV05_approved_cannot_depend_unconditionally_on_proposed (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV06_unstarted_or_deferred_dependency_needs_local_condition (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV07_scope_disposition_must_match_table (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV08_stray_dependency_punctuation_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV10_every_shared_field_except_trace_uses_client_section_terms (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV12_both_reviewer_authority_files_are_hash_pinned (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV12_omitted_changed_and_invented_results_cannot_promote_records (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV12_stale_checkpoint_metadata_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV13_terms_must_include_the_display_name_in_the_client_heading (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV14_third_authority_is_pinned_and_latest_verdict_controls (tests.test_product_requirements.ProductRequirements) ... ok
+test_PRV15_result_row_swaps_and_reversal_are_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_current_register_has_split_states_and_all_backlog_tickets (tests.test_product_requirements.ProductRequirements) ... ok
+test_dependency_cycle_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_developer_tested_without_named_tests_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_duplicate_id_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_established_id_cannot_be_silently_renamed (tests.test_product_requirements.ProductRequirements) ... ok
+test_independent_verification_requires_review_and_checkpoint (tests.test_product_requirements.ProductRequirements) ... ok
+test_missing_backlog_ticket_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_missing_field_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_mixed_implementation_state_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_shared_criteria_cannot_impose_first_client_facts (tests.test_product_requirements.ProductRequirements) ... ok
+test_unknown_dependency_is_rejected (tests.test_product_requirements.ProductRequirements) ... ok
+test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_changed_verdict_controls_even_with_matching_project_results (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_results_and_report_are_hash_pinned (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_results_following_an_altered_and_repinned_older_authority_are_rejected (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_each_older_authority_altered_and_repinned_cannot_override_the_fifth (tests.test_product_requirements_rf_registration.ProductRequirementsRFRegistration) ... ok
+test_fifth_failed_verdict_cannot_be_promoted_and_a_downgrade_is_accepted_when_results_and_register_follow (tests.test_product_requirements_rf_registration.ProductRequirementsRFRegistration) ... ok
+test_fifth_results_and_report_are_hash_pinned (tests.test_product_requirements_rf_registration.ProductRequirementsRFRegistration) ... ok
+test_historical_fixture_bytes_are_hash_checked_and_leave_the_shipped_pins_alone (tests.test_product_requirements_rf_registration.ProductRequirementsRFRegistration) ... ok
+test_record_absent_from_the_fifth_falls_back_to_the_fourth_verdict (tests.test_product_requirements_rf_registration.ProductRequirementsRFRegistration) ... ok
+test_results_and_register_that_follow_the_fourth_authority_are_rejected (tests.test_product_requirements_rf_registration.ProductRequirementsRFRegistration) ... ok
+test_seven_row_order_and_exact_rows_are_enforced_on_five_authorities (tests.test_product_requirements_rf_registration.ProductRequirementsRFRegistration) ... ok
+test_shipped_configuration_reads_five_authorities_and_the_fifth_is_latest (tests.test_product_requirements_rf_registration.ProductRequirementsRFRegistration) ... ok
+test_three_recorded_scopes_cite_the_fifth_checkpoint_and_nothing_else_moved (tests.test_product_requirements_rf_registration.ProductRequirementsRFRegistration) ... ok
+test_all_protected_inputs_unchanged_and_contract_exact (tests.test_re_review_gate.REReviewGate) ... ok
+
+----------------------------------------------------------------------
+Ran 65 tests in 141.186s
+
+OK
+exit 0
+
+$ jsc page_check.js -- accounting_agent/web/app.js
+{
+ "parses": true,
+ "no_anomaly_key": [],
+ "state_without_the_new_key": [
+  "card:A · UNASSIGNED_ACCOUNTING_PERIOD · period not configured"
+ ],
+ "with_anomaly": [
+  "card:A · SOURCE_MOVED_FROM_LOCKED_PERIOD · 2026-11",
+  "card:Q · SOURCE_ORDER_MIXED · A message with no order value was kept as evidence; it does not govern this row."
+ ]
+}
+exit 0

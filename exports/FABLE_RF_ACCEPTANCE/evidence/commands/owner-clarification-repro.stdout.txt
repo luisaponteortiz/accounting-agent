@@ -1,0 +1,5 @@
+Claim UNKNOWN0 : frozen approval preserved
+Claim UNKNOWN1 : frozen approval preserved
+Incoming version held; both claims recorded; audit valid
+After reopen: contested blocker retained, no automatic approval; audit valid
+PASS: owner D-029 clarification

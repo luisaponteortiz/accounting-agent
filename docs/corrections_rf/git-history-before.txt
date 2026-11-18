@@ -1,0 +1,270 @@
+commit 5af9a6194bc39e2f303cc6b43b0b59094118b8e4
+Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+AuthorDate: Mon Nov 16 17:37:17 2026 -0500
+Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+CommitDate: Mon Nov 16 17:37:17 2026 -0500
+
+    Add Fable RE/PRV independent review and Codex RF correction prompt
+    
+    Independent verification of FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip
+    (SHA-256 4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae)
+    under D-026 and owner clarification D-029.
+    
+    - RE-02 (clause 7, with D-029), RE-03 (clauses 8 and 9), PRV-14 and PRV-15
+      accepted.
+    - RE-01 not accepted: a claim on an older message that repeats an already
+      retained message is recorded but never applied; with a later replacement
+      row one charge is approved in locked November and approved and finalized
+      in open December (RF-01 P1; 40 of 480 orders in the reviewer's own search,
+      no release without authority in any order).
+    - RF-02 (P3): an earlier selector can approve after a confirming selection.
+      RF-03 (P3): make test passed in one of three unmodified runs; the other
+      two stopped at the unchanged five-second HTTP setup deadline.
+    - AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 remain Verification failed.
+      G0 technical criteria not met; Batch 3 stays closed.
+    
+    Adds exports/FABLE_RE_ACCEPTANCE/ (report, machine-readable verdicts,
+    tickets RF-01 to RF-03, observations UC-17, UC-18 and UC-20, probes, order
+    search, raw evidence), the response ZIP with its checksum (SHA-256
+    e0b0a49932ca4e4f7adf4c18f21202ea85b33219b08e3bc76038778c9178cf2a), and
+    CODEX_RF_CORRECTIONS_PROMPT.md.
+    
+    The prompt leaves D-026 and D-029 unchanged and authorizes one pass for
+    RF-01 to RF-03 and PRV-16. It carries three owner decisions: RF-02 is to be
+    fixed, the HTTP setup deadline stays, and UC-17, UC-18 and UC-20 are left
+    open. Where it differs from the review's ticket file, the prompt governs.
+    
+    Review output only. The register and decision log are not changed by this
+    commit.
+    
+    Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+commit 86dfec19133cf42dbacb0c77bafe9f9fcffc77d6
+Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+AuthorDate: Mon Nov 16 17:37:03 2026 -0500
+Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+CommitDate: Mon Nov 16 17:37:03 2026 -0500
+
+    Record Codex RE/PRV developer corrections in the register and decision log
+    
+    Commits the developer's edits from the RE/PRV correction pass exactly as
+    delivered. Both files are byte-identical to the versions in the reviewed
+    bundle FABLE_RE_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip (SHA-256
+    4890b297d7653e6f821eb6e8c2c97b8d766a7808858e9b3ca318ff38aa5998ae):
+    
+    - DECISIONS.md (SHA-256 cef283d2...9626): D-026 (owner feed contract, word
+      for word), D-027 (RE/PRV implementation contract), D-028 (developer
+      question on the frozen-period boundary) and D-029 (owner clarification:
+      preserve frozen approval; block new version).
+    - docs/PRODUCT_REQUIREMENTS.md (SHA-256 97876af9...c34c): PRV-14 and PRV-15
+      register edits. AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 stay Verification
+      failed, now bounded by D-026 and D-029 and naming RE-01 to RE-03;
+      AAOS-GOV-02 describes the third pinned authority and the row-order check.
+      No product decision and no implementation state changes.
+    
+    These are developer edits, not review output. They do not yet reflect the
+    independent RE review, which is committed next.
+    
+    Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+commit 542688b57ece08ea55082d68b713ccf6433fd8ce
+Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+AuthorDate: Mon Nov 16 13:40:57 2026 -0500
+Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+CommitDate: Mon Nov 16 13:40:57 2026 -0500
+
+    Correct the branch-head sentence in the Codex RE correction prompt
+    
+    The prompt said the branch head was the commit that adds the prompt and the
+    review. Commit d8b93b1 (the developer's RD/PRV register and decision-log
+    edits) made that untrue. The sentence now tells the developer to record the
+    head and commit count before starting and leave both unchanged, so it no
+    longer depends on how many commits follow.
+    
+    One sentence under "What to return"; no other change. The prompt's SHA-256
+    is now da481f96bb1772c07f3af9600c6ff5ff244560727a1f1fa510779ea3966d559a.
+    
+    Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+commit d8b93b10c9eda041328348e40d49eabb6913195f
+Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+AuthorDate: Mon Nov 16 13:40:07 2026 -0500
+Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+CommitDate: Mon Nov 16 13:40:07 2026 -0500
+
+    Record Codex RD/PRV developer corrections in the register and decision log
+    
+    Commits the developer's edits from the RD/PRV correction pass exactly as
+    delivered. Both files are byte-identical to the versions in the reviewed
+    bundle FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip (SHA-256
+    0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9):
+    
+    - DECISIONS.md (SHA-256 772ac2c1...f132): D-022 (RD/PRV correction
+      authority), D-023 (identity-persistent replacement claims), D-024
+      (independent-result authority and client-term integrity) and D-025
+      (developer validation and handoff).
+    - docs/PRODUCT_REQUIREMENTS.md (SHA-256 bcbfdedf...c997): PRV-11 to PRV-13
+      register edits. AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 stay Verification
+      failed, now naming RD-01 and RD-02; AAOS-CTL-09 cites the independent Q02
+      result; AAOS-GOV-02 describes the two new checks. No product decision and
+      no implementation state changes.
+    
+    These are developer edits, not review output. They do not yet reflect the
+    independent RD review in 1942b19 or the owner's feed contract; those updates
+    are ticket PRV-14 and decision D-026 in CODEX_RE_CORRECTIONS_PROMPT.md.
+    
+    Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+commit 1942b193883bfcf2274c315ebbd68ada30ee13bb
+Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+AuthorDate: Mon Nov 16 13:14:10 2026 -0500
+Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+CommitDate: Mon Nov 16 13:14:10 2026 -0500
+
+    Add Fable RD/PRV independent review and Codex RE correction prompt
+    
+    Independent verification of FABLE_RD_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip
+    (SHA-256 0d188fa65a7fef24447ae0089b07c17395bdb052c680b4c9dba91f9a37647ea9).
+    
+    - RD-01 and RD-02 accepted; PRV-11 to PRV-13 accepted.
+    - RB-01 not accepted: two further kinds of delivery leave one charge approved
+      in two periods (RE-01 P1, RE-02 P2; 14 of 336 orders in the extended search,
+      and 10 more that depended on the then-undecided UC-16).
+    - AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 remain Verification failed.
+      G0 technical criteria not met; Batch 3 stays closed.
+    
+    Adds exports/FABLE_RD_ACCEPTANCE/ (report, machine-readable verdicts,
+    tickets RE-01, RE-02, PRV-14, PRV-15, probes, extended order search, raw
+    evidence), the response ZIP with its checksum (SHA-256
+    97f062e5a1a36ffb995f149bd33c1cfe035453e1d6e837bbc7a9f9f636128b27), and
+    CODEX_RE_CORRECTIONS_PROMPT.md.
+    
+    The prompt carries the owner-approved feed contract (to be recorded as
+    D-026) and authorizes one pass for RE-01 to RE-03, PRV-14 and PRV-15. Where
+    it differs from the review's ticket file, the prompt governs.
+    
+    Review output only. The register and decision log are not changed by this
+    commit; the developer's uncommitted edits to them are left as they are.
+    
+    Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+commit 5a12ab0f49ff60cf1434e27b08d2866214333931
+Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+AuthorDate: Mon Nov 16 10:58:21 2026 -0500
+Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+CommitDate: Mon Nov 16 10:58:21 2026 -0500
+
+    Record Codex RC/PRV developer corrections in the register and decision log
+    
+    Commits the developer's edits from the RC/PRV correction pass exactly as
+    delivered. Both files are byte-identical to the versions in the reviewed
+    bundle FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip (SHA-256
+    9a85c78a40fd9b5f675b4d135274808056b34097ad907e38e962bf25b0762454):
+    
+    - DECISIONS.md: D-018 (RC/PRV correction authority) and D-019 (RC
+      arrival-order and transition-acceptance contracts).
+    - docs/PRODUCT_REQUIREMENTS.md (SHA-256 d55063e2...63f9): PRV-01 and
+      PRV-05 to PRV-10 register edits. AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03
+      stay Verification failed; AAOS-KNO-04, AAOS-CTL-01, AAOS-BNK-02 and
+      AAOS-CTL-09 are recorded Independently verified from the earlier RB review.
+    
+    These are developer edits, not review output. They do not yet reflect the
+    independent RC review in 963006a; that update is ticket PRV-11.
+    
+    Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+commit 963006a8dcc663b684f3e979f910d90707b344c2
+Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+AuthorDate: Mon Nov 16 10:55:59 2026 -0500
+Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+CommitDate: Mon Nov 16 10:55:59 2026 -0500
+
+    Add Fable RC/PRV independent review and Codex RD correction prompt
+    
+    Independent verification of FABLE_RC_AND_PRV_CORRECTIONS_REVIEW_BUNDLE.zip
+    (SHA-256 9a85c78a40fd9b5f675b4d135274808056b34097ad907e38e962bf25b0762454).
+    
+    - RC-01, RC-02, RC-03 accepted; PRV-01 to PRV-10 accepted.
+    - RB-01 not accepted: two further delivery orders leave one charge approved
+      in two periods (RD-01, RD-02, both P1; 18 of 120 orders in the search).
+    - AAOS-BNK-03, AAOS-CTL-04 and AAOS-GOV-03 remain Verification failed.
+      G0 technical criteria not met; Batch 3 stays closed.
+    
+    Adds exports/FABLE_RC_ACCEPTANCE/ (report, machine-readable verdicts,
+    tickets RD-01, RD-02, PRV-11 to PRV-13, probes, order search, raw evidence),
+    the response ZIP with its checksum, and CODEX_RD_CORRECTIONS_PROMPT.md.
+    
+    Review output only. The register and decision log are not changed by this
+    commit; the developer's uncommitted edits to them are left as they are.
+    
+    Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+commit db5d1ed4c12ea940fb00fff6872ff1ab83444f7f
+Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+AuthorDate: Mon Nov 16 01:43:43 2026 -0500
+Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+CommitDate: Mon Nov 16 01:43:53 2026 -0500
+
+    Record PR-11 confirmation in the register (D-016, D-017)
+    
+    - docs/PRODUCT_REQUIREMENTS.md is committed in full for the first time.
+      Relative to the version reviewed in the V2 bundle (SHA-256
+      4b62c91b...3b1f49) it differs only in AAOS-BB-01, AAOS-BB-02 and one
+      change-record row, which now carry the product owner's and accounting
+      lead's written PR-11 confirmation. New SHA-256 a149f900...3fb624.
+      No product decision, implementation state, dependency or gate changed.
+    - DECISIONS.md: D-017 records this edit as a user-directed exception to
+      the V2 working-file freeze (D-015).
+    - CODEX_RC_CORRECTIONS_PROMPT.md: tells Codex to build on the edited
+      register and keep the D-016 wording.
+    
+    make check and tests/test_product_requirements.py pass on the edited
+    register; the full test suite was not re-run.
+    
+    Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+commit 83b58932174a9b3ff6f76104083a4a8944b9e37e
+Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+AuthorDate: Mon Nov 16 01:41:33 2026 -0500
+Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+CommitDate: Mon Nov 16 01:41:33 2026 -0500
+
+    Add decision log with PR-11 owner confirmation (D-016)
+    
+    DECISIONS.md is committed in full for the first time; D-001 to D-015
+    are the existing project history. D-016 records the written PR-11
+    confirmation from the product owner and accounting lead: November 2026
+    procedure capture outside the application before G1, and December 2026
+    as the held-out validation month.
+    
+    The register records AAOS-BB-01 and AAOS-BB-02 are unchanged here; the
+    Codex correction prompt asks for D-016 to be carried into them.
+    
+    Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+commit e51b0d7abe7bb7beccc1a0a6d757ffe07afa9f4d
+Author:     Luis Aponte <luis@MacBook-Pro-112.local>
+AuthorDate: Mon Nov 16 01:40:52 2026 -0500
+Commit:     Luis Aponte <luis@MacBook-Pro-112.local>
+CommitDate: Mon Nov 16 01:40:52 2026 -0500
+
+    Add Fable RB/PR independent review and Codex correction prompt
+    
+    Independent verification of bundle
+    FABLE_RB_AND_REQUIREMENTS_CORRECTIONS_V2_REVIEW_BUNDLE.zip
+    (SHA-256 00a13d93...be001d).
+    
+    - exports/FABLE_RB_ACCEPTANCE: report, results, corrections (RC-01 to
+      RC-03), 18 new probes with output, and raw evidence. RB-02, RB-03 and
+      RB-04 accepted; RB-01 not accepted; G0 technical criteria not met.
+    - exports/FABLE_PR_REVERIFICATION: PR-01 to PR-17 verdicts and gaps
+      PRV-01 to PRV-10.
+    - Review response ZIP of both folders with its SHA-256 sidecar
+      (0562869a...5f399).
+    - CODEX_RC_CORRECTIONS_PROMPT.md: correction prompt for RC-01 to RC-03
+      and PRV-01 to PRV-10.
+    
+    The review folders and ZIP sit under exports/, which .gitignore
+    excludes, so they are force-added. No other project file is included.
+    
+    Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>

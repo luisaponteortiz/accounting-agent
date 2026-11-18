@@ -1,0 +1,10 @@
+test_RD01_repeated_unresolved_claim_is_a_lifecycle_noop (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD01_unchanged_late_claim_blocks_eligible_and_approved_before_target (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD02_amount_revision_keeps_claim_with_or_without_repeat_and_restart (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+test_RD02_retired_claimant_resent_unchanged_without_claim (tests.test_review_corrections_rd.ReviewCorrectionsRD) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 4.984s
+
+OK

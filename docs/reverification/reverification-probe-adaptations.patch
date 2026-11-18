@@ -1,0 +1,101 @@
+--- exports/FABLE_REVERIFICATION/fable_reverification_probes.py
++++ review/fable_reverification_probes.py
+@@ -1,3 +1,5 @@
++# Setup-only compatibility copy for RV-11/RV-12/RV-15; original input is unchanged.
++# See docs/reverification/probe-adaptations.md and reverification-probe-adaptations.patch.
+ """Fable independent re-verification probes: C-01 to C-06 and Batch 2 (T-09 to T-19).
+ 
+ Usage (from anywhere):
+@@ -271,7 +273,7 @@
+     moves = [(m['from_period_id'], m['to_period_id'], m['blocked'], m['had_approval']) for m in os_.export(PREP)['source_move_history']]
+     print('    move history (from, to, blocked, had_approval):', moves)
+     # recurring run for December while the origin is still locked
+-    mid = os_.create_mandate(PREP2, ['card_preparation'], '2026-12-06T00:00:00+00:00', '2026-12-09T00:00:00+00:00', 86400, 2, {'kind': 'fixed', 'period_id': '2026-12'}, {})
++    mid = os_.create_mandate(PREP2, ['card_preparation'], '2026-12-06T00:00:00+00:00', '2026-12-09T00:00:00+00:00', 86400, 2, {'kind': 'fixed', 'period_id': '2026-12'}, {'none':'Explicit fixed-evidence baseline for the original '+'RN02'+' scenario; freshness rejection is tested in RT10b'})
+     os_.approve_mandate(CTRL, mid, 'probe standing authority'); os_.tick(PREP2, '2026-12-06T12:00:00+00:00'); os_.drain(WORKER, now='2026-12-06T12:00:00+00:00')
+     dec_after_tick = gov(os_, CARD + ':A1', '2026-12')
+     print('    after a recurring December run -> December A1:', brief(dec_after_tick))
+@@ -316,7 +318,7 @@
+     a = gov(os_, CARD + ':A1'); b = gov(os_, CARD + ':A2')
+     print('    reject A1:', review(os_, REV, a, 'reject')[0], '| approve A2:', review(os_, REV, b, 'approve')[0])
+     run(os_, 'card_preparation', who=PREP2)                       # colleague re-enqueues identical inputs
+-    mid = os_.create_mandate(PREP2, ['card_preparation'], '2026-11-15T00:00:00+00:00', '2026-11-18T00:00:00+00:00', 86400, 2, {'kind': 'fixed', 'period_id': '2026-11'}, {})
++    mid = os_.create_mandate(PREP2, ['card_preparation'], '2026-11-15T00:00:00+00:00', '2026-11-18T00:00:00+00:00', 86400, 2, {'kind': 'fixed', 'period_id': '2026-11'}, {'none':'Explicit fixed-evidence baseline for the original '+'RN03'+' scenario; freshness rejection is tested in RT10b'})
+     os_.approve_mandate(CTRL, mid, 'probe standing authority'); os_.tick(PREP2, '2026-11-15T12:00:00+00:00'); os_.drain(WORKER, now='2026-11-15T12:00:00+00:00')
+     a_after = gov(os_, CARD + ':A1'); b_after = gov(os_, CARD + ':A2')
+     count = len(arts(os_, CARD + ':A1'))
+@@ -436,7 +438,7 @@
+     r['service dispositions'] = attempt(os_.disposition, svc, 'card_preparation', '2026-11', CARD + ':A3', 'MISSING_RECEIPT', 'refer_external', {}, a3['payload']['data']['evidence'], 'x')
+     rid = os_.propose_rule(PREP, 'receipt_matching', 'default', {'date_window_days': 1, 'amount_tolerance': None, 'multiple_receipts': None, 'vendor_method': None, 'statement_substitution': None}, '2026-11-01')
+     r['service approves rule'] = attempt(os_.approve_rule, svc, rid, 'x')
+-    mid = os_.create_mandate(PREP, ['card_preparation'], '2026-11-15T00:00:00+00:00', '2026-11-18T00:00:00+00:00', 86400, 1, {'kind': 'fixed', 'period_id': '2026-11'}, {})
++    mid = os_.create_mandate(PREP, ['card_preparation'], '2026-11-15T00:00:00+00:00', '2026-11-18T00:00:00+00:00', 86400, 1, {'kind': 'fixed', 'period_id': '2026-11'}, {'none':'Explicit fixed-evidence baseline for the original '+'RN07'+' scenario; freshness rejection is tested in RT10b'})
+     r['service approves mandate'] = attempt(os_.approve_mandate, svc, mid, 'x')
+     r['service creates mandate'] = attempt(os_.create_mandate, Actor('svc-prep', 'preparer', ORG, CLIENT, kind='service'), ['card_preparation'], '2026-11-15T00:00:00+00:00', '2026-11-18T00:00:00+00:00', 86400, 1, {'kind': 'fixed', 'period_id': '2026-11'}, {})
+     r['service finalizes'] = attempt(os_.finalize_package, svc, '2026-11', 'card_preparation', 'x', 'x')
+@@ -570,7 +572,7 @@
+     retained = [a for a in os_.export(PREP)['audit_history'] if a['event'] == 'older_or_conflicting_source_retained']
+     print('    current amount:', a1['payload']['data']['transaction']['amount'], '| eligible:', bool(a1['eligible']), '| retained-as-history events:', len(retained), '| replay:', replay['replay'])
+     newer = [tx('A1', '2026-11-03', '55.00', as_of=7), rc('A1', '2026-11-03', '55.00')]
+-    os_.intake(PREP, packet('s7', newer + [stmt(newer)])); run(os_, 'card_preparation'); a1b = gov(os_, CARD + ':A1')
++    os_.intake(PREP, packet('s7', newer + [stmt(newer)])); run(os_, 'card_preparation'); accept_revised_evidence(os_,CARD+':A1'); run(os_,'card_preparation'); a1b = gov(os_, CARD + ':A1')
+     print('    after newer sequence 7 (positive control):', a1b['payload']['data']['transaction']['amount'], brief(a1b))
+     ok = a1['payload']['data']['transaction']['amount'] == '50.00' and a1['eligible'] and len(retained) == 4 and replay['replay'] and a1b['payload']['data']['transaction']['amount'] == '55.00' and a1b['eligible']
+     return 'OK' if ok else 'WEAK'
+@@ -740,10 +742,19 @@
+ # Part 3. Batch 2 tickets T-14 to T-19
+ # ---------------------------------------------------------------------------------------
+ 
++def accept_revised_evidence(os_, key):
++    """RV-12 positive setup: an explicitly granted non-supplier accepts the revision."""
++    a=gov(os_,key)
++    assert 'EVIDENCE_REVISED_REQUIRES_REVIEW' in a['blockers'], 'Revised evidence must be held first'
++    assert a['payload']['data']['evidence_revisions'], 'Revision history must be disclosed'
++    result=dispose(os_,key,'EVIDENCE_REVISED_REQUIRES_REVIEW','revised_evidence_accepted',who=DISP)
++    assert result[0]=='ok',result
++
++
+ def dispose(os_, key, code, choice, payload=None, evidence=None, who=DISP, **kw):
+     a = gov(os_, key)
+     return attempt(os_.disposition, who, 'card_preparation', '2026-11', key, code, choice, payload or {},
+-                   a['payload']['data']['evidence'] if evidence is None else evidence, 'Fictional probe disposition', **kw)
++                   a['payload']['data']['evidence']+(a['payload']['data'].get('duplicate_evidence',[]) if choice=='distinct_purchases' else []) if evidence is None else evidence, 'Fictional probe disposition', **kw)
+ 
+ 
+ def duplicate_pair(extra=()):
+@@ -795,9 +806,14 @@
+ def _():
+     os_, rows = duplicate_pair()
+     for k in ('D1', 'D2'):
+-        own = [e for e in gov(os_, CARD + ':' + k)['payload']['data']['evidence'] if e['source_key'] in (CARD + ':' + k, 'receipt-' + k)]
+-        dispose(os_, CARD + ':' + k, 'POSSIBLE_DUPLICATE', 'distinct_purchases', evidence=own)      # charge and its own receipt only
+-    run(os_, 'card_preparation'); print('    D1 after disposition:', brief(gov(os_, CARD + ':D1')))
++        own = [e for e in gov(os_, CARD + ':' + k)['payload']['data']['evidence'] if e['source_key'] in (CARD + ':' + k, 'receipt-' + k)]+gov(os_,CARD+':'+k)['payload']['data'].get('duplicate_evidence',[])
++        initial_result = dispose(os_, CARD + ':' + k, 'POSSIBLE_DUPLICATE', 'distinct_purchases', evidence=own)  # own and candidate receipts; no statement
++        print('    initial distinct-purchases disposition', k + ':', initial_result)
++        assert initial_result[0] == 'ok', ('Initial distinct-purchases disposition must succeed', k, initial_result)
++    run(os_, 'card_preparation')
++    initial_d1 = gov(os_, CARD + ':D1')
++    assert initial_d1 is not None and initial_d1['eligible'], ('D1 must be eligible before D3 arrives', brief(initial_d1))
++    print('    D1 after disposition:', brief(initial_d1))
+     third = [tx('D3', '2026-11-06', '90.00'), rc('D3', '2026-11-06', '90.00', content='Fictional receipt three')]
+     os_.intake(PREP, packet('third', third + [stmt(rows + third)])); run(os_, 'card_preparation')
+     d1, d3 = gov(os_, CARD + ':D1'), gov(os_, CARD + ':D3')
+@@ -953,7 +969,7 @@
+     print('    after unrelated journal intake -> events:', ev1, '| after a card source revision -> events:', ev2)
+     print('    package bytes unchanged:', pkg0['payload'] == pkg1['payload'] and pkg0['hash'] == pkg1['hash'])
+     stale = show('finalize again while items are stale, with acknowledgement', attempt(os_.finalize_package, FIN, '2026-11', 'card_preparation', 'x', 'acknowledged'))
+-    run(os_, 'card_preparation')
++    run(os_, 'card_preparation'); accept_revised_evidence(os_,CARD+':A1'); run(os_,'card_preparation')
+     a1 = gov(os_, CARD + ':A1'); review(os_, REV, a1, 'approve'); review(os_, REV2, a1, 'reject')
+     disputed = show('finalize while A1 is disputed, with acknowledgement', attempt(os_.finalize_package, FIN, '2026-11', 'card_preparation', 'x', 'acknowledged'))
+     res = show('third reviewer resolves the dispute', review(os_, REV3, a1, 'resolve_approve'))
+@@ -1063,7 +1079,7 @@
+     src = {s['key']: s for s in teaching['sources']}
+     fixed_rc = copy.deepcopy(src['receipt-TX-009']); fixed_rc['data']['amount'] = '80.00'
+     fixed_j = copy.deepcopy(src['J-002']); fixed_j['data']['lines'][0]['debit'] = '26.00'; fixed_j['data']['lines'][1]['credit'] = '26.00'
+-    os_.intake(PREP, packet('teaching-corrections', [fixed_rc, fixed_j])); run(os_, 'card_preparation'); run(os_, 'journal_preparation')
++    os_.intake(PREP, packet('teaching-corrections', [fixed_rc, fixed_j])); run(os_, 'card_preparation'); run(os_, 'journal_preparation'); accept_revised_evidence(os_,CARD+':TX-009'); run(os_,'card_preparation')
+     K = CARD + ':TX-0'
+     steps = [dispose(os_, K + '04', 'POSSIBLE_DUPLICATE', 'distinct_purchases'), dispose(os_, K + '05', 'POSSIBLE_DUPLICATE', 'distinct_purchases'),
+              dispose(os_, K + '03', 'UNKNOWN_VENDOR', 'confirm_vendor', {'account_id': 'DEMO_OFFICE_SUPPLIES'}), dispose(os_, K + '03', 'UNKNOWN_CATEGORY', 'code_category', {'account_id': 'DEMO_OFFICE_SUPPLIES'}),

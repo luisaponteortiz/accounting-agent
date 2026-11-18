@@ -1,0 +1,56 @@
+test_RF01_first_claim_link_invariant_across_delivery_matrices (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) ... test_RF02_all_selectors_remain_contributors_for_confirm_replace_revision_and_descendant (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF03_autocommit_always_recomputes_and_cache_is_local_to_one_call (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_RF03_transaction_reuses_current_result_and_matches_full_computation (tests.test_review_corrections_rf.RFCorrections) ... ok
+test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF) ... ERROR
+test_fourth_changed_verdict_controls_even_with_matching_project_results (tests.test_product_requirements_rf.ProductRequirementsRF) ... ERROR
+test_fourth_results_and_report_are_hash_pinned (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_fourth_stale_missing_extra_duplicate_changed_and_reordered_results_refused (tests.test_product_requirements_rf.ProductRequirementsRF) ... ok
+test_all_21_unmodified_RE_probes (tests.test_rf_review_gate.RFReviewGate) ... ok
+test_order_validator_refuses_all_contract_faults (tests.test_rf_review_gate.RFReviewGate) ... ok
+test_probe_validator_refuses_all_contract_faults (tests.test_rf_review_gate.RFReviewGate) ... ok
+
+======================================================================
+ERROR: test_fourth_authority_wins_and_all_older_authorities_cannot_override (tests.test_product_requirements_rf.ProductRequirementsRF)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements_rf.py", line 41, in test_fourth_authority_wins_and_all_older_authorities_cannot_override
+    self.assertEqual(cpr.reviewer_verdicts(root)[0],original);cpr.validate_register(self.text,root)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check_product_requirements.py", line 212, in validate_register
+    if target:require((root/'docs'/target).exists(),'Missing evidence/source link: '+target)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check_product_requirements.py", line 35, in require
+    if not condition:raise ValueError(message)
+ValueError: Missing evidence/source link: corrections_rf/RF_CORRECTIONS_REPORT.md
+
+======================================================================
+ERROR: test_fourth_changed_verdict_controls_even_with_matching_project_results (tests.test_product_requirements_rf.ProductRequirementsRF)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_product_requirements_rf.py", line 55, in test_fourth_changed_verdict_controls_even_with_matching_project_results
+    cpr.validate_register(self.changed_field('AAOS-KNO-04','Implementation state','Verification failed'),root)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check_product_requirements.py", line 212, in validate_register
+    if target:require((root/'docs'/target).exists(),'Missing evidence/source link: '+target)
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/scripts/check_product_requirements.py", line 35, in require
+    if not condition:raise ValueError(message)
+ValueError: Missing evidence/source link: corrections_rf/RF_CORRECTIONS_REPORT.md
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=False, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 57, in test_RF01_retained_message_matrix_and_repeated_claim
+    if known or replacement!='approved-before':self.assertFalse(p.approved(o,p.K('Z'),'2026-12'))
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_RF01_retained_message_matrix_and_repeated_claim (tests.test_review_corrections_rf.RFCorrections) (known=False, approved=True, replacement='approved-before')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/luis/Documents/ChatGPT/Accounting Agent OS/tests/test_review_corrections_rf.py", line 57, in test_RF01_retained_message_matrix_and_repeated_claim
+    if known or replacement!='approved-before':self.assertFalse(p.approved(o,p.K('Z'),'2026-12'))
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 12 tests in 144.197s
+
+FAILED (failures=2, errors=2)

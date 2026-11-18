@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "exports/FABLE_RC_ACCEPTANCE/fable_rc_acceptance_probes.py",
+    "."
+  ],
+  "cwd": "/Users/luis/Documents/ChatGPT/Accounting Agent OS",
+  "started_utc": "2026-11-16T16:13:53.640935+00:00",
+  "elapsed_seconds": 26.542,
+  "exit_code": 0,
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "sqlite": "3.51.0",
+  "platform": "macOS-26.5.2-x86_64-i386-64bit"
+}

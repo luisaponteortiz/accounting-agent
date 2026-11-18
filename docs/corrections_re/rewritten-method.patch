@@ -1,0 +1,27 @@
+--- before/test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced
++++ after/test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced
+@@ -1,4 +1,5 @@
+     def test_RD02_latest_pending_target_wins_and_existing_link_is_not_replaced(self):
++        # D-026 supersedes the old method name's latest-target rule.
+         f = self.f
+         o = f.approved_locked_november()
+         o.intake(f.PREP2, f.packet('first', [f.sup('Y', '2026-12-03', '40.00', 'X')]))
+@@ -6,10 +7,15 @@
+         o.intake(f.PREP2, f.packet('old-target-arrives', [f.tx('X', '2026-12-02', '40.00')]))
+         with o.store.connect() as db:
+             head = db.execute('SELECT snapshot_id FROM source_heads WHERE source_key=?', (f.CARD+':Y',)).fetchone()[0]
+-            self.assertIsNone(o.supersession_link(db, f.SCOPE, head))
++            link = o.supersession_link(db, f.SCOPE, head)
++            self.assertIsNotNone(link)
++            self.assertEqual(o.card_claim_state(db, f.SCOPE, f.CARD+':Y')['target_key'], f.CARD+':X')
+         o.intake(f.PREP2, f.packet('new-target-arrives', [f.sup('W', '2026-12-02', '40.00', 'A1')]))
+-        self.prepare(o)
+-        self.held(o, f.CARD+':Y')
++        f.run(o, 'card_preparation', '2026-12', f.PREP2)
++        y = f.gov(o, f.CARD+':Y', '2026-12')
++        self.assertIsNotNone(y)
++        self.assertIn('SOURCE_CLAIM_CONFLICT', y['blockers'])
++        self.assertFalse(y['eligible'])
+         before = self.lifecycle(o)
+         o.intake(f.PREP2, f.packet('unrelated', [f.tx('D1', '2026-12-05', '15.00')]))
+         after = self.lifecycle(o)

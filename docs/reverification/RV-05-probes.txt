@@ -1,0 +1,34 @@
+Fable re-verification probes | project root: Accounting Agent OS | Python 3.9.6 | SQLite 3.51.0
+All data fictional; temporary databases only; service operations only.
+
+[RT09a] (T-09) a proposed profile is inert; the proposer, an ungranted human and a service cannot approve it
+    enqueue under a proposed profile: ('refused', 409, 'POLICY_NOT_APPROVED')
+    proposer approves own profile: ('refused', 403, 'Profile proposer cannot approve')
+    human without the approve_profile grant: ('refused', 403, 'Human authority grant required: approve_profile')
+    independent granted approver: ('ok', None)
+    after approval A1: {'id': 2, 'eligible': True, 'status': 'pending', 'blockers': []}
+    -> OK
+
+[RT09b] (T-09) rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive
+    rule proposed only -> M1 (Nov): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] | M2 (Dec): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    approve A1 (Nov): ok
+    rule proposer approves own rule: ('refused', 403, 'Rule proposer cannot approve/reject')
+    rule approved, effective December -> A1 status: approve | M1 (Nov): ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR'] | M2 (Dec): {'id': 11, 'eligible': True, 'status': 'pending', 'blockers': []} DEMO_REPAIRS
+    after an unrelated close-checklist rule -> A1 status: approve | same artifact: True
+    after a superseding rule effective 2027-01-01 -> M2 category: DEMO_REPAIRS | applied rules: [{'id': 1, 'version': 1}, {'id': 2, 'version': 1}, {'id': 4, 'version': 1}]
+    review policy effective 15 November -> A1 (3 Nov): [] pending | M1 (20 Nov): ['MODEL_REVIEW_UNAVAILABLE', 'UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']
+    observation: the approval of A1 (dated before the new policy) did not survive a same-period rule that applies only to later items
+    -> OK
+
+[RT09c] (T-09) a vendor removed from the approved profile no longer produces a clean match
+    approved profile v2 vendors: ['demo_acme']
+    Metro item under v2: {'id': 3, 'eligible': False, 'status': 'pending', 'blockers': ['UNKNOWN_CATEGORY', 'UNKNOWN_VENDOR']} | vendor: None | category: None
+    -> OK
+
+====================================================================================================
+RT09a  T-09       OK     a proposed profile is inert; the proposer, an ungranted human and a service cannot approve it
+RT09b  T-09       OK     rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive
+RT09c  T-09       OK     a vendor removed from the approved profile no longer produces a clean match
+
+Verdict counts: {'OK': 3}
+Re-verification gate: PASS

@@ -1,0 +1,22 @@
+{
+  "name": "Bird Bowl",
+  "configuration_status": "unconfigured",
+  "known_context_source": "ss_agent_system_handoff/BIRD_BOWL_ACCOUNTING_PILOT.md v1.4",
+  "legal_entity": null,
+  "accounting_framework": null,
+  "accounting_basis": null,
+  "chart_of_accounts": [],
+  "vendors": [],
+  "customers": [],
+  "periods": [],
+  "policies": {},
+  "procedures": [],
+  "historical_decisions": [],
+  "credentials_reference": null,
+  "system_and_migration_status": "unverified",
+  "review_authority": null,
+  "hosting": null,
+  "planned_capture_periods": ["2026-11", "2026-12"],
+  "theresa_independent_operation_verified": false,
+  "support_agreements_confirmed": false
+}

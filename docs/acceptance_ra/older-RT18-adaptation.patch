@@ -1,0 +1,11 @@
+--- frozen-RV-submission/review/fable_reverification_probes.py
++++ review/fable_reverification_probes.py
+@@ -969,7 +969,7 @@
+     print('    after unrelated journal intake -> events:', ev1, '| after a card source revision -> events:', ev2)
+     print('    package bytes unchanged:', pkg0['payload'] == pkg1['payload'] and pkg0['hash'] == pkg1['hash'])
+     stale = show('finalize again while items are stale, with acknowledgement', attempt(os_.finalize_package, FIN, '2026-11', 'card_preparation', 'x', 'acknowledged'))
+-    run(os_, 'card_preparation')
++    run(os_, 'card_preparation'); accept_revised_evidence(os_,CARD+':A1'); run(os_,'card_preparation')
+     a1 = gov(os_, CARD + ':A1'); review(os_, REV, a1, 'approve'); review(os_, REV2, a1, 'reject')
+     disputed = show('finalize while A1 is disputed, with acknowledgement', attempt(os_.finalize_package, FIN, '2026-11', 'card_preparation', 'x', 'acknowledged'))
+     res = show('third reviewer resolves the dispute', review(os_, REV3, a1, 'resolve_approve'))

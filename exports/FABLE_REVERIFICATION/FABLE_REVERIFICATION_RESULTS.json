@@ -1,0 +1,1734 @@
+{
+ "title": "Fable re-verification results: C-01 to C-06 and Batch 2",
+ "authored": "2026-11-15",
+ "notice": "Review output only. Authorises no connection, posting, payment, model call, hosting, deployment or policy activation, and opens no readiness gate. All data fictional.",
+ "status_vocabulary": {
+  "PASS": "verified by execution unless the evidence says inspection",
+  "FAIL": "a confirmed gap, with a defect id",
+  "NOTE": "limitation needing a decision",
+  "NOT_RUN": "not executed",
+  "DEFERRED": "capability correctly unavailable"
+ },
+ "environment": {
+  "python": "3.9.6",
+  "sqlite": "3.51.0",
+  "platform": "macOS (Darwin, arm64 or x86_64 as reported in the output file)",
+  "network": "not used",
+  "loopback": "available",
+  "bundle_sha256": "312232b6a235115b6c163a3a222672b7d21847e8d5a77d19577bf286138f9ebc",
+  "manifest": "152 of 152 files match; none unlisted"
+ },
+ "decisions": {
+  "historical_corrective_checkpoint": {
+   "status": "PASS",
+   "basis": "Unmodified original script on the frozen archive: N01 to N07 OK and all other required probes OK; exit 0. Chronology is consistent with the archive contents and file times but cannot be proved from an archive."
+  },
+  "current_C01_to_C06": {
+   "status": "FAIL",
+   "basis": "C-02 to C-06 pass on current source. C-01 passes its stated scenario and fails its objective through supersession (RV-01)."
+  },
+  "batch_2": {
+   "status": "FAIL",
+   "basis": "T-11, T-10, T-13, T-14, T-16 and T-17 meet their criteria. T-09, T-12, T-15, T-18 and T-19 each have a P1 defect."
+  },
+  "G0_technical_criteria": {
+   "status": "FAIL",
+   "basis": "Six P1 defects are open, so two of the six G0 criteria are not met. The month, isolation and reviewer-case criteria are met. Human G0 acceptance is a separate decision and should wait."
+  },
+  "gates_G1_to_G4": "closed; nothing in this review opens them"
+ },
+ "commands": [
+  {
+   "command": "python3 scripts/verify_corrective_checkpoint.py",
+   "exit_code": 0,
+   "evidence": "evidence/01_corrective_checkpoint.txt"
+  },
+  {
+   "command": "make test",
+   "exit_code": 0,
+   "result": "111 tests, 0 failures, 0 errors, 0 expected failures",
+   "evidence": "evidence/02_make_test.txt"
+  },
+  {
+   "command": "make check",
+   "exit_code": 0,
+   "evidence": "evidence/03_make_check.txt"
+  },
+  {
+   "command": "make batch2-gate",
+   "exit_code": 0,
+   "evidence": "evidence/04_make_batch2_gate.txt"
+  },
+  {
+   "command": "python3 review/run_fable_validation_cases.py . review/FABLE_VALIDATION_CASES.json --batch2-gate",
+   "exit_code": 0,
+   "evidence": "evidence/05_cases_batch2_gate.txt"
+  },
+  {
+   "command": "python3 review/batch2_verification_probes.py .",
+   "exit_code": 0,
+   "evidence": "evidence/06_maintained_probes.txt"
+  },
+  {
+   "command": "python3 scripts/synthetic_month.py",
+   "exit_code": 0,
+   "evidence": "evidence/07_synthetic_month.txt"
+  },
+  {
+   "command": "PYTHONDONTWRITEBYTECODE=1 python3 fable_reverification_probes.py <project-root>",
+   "exit_code": 1,
+   "result": "35 probes: 21 OK, 11 WEAK, 3 NOTE",
+   "evidence": "fable_reverification_output.txt section B; evidence/probe_stdout.txt"
+  },
+  {
+   "command": "python3 -I evidence/static_checks.py <root> <reviewer-originals> <original-bundle>",
+   "exit_code": 0,
+   "evidence": "evidence/static_checks.txt"
+  }
+ ],
+ "developer_claims": [
+  {
+   "claim": "111 passing tests",
+   "status": "PASS",
+   "reproduced": "111 run, all ok"
+  },
+  {
+   "claim": "all 41 original platform/HTTP methods retained",
+   "status": "PASS",
+   "reproduced": "41 of 41 platform and HTTP names of the Batch 1 baseline present (32 and 9). Against the first 0.1.0 bundle: 40 of 40 platform and HTTP methods present, 14 bodies changed, none with fewer assertions"
+  },
+  {
+   "claim": "60 cases: 29 PASS, 10 FIXED, 21 DEFERRED-OK",
+   "status": "PASS",
+   "reproduced": {
+    "PASS": 29,
+    "FIXED": 10,
+    "DEFERRED-OK": 21
+   }
+  },
+  {
+   "claim": "changed-files.json and the patch represent the actual source",
+   "status": "FAIL",
+   "reproduced": "all 46 listed hashes correct; accounting_agent/web/app.js and index.html changed and are in neither (RV-16)"
+  },
+  {
+   "claim": "four verification inputs unchanged",
+   "status": "PASS",
+   "reproduced": "identical in the outer bundle, the frozen archive and the reviewer originals"
+  },
+  {
+   "claim": "teaching month: nine card and two journal approvals, two held with external referral, two packages, November locked, second client unaffected",
+   "status": "PASS",
+   "reproduced": "independently re-driven with explicit authority (probe RG0); entry impact equals hand calculation",
+   "caveat": "TX-009 and J-002 are cleared by re-supplied inputs (RV-12)"
+  }
+ ],
+ "corrective_tickets": {
+  "C-01": {
+   "status": "FAIL",
+   "summary": "The re-dating scenario (N02) is fixed, including replay, a recurring run and release on reopen. The same result is reachable through supersession under a new key.",
+   "probes": [
+    "RN02",
+    "RN02b"
+   ],
+   "open_defects": [
+    "RV-01",
+    "RV-03",
+    "RV-04"
+   ]
+  },
+  "C-02": {
+   "status": "PASS",
+   "summary": "All five decision types, dispositions and finalization refuse with 409 PERIOD_LOCKED; an audited reopen by a granted human is required; decisions are accepted afterwards.",
+   "probes": [
+    "RN01"
+   ],
+   "open_defects": []
+  },
+  "C-03": {
+   "status": "PASS",
+   "summary": "Identical work by another enqueuer or mandate issuer reuses the artifact and keeps the rejection and the approval; contributors append outside the hash; a newly linked contributor loses review rights.",
+   "probes": [
+    "RN03"
+   ],
+   "open_defects": []
+  },
+  "C-04": {
+   "status": "PASS",
+   "summary": "Every version supplier and every author and approver of chart, entity and book configuration stays barred; another item's receipt does not bar. One P2 residual for superseded rule versions.",
+   "probes": [
+    "RN04",
+    "RN05",
+    "RN05b"
+   ],
+   "open_defects": [
+    "RV-10"
+   ]
+  },
+  "C-05": {
+   "status": "PASS",
+   "summary": "Marks are kept; unknown and colliding aliases are held; empty aliases refused.",
+   "probes": [
+    "RN06"
+   ],
+   "open_defects": []
+  },
+  "C-06": {
+   "status": "PASS",
+   "summary": "Kind is mandatory; a service identity is refused for every human authority, including when grants are issued to it.",
+   "probes": [
+    "RN07"
+   ],
+   "open_defects": []
+  }
+ },
+ "original_probes_N01_to_N07": {
+  "N01": {
+   "frozen_checkpoint_unmodified_script": "OK",
+   "maintained_harness_current_source": "OK",
+   "carried_into_current_api": {
+    "RN01": "PASS"
+   }
+  },
+  "N02": {
+   "frozen_checkpoint_unmodified_script": "OK",
+   "maintained_harness_current_source": "OK",
+   "carried_into_current_api": {
+    "RN02": "PASS",
+    "RN02b": "FAIL"
+   }
+  },
+  "N03": {
+   "frozen_checkpoint_unmodified_script": "OK",
+   "maintained_harness_current_source": "OK",
+   "carried_into_current_api": {
+    "RN03": "PASS"
+   }
+  },
+  "N04": {
+   "frozen_checkpoint_unmodified_script": "OK",
+   "maintained_harness_current_source": "OK",
+   "carried_into_current_api": {
+    "RN04": "PASS"
+   }
+  },
+  "N05": {
+   "frozen_checkpoint_unmodified_script": "OK",
+   "maintained_harness_current_source": "OK",
+   "carried_into_current_api": {
+    "RN05": "PASS",
+    "RN05b": "FAIL"
+   }
+  },
+  "N06": {
+   "frozen_checkpoint_unmodified_script": "OK",
+   "maintained_harness_current_source": "OK",
+   "carried_into_current_api": {
+    "RN06": "PASS"
+   }
+  },
+  "N07": {
+   "frozen_checkpoint_unmodified_script": "OK",
+   "maintained_harness_current_source": "OK",
+   "carried_into_current_api": {
+    "RN07": "PASS"
+   }
+  }
+ },
+ "frozen_checkpoint_all_probes_raw": {
+  "P01": "OK",
+  "P02": "OK",
+  "P03": "OK",
+  "P04": "OK",
+  "P05": "OK",
+  "P06": "OK",
+  "P07": "DEFERRED",
+  "P08": "DEFERRED",
+  "P09": "OK",
+  "P10": "OK",
+  "P11": "OK",
+  "P12": "DEFERRED",
+  "P13": "DEFERRED",
+  "P14": "OK",
+  "P15": "DEFERRED",
+  "P16": "OK",
+  "N01": "OK",
+  "N02": "OK",
+  "N03": "OK",
+  "N04": "OK",
+  "N05": "OK",
+  "N06": "OK",
+  "N07": "OK",
+  "N08": "WEAK",
+  "N09": "WEAK",
+  "N10": "NOTE",
+  "N11": "OK",
+  "N12": "OK",
+  "N13": "OK",
+  "N14": "NOTE",
+  "N15": "NOTE",
+  "N16": "NOTE",
+  "N17": "DEFERRED",
+  "N18": "NOTE"
+ },
+ "maintained_harness_all_probes_raw": {
+  "P01": "OK",
+  "P02": "OK",
+  "P03": "OK",
+  "P04": "OK",
+  "P05": "OK",
+  "P06": "OK",
+  "P07": "OK",
+  "P08": "OK",
+  "P09": "OK",
+  "P10": "OK",
+  "P11": "OK",
+  "P12": "OK",
+  "P13": "OK",
+  "P14": "OK",
+  "P15": "OK",
+  "P16": "OK",
+  "N01": "OK",
+  "N02": "OK",
+  "N03": "OK",
+  "N04": "OK",
+  "N05": "OK",
+  "N06": "OK",
+  "N07": "OK",
+  "N08": "OK",
+  "N09": "OK",
+  "N10": "OK",
+  "N11": "OK",
+  "N12": "OK",
+  "N13": "OK",
+  "N14": "OK",
+  "N15": "OK",
+  "N16": "NOTE",
+  "N17": "OK",
+  "N18": "NOTE"
+ },
+ "maintained_harness_judgment": {
+  "status": "accepted as an adaptation, not as sufficient evidence",
+  "points": [
+   "Setup changes (proposed-then-approved profile, explicit grants, structured statements, lock acknowledgement) keep the original assertions for N01 to N07; my independent versions with explicit setup agree.",
+   "Every mandate probe uses create_fixture_mandate, which supplies an empty freshness predicate and the occurrence-calendar rule, so the harness never exercises the freshness control (RV-11).",
+   "prepare_profile approves through a fixed second actor inside the helper. That is explicit but it means no maintained probe tests a withdrawn mapping, a superseded rule author or an untyped checklist.",
+   "N16 and N18 remain NOTE. N18 is not evidence that alias normalisation is visible to an approver (RV-14)."
+  ]
+ },
+ "validation_case_adaptations": [
+  {
+   "case": "FV-C13",
+   "judgment": "justified",
+   "reason": "T-12 asked for the superseded pending row to leave the open population."
+  },
+  {
+   "case": "FV-C17, FV-C18",
+   "judgment": "justified",
+   "reason": "T-17 asked for policy-unset codes; the items are still held."
+  },
+  {
+   "case": "FV-J05, FV-J07",
+   "judgment": "justified",
+   "reason": "Period contracts stated in the case text; outcome remains no eligible entry."
+  },
+  {
+   "case": "FV-CL04",
+   "judgment": "justified",
+   "reason": "Now executable; expects the missing-evidence blocker plus disclosure of the quarantined document."
+  },
+  {
+   "case": "statement adapter (accounting_agent/fixtures/spec_adapter.py)",
+   "judgment": "acceptable with a limit",
+   "reason": "Used only by the runner and the fixture builder, never by intake. It preserves a wrong declared count or total as a wrong statement. It takes line ids from the intake population, so the 60 cases cannot detect a line-identity defect; probes RT13 and RT13n cover that."
+  }
+ ],
+ "independent_probes": [
+  {
+   "id": "RN01",
+   "requirement": "C-02",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "every decision type is refused under lock, and accepted again after an authorised reopen"
+  },
+  {
+   "id": "RN02",
+   "requirement": "C-01",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "a source re-dated out of a locked period enters no other period until the origin is reopened"
+  },
+  {
+   "id": "RN02b",
+   "requirement": "C-01",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "a locked, approved item cannot be re-entered in another period through supersession under a new key"
+  },
+  {
+   "id": "RN03",
+   "requirement": "C-03",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "identical work by another enqueuer or mandate issuer keeps the governing artifact and its rejection"
+  },
+  {
+   "id": "RN04",
+   "requirement": "C-04",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "a supplier of any version of an item input stays barred; a supplier of another item evidence does not"
+  },
+  {
+   "id": "RN05",
+   "requirement": "C-04",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "the author of the chart and policy stays barred after a colleague re-registers the profile"
+  },
+  {
+   "id": "RN05b",
+   "requirement": "C-04/T-09",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "the author of a vendor mapping stays barred after a colleague re-proposes the rule with a cosmetic change"
+  },
+  {
+   "id": "RN06",
+   "requirement": "C-05",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "combining marks survive normalisation; unknown and colliding aliases are held; empty aliases refused"
+  },
+  {
+   "id": "RN07",
+   "requirement": "C-06",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "actor kind is mandatory; a service identity cannot use any human authority whatever its name, role or grants"
+  },
+  {
+   "id": "RT09a",
+   "requirement": "T-09",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "a proposed profile is inert; the proposer, an ungranted human and a service cannot approve it"
+  },
+  {
+   "id": "RT09b",
+   "requirement": "T-09",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "rules: proposed is inert, effective dates and supersession are applied per item date, earlier approvals survive"
+  },
+  {
+   "id": "RT09c",
+   "requirement": "T-09",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "a vendor removed from the approved profile no longer produces a clean match"
+  },
+  {
+   "id": "RT09d",
+   "requirement": "T-09",
+   "raw_verdict": "NOTE",
+   "status": "NOTE",
+   "checks": "normalised alias form is visible to the rule approver; punctuation-only collisions are held"
+  },
+  {
+   "id": "RT11",
+   "requirement": "T-11",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "client_sample with missing facts yields no eligible item; demo waivers are explicit in artifact and export"
+  },
+  {
+   "id": "RT12a",
+   "requirement": "T-12",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "older, conflicting, mixed-order and unordered deliveries never replace an accepted ordered head"
+  },
+  {
+   "id": "RT12b",
+   "requirement": "T-12/T-18",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "unrelated later intake leaves a locked, finalized period untouched (no new quarantine, no change event)"
+  },
+  {
+   "id": "RT12c",
+   "requirement": "T-12",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "evidence received before its period opens is adopted; a receipt follows its charge across a month boundary in either arrival order"
+  },
+  {
+   "id": "RT12d",
+   "requirement": "T-12/T-18",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "a removed or superseded source leaves no open item behind and raises an event when it had been approved"
+  },
+  {
+   "id": "RT10a",
+   "requirement": "T-10",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "mandates: independent approval, fixed target period, fresh-evidence wait and wake-up, suspension on policy change"
+  },
+  {
+   "id": "RT10b",
+   "requirement": "T-10",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "a mandate must state what fresh evidence it needs before it can dispatch"
+  },
+  {
+   "id": "RT13",
+   "requirement": "T-13",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "statement control: identity swap, purchase/payment offset, opening break and foreign rows are caught or disclosed"
+  },
+  {
+   "id": "RT13n",
+   "requirement": "T-13",
+   "raw_verdict": "NOTE",
+   "status": "NOTE",
+   "checks": "limits of the statement control when line identities or the prior statement are absent"
+  },
+  {
+   "id": "RT14a",
+   "requirement": "T-14",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "dispositions: closed vocabulary, exact split, separate review, revocation, inert rule proposal, referral never clears"
+  },
+  {
+   "id": "RT14b",
+   "requirement": "T-14",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "a distinct-purchases disposition does not cover a duplicate candidate that arrives afterwards"
+  },
+  {
+   "id": "RT14c",
+   "requirement": "T-14",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "after one of two charges is excluded as a duplicate, the surviving charge has a truthful path to approval"
+  },
+  {
+   "id": "RT14d",
+   "requirement": "T-14",
+   "raw_verdict": "NOTE",
+   "status": "NOTE",
+   "checks": "evidence cited for a disposition must be more than the item's own source row"
+  },
+  {
+   "id": "RT14e",
+   "requirement": "T-14/T-15",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "a card payment cannot be turned into a credit to an expense account through dispositions"
+  },
+  {
+   "id": "RT14f",
+   "requirement": "T-14",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "an empty inventory blocks the steps that depend on it"
+  },
+  {
+   "id": "RT15",
+   "requirement": "T-15",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "one source, one live entry: a journal citing a card item is held on both, and stays held after the source is revised"
+  },
+  {
+   "id": "RT16",
+   "requirement": "T-16",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "journal controls tested one at a time: wrong-type support, unbound support, duplicates, no net effect, dimensions"
+  },
+  {
+   "id": "RT17",
+   "requirement": "T-17",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "receipt policy: unset stays explicit, a proposed rule has no effect, both sides of the date and amount boundaries"
+  },
+  {
+   "id": "RT18",
+   "requirement": "T-18",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "finalization: independent granted human, acknowledgement of carried items, frozen bytes, visible later changes"
+  },
+  {
+   "id": "RT19a",
+   "requirement": "T-19",
+   "raw_verdict": "WEAK",
+   "status": "FAIL",
+   "checks": "close readiness: a document label alone does not complete reconciliation or tie-out requirements"
+  },
+  {
+   "id": "RT19b",
+   "requirement": "T-19",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "close readiness waits for in-flight preparation and does not adopt changed sources"
+  },
+  {
+   "id": "RG0",
+   "requirement": "G0",
+   "raw_verdict": "OK",
+   "status": "PASS",
+   "checks": "teaching month through service operations only; lineage, entry impact and second-client isolation recomputed"
+  }
+ ],
+ "batch_2_tickets": {
+  "T-09": {
+   "status": "FAIL",
+   "criteria": [
+    {
+     "criterion": "A proposed version or rule is never applied by a run.",
+     "status": "PASS",
+     "evidence": [
+      "RT09a",
+      "RT09b",
+      "RT17"
+     ]
+    },
+    {
+     "criterion": "The proposer cannot approve; a service actor cannot approve.",
+     "status": "PASS",
+     "evidence": [
+      "RT09a",
+      "RT09b",
+      "RN07"
+     ]
+    },
+    {
+     "criterion": "A rule effective on the first day of the next period is not applied to an item dated in the current period.",
+     "status": "PASS",
+     "evidence": [
+      "RT09b"
+     ]
+    },
+    {
+     "criterion": "After supersession, re-preparing an earlier period applies the rule that was in force for that date.",
+     "status": "PASS",
+     "evidence": [
+      "RT09b"
+     ]
+    },
+    {
+     "criterion": "Export shows, for every artifact, the rule ids and versions applied.",
+     "status": "PASS",
+     "evidence": [
+      "RT09b",
+      "inspection: service.py commit line 539"
+     ],
+     "note": "The list is the run-wide set, not the rules used by that item (DE-1)."
+    },
+    {
+     "criterion": "Added: independence uses the proposer and approver of each rule applied to the item; probe N05 stays refused.",
+     "status": "PASS",
+     "evidence": [
+      "RN05",
+      "maintained N05"
+     ],
+     "note": "Earlier versions of a superseded rule are not included.",
+     "defects": [
+      "RV-10"
+     ]
+    },
+    {
+     "criterion": "Added: a rule effective in a later period leaves approvals in earlier periods intact; probe N17 reports OK.",
+     "status": "PASS",
+     "evidence": [
+      "RT09b",
+      "maintained N17"
+     ]
+    },
+    {
+     "criterion": "Added: alias approval shows the normalised form (probe N18).",
+     "status": "FAIL",
+     "evidence": [
+      "RT09d"
+     ],
+     "note": "Recorded in the audit event only.",
+     "defects": [
+      "RV-14"
+     ]
+    },
+    {
+     "criterion": "Adversarial: a mapping withdrawn by a newly approved profile stops applying.",
+     "status": "FAIL",
+     "evidence": [
+      "RT09c"
+     ],
+     "defects": [
+      "RV-05"
+     ]
+    },
+    {
+     "criterion": "Adversarial: fixture approval and grant helpers are not reachable through HTTP.",
+     "status": "PASS",
+     "evidence": [
+      "inspection: accounting_agent/http.py routes; demo.py",
+      "delivered tests/test_http.py (11 tests, executed)"
+     ]
+    }
+   ]
+  },
+  "T-11": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "A client_sample profile with a null accounting basis yields no eligible journal artifact.",
+     "status": "PASS",
+     "evidence": [
+      "RT11"
+     ]
+    },
+    {
+     "criterion": "The demo profile yields the same results as before and its waivers appear in the export.",
+     "status": "PASS",
+     "evidence": [
+      "RT11",
+      "validation cases"
+     ]
+    }
+   ]
+  },
+  "T-12": {
+   "status": "FAIL",
+   "criteria": [
+    {
+     "criterion": "Probe P07: the newer amount stays current after the late older batch.",
+     "status": "PASS",
+     "evidence": [
+      "RT12a",
+      "maintained P07"
+     ]
+    },
+    {
+     "criterion": "A tombstoned pending authorisation produces no artifact and no blockers.",
+     "status": "FAIL",
+     "evidence": [
+      "RT12d"
+     ],
+     "note": "The old artifact stays governing with status stale and blocks finalization.",
+     "defects": [
+      "RV-03"
+     ]
+    },
+    {
+     "criterion": "FV-C13 holds the settled row and no longer reports the superseded pending row as an open item.",
+     "status": "PASS",
+     "evidence": [
+      "case FV-C13"
+     ]
+    },
+    {
+     "criterion": "Required behaviour: revision or removal of a source with an approved governing artifact raises an exception against that approval.",
+     "status": "FAIL",
+     "evidence": [
+      "RT12d",
+      "RT18"
+     ],
+     "note": "Raised for revision and removal; not for supersession.",
+     "defects": [
+      "RV-01"
+     ]
+    },
+    {
+     "criterion": "Added: supporting evidence is assigned to the period of the item it references and is listed even when it does not match; probe N09.",
+     "status": "PASS",
+     "evidence": [
+      "RT12c",
+      "maintained N09"
+     ]
+    },
+    {
+     "criterion": "Added: opening a period adopts every quarantined source that belongs to it; probe N08.",
+     "status": "PASS",
+     "evidence": [
+      "RT12c",
+      "maintained N08"
+     ]
+    },
+    {
+     "criterion": "Added: quarantined sources are included in the period status passed to close readiness.",
+     "status": "PASS",
+     "evidence": [
+      "RT19a",
+      "case FV-CL04"
+     ]
+    },
+    {
+     "criterion": "Adversarial: later intake for another period leaves a locked period untouched.",
+     "status": "FAIL",
+     "evidence": [
+      "RT12b"
+     ],
+     "defects": [
+      "RV-04"
+     ]
+    }
+   ]
+  },
+  "T-10": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "Issuer cannot approve own mandate.",
+     "status": "PASS",
+     "evidence": [
+      "RT10a"
+     ]
+    },
+    {
+     "criterion": "No run is created for an occurrence without fresh required evidence.",
+     "status": "PASS",
+     "evidence": [
+      "RT10a"
+     ],
+     "note": "Holds when a requirement is declared; an empty predicate is accepted.",
+     "defects": [
+      "RV-11"
+     ]
+    },
+    {
+     "criterion": "Changing a bound rule halts dispatch and is visible.",
+     "status": "PASS",
+     "evidence": [
+      "RT10a"
+     ]
+    },
+    {
+     "criterion": "Existing dedup, cap, expiry and revocation tests pass.",
+     "status": "PASS",
+     "evidence": [
+      "make test"
+     ]
+    },
+    {
+     "criterion": "Added: each occurrence prepares the period named by the period rule, not the calendar date of the slot.",
+     "status": "PASS",
+     "evidence": [
+      "RT10a"
+     ]
+    },
+    {
+     "criterion": "Adversarial: concurrent ticks and restart.",
+     "status": "PASS",
+     "evidence": [
+      "maintained N11, N12",
+      "delivered concurrency tests in make test"
+     ],
+     "note": "Executed through the delivered harness and tests; not re-probed independently."
+    }
+   ]
+  },
+  "T-13": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "A foreign-currency row appears as an unreconciled population item.",
+     "status": "PASS",
+     "evidence": [
+      "RT13"
+     ]
+    },
+    {
+     "criterion": "An opening-balance break blocks every item on that account.",
+     "status": "PASS",
+     "evidence": [
+      "RT13"
+     ]
+    },
+    {
+     "criterion": "Purchases, credits and payments tie separately.",
+     "status": "PASS",
+     "evidence": [
+      "RT13"
+     ]
+    },
+    {
+     "criterion": "FV-C08 and FV-C09 pass with statement inputs.",
+     "status": "PASS",
+     "evidence": [
+      "cases FV-C08, FV-C09"
+     ],
+     "note": "Through the test-only adapter, which keeps the declared count and total defects."
+    },
+    {
+     "criterion": "Substitution detected when line ids are present.",
+     "status": "PASS",
+     "evidence": [
+      "RT13"
+     ]
+    },
+    {
+     "criterion": "Limits disclosed when line ids or the prior statement are absent.",
+     "status": "NOTE",
+     "evidence": [
+      "RT13n"
+     ],
+     "defects": [
+      "RV-13"
+     ]
+    }
+   ]
+  },
+  "T-14": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "Two duplicate candidates with a distinct_purchases disposition and distinct receipts become eligible and cite the disposition.",
+     "status": "PASS",
+     "evidence": [
+      "RT14a",
+      "RG0"
+     ]
+    },
+    {
+     "criterion": "A split disposition whose lines sum exactly becomes eligible; lines that do not sum are refused.",
+     "status": "PASS",
+     "evidence": [
+      "RT14a"
+     ]
+    },
+    {
+     "criterion": "A service actor cannot disposition; a disposition creates no active rule; revoking it re-blocks the item.",
+     "status": "PASS",
+     "evidence": [
+      "RN07",
+      "RT14a"
+     ]
+    },
+    {
+     "criterion": "An inventory step with NO_SOURCE_EVIDENCE blocks its dependants.",
+     "status": "PASS",
+     "evidence": [
+      "RT14f"
+     ]
+    },
+    {
+     "criterion": "Added: contributors are computed per item lineage (N14 flips, N04 stays refused).",
+     "status": "PASS",
+     "evidence": [
+      "RN04",
+      "maintained N14, N04"
+     ]
+    },
+    {
+     "criterion": "Adversarial: external referral or duplicate exclusion never produces a clean approval or a silent loss of ledger effect.",
+     "status": "PASS",
+     "evidence": [
+      "RT14a",
+      "RT14c",
+      "RG0"
+     ]
+    },
+    {
+     "criterion": "Adversarial: a disposition is bound to the facts it decided.",
+     "status": "FAIL",
+     "evidence": [
+      "RT14b",
+      "RT14c",
+      "RT14d"
+     ],
+     "note": "P2 and P3 residuals.",
+     "defects": [
+      "RV-08",
+      "RV-09",
+      "RV-15"
+     ]
+    }
+   ]
+  },
+  "T-15": {
+   "status": "FAIL",
+   "criteria": [
+    {
+     "criterion": "Each approved card item has exactly one proposed entry traceable to its source snapshot.",
+     "status": "PASS",
+     "evidence": [
+      "RT15",
+      "RG0"
+     ]
+    },
+    {
+     "criterion": "A journal citing a source that already has a card-derived entry is held.",
+     "status": "FAIL",
+     "evidence": [
+      "RT15"
+     ],
+     "note": "Held at first; released by any later version of the cited source.",
+     "defects": [
+      "RV-02"
+     ]
+    },
+    {
+     "criterion": "The sum of proposed entries by account for a period is reproducible from the export.",
+     "status": "PASS",
+     "evidence": [
+      "RG0"
+     ]
+    },
+    {
+     "criterion": "FV-J01 to FV-J07 still pass through the shared validator.",
+     "status": "PASS",
+     "evidence": [
+      "cases FV-J01 to FV-J07",
+      "inspection: core.py validate_entry used by both handlers"
+     ]
+    },
+    {
+     "criterion": "Adversarial: signed expense, credit, settlement and transfer effects.",
+     "status": "FAIL",
+     "evidence": [
+      "RT14e",
+      "RG0"
+     ],
+     "note": "Correct for the intended paths; a payment can be dispositioned as a credit to expense.",
+     "defects": [
+      "RV-07"
+     ]
+    }
+   ]
+  },
+  "T-16": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "FV-J08, FV-J09 and FV-J10 report FIXED.",
+     "status": "PASS",
+     "evidence": [
+      "cases"
+     ]
+    },
+    {
+     "criterion": "FV-J01 to FV-J07 still pass.",
+     "status": "PASS",
+     "evidence": [
+      "cases"
+     ]
+    },
+    {
+     "criterion": "Added: separate unit tests for unbound support, duplicate journal and no-effect journal.",
+     "status": "PASS",
+     "evidence": [
+      "tests/test_reviewer_probes.py test_P08_* (three tests, executed)",
+      "RT16"
+     ]
+    }
+   ]
+  },
+  "T-17": {
+   "status": "PASS",
+   "criteria": [
+    {
+     "criterion": "With no rule, FV-C17 and FV-C18 are still held, with policy-unset codes.",
+     "status": "PASS",
+     "evidence": [
+      "cases FV-C17, FV-C18",
+      "RT17"
+     ]
+    },
+    {
+     "criterion": "With an approved one-day window a receipt dated the day before posting matches; two days does not.",
+     "status": "PASS",
+     "evidence": [
+      "RT17"
+     ]
+    },
+    {
+     "criterion": "A proposed rule has no effect.",
+     "status": "PASS",
+     "evidence": [
+      "RT17"
+     ]
+    },
+    {
+     "criterion": "Added: test_P15 asserts behaviour.",
+     "status": "PASS",
+     "evidence": [
+      "inspection and execution of tests/test_reviewer_probes.py test_P15_receipt_tolerance_is_explicit_client_policy"
+     ]
+    },
+    {
+     "criterion": "Adversarial: an item with a receipt exception can be carried or resolved without altering evidence.",
+     "status": "FAIL",
+     "evidence": [
+      "RG0"
+     ],
+     "defects": [
+      "RV-12"
+     ]
+    }
+   ]
+  },
+  "T-18": {
+   "status": "FAIL",
+   "criteria": [
+    {
+     "criterion": "Finalized package hash is identical before and after unrelated later intake.",
+     "status": "PASS",
+     "evidence": [
+      "RT18",
+      "RT12b"
+     ]
+    },
+    {
+     "criterion": "A source revision after finalization leaves the package unchanged and opens a visible exception.",
+     "status": "PASS",
+     "evidence": [
+      "RT18"
+     ]
+    },
+    {
+     "criterion": "A preparer cannot finalize.",
+     "status": "PASS",
+     "evidence": [
+      "RT18"
+     ]
+    },
+    {
+     "criterion": "Added: locking or finalizing is refused, or requires a recorded acknowledgement, while any governing item is stale, disputed or unreviewed (probe N10).",
+     "status": "PASS",
+     "evidence": [
+      "RN01",
+      "RT18",
+      "maintained N10"
+     ]
+    },
+    {
+     "criterion": "Added: no source key has a current governing artifact in more than one period.",
+     "status": "PASS",
+     "evidence": [
+      "RN02"
+     ],
+     "note": "Holds for one key; the same charge under a superseding key is not covered.",
+     "defects": [
+      "RV-01"
+     ]
+    },
+    {
+     "criterion": "T-07 follow-up: a defined recovery path for a mistaken revoke; a bound on re-opening a resolved dispute.",
+     "status": "PASS",
+     "evidence": [
+      "RT18",
+      "maintained N15"
+     ]
+    },
+    {
+     "criterion": "Adversarial: change events against a finalized package are raised only for real changes.",
+     "status": "FAIL",
+     "evidence": [
+      "RT12b"
+     ],
+     "defects": [
+      "RV-04"
+     ]
+    },
+    {
+     "criterion": "Adversarial: a period in which a source was removed can still be finalized.",
+     "status": "FAIL",
+     "evidence": [
+      "RT12d"
+     ],
+     "defects": [
+      "RV-03"
+     ]
+    }
+   ]
+  },
+  "T-19": {
+   "status": "FAIL",
+   "criteria": [
+    {
+     "criterion": "FV-CL02 reports FIXED.",
+     "status": "PASS",
+     "evidence": [
+      "case FV-CL02"
+     ]
+    },
+    {
+     "criterion": "FV-CL04 passes as an executable case.",
+     "status": "PASS",
+     "evidence": [
+      "case FV-CL04"
+     ]
+    },
+    {
+     "criterion": "FV-CL01 still passes.",
+     "status": "PASS",
+     "evidence": [
+      "case FV-CL01"
+     ]
+    },
+    {
+     "criterion": "Adversarial: a label-only document cannot complete reconciliation or tie-out requirements.",
+     "status": "FAIL",
+     "evidence": [
+      "RT19a"
+     ],
+     "note": "Holds for typed requirements; the shipped checklist is untyped.",
+     "defects": [
+      "RV-06"
+     ]
+    },
+    {
+     "criterion": "Adversarial: in-flight preparation race; waiting does not adopt changed sources or policy.",
+     "status": "PASS",
+     "evidence": [
+      "RT19b"
+     ]
+    },
+    {
+     "criterion": "External and final-close holds remain.",
+     "status": "PASS",
+     "evidence": [
+      "RT19a"
+     ]
+    }
+   ]
+  }
+ },
+ "validation_cases": [
+  {
+   "id": "FV-C01",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C02",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C03",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C04",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C05",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C06",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C07",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C08",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C09",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C10",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C11",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C12",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C13",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C14",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C15",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-C16",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C17",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C18",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-C19",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J01",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J02",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J03",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J04",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J05",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J06",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J07",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-J08",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-J09",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-J10",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-CL01",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-CL02",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-R01",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-R02",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-R03",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-R04",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-RC01",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-RC02",
+   "stage": "executable_now_fails_until_fix",
+   "raw_runner_status": "FIXED",
+   "status": "PASS",
+   "detail": "meets required outcome"
+  },
+  {
+   "id": "FV-RC03",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-AP01",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AP02",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AP03",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AP04",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AP05",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AR01",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AR02",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AR03",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-AR04",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-BK01",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-BK02",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-BK03",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-BK04",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-BK05",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-CL03",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-CL04",
+   "stage": "executable_now",
+   "raw_runner_status": "PASS",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "FV-GL01",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-RP01",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-RP02",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-RP03",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-RP04",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  },
+  {
+   "id": "FV-RP05",
+   "stage": "future_module_specification",
+   "raw_runner_status": "DEFERRED-OK",
+   "status": "DEFERRED",
+   "detail": "refused (403)"
+  }
+ ],
+ "validation_case_summary": {
+  "PASS": 29,
+  "FIXED": 10,
+  "DEFERRED-OK": 21
+ },
+ "full_month_and_isolation": [
+  {
+   "criterion": "Every teaching item approved or dispositioned, with service operations only and no database edit.",
+   "status": "PASS",
+   "evidence": [
+    "RG0",
+    "scripts/synthetic_month.py"
+   ],
+   "note": "Eleven approved; TX-007 and TX-011 referred and still held; TX-008 quarantined in unconfigured October and named in the package."
+  },
+  {
+   "criterion": "No weakened blocker.",
+   "status": "PASS",
+   "evidence": [
+    "RG0"
+   ],
+   "note": "No blocker was weakened. TX-009 was cleared by replacing its receipt and J-002 by correcting the journal; the first is defect RV-12."
+  },
+  {
+   "criterion": "Packages finalized by an independent granted human with acknowledgement; period locked.",
+   "status": "PASS",
+   "evidence": [
+    "RG0"
+   ]
+  },
+  {
+   "criterion": "Proposed-entry impact recomputed independently.",
+   "status": "PASS",
+   "evidence": [
+    "RG0"
+   ],
+   "note": "Office supplies +391.00, repairs +200.00, card liability -291.00, cash -300.00; net zero."
+  },
+  {
+   "criterion": "Second client in December on the same engine with no effect on the first.",
+   "status": "PASS",
+   "evidence": [
+    "RG0"
+   ],
+   "note": "Artifacts, package bytes and evidence history unchanged; cross-client review and intake refused; both audit chains verify."
+  }
+ ],
+ "G0_criteria": [
+  {
+   "criterion": "Batch 1 and Batch 2 complete.",
+   "status": "FAIL",
+   "evidence": [
+    "batch_2_tickets"
+   ],
+   "note": "Five Batch 2 tickets have a P1 defect."
+  },
+  {
+   "criterion": "All P0 and P1 current defects fixed with tests.",
+   "status": "FAIL",
+   "evidence": [
+    "FABLE_REVERIFICATION_CORRECTIONS.json"
+   ],
+   "note": "RV-01 to RV-06 open."
+  },
+  {
+   "criterion": "Reviewer cases: zero unexpected, all fail-until-fix cases fixed.",
+   "status": "PASS",
+   "evidence": [
+    "validation_cases"
+   ]
+  },
+  {
+   "criterion": "A full synthetic month reaches approved-or-dispositioned, finalized and locked with no database edits and no weakened blocker.",
+   "status": "PASS",
+   "evidence": [
+    "RG0"
+   ],
+   "note": "With the RV-12 caveat."
+  },
+  {
+   "criterion": "Two synthetic clients in different periods on one engine with no cross-effects.",
+   "status": "PASS",
+   "evidence": [
+    "RG0"
+   ]
+  },
+  {
+   "criterion": "Documentation matches code.",
+   "status": "FAIL",
+   "evidence": [
+    "static checks",
+    "RT19a"
+   ],
+   "note": "Change inventory omits two files (RV-16); close-readiness documents describe typed requirements while the shipped checklist is untyped (RV-06)."
+  }
+ ],
+ "not_run": [
+  {
+   "item": "Browser walkthrough of the demo UI",
+   "reason": "No accounting control depends on it. HTTP boundaries were executed through the delivered tests and inspected."
+  },
+  {
+   "item": "Unverified concerns UC-1 to UC-5",
+   "reason": "Found by reading; listed separately and not counted as defects."
+  }
+ ]
+}

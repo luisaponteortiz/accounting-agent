@@ -1,0 +1,15 @@
+eq-demo: RF-03 EQUIVALENCE {"calls_in_transaction": 22, "calls_autocommit": 1, "mismatches": 0, "current_evaluations_delivered": 55, "current_evaluations_full": 286, "calls_where_shortcut_saved_work": 21, "autocommit_calls_that_reused": 0} wrapped_script_exit=0
+eq-ra-probes: RF-03 EQUIVALENCE {"calls_in_transaction": 4, "calls_autocommit": 0, "mismatches": 0, "current_evaluations_delivered": 4, "current_evaluations_full": 7, "calls_where_shortcut_saved_work": 3, "autocommit_calls_that_reused": 0} wrapped_script_exit=0
+eq-rb-probes: RF-03 EQUIVALENCE {"calls_in_transaction": 15, "calls_autocommit": 0, "mismatches": 0, "current_evaluations_delivered": 15, "current_evaluations_full": 26, "calls_where_shortcut_saved_work": 11, "autocommit_calls_that_reused": 0} wrapped_script_exit=0
+eq-rc-probes: RF-03 EQUIVALENCE {"calls_in_transaction": 31, "calls_autocommit": 0, "mismatches": 0, "current_evaluations_delivered": 29, "current_evaluations_full": 52, "calls_where_shortcut_saved_work": 23, "autocommit_calls_that_reused": 0} wrapped_script_exit=0
+eq-rd-probes: RF-03 EQUIVALENCE {"calls_in_transaction": 57, "calls_autocommit": 0, "mismatches": 0, "current_evaluations_delivered": 54, "current_evaluations_full": 100, "calls_where_shortcut_saved_work": 46, "autocommit_calls_that_reused": 0} wrapped_script_exit=1
+eq-re-probes: RF-03 EQUIVALENCE {"calls_in_transaction": 65, "calls_autocommit": 0, "mismatches": 0, "current_evaluations_delivered": 63, "current_evaluations_full": 120, "calls_where_shortcut_saved_work": 57, "autocommit_calls_that_reused": 0} wrapped_script_exit=0
+eq-re-step-search-older-resent: RF-03 EQUIVALENCE {"calls_in_transaction": 120, "calls_autocommit": 0, "mismatches": 0, "current_evaluations_delivered": 120, "current_evaluations_full": 240, "calls_where_shortcut_saved_work": 120, "autocommit_calls_that_reused": 0} wrapped_script_exit=0
+eq-rf-probes: RF-03 EQUIVALENCE {"calls_in_transaction": 52, "calls_autocommit": 0, "mismatches": 0, "current_evaluations_delivered": 50, "current_evaluations_full": 88, "calls_where_shortcut_saved_work": 38, "autocommit_calls_that_reused": 0} wrapped_script_exit=0
+
+--- demo data, single-threaded (eq-demo)
+demo runs: [('close_readiness', '2026-11', 'prepared_with_exceptions'), ('journal_preparation', '2026-11', 'prepared_with_exceptions'), ('card_preparation', '2026-11', 'prepared_with_exceptions')]
+autocommit period 2026-11 items 13 in_transaction False
+transaction period 2026-11 items 13 in_transaction True
+same result inside and outside a transaction: True
+

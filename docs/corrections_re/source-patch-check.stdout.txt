@@ -1,0 +1,63 @@
+patching file Makefile
+patching file 'accounting_agent/exceptions.py'
+patching file 'accounting_agent/feed_contract.py'
+patching file 'accounting_agent/modules.py'
+patching file 'accounting_agent/service.py'
+patching file 'accounting_agent/source_control.py'
+patching file 'review/fable_rd_feed_contract_probes.py'
+patching file 'scripts/build_feed_contract_adapter.py'
+patching file 'scripts/build_re_review_bundle.py'
+patching file 'scripts/check_product_requirements.py'
+patching file 'scripts/verify_rd_feed_review.py'
+patching file 'scripts/verify_re_bundle.py'
+patching file 'scripts/verify_re_patch.py'
+patching file 'scripts/verify_re_preservation.py'
+patching file 'tests/test_feed_contract.py'
+patching file 'tests/test_product_requirements.py'
+patching file 'tests/test_re_review_gate.py'
+patching file 'tests/test_review_corrections_rd.py'
+patching file Makefile
+patching file 'accounting_agent/exceptions.py'
+patching file 'accounting_agent/feed_contract.py'
+patching file 'accounting_agent/modules.py'
+patching file 'accounting_agent/service.py'
+patching file 'accounting_agent/source_control.py'
+patching file 'review/fable_rd_feed_contract_probes.py'
+patching file 'scripts/build_feed_contract_adapter.py'
+patching file 'scripts/build_re_review_bundle.py'
+patching file 'scripts/check_product_requirements.py'
+patching file 'scripts/verify_rd_feed_review.py'
+patching file 'scripts/verify_re_bundle.py'
+patching file 'scripts/verify_re_patch.py'
+patching file 'scripts/verify_re_preservation.py'
+patching file 'tests/test_feed_contract.py'
+patching file 'tests/test_product_requirements.py'
+patching file 'tests/test_re_review_gate.py'
+patching file 'tests/test_review_corrections_rd.py'
+{
+  "patch_sha256": "3d49d9402ff0b8b67926b3ea45f82771c5030b0e7d035ede9a5ecd42a642a3c2",
+  "dry_run_exit": 0,
+  "apply_exit": 0,
+  "all_changed_code_test_gate_adapter_files_reproduced_exactly": true,
+  "count": 18,
+  "files": [
+    "Makefile",
+    "accounting_agent/exceptions.py",
+    "accounting_agent/feed_contract.py",
+    "accounting_agent/modules.py",
+    "accounting_agent/service.py",
+    "accounting_agent/source_control.py",
+    "review/fable_rd_feed_contract_probes.py",
+    "scripts/build_feed_contract_adapter.py",
+    "scripts/build_re_review_bundle.py",
+    "scripts/check_product_requirements.py",
+    "scripts/verify_rd_feed_review.py",
+    "scripts/verify_re_bundle.py",
+    "scripts/verify_re_patch.py",
+    "scripts/verify_re_preservation.py",
+    "tests/test_feed_contract.py",
+    "tests/test_product_requirements.py",
+    "tests/test_re_review_gate.py",
+    "tests/test_review_corrections_rd.py"
+  ]
+}

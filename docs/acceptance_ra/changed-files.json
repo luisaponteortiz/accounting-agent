@@ -1,0 +1,236 @@
+{
+  "baseline": "exports/FABLE_REVERIFICATION_CORRECTIONS_REVIEW_BUNDLE.zip",
+  "original_test_methods": {
+    "tests/test_platform.py": {
+      "original_methods": 32,
+      "retained": [
+        "test_ambiguous_alias_does_not_choose_arbitrarily",
+        "test_backup_restore_and_portable_export_preserve_scope_and_evidence",
+        "test_change_during_execution_discards_uncommitted_result",
+        "test_changed_inputs_during_export_are_rejected",
+        "test_close_readiness_never_claims_completed_close",
+        "test_concurrent_workers_do_not_duplicate_artifacts",
+        "test_crash_recovery_expired_lease_and_lost_worker_rejected",
+        "test_idempotent_intake_and_manual_runs",
+        "test_instruction_injection_stays_source_data",
+        "test_invalid_scope_components_and_unsafe_backup_destination_rejected",
+        "test_journal_balance_exact_account_period_and_support_controls",
+        "test_late_duplicate_also_invalidates_earlier_review",
+        "test_late_evidence_invalidates_approval_and_new_run_resumes",
+        "test_malformed_module_result_rolls_back_whole_checkpoint",
+        "test_mandate_expiry_rechecked_before_dispatch",
+        "test_mandate_revocation_holds_only_dependent_work",
+        "test_module_dependencies_receive_only_committed_scoped_outputs",
+        "test_money_rejects_float_nonfinite_precision_and_oversize",
+        "test_profile_change_requires_version_and_invalidates_approvals",
+        "test_recurring_occurrence_dedup_caps_and_no_response_not_approval",
+        "test_required_model_review_remains_blocked_without_model",
+        "test_retry_limit_is_persistent",
+        "test_review_role_exact_hash_and_append_only_revoke",
+        "test_scope_denial_and_second_client_uses_same_engine",
+        "test_simulated_recurring_clock_persists_and_worker_uses_it",
+        "test_statement_population_mismatch_blocks_clean_items",
+        "test_teaching_results_are_not_client_policy",
+        "test_unconfigured_and_non_synthetic_profiles_fail_closed",
+        "test_unimplemented_capabilities_are_honest_and_unavailable",
+        "test_workflows_complete_with_application_outbound_calls_denied",
+        "test_workflows_use_shared_runner_and_checkpoint",
+        "test_wrong_company_rejected_before_intake"
+      ],
+      "missing": []
+    },
+    "tests/test_http.py": {
+      "original_methods": 11,
+      "retained": [
+        "test_approval_and_export_black_box",
+        "test_blocked_artifact_approval_fails",
+        "test_health_and_real_worker_results",
+        "test_host_origin_and_scope_override_defenses",
+        "test_invalid_api_requests_have_no_side_effects",
+        "test_loopback_only_and_static_assets_with_csp",
+        "test_mandate_proposal_requires_independent_activation",
+        "test_package_and_disposition_routes_enforce_controls",
+        "test_period_operations_require_independent_human_and_preserve_scope",
+        "test_reviewer_cannot_intake_or_prepare",
+        "test_session_is_explicitly_synthetic_and_authorization_required"
+      ],
+      "missing": []
+    }
+  },
+  "files": [
+    {
+      "file": "AGENTS.md",
+      "status": "modified",
+      "baseline_sha256": "c099b073a48199774ecb8a0e97056dccf1ddf618c6840da661f09eee4b7bae7e",
+      "sha256": "cd37e3a190d3957cddbf2ddf692d287c6ab7324665ab5eb32bb30c4dfb84b77b"
+    },
+    {
+      "file": "DECISIONS.md",
+      "status": "modified",
+      "baseline_sha256": "73f14c2e994aa624d3f834e6b15635f606f8a0debafdbba155c02e6d85615874",
+      "sha256": "56db19ec5b66ab30ec50316dc1f9dcf4fdf76874f30c6bdbaf8a050ebafef107"
+    },
+    {
+      "file": "FABLE_ACCOUNTING_HANDOFF.md",
+      "status": "modified",
+      "baseline_sha256": "a71ca55d39d8046d03a4306122484df306b57f0fbe887dd6e5f0bb884c3da18a",
+      "sha256": "902630e2b24b0142ab3da28ed36f389fefb6a6608507874d52cc834e31665b6e"
+    },
+    {
+      "file": "FABLE_RA_CORRECTIONS_HANDOFF.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "sha256": "01d4efa0bd3ba76ab830887c25ec98c6f2e505c9565967127a0f890048baa291"
+    },
+    {
+      "file": "FABLE_RA_REVIEW_PROMPT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "sha256": "f1d37931df33bbc611c119a55fcfd4257184cc49350af364415e2307e8f1b055"
+    },
+    {
+      "file": "FABLE_RV_CORRECTIONS_HANDOFF.md",
+      "status": "modified",
+      "baseline_sha256": "016a5dfd6d7a7ad71866d0033805b8f56065d4cf2c999d6b2bfdd78a49f8c0c2",
+      "sha256": "b61d0e6e9ae64f96dab4a72d293f2afff2c3f3d3beb456c12ec7197d41353ada"
+    },
+    {
+      "file": "Makefile",
+      "status": "modified",
+      "baseline_sha256": "bc96a00f0ba128568a5461be4f0a2ee1ba1254196806493c22c2c99f5b9dbfb5",
+      "sha256": "82b3149a9cb749faa62081a7f0985eedc7bbaf3ad9cdfbc840703eb90cdf22ec"
+    },
+    {
+      "file": "PROGRESS.md",
+      "status": "modified",
+      "baseline_sha256": "da93fb1478929203d5b2bf6e9f54202abfc35762126b15675ac2dca3f34b7167",
+      "sha256": "17419182eb652453801654e6d289eae7f447a6a99a1ac611902abbc292abe87e"
+    },
+    {
+      "file": "README.md",
+      "status": "modified",
+      "baseline_sha256": "ec79b8463ab15abea34e376927bc27cfaeed8a38b137f5b99a91e89082836eb4",
+      "sha256": "4c3b3d8f910b4f6c4bccabf9ec21b8086e27727fbe24a216bd18c4ff9554b5d3"
+    },
+    {
+      "file": "REVIEW_FREEZE.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "sha256": "e8b1a62657c35e4ce8e7b42e9735db16660940d9be9a306aae07ea3cd15ccefb"
+    },
+    {
+      "file": "accounting_agent/controls.py",
+      "status": "modified",
+      "baseline_sha256": "4918f8955e3e47817ae6240ed1a697d51642781bbc20add3005f861b7fffab2a",
+      "sha256": "d3a694532581c4440bf246572450e016e6b2f05e6bd3d31955c0720c17c94828"
+    },
+    {
+      "file": "accounting_agent/exceptions.py",
+      "status": "modified",
+      "baseline_sha256": "c21af6a4be081fdaf65addc8095b61c036a636bd13e32b99c2a990d7a3cfbe95",
+      "sha256": "747ea3056fbc1bc9d9b411fd44a0f3920f9a742477af3ece14ce83a98c81f14e"
+    },
+    {
+      "file": "accounting_agent/modules.py",
+      "status": "modified",
+      "baseline_sha256": "c22c7c31b9734db92a3f52b34f8b09cc9140a4cbcf234da2dfa99ec86dd885af",
+      "sha256": "7baa22574245d9d868245fbe8ddb77264cb591ce2d0a1bf5c7f3cb421b381b7c"
+    },
+    {
+      "file": "accounting_agent/service.py",
+      "status": "modified",
+      "baseline_sha256": "a9311f3c7b5710fdaf324a8f38375b2431f938b66a5f67f76c24b171cc911e73",
+      "sha256": "e12110da717a331d1cee348f6c400dbf06aaad5ba22eab64fb8454028a402a0f"
+    },
+    {
+      "file": "accounting_agent/source_control.py",
+      "status": "modified",
+      "baseline_sha256": "84e4fadb9ac29b846f2fc4f82f30cb117329d7bcaec244dd83ded95f71296826",
+      "sha256": "d153bf21ca0607eefc99d115159723a97b0287891e85a7135f012727a63d0311"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "status": "modified",
+      "baseline_sha256": "03e656cd6507179806baa5b43635c698d17cdcec7f581a6991408c86cddcdbf6",
+      "sha256": "4cab692c1cacb47ef9d3154a2a852be4dd92b44d9b5a71b076ff31385a2c9e52"
+    },
+    {
+      "file": "docs/CAPABILITY_CONTRACTS.md",
+      "status": "modified",
+      "baseline_sha256": "8ec65bb37f592e9badfa58daa9dbb7392ed2e0f3a850439548b8bb445ac5ea59",
+      "sha256": "79610f2be089b85c44865f0b3ee5ce615023f76195b0d5b8f74669b478cd85a4"
+    },
+    {
+      "file": "docs/CONNECTION_READINESS.md",
+      "status": "modified",
+      "baseline_sha256": "9c5a90dbf40ea0d4a6ddcf2014de89d50ff945887aa0401907a0837b358eabc1",
+      "sha256": "ccef9b2da86caac89406d883985827c67f5a2460a0b67e573b73985c6d88f88c"
+    },
+    {
+      "file": "docs/RA_CORRECTIONS_REPORT.md",
+      "status": "added",
+      "baseline_sha256": null,
+      "sha256": "6f33853463390aaff9199f4a05a4c0ed2b8931cfffeade54e0f7f8b78df791c4"
+    },
+    {
+      "file": "docs/REVERIFICATION_CORRECTIONS_REPORT.md",
+      "status": "modified",
+      "baseline_sha256": "4ae5d86793a9c9a1efd446ba34337e858c217bb275c608e03c6bc0a13a1b2cc7",
+      "sha256": "e30663922ff996792099cc5383850f66573a7590ccfc39b256ca1a73a93dcf76"
+    },
+    {
+      "file": "review/fable_reverification_probes.py",
+      "status": "modified",
+      "baseline_sha256": "b9445e6c0cdd89b6f06943c3a47f53da681990d52defe5a2b24ac34cb6427095",
+      "sha256": "f986e98c364a3daad50d684d148397e9f01c4db66bb9eaad49059f5f52c7e5bf"
+    },
+    {
+      "file": "review/fable_rv_acceptance_probes.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "sha256": "3ef0d7f2002a05a2da67c4457cfc5ea4e216756f201dec8394a0742bd1f11c92"
+    },
+    {
+      "file": "scripts/build_acceptance_adapter.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "sha256": "4805fbab2fc36697d1cc8fe42a767966f2b61ce02e33e53cc1d64b676c2dff5b"
+    },
+    {
+      "file": "scripts/build_change_report.py",
+      "status": "modified",
+      "baseline_sha256": "eb4f0d674a22c32f5d07422e091603a9c5976a307f914bdd9a36498116980a93",
+      "sha256": "259b939b6868e5d8abbc9c16195e90d9d30c1c267523eba4cdf3edca59b6d9e9"
+    },
+    {
+      "file": "scripts/build_reverification_adapter.py",
+      "status": "modified",
+      "baseline_sha256": "e570649d6502e5552ef4534dfc2451ff863f3f36f1845590a1af7cb9ba7b205b",
+      "sha256": "41fb679e956559b7010d99106d2d65b56311d99ef4a52370b00f1699fa5f505d"
+    },
+    {
+      "file": "scripts/build_review_bundle.py",
+      "status": "modified",
+      "baseline_sha256": "f8a21f06324d9aabc3fd947d9926fd354933d1f074083fe8bf927c63bb8db2fe",
+      "sha256": "ef65231b115549c1810ae6dffd101854c195621fde49ccfe96cb811fc64d8c01"
+    },
+    {
+      "file": "tests/test_acceptance_corrections.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "sha256": "79559e6db67a6b8f07abed335adf6f5541a9048b0c4c8c0df1525e97b4d1c0cf"
+    },
+    {
+      "file": "tests/test_acceptance_gate.py",
+      "status": "added",
+      "baseline_sha256": null,
+      "sha256": "51b4896b553b4cf0cafc6ec5949953fb8e557c16f6fd87b83de5399df60d37ba"
+    },
+    {
+      "file": "tests/test_reverification_gate.py",
+      "status": "modified",
+      "baseline_sha256": "8d2ad85eb709ecbac009da7f4d32c30540bfe2b38dd806cd6f9cd1192aceffd6",
+      "sha256": "9bc75823fba1c7f60fd997de4213ca33f1693ae8b2a4ebb29818b79c5299914b"
+    }
+  ]
+}
