@@ -246,11 +246,15 @@ class Qbo:
         return dict(found=True, id=account["Id"], name=account["Name"], type=account.get("AccountType"),
                     balance_cents=cents(account.get("CurrentBalance")), lines=lines)
 
-    def move_to_clearing(self, line_id, kind, txn_id, name=CLEARING):
+    def move_to_clearing(self, line_id, kind, txn_id, name=CLEARING, card=False):
         """Change one recorded payment's bank account to the clearing account, and read it back.
 
         Allowed only for a payment that clearing() paired with the named clearing line, and only
         when that line came from a bank account (not a credit card). Nothing is deleted.
+
+        card=True is a sandbox test the owner has not decided: a charge or bill payment recorded
+        on a credit card is changed into one paid from the clearing account, which also changes
+        its payment type from credit card to cash or check, because the clearing account is a bank account.
         """
         before = self.clearing(name)
         if not before.get("found"):
@@ -260,12 +264,21 @@ class Qbo:
             raise QboError("no clearing line %s" % line_id)
         if not any(r["type"] == kind and r["id"] == str(txn_id) for r in line["recorded"]):
             raise QboError("%s %s is not a recorded payment paired with that line" % (kind, txn_id))
-        if line["bank_account_type"] != "Bank":
+        on_card = line["bank_account_type"] == "Credit Card"
+        if line["bank_account_type"] != "Bank" and not (card and on_card):
             raise QboError("this first build moves payments recorded in bank accounts only; this one is in a %s account" % line["bank_account_type"])
         place = dict(RECORDED_PLACES)[kind]
         record = self._get("%s/%s" % (kind.lower(), txn_id))[kind]
         if (place(record) or {}).get("value") != line["bank_account_id"]:
             raise QboError("%s %s is no longer recorded in %s" % (kind, txn_id, line["bank_account"]))
+        if on_card:
+            if kind == "Purchase" and record.get("PaymentType") == "CreditCard" and not record.get("Credit"):
+                record["PaymentType"] = "Cash"
+            elif kind == "BillPayment" and record.get("PayType") == "CreditCard":
+                record.pop("CreditCardPayment")
+                record.update(PayType="Check", CheckPayment={"BankAccountRef": {}, "PrintStatus": "NotSet"})
+            else:
+                raise QboError("%s %s is not a card charge or a bill paid by card that this test can change" % (kind, txn_id))
         place(record).clear()
         place(record).update(value=before["id"], name=before["name"])
         self._post(kind.lower(), record)

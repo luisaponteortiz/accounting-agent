@@ -32,7 +32,7 @@ class Intuit:
                 {"Id": "B8", "SyncToken": "0", "DocNumber": "8", "TxnDate": "2026-08-01", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}},
                 {"Id": "B10", "SyncToken": "0", "DocNumber": "10", "TxnDate": "2026-10-28", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}},
                 {"Id": "B3", "SyncToken": "0", "DocNumber": "3", "TxnDate": "2026-10-20", "TotalAmt": 75.0, "VendorRef": {"name": "Books by Bessie"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}},
-                {"Id": "B9", "SyncToken": "0", "DocNumber": "9", "TxnDate": "2026-10-10", "TotalAmt": 34.0, "VendorRef": {"name": "Card Vendor"}, "CreditCardPayment": {"CCAccountRef": {"value": "41", "name": "Mastercard"}}}],
+                {"Id": "B9", "SyncToken": "0", "DocNumber": "9", "TxnDate": "2026-10-10", "TotalAmt": 34.0, "VendorRef": {"name": "Card Vendor"}, "PayType": "CreditCard", "CreditCardPayment": {"CCAccountRef": {"value": "41", "name": "Mastercard"}}}],
             "Purchase": [
                 {"Id": "75", "SyncToken": "2", "TxnDate": "2026-11-01", "TotalAmt": 228.75, "PaymentType": "Check", "EntityRef": {"name": "Hicks Hardware"}, "AccountRef": {"value": "35", "name": "Checking"},
                  "Line": [{"Amount": 228.75, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]},
@@ -299,6 +299,38 @@ class QboCase(unittest.TestCase):
         with self.assertRaises(qbo.QboError):
             self.q.move_to_clearing("T1", "BillPayment", "B6", name="No Such Account")
         self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[before:]))      # nothing was sent to the books
+
+    def test_the_card_test_changes_a_bill_paid_by_card_into_one_paid_from_clearing_and_only_when_asked(self):
+        before = self.connect()
+        with self.assertRaises(qbo.QboError):
+            self.q.move_to_clearing("T4", "BillPayment", "B9")                       # not asked for: a card line is refused, as before
+        held = next(r for r in self.intuit.records["BillPayment"] if r["Id"] == "B9")
+        held["PayType"] = "Check"                                                    # not a card payment after all: the test leaves it alone
+        with self.assertRaises(qbo.QboError):
+            self.q.move_to_clearing("T4", "BillPayment", "B9", card=True)
+        self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[before:]))
+        held["PayType"] = "CreditCard"
+        result = self.q.move_to_clearing("T4", "BillPayment", "B9", card=True)
+        self.assertEqual((result["moved"], result["from_account"], result["to_account"]), (True, "Mastercard", "Bank Feed Clearing"))
+        self.assertEqual((held["PayType"], held["CheckPayment"], "CreditCardPayment" in held, held["TotalAmt"], held["TxnDate"], held["VendorRef"]),
+                         ("Check", {"BankAccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "PrintStatus": "NotSet"}, False, 34.0, "2026-10-10", {"name": "Card Vendor"}))
+        line = next(l for l in self.q.clearing()["lines"] if l["id"] == "T4")
+        self.assertEqual([c["id"] for c in line["cleared_by"]], ["B9"])              # the card line is cancelled
+        self.assertEqual(len([c for c in self.intuit.calls[before:] if c[0] == "POST" and c[1] != qbo.TOKEN]), 1)
+
+    def test_the_card_test_changes_a_card_charge_but_not_a_card_refund(self):
+        self.connect()
+        charge = {"Id": "77", "SyncToken": "0", "TxnDate": "2026-10-11", "TotalAmt": 34.0, "PaymentType": "CreditCard", "Credit": True, "EntityRef": {"name": "Card Vendor"},
+                  "AccountRef": {"value": "41", "name": "Mastercard"}, "Line": [{"Amount": 34.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]}
+        self.intuit.records["Purchase"].append(charge)
+        sent = len(self.intuit.calls)
+        with self.assertRaises(qbo.QboError):                                        # a refund on the card is money coming back, not a charge
+            self.q.move_to_clearing("T4", "Purchase", "77", card=True)
+        self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[sent:]))
+        del charge["Credit"]
+        self.assertTrue(self.q.move_to_clearing("T4", "Purchase", "77", card=True)["moved"])
+        self.assertEqual((charge["PaymentType"], charge["AccountRef"], charge["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"]["name"], charge["TotalAmt"]),
+                         ("Cash", {"value": "90", "name": "Bank Feed Clearing"}, "Supplies", 34.0))   # the category it was given stays
 
     def test_a_refused_or_unconfirmed_change_is_reported_as_such(self):
         self.connect()

@@ -193,11 +193,11 @@ class Handler(BaseHTTPRequestHandler):
                 if not s.qbo:
                     return self.send(404, {"error": "QuickBooks keys are not set on this service."})
                 try:
-                    result = s.qbo.move_to_clearing(str(body["line"]), str(body["type"]), str(body["id"]))
+                    result = s.qbo.move_to_clearing(str(body["line"]), str(body["type"]), str(body["id"]), card=body.get("card") is True)
                 except qbo.QboError as problem:
                     s.store.audit("-", person["name"], "sandbox_move_to_clearing_refused", {"type": str(body["type"]), "id": str(body["id"]), "why": str(problem)})
                     return self.send(200, {"error": str(problem)})
-                s.store.audit("-", person["name"], "sandbox_moved_to_clearing", result)
+                s.store.audit("-", person["name"], "sandbox_moved_to_clearing", dict(result, card_test=body.get("card") is True))
                 return self.send(200, result)
             if path == "/api/labs/register":
                 review.allow(person, "mode")
