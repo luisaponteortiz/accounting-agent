@@ -60,9 +60,9 @@ class BaselineBrain:
         recorded = line.get("recorded") or []            # payments of this amount already in the books for this bank account
         if recorded:
             best = next((c for c in recorded if c.get("best_fit")), None)
-            if line.get("bank_account_type") != "Bank":
-                return proposal("already_recorded", "credit card", None, 0.0, candidates=recorded,
-                                why="already recorded in the books; moving a credit card payment to clearing is not built yet")
+            if not line.get("movable", line.get("bank_account_type") == "Bank"):
+                return proposal("already_recorded", "no clearing account", None, 0.0, candidates=recorded,
+                                why="already recorded in the books, and this company has no clearing account for this kind of account to move it to")
             if not best:
                 return proposal("already_recorded", "no clear fit", None, 0.0, candidates=recorded,
                                 why="each recorded payment of this amount fits another bank line better")

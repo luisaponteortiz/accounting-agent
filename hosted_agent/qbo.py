@@ -30,7 +30,7 @@ RECORDED = ("Purchase", "Deposit", "Transfer", "JournalEntry", "BillPayment", "P
 FEED_NAMES = ("BankTransaction", "BankFeed", "BankFeedTransaction", "OlbTransaction", "PendingTransaction", "DownloadedTransaction")
 FEED_PATHS = ("banking/transactions", "bankfeeds", "olb/transactions")
 CLEARING = "Bank Feed Clearing"
-CARD_CLEARING = "Card Feed Clearing"      # a credit card account: QuickBooks will not turn a card charge into a bank payment
+CARD_CLEARING = "Card Feed Clearing"      # D-045: a credit card account, because QuickBooks will not turn a card charge into a bank payment
 MATCH_DAYS = 21
 _deposit_to = lambda t: t.get("DepositToAccountRef")
 def _bill_payment_place(t):
@@ -181,18 +181,21 @@ class Qbo:
         every = self.query("select * from Account maxresults 1000").get("Account", [])
         kinds = {a["Id"]: a.get("AccountType") for a in every}
         card = next((a for a in every if a.get("Name") == CARD_CLEARING and a.get("AccountType") == "Credit Card"), None)
+        clearing_ids = {account["Id"]} | ({card["Id"]} if card else set())      # rules post bank lines to one and card lines to the other
         cents = lambda amount: int(round(float(amount or 0) * 100))
         day = lambda text: date.fromisoformat(text[:10])
         raw = {entity: self.query("select * from %s maxresults 1000" % entity).get(entity, []) for entity, _, _ in RECORDED_PAYMENTS}
         lines, own = [], set()
 
         def add(line_id, when, amount, direction, bank, **more):
+            kind = kinds.get(bank.get("value"))
             lines.append(dict(id=line_id, date=when, amount_cents=cents(amount), direction=direction, bank_account=bank.get("name"),
-                              bank_account_id=bank.get("value"), bank_account_type=kinds.get(bank.get("value")), **more))
+                              bank_account_id=bank.get("value"), bank_account_type=kind,
+                              movable=kind == "Bank" or (kind == "Credit Card" and bool(card)), **more))
 
         def posted_by_rule(entity, t, detail, party):
             """The parts of one record that a rule booked against the clearing account, as one line."""
-            parts = [l for l in t.get("Line", []) if ((l.get(detail) or {}).get("AccountRef") or {}).get("value") == account["Id"]]
+            parts = [l for l in t.get("Line", []) if ((l.get(detail) or {}).get("AccountRef") or {}).get("value") in clearing_ids]
             if not parts:
                 return None
             own.add((entity, t.get("Id")))
@@ -201,9 +204,9 @@ class Qbo:
 
         for t in self.query("select * from Transfer maxresults 1000").get("Transfer", []):
             source, target = t.get("FromAccountRef") or {}, t.get("ToAccountRef") or {}
-            if account["Id"] not in (source.get("value"), target.get("value")):
+            if len(clearing_ids & {source.get("value"), target.get("value")}) != 1:
                 continue
-            direction = "out" if target.get("value") == account["Id"] else "in"     # as the bank account saw it
+            direction = "out" if target.get("value") in clearing_ids else "in"     # as the bank account saw it
             add(t["Id"], t.get("TxnDate"), t.get("Amount"), direction, source if direction == "out" else target,
                 note=t.get("PrivateNote"), payee=None, posted_as="transfer")
         for t in raw["Purchase"]:
@@ -252,15 +255,13 @@ class Qbo:
                     balance_cents=cents(account.get("CurrentBalance")), lines=lines,
                     card=dict(id=card["Id"], name=card["Name"], balance_cents=cents(card.get("CurrentBalance"))) if card else None)
 
-    def move_to_clearing(self, line_id, kind, txn_id, name=CLEARING, card=False):
+    def move_to_clearing(self, line_id, kind, txn_id, name=CLEARING):
         """Change one recorded payment's bank account to the clearing account, and read it back.
 
-        Allowed only for a payment that clearing() paired with the named clearing line, and only
-        when that line came from a bank account (not a credit card). Nothing is deleted.
-
-        card=True is a sandbox test the owner has not decided: a charge or a bill payment recorded
-        on a credit card is moved to the card clearing account, a credit card account, with nothing
-        else changed. (QuickBooks refused to change a card charge into a payment from a bank account.)
+        Allowed only for a payment that clearing() paired with the named clearing line. A payment
+        recorded in a bank account moves to the bank clearing account. A charge or a bill payment
+        recorded on a credit card moves to the card clearing account (D-045), which must exist.
+        Nothing else in the record changes and nothing is deleted.
         """
         before = self.clearing(name)
         if not before.get("found"):
@@ -271,10 +272,10 @@ class Qbo:
         if not any(r["type"] == kind and r["id"] == str(txn_id) for r in line["recorded"]):
             raise QboError("%s %s is not a recorded payment paired with that line" % (kind, txn_id))
         on_card = line["bank_account_type"] == "Credit Card"
-        if line["bank_account_type"] != "Bank" and not (card and on_card):
-            raise QboError("this first build moves payments recorded in bank accounts only; this one is in a %s account" % line["bank_account_type"])
         if on_card and not before["card"]:
-            raise QboError("this company has no credit card account named %s" % CARD_CLEARING)
+            raise QboError("this line is on a credit card and this company has no credit card account named %s to move its payment to" % CARD_CLEARING)
+        if line["bank_account_type"] != "Bank" and not on_card:
+            raise QboError("payments move from bank and credit card accounts only; this one is in a %s account" % line["bank_account_type"])
         target = before["card"] if on_card else before
         place = dict(RECORDED_PLACES)[kind]
         record = self._get("%s/%s" % (kind.lower(), txn_id))[kind]

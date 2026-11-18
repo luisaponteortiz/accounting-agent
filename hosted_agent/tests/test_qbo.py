@@ -293,7 +293,7 @@ class QboCase(unittest.TestCase):
                                 ("T1", "BillPayment", "B7"),       # same amount, another bank account
                                 ("T2", "BillPayment", "B6"),       # another line
                                 ("T9", "BillPayment", "B6"),       # no such line
-                                ("T4", "BillPayment", "B9"),       # a credit card line
+                                ("T4", "Purchase", "B9"),          # the right number, the wrong kind
                                 ("T1", "Invoice", "B6")):          # not a kind of payment
             with self.assertRaises(qbo.QboError, msg=(line, kind, txn)):
                 self.q.move_to_clearing(line, kind, txn)
@@ -301,43 +301,55 @@ class QboCase(unittest.TestCase):
             self.q.move_to_clearing("T1", "BillPayment", "B6", name="No Such Account")
         self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[before:]))      # nothing was sent to the books
 
-    def test_the_card_test_moves_a_bill_paid_by_card_to_the_card_clearing_account_and_only_when_asked(self):
+    def test_a_bill_paid_by_card_moves_to_the_card_clearing_account_when_the_company_has_one(self):
         before = self.connect()
-        with self.assertRaises(qbo.QboError):
-            self.q.move_to_clearing("T4", "BillPayment", "B9")                       # not asked for: a card line is refused, as before
+        card_account = next(a for a in self.intuit.accounts if a["Id"] == "91")
+        card_account["AccountType"] = "Bank"                                         # an account of that name that is not a credit card does not count
+        self.assertEqual((self.line(self.q.clearing(), "T4")["movable"], self.line(self.q.clearing(), "T1")["movable"], self.q.clearing()["card"]), (False, True, None))
+        with self.assertRaises(qbo.QboError) as told:
+            self.q.move_to_clearing("T4", "BillPayment", "B9")
+        self.assertIn("no credit card account named Card Feed Clearing", str(told.exception))
         self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[before:]))
+        card_account["AccountType"] = "Credit Card"
+        self.assertTrue(self.line(self.q.clearing(), "T4")["movable"])
         held = next(r for r in self.intuit.records["BillPayment"] if r["Id"] == "B9")
         kept = json.loads(json.dumps(held))
-        result = self.q.move_to_clearing("T4", "BillPayment", "B9", card=True)
+        sent = len(self.intuit.calls)
+        result = self.q.move_to_clearing("T4", "BillPayment", "B9")
         self.assertEqual((result["moved"], result["from_account"], result["to_account"]), (True, "Mastercard", "Card Feed Clearing"))
         kept.update(CreditCardPayment={"CCAccountRef": {"value": "91", "name": "Card Feed Clearing"}}, SyncToken="1")
         self.assertEqual(held, kept)                                                 # still a bill paid by card; only the card account changed
         got = self.q.clearing()
-        line = next(l for l in got["lines"] if l["id"] == "T4")
-        self.assertEqual(([c["id"] for c in line["cleared_by"]], got["card"]["name"]), (["B9"], "Card Feed Clearing"))   # the card line is cancelled
+        self.assertEqual(([c["id"] for c in self.line(got, "T4")["cleared_by"]], got["card"]["name"]), (["B9"], "Card Feed Clearing"))   # the card line is cancelled
         self.intuit.transfers.append({"Id": "T0", "TxnDate": "2026-10-10", "Amount": 34.0, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}})
         lines = {l["id"]: l for l in self.q.clearing()["lines"]}
         self.assertEqual(([c["id"] for c in lines["T4"]["cleared_by"]], lines["T0"]["cleared_by"]), (["B9"], []))   # a bank line of the same amount is not cancelled from the card account
-        self.assertEqual(len([c for c in self.intuit.calls[before:] if c[0] == "POST" and c[1] != qbo.TOKEN]), 1)
+        self.assertEqual(len([c for c in self.intuit.calls[sent:] if c[0] == "POST" and c[1] != qbo.TOKEN]), 1)
 
-    def test_the_card_test_moves_a_card_charge_but_not_a_card_refund_and_needs_the_card_clearing_account(self):
+    def test_a_card_charge_moves_but_a_card_refund_does_not(self):
         self.connect()
         charge = {"Id": "77", "SyncToken": "0", "TxnDate": "2026-10-11", "TotalAmt": 34.0, "PaymentType": "CreditCard", "Credit": True, "EntityRef": {"name": "Card Vendor"},
                   "AccountRef": {"value": "41", "name": "Mastercard"}, "Line": [{"Amount": 34.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]}
         self.intuit.records["Purchase"].append(charge)
         sent = len(self.intuit.calls)
         with self.assertRaises(qbo.QboError):                                        # a refund on the card is money coming back, not a charge
-            self.q.move_to_clearing("T4", "Purchase", "77", card=True)
-        del charge["Credit"]
-        card_account = next(a for a in self.intuit.accounts if a["Id"] == "91")
-        card_account["AccountType"] = "Bank"                                         # an account of that name that is not a credit card does not count
-        with self.assertRaises(qbo.QboError):
-            self.q.move_to_clearing("T4", "Purchase", "77", card=True)
+            self.q.move_to_clearing("T4", "Purchase", "77")
         self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[sent:]))
-        card_account["AccountType"] = "Credit Card"
-        self.assertTrue(self.q.move_to_clearing("T4", "Purchase", "77", card=True)["moved"])
+        del charge["Credit"]
+        self.assertTrue(self.q.move_to_clearing("T4", "Purchase", "77")["moved"])
         self.assertEqual((charge["PaymentType"], charge["AccountRef"], charge["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"]["name"], charge["TotalAmt"]),
                          ("CreditCard", {"value": "91", "name": "Card Feed Clearing"}, "Supplies", 34.0))   # still a card charge, with the category it was given
+
+    def test_a_card_line_that_a_rule_posted_to_the_card_clearing_account_is_a_clearing_line(self):
+        self.connect()
+        self.intuit.records["Purchase"].append({"Id": "23", "SyncToken": "0", "TxnDate": "2026-11-12", "TotalAmt": 12.0, "PaymentType": "CreditCard", "AccountRef": {"value": "41", "name": "Mastercard"},
+                                                "Line": [{"Amount": 12.0, "Description": "AMZN MKTP", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})
+        self.intuit.transfers.append({"Id": "T8", "TxnDate": "2026-11-13", "Amount": 9.0, "FromAccountRef": {"value": "41", "name": "Mastercard"}, "ToAccountRef": {"value": "91", "name": "Card Feed Clearing"}})
+        self.intuit.transfers.append({"Id": "T9", "TxnDate": "2026-11-13", "Amount": 5.0, "FromAccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "ToAccountRef": {"value": "91", "name": "Card Feed Clearing"}})
+        lines = {l["id"]: l for l in self.q.clearing()["lines"]}
+        self.assertEqual((lines["P23"]["bank_account"], lines["P23"]["amount_cents"], lines["P23"]["direction"], lines["P23"]["note"], lines["P23"]["recorded"]), ("Mastercard", 1200, "out", "AMZN MKTP", []))
+        self.assertEqual((lines["T8"]["bank_account"], lines["T8"]["direction"]), ("Mastercard", "out"))
+        self.assertNotIn("T9", lines)                                                # a transfer between the two clearing accounts is nobody's bank line
 
     def test_a_refused_or_unconfirmed_change_is_reported_as_such(self):
         self.connect()

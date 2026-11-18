@@ -10,7 +10,8 @@ categorize   the line's own record gets its real category and payee in place
 match        an open bill or invoice of the same amount is paid from, or into,
              the clearing account
 move         a payment that was already recorded in the bank account is moved
-             to the clearing account (D-043)
+             to the clearing account (D-043); one recorded on a credit card
+             is moved to the card clearing account (D-045)
 transfer     not built for QuickBooks yet
 
 Every call names the company and is refused unless it is the connected one.
@@ -55,7 +56,7 @@ class QboLedger:
         signed = -line["amount_cents"] if line["direction"] == "out" else line["amount_cents"]
         return dict(id=line["id"], date=line["date"], amount_cents=signed, description=line["note"] or "", bank_account=line["bank_account"],
                     status="pending", payee=line["payee"], posted_as=line["posted_as"], bank_account_type=line["bank_account_type"],
-                    recorded=line["recorded"])
+                    movable=line["movable"], recorded=line["recorded"])
 
     def _pending(self, feed_id):
         got = self._lines()
@@ -126,14 +127,14 @@ class QboLedger:
     @guarded
     def history(self, realm_id):
         """How the books treated payees before: recorded expenses and deposits that carry a category of their own."""
-        clearing = next((a["Id"] for a in self._all("Account") if a.get("Name") == self.clearing), None)
+        clearing = {a["Id"] for a in self._all("Account") if a.get("Name") in (self.clearing, CARD_CLEARING)}
         out = []
         for kind, detail, sign, party in (("Purchase", "AccountBasedExpenseLineDetail", -1, lambda t, d: t.get("EntityRef")),
                                           ("Deposit", "DepositLineDetail", 1, lambda t, d: d.get("Entity"))):
             for t in self._all(kind):
                 part = next((l for l in t.get("Line", []) if (l.get(detail) or {}).get("AccountRef")), None)
                 bank = t.get("AccountRef") if kind == "Purchase" else t.get("DepositToAccountRef")
-                if not part or part[detail]["AccountRef"].get("value") == clearing or (bank or {}).get("value") == clearing:
+                if not part or part[detail]["AccountRef"].get("value") in clearing or (bank or {}).get("value") in clearing:
                     continue
                 vendor = (party(t, part[detail]) or {}).get("name")
                 out.append(dict(id="%s %s" % (kind, t.get("Id")), date=t.get("TxnDate"), amount_cents=sign * cents(t.get("TotalAmt")), bank_account=(bank or {}).get("name"),
@@ -183,7 +184,8 @@ class QboLedger:
         got, line = self._pending(feed_id)
         target = self._account(account)
         kind, detail, record = self._record_of(feed_id)
-        parts = [l for l in record.get("Line", []) if ((l.get(detail) or {}).get("AccountRef") or {}).get("value") == got["id"]]
+        held = (got["id"], (got.get("card") or {}).get("id"))                # a card line sits in the card clearing account
+        parts = [l for l in record.get("Line", []) if ((l.get(detail) or {}).get("AccountRef") or {}).get("value") in held]
         if not parts:
             raise LedgerError("%s %s is no longer booked against %s" % (kind, record.get("Id"), self.clearing))
         add = ("Vendor" if kind == "Purchase" else "Customer") if self.add_payees and by_person else None   # never on a standing approval

@@ -89,7 +89,7 @@ class QboLedgerCase(unittest.TestCase):
         self.assertEqual((told["T1"][:2], got["T1"]["action"]["txn_id"], got["T1"]["confidence"]), (("already_recorded", "move"), "B6", 0.7))   # two candidates: a person looks
         self.assertIn("low confidence", got["T1"]["reasons"])
         self.assertEqual(told["T2"][:2], ("no_bank_text", None))
-        self.assertEqual(told["T4"][:2], ("already_recorded", None))    # a credit card line: not built, so no proposal
+        self.assertEqual((told["T4"][:2], got["T4"]["action"]["txn_id"], got["T4"]["confidence"]), (("already_recorded", "move"), "B9", 0.97))   # a card line: to the card clearing account (D-045)
         self.assertTrue(all(p["status"] == "waiting" for p in got.values()))   # nothing posts without a person
 
     def test_an_approved_category_changes_only_the_category_and_payee_and_is_read_back(self):
@@ -134,6 +134,39 @@ class QboLedgerCase(unittest.TestCase):
             self.books.categorize(REALM, "D30", "Utilities", None, "")
         self.assertEqual(self.writes(sent), [])
 
+    def test_a_recorded_card_charge_is_moved_to_the_card_clearing_account_on_approval(self):
+        before = self.connect()
+        got = self.run_agent()
+        self.assertEqual(review.decide(self.store, self.books, OWNER, got["T4"]["id"], "approve"), "posted")
+        held = self.record("BillPayment", "B9")
+        self.assertEqual((self.writes(before), held["CreditCardPayment"]["CCAccountRef"], held["PayType"]), ([("POST", "billpayment")], {"value": "91", "name": "Card Feed Clearing"}, "CreditCard"))
+        posting = self.store.one("SELECT * FROM postings WHERE proposal_id=?", (got["T4"]["id"],))
+        self.assertEqual((posting["verified"], posting["ledger_ref"]), (1, "BillPayment B9"))
+        self.assertNotIn("T4", [i["id"] for i in self.books.pending_feed(REALM)])
+
+    def test_without_a_card_clearing_account_a_recorded_card_charge_goes_to_a_person_with_the_reason(self):
+        before = self.connect()
+        next(a for a in self.intuit.accounts if a["Id"] == "91")["Name"] = "Some Other Card"
+        got = self.run_agent()
+        self.assertEqual((got["T4"]["item_class"], got["T4"]["action"], got["T4"]["queue"]), ("already_recorded", None, "exception"))
+        self.assertIn("no clearing account", got["T4"]["evidence"]["why"])
+        with self.assertRaises(LedgerError):
+            self.books.move(REALM, "T4", "BillPayment", "B9")
+        self.assertEqual(self.writes(before), [])
+
+    def test_a_card_line_in_the_card_clearing_account_is_worked_like_any_other(self):
+        before = self.connect()
+        self.intuit.records["Purchase"].append({"Id": "23", "SyncToken": "0", "TxnDate": "2026-11-12", "TotalAmt": 12.0, "PaymentType": "CreditCard", "AccountRef": {"value": "41", "name": "Mastercard"},
+                                                "Line": [{"Amount": 12.0, "Description": "AMZN MKTP", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})
+        feed = {i["id"]: i for i in self.books.pending_feed(REALM)}
+        self.assertEqual((feed["P23"]["amount_cents"], feed["P23"]["bank_account"], feed["P23"]["description"]), (-1200, "Mastercard", "AMZN MKTP"))
+        self.assertFalse([h for h in self.books.history(REALM) if h["id"] == "Purchase 23"])     # waiting in clearing: not history
+        self.assertEqual(self.books.categorize(REALM, "P23", "Supplies", None, ""), "Purchase 23")
+        now = self.record("Purchase", "23")
+        self.assertEqual((now["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"], now["AccountRef"]["name"], now["PaymentType"]), ({"value": "60", "name": "Supplies"}, "Mastercard", "CreditCard"))
+        self.assertEqual((self.writes(before), self.books.read_back(REALM, "P23")["posted"]["account"]), ([("POST", "purchase")], "Supplies"))
+        self.assertTrue([h for h in self.books.history(REALM) if h["id"] == "Purchase 23"])
+
     def test_a_memo_already_on_the_record_is_kept(self):
         self.connect()
         self.record("Purchase", "21")["PrivateNote"] = "Memo from the bank"
@@ -146,7 +179,7 @@ class QboLedgerCase(unittest.TestCase):
         refused = (lambda: self.books.categorize(REALM, "P21", "No Such Account", None, ""),
                    lambda: self.books.categorize(REALM, "P21", "Bank Feed Clearing", None, ""),          # back into clearing is no treatment
                    lambda: self.books.categorize(REALM, "P21", "Card Feed Clearing", None, ""),
-                   lambda: self.books.move(REALM, "T4", "BillPayment", "B9"),                            # a card line: the agent's own run does not move it
+                   lambda: self.books.match(REALM, "T4", "bill", "B100"),                                # paying an open bill from a card line is not built
                    lambda: self.books.categorize(REALM, "P21", "Utilities", "A Vendor Nobody Added", ""),
                    lambda: self.books.categorize(REALM, "T2", "Utilities", None, ""),                    # posted as a transfer: it has no category to change
                    lambda: self.books.categorize(REALM, "P99", "Utilities", None, ""),
