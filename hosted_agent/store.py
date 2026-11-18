@@ -6,12 +6,13 @@ import threading
 from datetime import datetime, timezone
 
 MODES = ("prepare_only", "post_approved", "post_standing")
+FEEDS = ("direct", "handoff")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS clients(
  client_id TEXT PRIMARY KEY, name TEXT NOT NULL, realm_id TEXT NOT NULL UNIQUE,
  mode TEXT NOT NULL, auto_limit_cents INTEGER NOT NULL, spot_check_percent INTEGER NOT NULL,
- created TEXT NOT NULL);
+ created TEXT NOT NULL, feed TEXT NOT NULL DEFAULT 'direct');
 CREATE TABLE IF NOT EXISTS runs(
  id INTEGER PRIMARY KEY AUTOINCREMENT, client_id TEXT NOT NULL REFERENCES clients(client_id),
  job TEXT NOT NULL, started TEXT NOT NULL, finished TEXT, status TEXT NOT NULL, summary TEXT NOT NULL);
@@ -36,6 +37,15 @@ CREATE TABLE IF NOT EXISTS postings(
  proposal_id INTEGER NOT NULL REFERENCES proposals(id), realm_id TEXT NOT NULL, how TEXT NOT NULL,
  action TEXT NOT NULL, ledger_ref TEXT, read_back TEXT NOT NULL, verified INTEGER NOT NULL,
  actor TEXT NOT NULL, created TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS feed_lines(
+ client_id TEXT NOT NULL REFERENCES clients(client_id), item_key TEXT NOT NULL, item TEXT NOT NULL,
+ status TEXT NOT NULL, received TEXT NOT NULL, carrier TEXT NOT NULL, PRIMARY KEY(client_id, item_key));
+CREATE TABLE IF NOT EXISTS carrier_statements(
+ client_id TEXT PRIMARY KEY REFERENCES clients(client_id), company TEXT NOT NULL, stated TEXT NOT NULL, carrier TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS instructions(
+ id INTEGER PRIMARY KEY AUTOINCREMENT, client_id TEXT NOT NULL REFERENCES clients(client_id),
+ proposal_id INTEGER NOT NULL REFERENCES proposals(id), action TEXT NOT NULL, how TEXT NOT NULL, actor TEXT NOT NULL,
+ status TEXT NOT NULL, created TEXT NOT NULL, collected TEXT, done TEXT);
 CREATE TABLE IF NOT EXISTS audit(
  id INTEGER PRIMARY KEY AUTOINCREMENT, client_id TEXT NOT NULL, actor TEXT NOT NULL,
  event TEXT NOT NULL, payload TEXT NOT NULL, prev_hash TEXT NOT NULL, hash TEXT NOT NULL,
@@ -98,12 +108,16 @@ class Store:
 
     # -- clients ---------------------------------------------------------
     def add_client(self, client_id, name, realm_id, mode="prepare_only", auto_limit_cents=250000,
-                   spot_check_percent=10, actor="setup"):
+                   spot_check_percent=10, actor="setup", feed="direct"):
+        """feed: 'direct' (the agent reads and posts through its own connection) or 'handoff'
+        (a carrier hands the bank feed in and posts what was approved; see handoff.py)."""
         if mode not in MODES:
             raise ValueError("unknown mode " + mode)
-        self.run("INSERT INTO clients VALUES(?,?,?,?,?,?,?)",
-                 (client_id, name, str(realm_id), mode, auto_limit_cents, spot_check_percent, now()))
-        self.audit(client_id, actor, "client_added", {"name": name, "realm_id": str(realm_id), "mode": mode})
+        if feed not in FEEDS:
+            raise ValueError("unknown feed " + feed)
+        self.run("INSERT INTO clients(client_id,name,realm_id,mode,auto_limit_cents,spot_check_percent,created,feed) VALUES(?,?,?,?,?,?,?,?)",
+                 (client_id, name, str(realm_id), mode, auto_limit_cents, spot_check_percent, now(), feed))
+        self.audit(client_id, actor, "client_added", {"name": name, "realm_id": str(realm_id), "mode": mode, "feed": feed})
 
     def client(self, client_id):
         found = self.one("SELECT * FROM clients WHERE client_id=?", (client_id,))

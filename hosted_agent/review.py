@@ -55,7 +55,7 @@ def decide(store, ledger, person, proposal_id, verdict, final_action=None, note=
         ok = execute(store, ledger, proposal_id, action, "approved" if verdict == "approve" else "changed", person["name"])
     except Blocked as stop:
         raise Refused(str(stop))
-    return "posted" if ok else "failed"
+    return "sent" if ok is None else "posted" if ok else "failed"
 
 
 def record(store, client_id):
@@ -128,7 +128,7 @@ def state(store, client_id):
     """Everything the review page shows for ONE client. Never mixes clients."""
     client = store.client(client_id)
     return dict(
-        client=client, waiting=store.proposals(client_id, "waiting"), record=record(store, client_id),
+        client=client, waiting=store.proposals(client_id, "waiting"), sent=store.proposals(client_id, "sent"), record=record(store, client_id),
         standing=store.active_standing(client_id),
         runs=store.rows("SELECT id,job,started,finished,status,summary FROM runs WHERE client_id=? ORDER BY id DESC LIMIT 10", (client_id,)),
         posted=store.rows("""SELECT po.id, po.how, po.actor, po.created, po.ledger_ref, po.verified, p.item, po.action
@@ -142,5 +142,5 @@ def roster(store):
     for c in store.clients():
         waiting = store.rows("SELECT queue, COUNT(*) n FROM proposals WHERE client_id=? AND status='waiting' GROUP BY queue", (c["client_id"],))
         last = store.one("SELECT started,status,summary FROM runs WHERE client_id=? ORDER BY id DESC LIMIT 1", (c["client_id"],))
-        out.append(dict(client_id=c["client_id"], name=c["name"], mode=c["mode"], waiting={w["queue"]: w["n"] for w in waiting}, last_run=last))
+        out.append(dict(client_id=c["client_id"], name=c["name"], mode=c["mode"], feed=c["feed"], waiting={w["queue"]: w["n"] for w in waiting}, last_run=last))
     return out

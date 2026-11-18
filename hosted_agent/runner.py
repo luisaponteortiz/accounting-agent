@@ -36,6 +36,14 @@ def execute(store, ledger, proposal_id, action, how, actor):
     if stops:
         raise Blocked("; ".join(stops))
     realm, feed_id = client["realm_id"], p["item"]["id"]
+    if getattr(ledger, "defers", lambda realm_id: False)(realm):
+        # This client's bank feed is worked by a carrier (handoff.py). Nothing is written here:
+        # the approved treatment waits for the carrier, and counts as posted only after its read-back.
+        store.run("INSERT INTO instructions(client_id,proposal_id,action,how,actor,status,created) VALUES(?,?,?,?,?,?,?)",
+                  (p["client_id"], proposal_id, dumps(action), how, actor, "waiting", now()))
+        store.run("UPDATE proposals SET status='sent', queue=NULL WHERE id=?", (proposal_id,))
+        store.audit(p["client_id"], actor, "sent_to_carrier", {"proposal": proposal_id, "how": how})
+        return None
     try:
         if action["kind"] == "categorize":
             ref = ledger.categorize(realm, feed_id, action["account"], action.get("vendor"), action.get("memo", ""))
@@ -49,16 +57,25 @@ def execute(store, ledger, proposal_id, action, how, actor):
         error = None
     except LedgerError as problem:
         ref, back, error = None, {}, str(problem)
-    verified = bool(ref) and verify(p["item"], action, back, ref)
+    return settle(store, p, action, how, actor, ref, back, error)
+
+
+def settle(store, p, action, how, actor, ref, back, error, via=None):
+    """Record one posting attempt. It counts as posted only if the read-back matches what was approved."""
+    proposal_id = p["id"]
+    verified = bool(ref) and not error and verify(p["item"], action, back, ref)
     store.run("INSERT INTO postings(client_id,proposal_id,realm_id,how,action,ledger_ref,read_back,verified,actor,created) VALUES(?,?,?,?,?,?,?,?,?,?)",
-              (p["client_id"], proposal_id, realm, how, dumps(action), ref, dumps(back), int(verified), actor, now()))
+              (p["client_id"], proposal_id, store.client(p["client_id"])["realm_id"], how, dumps(action), ref, dumps(back), int(verified), actor, now()))
+    detail = {"proposal": proposal_id, "how": how, "ledger_ref": ref}
+    if via:
+        detail["carrier"] = via
     if verified:
         store.run("UPDATE proposals SET status='posted', queue=NULL, closed=? WHERE id=?", (now(), proposal_id))
-        store.audit(p["client_id"], actor, "posted", {"proposal": proposal_id, "how": how, "ledger_ref": ref})
+        store.audit(p["client_id"], actor, "posted", detail)
     else:
         reason = "posting failed: " + error if error else "read-back did not match what was sent"
         store.run("UPDATE proposals SET status='waiting', queue='exception', reasons=? WHERE id=?", (dumps([reason]), proposal_id))
-        store.audit(p["client_id"], actor, "posting_not_verified", {"proposal": proposal_id, "how": how, "ledger_ref": ref, "reason": reason})
+        store.audit(p["client_id"], actor, "posting_not_verified", dict(detail, reason=reason))
     return verified
 
 
@@ -145,7 +162,7 @@ def run_client(store, ledger, brain, client_id, job="bank_feed"):
     started = now()
     run_id = store.run("INSERT INTO runs(client_id,job,started,status,summary) VALUES(?,?,?,?,?)",
                        (client_id, job, started, "running", "{}"))
-    counts = dict(read=0, new=0, auto_posted=0, spot_check=0, prepared=0, exception=0, failed=0, observed=0)
+    counts = dict(read=0, new=0, auto_posted=0, sent=0, spot_check=0, prepared=0, exception=0, failed=0, observed=0)
     try:
         client, company = preflight(store, ledger, client_id)
     except Blocked as stop:
@@ -177,7 +194,7 @@ def run_client(store, ledger, brain, client_id, job="bank_feed"):
         except Blocked as stop:
             store.run("UPDATE proposals SET queue='exception', reasons=? WHERE id=?", (dumps([str(stop)]), proposal_id))
             ok = False
-        counts["auto_posted" if ok else "failed"] += 1
+        counts["sent" if ok is None else "auto_posted" if ok else "failed"] += 1
     store.run("UPDATE runs SET finished=?, status='finished', summary=? WHERE id=?", (now(), dumps(counts), run_id))
     store.audit(client_id, AGENT, "run_finished", dict(counts, run=run_id))
     return dict(run_id=run_id, status="finished", **counts)
