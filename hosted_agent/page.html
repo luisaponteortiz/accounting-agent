@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Accounting agent review</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1c2430;--muted:#667085;--line:#dcd9d0;--accent:#1f5f4a;--warn:#9a5b00;--bad:#a32020}
+@media(prefers-color-scheme:dark){:root{--bg:#14181d;--card:#1c2229;--ink:#e8eaed;--muted:#98a2b3;--line:#2e3742;--accent:#6fcfae;--warn:#e0a94a;--bad:#f08a8a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif}
+header{padding:10px 16px;border-bottom:1px solid var(--line);display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.dev{background:var(--warn);color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600}
+main{display:grid;grid-template-columns:260px 1fr;gap:16px;padding:16px;max-width:1300px;margin:auto}
+@media(max-width:800px){main{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:14px;overflow-x:auto}
+h2{font-size:15px;margin:0 0 8px}h3{font-size:13px;margin:14px 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px}td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+button,select,input{font:inherit;padding:4px 9px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+button{cursor:pointer}button.go{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:600}
+.client{display:block;width:100%;text-align:left;margin-bottom:6px}.client.on{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.muted{color:var(--muted);font-size:13px}.why{color:var(--warn);font-size:13px}.bad{color:var(--bad)}.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+#msg{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:6px;display:none;max-width:90vw}
+</style></head><body>
+<header><strong>Accounting agent</strong><span class="dev">DEVELOPMENT BUILD: FICTIONAL COMPANIES</span><span class="muted" id="me"></span></header>
+<main><aside><div class="card"><h2>Clients</h2><div id="clients"></div><p class="muted">Names and counts only. Open a client to see its items.</p></div></aside>
+<section id="view"><div class="card">Choose a client.</div></section></main><div id="msg"></div>
+<script>
+const $=s=>document.querySelector(s),esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=c=>(c<0?'-':'')+'$'+(Math.abs(c)/100).toLocaleString('en-US',{minimumFractionDigits:2});
+let me=null,current=null,S=null;
+const say=t=>{const m=$('#msg');m.textContent=t;m.style.display='block';clearTimeout(say.t);say.t=setTimeout(()=>m.style.display='none',6000)};
+const get=u=>fetch(u).then(r=>r.json());
+const post=(u,b)=>fetch(u,{method:'POST',headers:{'Content-Type':'application/json','X-Requested-With':'accounting-agent'},body:JSON.stringify(b)}).then(r=>r.json());
+const treat=a=>!a?'<span class="muted">no proposal</span>':a.kind==='categorize'?'Categorize to <b>'+esc(a.account)+'</b>'+(a.vendor?' ('+esc(a.vendor)+')':''):a.kind==='match'?'Match to open '+esc(a.txn_type)+' <b>'+esc(a.txn_id)+'</b>':'Transfer with <b>'+esc(a.other_account)+'</b>';
+const QUEUES={exception:'Exceptions: need your decision',spot_check:'Spot checks of approved classes',prepared:'Prepared: would be routine once approved'};
+async function roster(){const r=await get('/api/roster');me=r.person;$('#me').textContent=me.name+' ('+me.role+')';
+ $('#clients').innerHTML=r.clients.map(c=>{const w=Object.values(c.waiting).reduce((a,b)=>a+b,0);
+  return `<button class="client ${c.client_id===current?'on':''}" data-c="${esc(c.client_id)}">${esc(c.name)}<br><span class="muted">${w} waiting · ${esc(c.mode.replace(/_/g,' '))}</span></button>`}).join('');
+ document.querySelectorAll('.client').forEach(b=>b.onclick=()=>{current=b.dataset.c;load()})}
+async function load(){await roster();if(!current)return;S=await get('/api/state?client='+encodeURIComponent(current));const c=S.client,owner=me.role==='owner';
+ let h=`<div class="card"><h2>${esc(c.name)}</h2><div class="bar"><span>Mode:</span><select id="mode" ${owner?'':'disabled'}>${['prepare_only','post_approved','post_standing'].map(m=>`<option value="${m}" ${m===c.mode?'selected':''}>${m.replace(/_/g,' ')}</option>`).join('')}</select>
+ ${owner?'<button id="run">Run the agent now</button>':''}<span class="muted">Unattended limit ${money(c.auto_limit_cents)} · spot check ${c.spot_check_percent}% · audit trail ${S.audit_ok?'intact':'<b class="bad">BROKEN</b>'}</span></div></div>`;
+ for(const q of Object.keys(QUEUES)){const items=S.waiting.filter(p=>p.queue===q);if(!items.length)continue;
+  h+=`<div class="card"><h2>${QUEUES[q]} (${items.length})</h2><table><tr><th></th><th>Date</th><th>Bank line</th><th>Amount</th><th>Proposed</th><th>Why it is here</th></tr>`+
+  items.map(p=>`<tr><td><input type="checkbox" class="pick" value="${p.id}"></td><td class="n">${esc(p.item.date)}</td><td>${esc(p.item.description)}<br><span class="muted">${esc(p.item.bank_account)} · ${esc(p.item_class.replace(/_/g,' '))}</span></td><td class="n">${money(p.item.amount_cents)}</td><td>${treat(p.action)}</td><td class="why">${p.reasons.map(esc).join('<br>')}</td></tr>`).join('')+'</table></div>'}
+ if(S.waiting.length)h+=`<div class="card"><h2>Decide the ticked items</h2><div class="bar"><button class="go" id="ok">Approve as proposed</button>
+  <span>or change to</span><select id="acct">${S.accounts.map(a=>`<option>${esc(a)}</option>`).join('')}</select><input id="vend" placeholder="vendor (optional)" size="16"><button id="chg">Post with this account</button></div>
+  <div class="bar"><input id="note" placeholder="reason (required to reject)" size="40"><button id="rej">Reject</button></div></div>`;
+ else h+='<div class="card">Nothing is waiting for this client.</div>';
+ h+=`<div class="card"><h2>Standing approvals</h2>${S.standing.length?'<table><tr><th>Class</th><th>Covers</th><th>Up to</th><th>Granted</th><th></th></tr>'+S.standing.map(s=>`<tr><td>${esc(s.item_class.replace(/_/g,' '))}</td><td>${esc(s.class_key)}</td><td class="n">${money(s.max_amount_cents)}</td><td>${esc(s.granted_by)}<br><span class="muted">${esc(s.granted_at)}</span></td><td>${owner?`<button class="end" data-id="${s.id}">End</button>`:''}</td></tr>`).join('')+'</table>':'<p class="muted">None. Nothing posts for this client without a decision on each item.</p>'}
+ <h3>The record: how often people agreed with the agent</h3>${S.record.length?'<table><tr><th>Class</th><th>Covers</th><th>Agreed</th><th>In a row</th><th></th></tr>'+S.record.map((r,i)=>`<tr><td>${esc(r.item_class.replace(/_/g,' '))}</td><td>${esc(r.class_key)}</td><td class="n">${r.agreed} of ${r.decided}</td><td class="n">${r.streak}</td><td>${r.has_standing?'<span class="muted">has approval</span>':r.eligible&&owner?`<button class="grant go" data-i="${i}">Grant standing approval</button>`:r.eligible?'eligible':''}</td></tr>`).join('')+'</table>':'<p class="muted">No decisions recorded yet.</p>'}</div>`;
+ h+=`<div class="card"><h2>Posted to the books</h2>${S.posted.length?'<table><tr><th>When</th><th>Bank line</th><th>Amount</th><th>Treatment</th><th>How</th><th>Read back</th></tr>'+S.posted.map(p=>{const it=JSON.parse(p.item);return `<tr><td>${esc(p.created)}</td><td>${esc(it.description)}</td><td class="n">${money(it.amount_cents)}</td><td>${treat(JSON.parse(p.action))}</td><td>${esc(p.how)} by ${esc(p.actor)}</td><td>${p.verified?'verified':'<b class="bad">not verified</b>'}</td></tr>`}).join('')+'</table>':'<p class="muted">Nothing posted.</p>'}
+ <h3>Runs</h3><table><tr><th>Started</th><th>Status</th><th>Result</th></tr>${S.runs.map(r=>`<tr><td>${esc(r.started)}</td><td>${esc(r.status)}</td><td class="muted">${esc(Object.entries(JSON.parse(r.summary)).map(([k,v])=>k.replace(/_/g,' ')+' '+v).join(' · '))}</td></tr>`).join('')}</table></div>`;
+ $('#view').innerHTML=h;
+ const ids=()=>[...document.querySelectorAll('.pick:checked')].map(x=>x.value);
+ const decide=async b=>{if(!ids().length)return say('Tick at least one item.');const r=await post('/api/decide',{ids:ids(),...b});const v=Object.values(r.results||{});const bad=v.filter(x=>String(x).startsWith('refused')||x==='failed');say(bad.length?bad[0]:v.length+' decided');load()};
+ if($('#ok')){$('#ok').onclick=()=>decide({verdict:'approve'});$('#rej').onclick=()=>decide({verdict:'reject',note:$('#note').value});
+  $('#chg').onclick=()=>decide({verdict:'change',note:$('#note').value,final_action:{kind:'categorize',account:$('#acct').value,vendor:$('#vend').value||null,memo:''}})}
+ if($('#mode'))$('#mode').onchange=async e=>{const r=await post('/api/mode',{client:current,mode:e.target.value});say(r.error||'Mode changed');load()};
+ if($('#run'))$('#run').onclick=async()=>{const r=await post('/api/run',{client:current});say(r.error||r.why||('Run finished: '+r.new+' new, '+r.auto_posted+' posted unattended'));load()};
+ document.querySelectorAll('.end').forEach(b=>b.onclick=async()=>{const reason=prompt('Reason for ending this standing approval?');if(reason===null)return;const r=await post('/api/standing/end',{id:b.dataset.id,reason});say(r.error||'Ended');load()});
+ document.querySelectorAll('.grant').forEach(b=>b.onclick=async()=>{const r0=S.record[b.dataset.i];const cap=prompt('Largest amount this approval covers, in dollars:',(Math.ceil(r0.max_seen_cents*1.25/100)).toString());if(!cap)return;
+  const r=await post('/api/standing/grant',{client:current,item_class:r0.item_class,class_key:r0.class_key,max_amount_cents:Math.round(parseFloat(cap)*100)});say(r.error||'Standing approval granted');load()});
+}
+roster();
+</script></body></html>
