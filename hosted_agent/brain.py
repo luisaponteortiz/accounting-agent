@@ -127,7 +127,8 @@ class BaselineBrain:
         book, kind, party = (ctx.bills, "bill", "vendor") if cents < 0 else (ctx.invoices, "invoice", "customer")
         exact = [t for t in book if t["amount_cents"] == abs(cents)]
         named = [t for t in exact if vendor_key(t[party]) and vendor_key(t[party]) == vendor_key(text)]
-        if len(named) == 1 and len(exact) == 1:
+        on_card = line.get("bank_account_type") == "Credit Card"      # a customer's payment does not arrive on a card
+        if len(named) == 1 and len(exact) == 1 and not (on_card and kind == "invoice"):
             return proposal(kind + "_payment_match", named[0][party],
                             dict(kind="match", txn_type=kind, txn_id=named[0]["id"]), 0.99,
                             open_item=named[0]["id"], same_amount=True, same_name=True)

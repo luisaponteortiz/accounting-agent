@@ -8,7 +8,8 @@ record, never a deletion:
 categorize   the line's own record gets its real category and payee in place
              of the clearing account
 match        an open bill or invoice of the same amount is paid from, or into,
-             the clearing account
+             the clearing account; a bill paid on a card is paid from the card
+             clearing account
 move         a payment that was already recorded in the bank account is moved
              to the clearing account (D-043); a charge, a refund or a bill
              payment recorded on a credit card is moved to the card clearing
@@ -216,8 +217,15 @@ class QboLedger:
             raise LedgerError("cannot match to a %s" % txn_type)
         if line["direction"] != ("out" if txn_type == "bill" else "in"):
             raise LedgerError("a %s cannot be paid by money going %s" % (txn_type, line["direction"]))
-        if line["bank_account_type"] != "Bank":
-            raise LedgerError("this build pays open items for bank account lines only; this one is in a %s account" % line["bank_account_type"])
+        on_card = line["bank_account_type"] == "Credit Card"
+        if line["bank_account_type"] != "Bank" and not on_card:
+            raise LedgerError("open items are paid from bank and credit card lines only; this one is in a %s account" % line["bank_account_type"])
+        if on_card and txn_type != "bill":
+            raise LedgerError("a customer's payment does not arrive on a credit card; this line is in %s" % line["bank_account"])
+        if on_card and (not got.get("card") or line["clearing_id"] != got["card"]["id"]):
+            raise LedgerError("a bill is paid from a card line only through the card clearing account, and this line is not held there")
+        if not on_card and line["clearing_id"] != got["id"]:
+            raise LedgerError("this bank line is not held in %s" % got["name"])
         try:
             found = [self.q._get("%s/%s" % (entity.lower(), txn_id))[entity]]
         except QboError:
@@ -229,7 +237,10 @@ class QboLedger:
         amount, clearing = line["amount_cents"] / 100, dict(value=got["id"], name=got["name"])
         new = dict(TotalAmt=amount, TxnDate=line["date"], PrivateNote="Paid per bank line dated %s" % line["date"],
                    Line=[dict(Amount=amount, LinkedTxn=[dict(TxnId=found[0]["Id"], TxnType=entity)])])
-        if txn_type == "bill":
+        if on_card:      # paid by card: the payment sits in the card clearing account and cancels the card line there (D-045)
+            new.update(VendorRef=found[0]["VendorRef"], PayType="CreditCard",
+                       CreditCardPayment=dict(CCAccountRef=dict(value=got["card"]["id"], name=got["card"]["name"])))
+        elif txn_type == "bill":
             new.update(VendorRef=found[0]["VendorRef"], PayType="Check", CheckPayment=dict(BankAccountRef=clearing, PrintStatus="NotSet"))
         else:
             new.update(CustomerRef=found[0]["CustomerRef"], DepositToAccountRef=clearing)

@@ -154,6 +154,47 @@ class QboLedgerCase(unittest.TestCase):
             self.books.move(REALM, "T4", "BillPayment", "B9")
         self.assertEqual(self.writes(before), [])
 
+    def card_charge(self, record_id, amount, text, when="2026-11-14", held_in="91", credit=False):
+        """A card line as a rule posts it: a charge (or a credit) on the Mastercard against a clearing account."""
+        made = {"Id": record_id, "SyncToken": "0", "TxnDate": when, "TotalAmt": amount, "PaymentType": "CreditCard", "AccountRef": {"value": "41", "name": "Mastercard"},
+                "Line": [{"Amount": amount, "Description": text, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": held_in, "name": "a clearing account"}}}]}
+        if credit:
+            made["Credit"] = True
+        self.intuit.records["Purchase"].append(made)
+
+    def test_an_open_bill_paid_on_a_card_is_paid_through_the_card_clearing_account(self):
+        before = self.connect()
+        self.card_charge("23", 380.0, "NORTHSIDE PRODUCE CO")
+        p = self.run_agent()["P23"]
+        self.assertEqual((p["item_class"], p["action"]["kind"], p["action"]["txn_type"], p["action"]["txn_id"]), ("bill_payment_match", "match", "bill", "B101"))
+        self.assertEqual(review.decide(self.store, self.books, OWNER, p["id"], "approve"), "posted")
+        paid = self.intuit.records["BillPayment"][-1]
+        self.assertEqual((self.writes(before), paid["PayType"], paid["CreditCardPayment"], paid["TotalAmt"], paid["TxnDate"], paid["VendorRef"]["value"], paid["Line"][0]["LinkedTxn"]),
+                         ([("POST", "billpayment")], "CreditCard", {"CCAccountRef": {"value": "91", "name": "Card Feed Clearing"}}, 380.0, "2026-11-14", "V2", [{"TxnId": "B101", "TxnType": "Bill"}]))
+        self.assertNotIn("CheckPayment", paid)                             # paid by card, not from a bank account
+        self.assertNotIn("Mastercard", json.dumps(paid))                   # the card already has the card's own line
+        posting = self.store.one("SELECT * FROM postings WHERE proposal_id=?", (p["id"],))
+        self.assertEqual((posting["verified"], self.record("Bill", "B101")["Balance"]), (1, 0))
+        self.assertNotIn("P23", [i["id"] for i in self.books.pending_feed(REALM)])
+        self.assertEqual(self.record("Purchase", "23")["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"]["value"], "91")   # the card line itself is left as it was
+
+    def test_what_a_card_line_cannot_pay_is_refused_before_anything_is_sent(self):
+        before = self.connect()
+        self.intuit.records["Bill"].append({"Id": "B102", "DocNumber": "102", "VendorRef": {"value": "V2", "name": "Northside Produce Co"}, "TotalAmt": 34.0, "Balance": 34.0, "DueDate": "2026-10-20"})
+        self.card_charge("24", 380.0, "NORTHSIDE PRODUCE CO", held_in="90")          # a card line a rule posted against the bank clearing account
+        self.card_charge("39", 1840.0, "BAYVIEW CATERING", credit=True)              # money in on the card, the amount of open invoice I200
+        self.card_charge("40", 380.0, "NORTHSIDE PRODUCE CO", credit=True)           # money in on the card, the amount of open bill B101
+        got = self.run_agent()
+        self.assertNotEqual(got["P39"]["item_class"], "invoice_payment_match")       # a customer's payment does not arrive on a card
+        for call in (lambda: self.books.match(REALM, "T4", "bill", "B102"),          # the card line sits in the bank clearing account
+                     lambda: self.books.match(REALM, "P24", "bill", "B101"),
+                     lambda: self.books.match(REALM, "P39", "invoice", "I200"),
+                     lambda: self.books.match(REALM, "P40", "bill", "B101")):        # money in does not pay a bill
+            with self.assertRaises(LedgerError):
+                call()
+        self.assertEqual(self.writes(before), [])
+        self.assertEqual((self.record("Bill", "B101")["Balance"], self.record("Bill", "B102")["Balance"], self.record("Invoice", "I200")["Balance"]), (380.0, 34.0, 1840.0))
+
     def test_a_recorded_card_refund_is_moved_to_the_card_clearing_account_on_approval(self):
         before = self.connect()
         refund = {"Id": "77", "SyncToken": "0", "TxnDate": "2026-11-12", "TotalAmt": 61.4, "PaymentType": "CreditCard", "Credit": True, "EntityRef": {"name": "Card Vendor"},
@@ -366,7 +407,7 @@ class QboLedgerCase(unittest.TestCase):
         refused = (lambda: self.books.categorize(REALM, "P21", "No Such Account", None, ""),
                    lambda: self.books.categorize(REALM, "P21", "Bank Feed Clearing", None, ""),          # back into clearing is no treatment
                    lambda: self.books.categorize(REALM, "P21", "Card Feed Clearing", None, ""),
-                   lambda: self.books.match(REALM, "T4", "bill", "B100"),                                # paying an open bill from a card line is not built
+                   lambda: self.books.match(REALM, "T4", "bill", "B100"),                                # a card line, and another amount
                    lambda: self.books.categorize(REALM, "P21", "Utilities", "A Vendor Nobody Added", ""),
                    lambda: self.books.categorize(REALM, "T2", "Utilities", None, ""),                    # posted as a transfer: it has no category to change
                    lambda: self.books.categorize(REALM, "P99", "Utilities", None, ""),
