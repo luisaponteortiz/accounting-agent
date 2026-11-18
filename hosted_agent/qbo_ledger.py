@@ -259,7 +259,10 @@ class QboLedger:
                   and l["bank_account"] == other_account and l["bank_account_id"] != line["bank_account_id"] and apart(l) <= PAIR_DAYS]
         if len(others) != 1:
             raise LedgerError("%d open lines in %s could be the other side of this transfer; it needs exactly one" % (len(others), other_account))
-        result = self.q.pair_transfer(feed_id, others[0]["id"], self.clearing)
+        # Two lines in the same clearing account cancel as they stand and are only marked as one transfer. A payment to the
+        # company's own card has one line in each clearing account, and one transfer between the two accounts settles it (D-047).
+        settle = self.q.pair_transfer if others[0]["clearing_id"] == line["clearing_id"] else self.q.bridge_card_payment
+        result = settle(feed_id, others[0]["id"], self.clearing)
         if not result["paired"]:
             raise LedgerError("QuickBooks accepted the change but the two lines did not read back as paired")
         return ref

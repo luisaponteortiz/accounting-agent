@@ -16,7 +16,7 @@ FEE_WORDS = ("SERVICE FEE", "MONTHLY FEE", "WIRE FEE", "OVERDRAFT FEE", "MAINTEN
 PERSON_RAILS = ("ZELLE", "VENMO", "CASH APP", "ATM WITHDRAWAL")
 
 # Classes a standing approval may ever cover. Everything else always goes to a person.
-AUTO_ELIGIBLE = {"recurring_vendor", "bill_payment_match", "invoice_payment_match", "own_transfer", "bank_fee", "already_recorded"}
+AUTO_ELIGIBLE = {"recurring_vendor", "bill_payment_match", "invoice_payment_match", "own_transfer", "card_payment", "bank_fee", "already_recorded"}
 
 
 def vendor_key(description):
@@ -84,6 +84,23 @@ class BaselineBrain:
                     % ", ".join(str(t["id"]) for t in by_hand)) if by_hand else "the same amount moved the other way in %s within three days; the bank text does not say transfer" % mirror[0]["bank_account"]
             return proposal("own_transfer", pair, dict(kind="transfer", other_account=mirror[0]["bank_account"]), 0.7,
                             other_side=mirror[0]["id"], reasoning=note, recorded_transfers=by_hand)
+
+        # A payment from a bank account to the company's own card: money out of the bank account and the same amount in on the card.
+        kind = line.get("bank_account_type")
+        to_card = [l for l in ctx.feed if l["id"] != line["id"] and l["amount_cents"] == -cents
+                   and (kind, l.get("bank_account_type")) in ((("Bank", "Credit Card"),) if cents < 0 else (("Credit Card", "Bank"),))
+                   and abs((date.fromisoformat(l["date"]) - date.fromisoformat(line["date"])).days) <= 3]
+        if len(to_card) == 1:
+            other = to_card[0]
+            bank_side, card_side = (line, other) if kind == "Bank" else (other, line)
+            by_hand = line.get("recorded_transfers") or []
+            says = "PAYMENT" in text or "PAYMENT" in (other.get("description") or "").upper()
+            note = (("the books also hold this as recorded transfer %s; with both lines in clearing that recorded transfer is a second copy for a person to remove in the books"
+                     % ", ".join(str(t["id"]) for t in by_hand)) if by_hand else
+                    None if says else "the same amount left %s and reached %s within three days; neither bank text says payment" % (bank_side["bank_account"], card_side["bank_account"]))
+            evidence = dict(other_side=other["id"], recorded_transfers=by_hand, **(dict(reasoning=note) if note else {}))
+            return proposal("card_payment", "%s > %s" % (bank_side["bank_account"], card_side["bank_account"]),
+                            dict(kind="transfer", other_account=other["bank_account"]), 0.7 if note else 0.97, **evidence)
 
         if not text.strip():
             if len(mirror) == 1:
