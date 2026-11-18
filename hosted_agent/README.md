@@ -27,7 +27,7 @@ People decide waiting items (approve, change, reject with a reason), grant and e
 
 ```sh
 python3 -m hosted_agent demo                               # review page on http://127.0.0.1:8770, sign-in links printed
-python3 -m unittest discover -s hosted_agent/tests -t .     # 64 review tests
+python3 -m unittest discover -s hosted_agent/tests -t .     # 66 review tests
 ```
 
 ## What is not built yet

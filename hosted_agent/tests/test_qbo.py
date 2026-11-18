@@ -17,19 +17,34 @@ class Intuit:
             {"Id": "T1", "TxnDate": "2026-10-21", "Amount": 114.09, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "PrivateNote": "PG E"},
             {"Id": "T2", "TxnDate": "2026-10-04", "Amount": 24.38, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}},
             {"Id": "T3", "TxnDate": "2026-10-05", "Amount": 500.0, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "36", "name": "Savings"}},
-            {"Id": "T4", "TxnDate": "2026-10-10", "Amount": 34.0, "FromAccountRef": {"value": "41", "name": "Mastercard"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}}]
+            {"Id": "T4", "TxnDate": "2026-10-10", "Amount": 34.0, "FromAccountRef": {"value": "41", "name": "Mastercard"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}},
+            {"Id": "T5", "TxnDate": "2026-10-20", "Amount": 75.0, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}},
+            {"Id": "T6", "TxnDate": "2026-10-22", "Amount": 75.0, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}}]
         self.records = {
             "BillPayment": [
                 {"Id": "B6", "SyncToken": "0", "DocNumber": "6", "TxnDate": "2026-10-21", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}},
                  "Line": [{"Amount": 114.09, "LinkedTxn": [{"TxnId": "200", "TxnType": "Bill"}]}]},
                 {"Id": "B7", "SyncToken": "0", "DocNumber": "7", "TxnDate": "2026-10-21", "TotalAmt": 114.09, "VendorRef": {"name": "Other Utility"}, "CheckPayment": {"BankAccountRef": {"value": "36", "name": "Savings"}}},
                 {"Id": "B8", "SyncToken": "0", "DocNumber": "8", "TxnDate": "2026-08-01", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}},
+                {"Id": "B10", "SyncToken": "0", "DocNumber": "10", "TxnDate": "2026-10-28", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}},
+                {"Id": "B3", "SyncToken": "0", "DocNumber": "3", "TxnDate": "2026-10-20", "TotalAmt": 75.0, "VendorRef": {"name": "Books by Bessie"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}},
                 {"Id": "B9", "SyncToken": "0", "DocNumber": "9", "TxnDate": "2026-10-10", "TotalAmt": 34.0, "VendorRef": {"name": "Card Vendor"}, "CreditCardPayment": {"CCAccountRef": {"value": "41", "name": "Mastercard"}}}],
             "Purchase": [
                 {"Id": "75", "SyncToken": "2", "TxnDate": "2026-11-01", "TotalAmt": 228.75, "PaymentType": "Check", "EntityRef": {"name": "Hicks Hardware"}, "AccountRef": {"value": "35", "name": "Checking"},
                  "Line": [{"Amount": 228.75, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]},
                 {"Id": "20", "SyncToken": "0", "TxnDate": "2026-11-03", "TotalAmt": 228.75, "PaymentType": "Cash", "AccountRef": {"value": "35", "name": "Checking"},
-                 "Line": [{"Amount": 228.75, "Description": "HICKS HARDWARE 0443", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]}]}
+                 "Line": [{"Amount": 228.75, "Description": "HICKS HARDWARE 0443", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]},
+                {"Id": "76", "SyncToken": "0", "DocNumber": "76", "TxnDate": "2026-10-22", "TotalAmt": 75.0, "PaymentType": "Check", "EntityRef": {"name": "Pam Seitz"}, "AccountRef": {"value": "35", "name": "Checking"},
+                 "Line": [{"Amount": 75.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "61", "name": "Legal"}}}]}],
+            "Deposit": [
+                {"Id": "30", "SyncToken": "0", "TxnDate": "2026-10-22", "TotalAmt": 868.15, "DepositToAccountRef": {"value": "35", "name": "Checking"},
+                 "Line": [{"Amount": 868.15, "Description": "DEPOSIT 1022", "DepositLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]},
+                {"Id": "31", "SyncToken": "1", "TxnDate": "2026-10-21", "TotalAmt": 868.15, "DepositToAccountRef": {"value": "35", "name": "Checking"},
+                 "Line": [{"Amount": 868.15, "LinkedTxn": [{"TxnId": "300", "TxnType": "Payment"}]}]},
+                {"Id": "32", "SyncToken": "0", "TxnDate": "2026-11-17", "TotalAmt": 200.0, "DepositToAccountRef": {"value": "35", "name": "Checking"},
+                 "Line": [{"Amount": 200.0, "Description": "A RENTAL", "DepositLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "Entity": {"name": "A Rental"}}}]}],
+            "Payment": [
+                {"Id": "40", "SyncToken": "0", "TxnDate": "2026-11-16", "TotalAmt": 200.0, "CustomerRef": {"name": "A Rental Customer"}, "DepositToAccountRef": {"value": "35", "name": "Checking"}}]}
 
     def reply(self, status, data):
         return status, json.dumps(data).encode()
@@ -55,7 +70,8 @@ class Intuit:
             if not self.ignore_change:
                 place = dict(qbo.RECORDED_PLACES)[kind]
                 if place(sent)["value"] == "90" and place(held)["value"] != "90":
-                    self.accounts[-1]["CurrentBalance"] = round(self.accounts[-1]["CurrentBalance"] - held["TotalAmt"], 2)
+                    sign = 1 if kind in ("Payment", "Deposit", "SalesReceipt") else -1      # money in adds to the clearing account
+                    self.accounts[-1]["CurrentBalance"] = round(self.accounts[-1]["CurrentBalance"] + sign * held["TotalAmt"], 2)
                 held.clear()
                 held.update(sent, SyncToken=str(int(sent["SyncToken"]) + 1))
             return self.reply(200, {kind: held})
@@ -167,11 +183,12 @@ class QboCase(unittest.TestCase):
         before = self.connect()
         got = self.q.clearing()
         self.assertEqual((got["found"], got["id"], got["type"], got["balance_cents"]), (True, "90", "Bank", 37722))
-        self.assertEqual(sorted(l["id"] for l in got["lines"]), ["P20", "T1", "T2", "T4"])   # the Checking to Savings transfer is not a clearing line
+        self.assertEqual(sorted(l["id"] for l in got["lines"]), ["D30", "D32", "P20", "T1", "T2", "T4", "T5", "T6"])   # the Checking to Savings transfer is not a clearing line
         paid, plain = self.line(got, "T1"), self.line(got, "T2")
         self.assertEqual((paid["amount_cents"], paid["direction"], paid["bank_account"], paid["bank_account_type"], paid["note"], paid["posted_as"]),
                          (11409, "out", "Checking", "Bank", "PG E", "transfer"))
-        self.assertEqual([(r["type"], r["number"], r["days_apart"]) for r in paid["recorded"]], [("BillPayment", "6", 0)])   # not the Savings one, not the August one
+        self.assertEqual([(r["type"], r["number"], r["days_apart"], r["best_fit"]) for r in paid["recorded"]],
+                         [("BillPayment", "6", 0, True), ("BillPayment", "10", 7, False)])   # not the Savings one, not the August one; the nearest date is the best fit
         self.assertEqual((plain["note"], plain["recorded"], plain["cleared_by"]), (None, [], []))
         self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[before:]))
         self.assertFalse(self.q.clearing("No Such Account")["found"])
@@ -209,6 +226,33 @@ class QboCase(unittest.TestCase):
         self.assertTrue(got["moved"])
         self.assertEqual(self.intuit.records["Purchase"][0]["AccountRef"], {"value": "90", "name": "Bank Feed Clearing"})
         self.assertEqual(self.intuit.records["Purchase"][0]["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"]["name"], "Supplies")
+
+    def test_money_in_lines_come_from_deposits_a_rule_posted_and_pair_with_recorded_deposits_and_customer_payments(self):
+        self.connect()
+        got = self.q.clearing()
+        banked, rent = self.line(got, "D30"), self.line(got, "D32")
+        self.assertEqual((banked["direction"], banked["posted_as"], banked["amount_cents"], banked["note"], banked["bank_account"]), ("in", "deposit", 86815, "DEPOSIT 1022", "Checking"))
+        self.assertEqual([(r["type"], r["id"], r["days_apart"], r["best_fit"]) for r in banked["recorded"]], [("Deposit", "31", 1, True)])   # never Deposit 30 or 32, which are lines themselves
+        self.assertEqual((rent["payee"], [(r["type"], r["id"]) for r in rent["recorded"]]), ("A Rental", [("Payment", "40")]))
+        moved = self.q.move_to_clearing("D30", "Deposit", "31")
+        self.assertEqual((moved["moved"], moved["balance_after_cents"] - moved["balance_before_cents"]), (True, 86815))
+        self.assertEqual(self.intuit.records["Deposit"][1]["DepositToAccountRef"], {"value": "90", "name": "Bank Feed Clearing"})
+        self.assertTrue(self.q.move_to_clearing("D32", "Payment", "40")["moved"])
+        after = self.q.clearing()
+        self.assertEqual(([r["id"] for r in self.line(after, "D30")["cleared_by"]], [r["id"] for r in self.line(after, "D32")["cleared_by"]]), (["31"], ["40"]))
+
+    def test_when_amounts_repeat_each_recorded_payment_is_the_best_fit_for_one_line_only(self):
+        self.connect()
+        got = self.q.clearing()
+        first, second = self.line(got, "T5"), self.line(got, "T6")       # two $75.00 lines two days apart, two recorded $75.00 payments
+        fit = lambda line: [(r["type"], r["id"], r["days_apart"]) for r in line["recorded"] if r["best_fit"]]
+        self.assertEqual((len(first["recorded"]), len(second["recorded"])), (2, 2))                     # a person still sees both
+        self.assertEqual((fit(first), fit(second)), ([("BillPayment", "B3", 0)], [("Purchase", "76", 0)]))
+        self.q.move_to_clearing("T6", "BillPayment", "B3")              # a person may choose the other one
+        after = self.q.clearing()
+        first, second = self.line(after, "T5"), self.line(after, "T6")
+        self.assertEqual(sum(len(l["cleared_by"]) for l in (first, second)), 1)                         # one payment cancels one line, not both
+        self.assertEqual(([r["id"] for r in first["cleared_by"]], fit(second)), (["B3"], [("Purchase", "76", 0)]))   # nearest dates first: it cancels the 20th, and the 22nd keeps its own
 
     def test_only_a_payment_paired_with_the_line_in_a_bank_account_can_be_moved(self):
         before = self.connect()

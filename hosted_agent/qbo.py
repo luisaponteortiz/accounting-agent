@@ -165,11 +165,13 @@ class Qbo:
     def clearing(self, name=CLEARING):
         """What sits in the clearing account. Reads only.
 
-        Bank rules post each bank line against the clearing account, as a transfer or as an
-        expense whose category is the clearing account. For each line this lists payments of
-        the same amount already recorded in the same bank account ("recorded": probably the
-        same money a second time) and payments already recorded in the clearing account
-        itself ("cleared_by": they cancel the line). The agent proposes; a person decides.
+        Bank rules post each bank line against the clearing account: money out as an expense
+        (or a transfer), money in as a deposit, with the clearing account as the category.
+        For each line this lists payments of the same amount already recorded in the same
+        bank account ("recorded": probably the same money a second time; "best_fit" marks the
+        one this line would take when each payment goes to one line only) and the payment
+        already recorded in the clearing account that cancels it ("cleared_by").
+        The agent proposes; a person decides.
         """
         found = self.query("select * from Account where Name = '%s'" % name.replace("'", "\\'")).get("Account", [])
         if not found:
@@ -185,6 +187,15 @@ class Qbo:
             lines.append(dict(id=line_id, date=when, amount_cents=cents(amount), direction=direction, bank_account=bank.get("name"),
                               bank_account_id=bank.get("value"), bank_account_type=kinds.get(bank.get("value")), **more))
 
+        def posted_by_rule(entity, t, detail, party):
+            """The parts of one record that a rule booked against the clearing account, as one line."""
+            parts = [l for l in t.get("Line", []) if ((l.get(detail) or {}).get("AccountRef") or {}).get("value") == account["Id"]]
+            if not parts:
+                return None
+            own.add((entity, t.get("Id")))
+            return dict(amount=sum(float(l.get("Amount") or 0) for l in parts), payee=(party(t, parts[0]) or {}).get("name"),
+                        note=next((l.get("Description") for l in parts if l.get("Description")), None) or t.get("PrivateNote"))
+
         for t in self.query("select * from Transfer maxresults 1000").get("Transfer", []):
             source, target = t.get("FromAccountRef") or {}, t.get("ToAccountRef") or {}
             if account["Id"] not in (source.get("value"), target.get("value")):
@@ -193,23 +204,44 @@ class Qbo:
             add(t["Id"], t.get("TxnDate"), t.get("Amount"), direction, source if direction == "out" else target,
                 note=t.get("PrivateNote"), payee=None, posted_as="transfer")
         for t in raw["Purchase"]:
-            for part in t.get("Line", []):
-                if ((part.get("AccountBasedExpenseLineDetail") or {}).get("AccountRef") or {}).get("value") == account["Id"]:
-                    own.add(("Purchase", t.get("Id")))
-                    add("P%s" % t.get("Id"), t.get("TxnDate"), part.get("Amount"), "out", t.get("AccountRef") or {},
-                        note=part.get("Description") or t.get("PrivateNote"), payee=(t.get("EntityRef") or {}).get("name"), posted_as="expense")
+            got = posted_by_rule("Purchase", t, "AccountBasedExpenseLineDetail", lambda t, part: t.get("EntityRef"))
+            if got:
+                add("P%s" % t.get("Id"), t.get("TxnDate"), got["amount"], "out", t.get("AccountRef") or {}, note=got["note"], payee=got["payee"], posted_as="expense")
+        for t in raw["Deposit"]:
+            got = posted_by_rule("Deposit", t, "DepositLineDetail", lambda t, part: part["DepositLineDetail"].get("Entity"))
+            if got:
+                add("D%s" % t.get("Id"), t.get("TxnDate"), got["amount"], "in", t.get("DepositToAccountRef") or {}, note=got["note"], payee=got["payee"], posted_as="deposit")
         recorded = [dict(type=entity, id=t.get("Id"), number=t.get("DocNumber"), date=t.get("TxnDate"), direction=direction,
                          amount_cents=cents(t.get("TotalAmt")), bank_account_id=(bank(t) or {}).get("value"),
                          payee=((t.get("EntityRef") or t.get("VendorRef") or t.get("CustomerRef") or {}).get("name")))
                     for entity, direction, bank in RECORDED_PAYMENTS for t in raw[entity] if (entity, t.get("Id")) not in own]
+
+        def near(line, in_account):
+            return sorted((dict(type=r["type"], id=r["id"], number=r["number"], date=r["date"], payee=r["payee"],
+                                days_apart=abs((day(r["date"]) - day(line["date"])).days))
+                           for r in recorded if r["direction"] == line["direction"] and r["amount_cents"] == line["amount_cents"]
+                           and r["bank_account_id"] == in_account and r["date"] and line["date"]
+                           and abs((day(r["date"]) - day(line["date"])).days) <= MATCH_DAYS), key=lambda r: (r["days_apart"], r["type"], r["id"]))
+
+        def one_each(candidates):
+            """Give each recorded payment to one line only, nearest dates first. candidates: {line id: [payments]}."""
+            pairs = sorted((c["days_apart"], line_id, c["type"], c["id"]) for line_id, found in candidates.items() for c in found)
+            given, used = {}, set()
+            for _, line_id, kind, txn in pairs:
+                if line_id not in given and (kind, txn) not in used:
+                    given[line_id] = (kind, txn)
+                    used.add((kind, txn))
+            return given
+
+        # A payment already sitting in the clearing account cancels one line, not every line of that amount.
+        in_clearing = {l["id"]: near(l, account["Id"]) for l in lines}
+        cancels = one_each(in_clearing)
         for line in lines:
-            def near(in_account):
-                return sorted((dict(type=r["type"], id=r["id"], number=r["number"], date=r["date"], payee=r["payee"],
-                                    days_apart=abs((day(r["date"]) - day(line["date"])).days))
-                               for r in recorded if r["direction"] == line["direction"] and r["amount_cents"] == line["amount_cents"]
-                               and r["bank_account_id"] == in_account and r["date"] and line["date"]
-                               and abs((day(r["date"]) - day(line["date"])).days) <= MATCH_DAYS), key=lambda r: r["days_apart"])
-            line["recorded"], line["cleared_by"] = near(line["bank_account_id"]), near(account["Id"])
+            line["cleared_by"] = [c for c in in_clearing[line["id"]] if (c["type"], c["id"]) == cancels.get(line["id"])]
+        open_lines = {l["id"]: near(l, l["bank_account_id"]) for l in lines if not l["cleared_by"]}
+        best = one_each(open_lines)
+        for line in lines:
+            line["recorded"] = [dict(c, best_fit=(c["type"], c["id"]) == best.get(line["id"])) for c in open_lines.get(line["id"], [])]
         lines.sort(key=lambda l: (l["date"] or "", l["id"]), reverse=True)
         return dict(found=True, id=account["Id"], name=account["Name"], type=account.get("AccountType"),
                     balance_cents=cents(account.get("CurrentBalance")), lines=lines)
