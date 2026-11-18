@@ -64,7 +64,13 @@ async function qbo(){const q=await get('/api/qbo'),el=$('#qbo');
  if(!q.connected){el.innerHTML=(q.error?'<span class="bad">'+esc(q.error)+'</span><br>':'')+'Not connected.<br><a href="/qbo/connect"><button class="go" style="margin-top:8px">Connect the sandbox company</button></a><br><span class="muted">Intuit must list this address as a redirect URI:<br>'+esc(q.redirect_uri)+'</span>';return}
  el.innerHTML='<b style="color:var(--ink)">'+esc(q.company)+'</b><br>Sandbox · read only · connected by '+esc(q.connected_by)+'<br>'+['accounts','vendors','customers','purchases','bills','invoices'].map(k=>q[k]+' '+k).join(' · ')+
   '<h3>Latest purchases in its books</h3>'+q.recent_purchases.map(p=>esc(p.date)+' · $'+esc(p.amount)+'<br>'+esc(p.payee||'no payee')+' → '+esc(p.category||'uncategorized')).join('<br>')+
-  '<h3>Can this connection read the bank feed?</h3><button id="probe">Run the test</button><div id="probeout"></div>';
+  '<h3>Clearing account</h3><button id="clr">Read the clearing account</button><div id="clrout"></div><h3>Can this connection read the bank feed?</h3><button id="probe">Run the test</button><div id="probeout"></div>';
+ $('#clr').onclick=async()=>{const out=$('#clrout');out.textContent='Reading…';const r=await get('/api/qbo/clearing');
+  if(r.error||!r.found){out.innerHTML='<span class="bad">'+esc(r.error||('No account named '+r.name+' in this company.'))+'</span>';return}
+  const dup=r.lines.filter(l=>l.recorded.length).length;
+  out.innerHTML='<b>'+esc(r.name)+'</b> ('+esc(r.type)+') · balance '+money(r.balance_cents)+' · '+r.lines.length+' lines · '+dup+' already recorded<br>'+
+   r.lines.map(l=>esc(l.date)+' · '+money(l.direction==='out'?-l.amount_cents:l.amount_cents)+' · '+esc(l.bank_account)+(l.note?' · '+esc(l.note):' · no bank text')+
+    (l.recorded.length?'<br><span class="bad">already recorded:</span> '+l.recorded.map(c=>esc(c.type)+(c.number?' '+esc(c.number):'')+' '+esc(c.payee||'')+' ('+c.days_apart+'d apart)').join('; '):'')).join('<br>')};
  $('#probe').onclick=async()=>{const out=$('#probeout');out.textContent='Asking QuickBooks…';const r=await get('/api/qbo/probe');
   if(r.error||!r.results){out.innerHTML='<span class="bad">'+esc(r.error||'The test could not run.')+'</span>';return}
   const row=x=>esc(x.name)+': '+(x.readable?'readable'+(x.count==null?'':' ('+x.count+')'):'refused (HTTP '+esc(x.status)+(x.said?', '+esc(x.said):'')+')');

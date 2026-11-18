@@ -23,6 +23,21 @@ class Intuit:
         statement = asked["query"][0]
         if statement.split()[-1] in qbo.FEED_NAMES:
             return 400, json.dumps({"Fault": {"Error": [{"Message": "Error parsing query", "Detail": "QueryParserError: Invalid entity", "code": "4000"}], "type": "ValidationFault"}}).encode()
+        if statement.startswith("select * from Account where Name"):
+            hit = [{"Id": "90", "Name": "Bank Feed Clearing", "AccountType": "Bank", "CurrentBalance": 138.47}] if "Bank Feed Clearing" in statement else []
+            return 200, json.dumps({"QueryResponse": {"Account": hit}}).encode()
+        if statement.startswith("select * from Transfer"):
+            return 200, json.dumps({"QueryResponse": {"Transfer": [
+                {"Id": "T1", "TxnDate": "2026-10-21", "Amount": 114.09, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "PrivateNote": "PG E"},
+                {"Id": "T2", "TxnDate": "2026-10-04", "Amount": 24.38, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}},
+                {"Id": "T3", "TxnDate": "2026-10-05", "Amount": 500.0, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "36", "name": "Savings"}}]}}).encode()
+        if statement.startswith("select * from BillPayment"):
+            return 200, json.dumps({"QueryResponse": {"BillPayment": [
+                {"Id": "B6", "DocNumber": "6", "TxnDate": "2026-10-21", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}},
+                {"Id": "B7", "DocNumber": "7", "TxnDate": "2026-10-21", "TotalAmt": 114.09, "VendorRef": {"name": "Other Utility"}, "CheckPayment": {"BankAccountRef": {"value": "36", "name": "Savings"}}},
+                {"Id": "B8", "DocNumber": "8", "TxnDate": "2026-08-01", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}}]}}).encode()
+        if statement.startswith("select * from") and "Purchase" not in statement:
+            return 200, json.dumps({"QueryResponse": {}}).encode()
         if "count(*)" in statement:
             return 200, json.dumps({"QueryResponse": {"totalCount": 7}}).encode()
         return 200, json.dumps({"QueryResponse": {"Purchase": [{"TxnDate": "2026-11-01", "TotalAmt": 19.99, "EntityRef": {"name": "Sample Vendor"},
@@ -107,6 +122,18 @@ class QboCase(unittest.TestCase):
         asked = self.intuit.calls[before:]
         self.assertTrue(all(c[0] == "GET" and c[1].startswith(qbo.API + "/v3/company/123/") for c in asked))
         self.assertNotIn("ACCESS-", json.dumps(got))
+
+    def test_the_clearing_read_pairs_a_line_only_with_the_same_money_in_the_same_bank_account(self):
+        self.q.finish(self.start()["state"][0], "code", "123")
+        before = len(self.intuit.calls)
+        got = self.q.clearing()
+        self.assertEqual((got["found"], got["type"], got["balance_cents"], len(got["lines"])), (True, "Bank", 13847, 2))   # the Checking to Savings transfer is not a clearing line
+        paid, plain = got["lines"]
+        self.assertEqual((paid["amount_cents"], paid["direction"], paid["bank_account"], paid["note"]), (11409, "out", "Checking", "PG E"))
+        self.assertEqual([(r["type"], r["number"], r["days_apart"]) for r in paid["recorded"]], [("BillPayment", "6", 0)])   # not the Savings one, not the August one
+        self.assertEqual((plain["note"], plain["recorded"]), (None, []))
+        self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[before:]))
+        self.assertFalse(self.q.clearing("No Such Account")["found"])
 
     def test_without_keys_there_is_no_connection_object(self):
         self.assertIsNone(qbo.from_environment({}))
