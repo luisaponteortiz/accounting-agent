@@ -6,7 +6,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
-from . import review
+from . import qbo, review
 from .runner import run_client
 
 PAGE = Path(__file__).parent / "page.html"
@@ -15,9 +15,9 @@ PAGE = Path(__file__).parent / "page.html"
 class ReviewServer(ThreadingHTTPServer):
     daemon_threads = True
 
-    def __init__(self, address, store, ledger, brain, people):
+    def __init__(self, address, store, ledger, brain, people, qbo=None):
         """people: {token: {"name": ..., "role": "owner" | "reviewer"}}"""
-        self.store, self.ledger, self.brain, self.people = store, ledger, brain, people
+        self.store, self.ledger, self.brain, self.people, self.qbo = store, ledger, brain, people, qbo
         super().__init__(address, Handler)
 
     def person(self, token):
@@ -71,11 +71,28 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Set-Cookie", cookie)
             self.end_headers()
             return
+        if url.path == "/qbo/callback":
+            return self.qbo_callback(query)
         person = self.who()
         if not person:
             return self.send(401, b"Sign in with the link you were given.", "text/plain")
         s = self.server
         try:
+            if url.path == "/qbo/connect":
+                review.allow(person, "mode")
+                if not s.qbo:
+                    return self.send(404, b"QuickBooks keys are not set on this service.", "text/plain")
+                self.send_response(303)
+                self.send_header("Location", s.qbo.authorize_url(person["name"]))
+                self.end_headers()
+                return
+            if url.path == "/api/qbo":
+                if not s.qbo:
+                    return self.send(200, {"configured": False})
+                try:
+                    return self.send(200, dict(configured=True, redirect_uri=s.qbo.redirect_uri, **s.qbo.summary()))
+                except qbo.QboError as problem:
+                    return self.send(200, dict(configured=True, connected=False, error=str(problem)))
             if url.path == "/":
                 return self.send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
             if url.path == "/api/roster":
@@ -85,9 +102,25 @@ class Handler(BaseHTTPRequestHandler):
                 state = review.state(s.store, query["client"][0])
                 state["accounts"] = [a["name"] for a in s.ledger.accounts(state["client"]["realm_id"])]
                 return self.send(200, state)
+        except review.Refused as no:
+            return self.send(403, str(no).encode(), "text/plain")
         except (KeyError, IndexError):
             return self.send(404, {"error": "not found"})
         self.send(404, {"error": "not found"})
+
+    def qbo_callback(self, query):
+        """Intuit sends the browser back here. The one-time state, not a cookie, proves who started it."""
+        s, first = self.server, lambda name: (query.get(name) or [""])[0]
+        if not s.qbo:
+            return self.send(404, b"QuickBooks keys are not set on this service.", "text/plain")
+        try:
+            person = s.qbo.finish(first("state"), first("code"), first("realmId"))
+            s.store.audit("-", person, "qbo_sandbox_connected", {"realm_id": s.qbo.connection["realm_id"]})
+            message = "QuickBooks sandbox connected. Returning to the agent."
+        except qbo.QboError as problem:
+            message = "QuickBooks was not connected: %s" % problem
+        page = '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="2;url=/"><p style="font:16px system-ui;padding:24px">%s</p>' % message
+        self.send(200, page.encode(), "text/html; charset=utf-8")
 
     def do_POST(self):
         person, s = self.who(), self.server

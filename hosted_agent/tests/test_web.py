@@ -73,6 +73,13 @@ class WebCase(unittest.TestCase):
         self.assertEqual((status, body["waiting"]), (200, []))
         self.assertEqual(self.call("/api/state?client=nobody", token="owner-token")[0], 404)
 
+    def test_quickbooks_routes_are_owner_only_and_safe_without_keys(self):
+        self.assertEqual(self.call("/api/qbo", token="owner-token"), (200, {"configured": False}))
+        self.assertEqual(self.call("/qbo/connect", token="owner-token")[0], 404)       # no keys on this server
+        self.assertEqual(self.call("/qbo/connect", token="reviewer-token")[0], 403)
+        self.assertEqual(self.call("/qbo/connect")[0], 401)
+        self.assertEqual(self.call("/qbo/callback?state=x&code=y&realmId=1")[0], 404)
+
     def test_a_refusal_is_reported_per_item(self):
         closed = self.first("F011")
         _, body = self.call("/api/decide", dict(ids=[closed], verdict="approve"), "owner-token")

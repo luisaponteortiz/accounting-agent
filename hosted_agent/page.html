@@ -19,7 +19,7 @@ button{cursor:pointer}button.go{background:var(--accent);color:var(--bg);border-
 #msg{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:6px;display:none;max-width:90vw}
 </style></head><body>
 <header><strong>Accounting agent</strong><span class="dev">DEVELOPMENT BUILD: FICTIONAL COMPANIES</span><span class="muted" id="me"></span></header>
-<main><aside><div class="card"><h2>Clients</h2><div id="clients"></div><p class="muted">Names and counts only. Open a client to see its items.</p></div></aside>
+<main><aside><div class="card"><h2>Clients</h2><div id="clients"></div><p class="muted">Names and counts only. Open a client to see its items.</p></div><div class="card"><h2>QuickBooks sandbox</h2><div id="qbo" class="muted">Checking…</div></div></aside>
 <section id="view"><div class="card">Choose a client.</div></section></main><div id="msg"></div>
 <script>
 const $=s=>document.querySelector(s),esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -59,5 +59,10 @@ async function load(){await roster();if(!current)return;S=await get('/api/state?
  document.querySelectorAll('.grant').forEach(b=>b.onclick=async()=>{const r0=S.record[b.dataset.i];const cap=prompt('Largest amount this approval covers, in dollars:',(Math.ceil(r0.max_seen_cents*1.25/100)).toString());if(!cap)return;
   const r=await post('/api/standing/grant',{client:current,item_class:r0.item_class,class_key:r0.class_key,max_amount_cents:Math.round(parseFloat(cap)*100)});say(r.error||'Standing approval granted');load()});
 }
-roster();
+async function qbo(){const q=await get('/api/qbo'),el=$('#qbo');
+ if(!q.configured){el.textContent='Keys are not set on this service yet.';return}
+ if(!q.connected){el.innerHTML=(q.error?'<span class="bad">'+esc(q.error)+'</span><br>':'')+'Not connected.<br><a href="/qbo/connect"><button class="go" style="margin-top:8px">Connect the sandbox company</button></a><br><span class="muted">Intuit must list this address as a redirect URI:<br>'+esc(q.redirect_uri)+'</span>';return}
+ el.innerHTML='<b style="color:var(--ink)">'+esc(q.company)+'</b><br>Sandbox · read only · connected by '+esc(q.connected_by)+'<br>'+['accounts','vendors','customers','purchases','bills','invoices'].map(k=>q[k]+' '+k).join(' · ')+
+  '<h3>Latest purchases in its books</h3>'+q.recent_purchases.map(p=>esc(p.date)+' · $'+esc(p.amount)+'<br>'+esc(p.payee||'no payee')+' → '+esc(p.category||'uncategorized')).join('<br>')}
+roster();qbo();
 </script></body></html>

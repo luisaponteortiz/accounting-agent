@@ -27,13 +27,13 @@ People decide waiting items (approve, change, reject with a reason), grant and e
 
 ```sh
 python3 -m hosted_agent demo                               # review page on http://127.0.0.1:8770, sign-in links printed
-python3 -m unittest discover -s hosted_agent/tests -t .     # 44 review tests
+python3 -m unittest discover -s hosted_agent/tests -t .     # 52 review tests
 ```
 
 ## What is not built yet
 
 - **Claude is a first cut.** With `ANTHROPIC_API_KEY` set, `ClaudeBrain` asks Claude only about lines the books cannot settle, and its suggestions are always reviewed by a person (class `model suggestion` can never get a standing approval). Its instructions are a short list of the firm's rules written into `claude_brain.py`; the owner's skill library is not loaded yet. Set `AGENT_BRAIN=baseline` to switch it off, `AGENT_MODEL` to change the model.
-- **The ledger is a fake.** `FakeLedger` stands in for QuickBooks. Whether a hosted service can read and act on the QuickBooks bank feed is the first thing to prove against an Intuit sandbox.
+- **QuickBooks is connected read-only, to a sandbox.** With `INTUIT_CLIENT_ID` and `INTUIT_CLIENT_SECRET` set, the owner can connect one Intuit sandbox company and the page shows what the agent can read from it. `qbo.py` can reach only the sandbox host and writes nothing. The agent's runs still use `FakeLedger`. Whether the bank feed's unreviewed lines can be read this way is not yet known.
 - **Only the bank feed job.** Cards, documents, close and the other jobs follow the same frame.
 - **Sign-in is a link with a token**, good enough for fictional data and not for go-live. Storage is SQLite.
 - The page has been exercised in a headless browser, not reviewed by a person.

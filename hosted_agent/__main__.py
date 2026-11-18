@@ -6,6 +6,7 @@ import os
 import secrets
 
 from . import demo_books
+from . import qbo
 from .claude_brain import from_environment
 from .ledger import FakeLedger
 from .runner import run_client
@@ -45,7 +46,8 @@ def main():
     if args.command == "run":
         return
     people, made_up = people_from_env()
-    server = ReviewServer((args.host, args.port), store, ledger, brain, people)
+    server = ReviewServer((args.host, args.port), store, ledger, brain, people, qbo.from_environment(os.environ))
+    print("QuickBooks sandbox keys: %s" % ("set" if server.qbo else "not set"), flush=True)
     print("Review page on port %s. FICTIONAL COMPANIES ONLY." % server.server_port, flush=True)
     if made_up:
         for token, person in people.items():
