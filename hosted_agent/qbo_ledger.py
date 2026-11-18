@@ -19,7 +19,7 @@ The connection underneath (qbo.py) can reach only Intuit's sandbox host.
 from datetime import date
 
 from .ledger import LedgerError
-from .qbo import CLEARING, QboError
+from .qbo import CARD_CLEARING, CLEARING, QboError
 
 MONTHS = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 LINE_RECORDS = {"P": ("Purchase", "AccountBasedExpenseLineDetail"), "D": ("Deposit", "DepositLineDetail")}
@@ -71,7 +71,7 @@ class QboLedger:
 
     def _account(self, name):
         found = [a for a in self._all("Account") if name in (a.get("FullyQualifiedName"), a.get("Name"))]
-        if not found or name == self.clearing:
+        if not found or name in (self.clearing, CARD_CLEARING):
             raise LedgerError("no account named %s" % name)
         return found[0]
 
@@ -108,7 +108,7 @@ class QboLedger:
 
     @guarded
     def accounts(self, realm_id):
-        return [{"name": a.get("FullyQualifiedName") or a.get("Name"), "type": a.get("AccountType")} for a in self._all("Account") if a.get("Name") != self.clearing]
+        return [{"name": a.get("FullyQualifiedName") or a.get("Name"), "type": a.get("AccountType")} for a in self._all("Account") if a.get("Name") not in (self.clearing, CARD_CLEARING)]
 
     @guarded
     def bank_accounts(self, realm_id):

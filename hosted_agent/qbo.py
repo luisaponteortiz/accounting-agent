@@ -30,6 +30,7 @@ RECORDED = ("Purchase", "Deposit", "Transfer", "JournalEntry", "BillPayment", "P
 FEED_NAMES = ("BankTransaction", "BankFeed", "BankFeedTransaction", "OlbTransaction", "PendingTransaction", "DownloadedTransaction")
 FEED_PATHS = ("banking/transactions", "bankfeeds", "olb/transactions")
 CLEARING = "Bank Feed Clearing"
+CARD_CLEARING = "Card Feed Clearing"      # a credit card account: QuickBooks will not turn a card charge into a bank payment
 MATCH_DAYS = 21
 _deposit_to = lambda t: t.get("DepositToAccountRef")
 def _bill_payment_place(t):
@@ -177,7 +178,9 @@ class Qbo:
         if not found:
             return dict(found=False, name=name)
         account = found[0]
-        kinds = {a["Id"]: a.get("AccountType") for a in self.query("select * from Account maxresults 1000").get("Account", [])}
+        every = self.query("select * from Account maxresults 1000").get("Account", [])
+        kinds = {a["Id"]: a.get("AccountType") for a in every}
+        card = next((a for a in every if a.get("Name") == CARD_CLEARING and a.get("AccountType") == "Credit Card"), None)
         cents = lambda amount: int(round(float(amount or 0) * 100))
         day = lambda text: date.fromisoformat(text[:10])
         raw = {entity: self.query("select * from %s maxresults 1000" % entity).get(entity, []) for entity, _, _ in RECORDED_PAYMENTS}
@@ -220,7 +223,7 @@ class Qbo:
             return sorted((dict(type=r["type"], id=r["id"], number=r["number"], date=r["date"], payee=r["payee"],
                                 days_apart=abs((day(r["date"]) - day(line["date"])).days))
                            for r in recorded if r["direction"] == line["direction"] and r["amount_cents"] == line["amount_cents"]
-                           and r["bank_account_id"] == in_account and r["date"] and line["date"]
+                           and r["bank_account_id"] in in_account and r["date"] and line["date"]
                            and abs((day(r["date"]) - day(line["date"])).days) <= MATCH_DAYS), key=lambda r: (r["days_apart"], r["type"], r["id"]))
 
         def one_each(candidates):
@@ -234,17 +237,20 @@ class Qbo:
             return given
 
         # A payment already sitting in the clearing account cancels one line, not every line of that amount.
-        in_clearing = {l["id"]: near(l, account["Id"]) for l in lines}
+        # A charge recorded on a card can only sit in a card account, so a card line is cancelled from the card clearing account.
+        home = lambda l: (account["Id"], card["Id"]) if card and l["bank_account_type"] == "Credit Card" else (account["Id"],)
+        in_clearing = {l["id"]: near(l, home(l)) for l in lines}
         cancels = one_each(in_clearing)
         for line in lines:
             line["cleared_by"] = [c for c in in_clearing[line["id"]] if (c["type"], c["id"]) == cancels.get(line["id"])]
-        open_lines = {l["id"]: near(l, l["bank_account_id"]) for l in lines if not l["cleared_by"]}
+        open_lines = {l["id"]: near(l, (l["bank_account_id"],)) for l in lines if not l["cleared_by"]}
         best = one_each(open_lines)
         for line in lines:
             line["recorded"] = [dict(c, best_fit=(c["type"], c["id"]) == best.get(line["id"])) for c in open_lines.get(line["id"], [])]
         lines.sort(key=lambda l: (l["date"] or "", l["id"]), reverse=True)
         return dict(found=True, id=account["Id"], name=account["Name"], type=account.get("AccountType"),
-                    balance_cents=cents(account.get("CurrentBalance")), lines=lines)
+                    balance_cents=cents(account.get("CurrentBalance")), lines=lines,
+                    card=dict(id=card["Id"], name=card["Name"], balance_cents=cents(card.get("CurrentBalance"))) if card else None)
 
     def move_to_clearing(self, line_id, kind, txn_id, name=CLEARING, card=False):
         """Change one recorded payment's bank account to the clearing account, and read it back.
@@ -252,9 +258,9 @@ class Qbo:
         Allowed only for a payment that clearing() paired with the named clearing line, and only
         when that line came from a bank account (not a credit card). Nothing is deleted.
 
-        card=True is a sandbox test the owner has not decided: a charge or bill payment recorded
-        on a credit card is changed into one paid from the clearing account, which also changes
-        its payment type from credit card to cash or check, because the clearing account is a bank account.
+        card=True is a sandbox test the owner has not decided: a charge or a bill payment recorded
+        on a credit card is moved to the card clearing account, a credit card account, with nothing
+        else changed. (QuickBooks refused to change a card charge into a payment from a bank account.)
         """
         before = self.clearing(name)
         if not before.get("found"):
@@ -267,26 +273,26 @@ class Qbo:
         on_card = line["bank_account_type"] == "Credit Card"
         if line["bank_account_type"] != "Bank" and not (card and on_card):
             raise QboError("this first build moves payments recorded in bank accounts only; this one is in a %s account" % line["bank_account_type"])
+        if on_card and not before["card"]:
+            raise QboError("this company has no credit card account named %s" % CARD_CLEARING)
+        target = before["card"] if on_card else before
         place = dict(RECORDED_PLACES)[kind]
         record = self._get("%s/%s" % (kind.lower(), txn_id))[kind]
         if (place(record) or {}).get("value") != line["bank_account_id"]:
             raise QboError("%s %s is no longer recorded in %s" % (kind, txn_id, line["bank_account"]))
-        if on_card:
-            if kind == "Purchase" and record.get("PaymentType") == "CreditCard" and not record.get("Credit"):
-                record["PaymentType"] = "Cash"
-            elif kind == "BillPayment" and record.get("PayType") == "CreditCard":
-                record.pop("CreditCardPayment")
-                record.update(PayType="Check", CheckPayment={"BankAccountRef": {}, "PrintStatus": "NotSet"})
-            else:
-                raise QboError("%s %s is not a card charge or a bill paid by card that this test can change" % (kind, txn_id))
+        if on_card and (kind not in ("Purchase", "BillPayment") or record.get("Credit")):
+            raise QboError("%s %s is not a card charge or a bill paid by card" % (kind, txn_id))
         place(record).clear()
-        place(record).update(value=before["id"], name=before["name"])
+        place(record).update(value=target["id"], name=target["name"])
         self._post(kind.lower(), record)
         now = self._get("%s/%s" % (kind.lower(), txn_id))[kind]
-        moved = (place(now) or {}).get("value") == before["id"] and int(round(float(now.get("TotalAmt") or 0) * 100)) == line["amount_cents"]
+        moved = (place(now) or {}).get("value") == target["id"] and int(round(float(now.get("TotalAmt") or 0) * 100)) == line["amount_cents"]
         after = self.clearing(name)
-        return dict(moved=moved, kind=kind, id=str(txn_id), number=now.get("DocNumber"), from_account=line["bank_account"], to_account=before["name"],
-                    balance_before_cents=before["balance_cents"], balance_after_cents=after["balance_cents"])
+        result = dict(moved=moved, kind=kind, id=str(txn_id), number=now.get("DocNumber"), from_account=line["bank_account"], to_account=target["name"],
+                      balance_before_cents=before["balance_cents"], balance_after_cents=after["balance_cents"])
+        if on_card:
+            result.update(card_balance_before_cents=before["card"]["balance_cents"], card_balance_after_cents=(after.get("card") or {}).get("balance_cents"))
+        return result
 
     def probe(self):
         """Ask the sandbox which kinds of record this connection can read. Reads only.

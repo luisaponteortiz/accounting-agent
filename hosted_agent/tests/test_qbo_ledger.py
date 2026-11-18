@@ -66,7 +66,7 @@ class QboLedgerCase(unittest.TestCase):
         self.assertEqual((feed["D33"]["amount_cents"], feed["D33"]["description"]), (184000, "DEPOSIT BAYVIEW CATERING"))
         names = [a["name"] for a in self.books.accounts(REALM)]
         self.assertIn("Job Expenses:Decks and Patios", names)           # sub-accounts go by their full name
-        self.assertNotIn("Bank Feed Clearing", names)
+        self.assertFalse({"Bank Feed Clearing", "Card Feed Clearing"} & set(names))
         self.assertEqual(self.books.bank_accounts(REALM), ["Checking", "Savings"])
         self.assertEqual([(b["id"], b["vendor"], b["amount_cents"]) for b in self.books.open_bills(REALM)], [("B100", "Northside Produce Co", 64210), ("B101", "Northside Produce Co", 38000)])
         self.assertEqual([(i["id"], i["customer"], i["amount_cents"]) for i in self.books.open_invoices(REALM)], [("I200", "Bayview Catering", 184000), ("I201", "Bayview Catering", 64210)])
@@ -145,6 +145,8 @@ class QboLedgerCase(unittest.TestCase):
         before = self.connect()
         refused = (lambda: self.books.categorize(REALM, "P21", "No Such Account", None, ""),
                    lambda: self.books.categorize(REALM, "P21", "Bank Feed Clearing", None, ""),          # back into clearing is no treatment
+                   lambda: self.books.categorize(REALM, "P21", "Card Feed Clearing", None, ""),
+                   lambda: self.books.move(REALM, "T4", "BillPayment", "B9"),                            # a card line: the agent's own run does not move it
                    lambda: self.books.categorize(REALM, "P21", "Utilities", "A Vendor Nobody Added", ""),
                    lambda: self.books.categorize(REALM, "T2", "Utilities", None, ""),                    # posted as a transfer: it has no category to change
                    lambda: self.books.categorize(REALM, "P99", "Utilities", None, ""),
