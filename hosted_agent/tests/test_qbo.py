@@ -7,41 +7,74 @@ from hosted_agent import qbo
 
 
 class Intuit:
+    """A stand-in for Intuit: a token service and one small company whose recorded payments can be changed."""
     def __init__(self):
-        self.calls, self.token_status, self.issued = [], 200, 0
+        self.calls, self.token_status, self.issued, self.refuse_change, self.ignore_change = [], 200, 0, False, False
+        self.accounts = [{"Id": "35", "Name": "Checking", "AccountType": "Bank"}, {"Id": "36", "Name": "Savings", "AccountType": "Bank"},
+                         {"Id": "41", "Name": "Mastercard", "AccountType": "Credit Card"},
+                         {"Id": "90", "Name": "Bank Feed Clearing", "AccountType": "Bank", "CurrentBalance": 377.22}]
+        self.transfers = [
+            {"Id": "T1", "TxnDate": "2026-10-21", "Amount": 114.09, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "PrivateNote": "PG E"},
+            {"Id": "T2", "TxnDate": "2026-10-04", "Amount": 24.38, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}},
+            {"Id": "T3", "TxnDate": "2026-10-05", "Amount": 500.0, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "36", "name": "Savings"}},
+            {"Id": "T4", "TxnDate": "2026-10-10", "Amount": 34.0, "FromAccountRef": {"value": "41", "name": "Mastercard"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}}]
+        self.records = {
+            "BillPayment": [
+                {"Id": "B6", "SyncToken": "0", "DocNumber": "6", "TxnDate": "2026-10-21", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}},
+                 "Line": [{"Amount": 114.09, "LinkedTxn": [{"TxnId": "200", "TxnType": "Bill"}]}]},
+                {"Id": "B7", "SyncToken": "0", "DocNumber": "7", "TxnDate": "2026-10-21", "TotalAmt": 114.09, "VendorRef": {"name": "Other Utility"}, "CheckPayment": {"BankAccountRef": {"value": "36", "name": "Savings"}}},
+                {"Id": "B8", "SyncToken": "0", "DocNumber": "8", "TxnDate": "2026-08-01", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}},
+                {"Id": "B9", "SyncToken": "0", "DocNumber": "9", "TxnDate": "2026-10-10", "TotalAmt": 34.0, "VendorRef": {"name": "Card Vendor"}, "CreditCardPayment": {"CCAccountRef": {"value": "41", "name": "Mastercard"}}}],
+            "Purchase": [
+                {"Id": "75", "SyncToken": "2", "TxnDate": "2026-11-01", "TotalAmt": 228.75, "PaymentType": "Check", "EntityRef": {"name": "Hicks Hardware"}, "AccountRef": {"value": "35", "name": "Checking"},
+                 "Line": [{"Amount": 228.75, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]},
+                {"Id": "20", "SyncToken": "0", "TxnDate": "2026-11-03", "TotalAmt": 228.75, "PaymentType": "Cash", "AccountRef": {"value": "35", "name": "Checking"},
+                 "Line": [{"Amount": 228.75, "Description": "HICKS HARDWARE 0443", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]}]}
+
+    def reply(self, status, data):
+        return status, json.dumps(data).encode()
 
     def __call__(self, method, url, headers, body=None):
         self.calls.append((method, url, headers, body))
         if url == qbo.TOKEN:
             self.issued += 1
-            return self.token_status, json.dumps(dict(access_token="ACCESS-%d" % self.issued, refresh_token="REFRESH-%d" % self.issued, expires_in=3600)).encode()
+            return self.reply(self.token_status, dict(access_token="ACCESS-%d" % self.issued, refresh_token="REFRESH-%d" % self.issued, expires_in=3600))
         if "/companyinfo/" in url:
-            return 200, json.dumps({"CompanyInfo": {"CompanyName": "Sandbox Company_US_1"}}).encode()
-        asked = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
+            return self.reply(200, {"CompanyInfo": {"CompanyName": "Sandbox Company_US_1"}})
+        parts = urllib.parse.urlsplit(url)
+        tail = parts.path.split("/v3/company/")[-1].split("/")[1:]          # what follows the company number
+        kind = next((k for k in self.records if tail and k.lower() == tail[0]), None)
+        if kind and method == "GET" and len(tail) == 2:
+            hit = [r for r in self.records[kind] if r["Id"] == tail[1]]
+            return self.reply(200, {kind: hit[0]}) if hit else self.reply(400, {"Fault": {"Error": [{"Message": "Object Not Found"}]}})
+        if kind and method == "POST":
+            sent = json.loads(body)
+            held = next(r for r in self.records[kind] if r["Id"] == sent["Id"])
+            if self.refuse_change or sent.get("SyncToken") != held["SyncToken"]:
+                return self.reply(400, {"Fault": {"Error": [{"Message": "Stale Object Error", "Detail": "You and another user were working on the same thing.", "code": "5010"}], "type": "ValidationFault"}})
+            if not self.ignore_change:
+                place = dict(qbo.RECORDED_PLACES)[kind]
+                if place(sent)["value"] == "90" and place(held)["value"] != "90":
+                    self.accounts[-1]["CurrentBalance"] = round(self.accounts[-1]["CurrentBalance"] - held["TotalAmt"], 2)
+                held.clear()
+                held.update(sent, SyncToken=str(int(sent["SyncToken"]) + 1))
+            return self.reply(200, {kind: held})
+        asked = urllib.parse.parse_qs(parts.query)
         if "query" not in asked:
             return 404, b"<html>Not Found</html>"
         statement = asked["query"][0]
         if statement.split()[-1] in qbo.FEED_NAMES:
-            return 400, json.dumps({"Fault": {"Error": [{"Message": "Error parsing query", "Detail": "QueryParserError: Invalid entity", "code": "4000"}], "type": "ValidationFault"}}).encode()
-        if statement.startswith("select * from Account where Name"):
-            hit = [{"Id": "90", "Name": "Bank Feed Clearing", "AccountType": "Bank", "CurrentBalance": 138.47}] if "Bank Feed Clearing" in statement else []
-            return 200, json.dumps({"QueryResponse": {"Account": hit}}).encode()
-        if statement.startswith("select * from Transfer"):
-            return 200, json.dumps({"QueryResponse": {"Transfer": [
-                {"Id": "T1", "TxnDate": "2026-10-21", "Amount": 114.09, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "PrivateNote": "PG E"},
-                {"Id": "T2", "TxnDate": "2026-10-04", "Amount": 24.38, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}},
-                {"Id": "T3", "TxnDate": "2026-10-05", "Amount": 500.0, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "36", "name": "Savings"}}]}}).encode()
-        if statement.startswith("select * from BillPayment"):
-            return 200, json.dumps({"QueryResponse": {"BillPayment": [
-                {"Id": "B6", "DocNumber": "6", "TxnDate": "2026-10-21", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}},
-                {"Id": "B7", "DocNumber": "7", "TxnDate": "2026-10-21", "TotalAmt": 114.09, "VendorRef": {"name": "Other Utility"}, "CheckPayment": {"BankAccountRef": {"value": "36", "name": "Savings"}}},
-                {"Id": "B8", "DocNumber": "8", "TxnDate": "2026-08-01", "TotalAmt": 114.09, "VendorRef": {"name": "PG&E"}, "CheckPayment": {"BankAccountRef": {"value": "35", "name": "Checking"}}}]}}).encode()
-        if statement.startswith("select * from") and "Purchase" not in statement:
-            return 200, json.dumps({"QueryResponse": {}}).encode()
+            return self.reply(400, {"Fault": {"Error": [{"Message": "Error parsing query", "Detail": "QueryParserError: Invalid entity", "code": "4000"}], "type": "ValidationFault"}})
         if "count(*)" in statement:
-            return 200, json.dumps({"QueryResponse": {"totalCount": 7}}).encode()
-        return 200, json.dumps({"QueryResponse": {"Purchase": [{"TxnDate": "2026-11-01", "TotalAmt": 19.99, "EntityRef": {"name": "Sample Vendor"},
-                                "AccountRef": {"name": "Checking"}, "Line": [{"AccountBasedExpenseLineDetail": {"AccountRef": {"name": "Supplies"}}}]}]}}).encode()
+            return self.reply(200, {"QueryResponse": {"totalCount": 7}})
+        if statement.startswith("select * from Account where Name"):
+            return self.reply(200, {"QueryResponse": {"Account": [a for a in self.accounts if "'%s'" % a["Name"] in statement]}})
+        if statement.startswith("select * from Account"):
+            return self.reply(200, {"QueryResponse": {"Account": self.accounts}})
+        if statement.startswith("select * from Transfer"):
+            return self.reply(200, {"QueryResponse": {"Transfer": self.transfers}})
+        entity = statement.split()[3]
+        return self.reply(200, {"QueryResponse": {entity: self.records[entity]} if entity in self.records else {}})
 
 
 class QboCase(unittest.TestCase):
@@ -123,17 +156,84 @@ class QboCase(unittest.TestCase):
         self.assertTrue(all(c[0] == "GET" and c[1].startswith(qbo.API + "/v3/company/123/") for c in asked))
         self.assertNotIn("ACCESS-", json.dumps(got))
 
-    def test_the_clearing_read_pairs_a_line_only_with_the_same_money_in_the_same_bank_account(self):
+    def connect(self):
         self.q.finish(self.start()["state"][0], "code", "123")
-        before = len(self.intuit.calls)
+        return len(self.intuit.calls)
+
+    def line(self, got, line_id):
+        return next(l for l in got["lines"] if l["id"] == line_id)
+
+    def test_the_clearing_read_pairs_a_line_only_with_the_same_money_in_the_same_bank_account(self):
+        before = self.connect()
         got = self.q.clearing()
-        self.assertEqual((got["found"], got["type"], got["balance_cents"], len(got["lines"])), (True, "Bank", 13847, 2))   # the Checking to Savings transfer is not a clearing line
-        paid, plain = got["lines"]
-        self.assertEqual((paid["amount_cents"], paid["direction"], paid["bank_account"], paid["note"]), (11409, "out", "Checking", "PG E"))
+        self.assertEqual((got["found"], got["id"], got["type"], got["balance_cents"]), (True, "90", "Bank", 37722))
+        self.assertEqual(sorted(l["id"] for l in got["lines"]), ["P20", "T1", "T2", "T4"])   # the Checking to Savings transfer is not a clearing line
+        paid, plain = self.line(got, "T1"), self.line(got, "T2")
+        self.assertEqual((paid["amount_cents"], paid["direction"], paid["bank_account"], paid["bank_account_type"], paid["note"], paid["posted_as"]),
+                         (11409, "out", "Checking", "Bank", "PG E", "transfer"))
         self.assertEqual([(r["type"], r["number"], r["days_apart"]) for r in paid["recorded"]], [("BillPayment", "6", 0)])   # not the Savings one, not the August one
-        self.assertEqual((plain["note"], plain["recorded"]), (None, []))
+        self.assertEqual((plain["note"], plain["recorded"], plain["cleared_by"]), (None, [], []))
         self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[before:]))
         self.assertFalse(self.q.clearing("No Such Account")["found"])
+
+    def test_a_line_posted_by_an_expense_rule_keeps_the_bank_text_and_is_never_paired_with_itself(self):
+        self.connect()
+        line = self.line(self.q.clearing(), "P20")
+        self.assertEqual((line["posted_as"], line["note"], line["payee"], line["amount_cents"], line["bank_account"]),
+                         ("expense", "HICKS HARDWARE 0443", None, 22875, "Checking"))
+        self.assertEqual([(r["type"], r["id"], r["payee"]) for r in line["recorded"]], [("Purchase", "75", "Hicks Hardware")])   # not Purchase 20, which is the line itself
+
+    def test_moving_a_recorded_payment_changes_only_its_bank_account_and_reads_it_back(self):
+        before = self.connect()
+        kept = json.loads(json.dumps(self.intuit.records["BillPayment"][0]))
+        got = self.q.move_to_clearing("T1", "BillPayment", "B6")
+        self.assertEqual((got["moved"], got["kind"], got["id"], got["number"], got["from_account"], got["to_account"]),
+                         (True, "BillPayment", "B6", "6", "Checking", "Bank Feed Clearing"))
+        self.assertEqual((got["balance_before_cents"], got["balance_after_cents"]), (37722, 26313))
+        writes = [c for c in self.intuit.calls[before:] if c[0] != "GET"]
+        self.assertEqual([(c[0], c[1].split("/company/123/")[1].split("?")[0]) for c in writes], [("POST", "billpayment")])   # one change, nothing deleted
+        self.assertNotIn("operation=delete", writes[0][1])
+        sent, now = json.loads(writes[0][3]), self.intuit.records["BillPayment"][0]
+        self.assertEqual(sent["SyncToken"], "0")
+        kept["CheckPayment"]["BankAccountRef"] = {"value": "90", "name": "Bank Feed Clearing"}
+        self.assertEqual(sent, kept)                                                 # every other field went back as it was read
+        self.assertEqual(now["CheckPayment"]["BankAccountRef"]["value"], "90")
+        line = self.line(self.q.clearing(), "T1")
+        self.assertEqual(([r["id"] for r in line["recorded"]], [r["id"] for r in line["cleared_by"]]), ([], ["B6"]))
+        with self.assertRaises(qbo.QboError):                                        # already moved: no longer a recorded pair of that line
+            self.q.move_to_clearing("T1", "BillPayment", "B6")
+
+    def test_a_purchase_can_be_moved_too(self):
+        self.connect()
+        got = self.q.move_to_clearing("P20", "Purchase", "75")
+        self.assertTrue(got["moved"])
+        self.assertEqual(self.intuit.records["Purchase"][0]["AccountRef"], {"value": "90", "name": "Bank Feed Clearing"})
+        self.assertEqual(self.intuit.records["Purchase"][0]["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"]["name"], "Supplies")
+
+    def test_only_a_payment_paired_with_the_line_in_a_bank_account_can_be_moved(self):
+        before = self.connect()
+        for line, kind, txn in (("T1", "BillPayment", "B8"),       # same amount, but months apart
+                                ("T1", "BillPayment", "B7"),       # same amount, another bank account
+                                ("T2", "BillPayment", "B6"),       # another line
+                                ("T9", "BillPayment", "B6"),       # no such line
+                                ("T4", "BillPayment", "B9"),       # a credit card line
+                                ("T1", "Invoice", "B6")):          # not a kind of payment
+            with self.assertRaises(qbo.QboError, msg=(line, kind, txn)):
+                self.q.move_to_clearing(line, kind, txn)
+        with self.assertRaises(qbo.QboError):
+            self.q.move_to_clearing("T1", "BillPayment", "B6", name="No Such Account")
+        self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[before:]))      # nothing was sent to the books
+
+    def test_a_refused_or_unconfirmed_change_is_reported_as_such(self):
+        self.connect()
+        self.intuit.refuse_change = True
+        with self.assertRaises(qbo.QboError) as refused:
+            self.q.move_to_clearing("T1", "BillPayment", "B6")
+        self.assertIn("You and another user were working on the same thing.", str(refused.exception))
+        self.assertNotIn("ACCESS-", str(refused.exception))
+        self.assertEqual(self.intuit.records["BillPayment"][0]["CheckPayment"]["BankAccountRef"]["value"], "35")
+        self.intuit.refuse_change, self.intuit.ignore_change = False, True          # QuickBooks says yes but the record did not change
+        self.assertFalse(self.q.move_to_clearing("T1", "BillPayment", "B6")["moved"])
 
     def test_without_keys_there_is_no_connection_object(self):
         self.assertIsNone(qbo.from_environment({}))

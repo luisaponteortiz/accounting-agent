@@ -1,10 +1,15 @@
-"""Connection to a QuickBooks Online SANDBOX company. Read-only in this build.
+"""Connection to a QuickBooks Online SANDBOX company.
 
 Endpoints are Intuit's published ones (discovery document
 developer.api.intuit.com/.well-known/openid_sandbox_configuration). The API
 host is the sandbox host and nothing else: this module has no way to reach a
 real company's books. Tokens stay in this process and are never logged, sent
 to the page, or written to the audit trail.
+
+It reads, and it makes one kind of change: moving a payment that is already
+recorded from its bank account to the clearing account (D-042), so that it
+cancels the bank's own line there. It changes an existing record and reads it
+back. It never deletes.
 """
 import base64
 import json
@@ -27,6 +32,16 @@ FEED_PATHS = ("banking/transactions", "bankfeeds", "olb/transactions")
 CLEARING = "Bank Feed Clearing"
 MATCH_DAYS = 21
 _deposit_to = lambda t: t.get("DepositToAccountRef")
+def _bill_payment_place(t):
+    if "CheckPayment" in t:
+        return t["CheckPayment"].setdefault("BankAccountRef", {})
+    return (t.get("CreditCardPayment") or {}).get("CCAccountRef")
+
+
+# Where each kind of record names the account the money moved through. Returns the dict itself, so it can be changed in place.
+RECORDED_PLACES = (("Purchase", lambda t: t.setdefault("AccountRef", {})), ("BillPayment", _bill_payment_place),
+                   ("RefundReceipt", lambda t: t.setdefault("DepositToAccountRef", {})), ("Payment", lambda t: t.setdefault("DepositToAccountRef", {})),
+                   ("Deposit", lambda t: t.setdefault("DepositToAccountRef", {})), ("SalesReceipt", lambda t: t.setdefault("DepositToAccountRef", {})))
 RECORDED_PAYMENTS = (   # (kind of record, direction as the bank account saw it, where its bank account is named)
     ("Purchase", "out", lambda t: t.get("AccountRef")),
     ("BillPayment", "out", lambda t: (t.get("CheckPayment") or {}).get("BankAccountRef") or (t.get("CreditCardPayment") or {}).get("CCAccountRef")),
@@ -45,6 +60,18 @@ def http(method, url, headers, body=None):
             return response.status, response.read()
     except urllib.error.HTTPError as error:
         return error.code, error.read()
+
+
+def fault_text(raw):
+    """QuickBooks' own words for a refusal, shortened. Never includes a token."""
+    try:
+        data = json.loads(raw)
+    except ValueError:
+        return " ".join(raw.decode("utf-8", "replace").split())[:200] if isinstance(raw, bytes) else ""
+    fault = {k.lower(): v for k, v in data.items()}.get("fault") or {}
+    first = ({k.lower(): v for k, v in fault.items()}.get("error") or [{}])[0]
+    first = {k.lower(): v for k, v in first.items()}
+    return str(first.get("detail") or first.get("message") or "")[:200]
 
 
 class Qbo:
@@ -100,6 +127,19 @@ class Qbo:
             raise QboError("QuickBooks answered HTTP %s for %s" % (status, path.split("/")[0]))
         return json.loads(raw)
 
+    def _post(self, path, payload):
+        c = self.connection
+        if not c:
+            raise QboError("no QuickBooks sandbox company is connected")
+        if self.clock() >= c["expires_at"]:
+            c.update(self._token(dict(grant_type="refresh_token", refresh_token=c["refresh_token"])))
+        url = "%s/v3/company/%s/%s?minorversion=%s" % (API, c["realm_id"], path, MINOR_VERSION)
+        status, raw = self.transport("POST", url, {"Authorization": "Bearer " + c["access_token"], "Accept": "application/json",
+                                                   "Content-Type": "application/json"}, json.dumps(payload).encode())
+        if status != 200:
+            raise QboError("QuickBooks refused the change (HTTP %s): %s" % (status, fault_text(raw)))
+        return json.loads(raw)
+
     def query(self, statement):
         return self._get("query", {"query": statement}).get("QueryResponse", {})
 
@@ -123,45 +163,85 @@ class Qbo:
 
 
     def clearing(self, name=CLEARING):
-        """What sits in the clearing account, and for each line the payments already recorded
-        in the same bank account for the same amount. Reads only.
+        """What sits in the clearing account. Reads only.
 
-        Bank rules post each bank line as a transfer between its bank account and the clearing
-        account. A recorded payment of the same amount in that bank account is probably the
-        same money recorded a second time; the agent proposes, a person decides.
+        Bank rules post each bank line against the clearing account, as a transfer or as an
+        expense whose category is the clearing account. For each line this lists payments of
+        the same amount already recorded in the same bank account ("recorded": probably the
+        same money a second time) and payments already recorded in the clearing account
+        itself ("cleared_by": they cancel the line). The agent proposes; a person decides.
         """
         found = self.query("select * from Account where Name = '%s'" % name.replace("'", "\\'")).get("Account", [])
         if not found:
             return dict(found=False, name=name)
         account = found[0]
+        kinds = {a["Id"]: a.get("AccountType") for a in self.query("select * from Account maxresults 1000").get("Account", [])}
         cents = lambda amount: int(round(float(amount or 0) * 100))
         day = lambda text: date.fromisoformat(text[:10])
-        recorded = []
-        for entity, direction, bank in RECORDED_PAYMENTS:
-            for t in self.query("select * from %s maxresults 1000" % entity).get(entity, []):
-                ref = bank(t) or {}
-                recorded.append(dict(type=entity, id=t.get("Id"), number=t.get("DocNumber"), date=t.get("TxnDate"), direction=direction,
-                                     amount_cents=cents(t.get("TotalAmt")), bank_account_id=ref.get("value"),
-                                     payee=((t.get("EntityRef") or t.get("VendorRef") or t.get("CustomerRef") or {}).get("name"))))
-        lines = []
+        raw = {entity: self.query("select * from %s maxresults 1000" % entity).get(entity, []) for entity, _, _ in RECORDED_PAYMENTS}
+        lines, own = [], set()
+
+        def add(line_id, when, amount, direction, bank, **more):
+            lines.append(dict(id=line_id, date=when, amount_cents=cents(amount), direction=direction, bank_account=bank.get("name"),
+                              bank_account_id=bank.get("value"), bank_account_type=kinds.get(bank.get("value")), **more))
+
         for t in self.query("select * from Transfer maxresults 1000").get("Transfer", []):
             source, target = t.get("FromAccountRef") or {}, t.get("ToAccountRef") or {}
             if account["Id"] not in (source.get("value"), target.get("value")):
                 continue
             direction = "out" if target.get("value") == account["Id"] else "in"     # as the bank account saw it
-            other = source if direction == "out" else target
-            line = dict(id=t["Id"], date=t.get("TxnDate"), amount_cents=cents(t.get("Amount")), direction=direction,
-                        bank_account=other.get("name"), note=t.get("PrivateNote"))
-            line["recorded"] = sorted(
-                (dict(type=r["type"], id=r["id"], number=r["number"], date=r["date"], payee=r["payee"],
-                      days_apart=abs((day(r["date"]) - day(line["date"])).days))
-                 for r in recorded if r["direction"] == direction and r["amount_cents"] == line["amount_cents"]
-                 and r["bank_account_id"] == other.get("value") and r["date"] and line["date"]
-                 and abs((day(r["date"]) - day(line["date"])).days) <= MATCH_DAYS),
-                key=lambda r: r["days_apart"])
-            lines.append(line)
+            add(t["Id"], t.get("TxnDate"), t.get("Amount"), direction, source if direction == "out" else target,
+                note=t.get("PrivateNote"), payee=None, posted_as="transfer")
+        for t in raw["Purchase"]:
+            for part in t.get("Line", []):
+                if ((part.get("AccountBasedExpenseLineDetail") or {}).get("AccountRef") or {}).get("value") == account["Id"]:
+                    own.add(("Purchase", t.get("Id")))
+                    add("P%s" % t.get("Id"), t.get("TxnDate"), part.get("Amount"), "out", t.get("AccountRef") or {},
+                        note=part.get("Description") or t.get("PrivateNote"), payee=(t.get("EntityRef") or {}).get("name"), posted_as="expense")
+        recorded = [dict(type=entity, id=t.get("Id"), number=t.get("DocNumber"), date=t.get("TxnDate"), direction=direction,
+                         amount_cents=cents(t.get("TotalAmt")), bank_account_id=(bank(t) or {}).get("value"),
+                         payee=((t.get("EntityRef") or t.get("VendorRef") or t.get("CustomerRef") or {}).get("name")))
+                    for entity, direction, bank in RECORDED_PAYMENTS for t in raw[entity] if (entity, t.get("Id")) not in own]
+        for line in lines:
+            def near(in_account):
+                return sorted((dict(type=r["type"], id=r["id"], number=r["number"], date=r["date"], payee=r["payee"],
+                                    days_apart=abs((day(r["date"]) - day(line["date"])).days))
+                               for r in recorded if r["direction"] == line["direction"] and r["amount_cents"] == line["amount_cents"]
+                               and r["bank_account_id"] == in_account and r["date"] and line["date"]
+                               and abs((day(r["date"]) - day(line["date"])).days) <= MATCH_DAYS), key=lambda r: r["days_apart"])
+            line["recorded"], line["cleared_by"] = near(line["bank_account_id"]), near(account["Id"])
         lines.sort(key=lambda l: (l["date"] or "", l["id"]), reverse=True)
-        return dict(found=True, name=account["Name"], type=account.get("AccountType"), balance_cents=cents(account.get("CurrentBalance")), lines=lines)
+        return dict(found=True, id=account["Id"], name=account["Name"], type=account.get("AccountType"),
+                    balance_cents=cents(account.get("CurrentBalance")), lines=lines)
+
+    def move_to_clearing(self, line_id, kind, txn_id, name=CLEARING):
+        """Change one recorded payment's bank account to the clearing account, and read it back.
+
+        Allowed only for a payment that clearing() paired with the named clearing line, and only
+        when that line came from a bank account (not a credit card). Nothing is deleted.
+        """
+        before = self.clearing(name)
+        if not before.get("found"):
+            raise QboError("no account named %s in this company" % name)
+        line = next((l for l in before["lines"] if l["id"] == str(line_id)), None)
+        if not line:
+            raise QboError("no clearing line %s" % line_id)
+        if not any(r["type"] == kind and r["id"] == str(txn_id) for r in line["recorded"]):
+            raise QboError("%s %s is not a recorded payment paired with that line" % (kind, txn_id))
+        if line["bank_account_type"] != "Bank":
+            raise QboError("this first build moves payments recorded in bank accounts only; this one is in a %s account" % line["bank_account_type"])
+        place = dict(RECORDED_PLACES)[kind]
+        record = self._get("%s/%s" % (kind.lower(), txn_id))[kind]
+        if (place(record) or {}).get("value") != line["bank_account_id"]:
+            raise QboError("%s %s is no longer recorded in %s" % (kind, txn_id, line["bank_account"]))
+        place(record).clear()
+        place(record).update(value=before["id"], name=before["name"])
+        self._post(kind.lower(), record)
+        now = self._get("%s/%s" % (kind.lower(), txn_id))[kind]
+        moved = (place(now) or {}).get("value") == before["id"] and int(round(float(now.get("TotalAmt") or 0) * 100)) == line["amount_cents"]
+        after = self.clearing(name)
+        return dict(moved=moved, kind=kind, id=str(txn_id), number=now.get("DocNumber"), from_account=line["bank_account"], to_account=before["name"],
+                    balance_before_cents=before["balance_cents"], balance_after_cents=after["balance_cents"])
 
     def probe(self):
         """Ask the sandbox which kinds of record this connection can read. Reads only.
