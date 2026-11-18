@@ -57,6 +57,8 @@ class Case(unittest.TestCase):
         self.assertEqual(len(self.api.requests), 3)                      # F008, F009, F013 of 14 lines
         asked = sorted(json.loads(r["messages"][0]["content"])["bank_line"]["description"] for r in self.api.requests)
         self.assertEqual(asked, ["BRIGHTSIGN STUDIO", "MOBILE DEPOSIT", "OMNIMART ONLINE 90417"])
+        shown = {b["description"]: (b["amount"], b["direction"]) for b in (json.loads(r["messages"][0]["content"])["bank_line"] for r in self.api.requests)}
+        self.assertEqual((shown["MOBILE DEPOSIT"], shown["BRIGHTSIGN STUDIO"]), ((512.34, "money in"), (239.99, "money out")))   # the direction is said in words, not left to a sign
         self.assertEqual(got["F001"]["item_class"], "recurring_vendor")
         self.assertEqual(got["F010"]["item_class"], "person_payment")     # a payment to a person never reaches the model
 

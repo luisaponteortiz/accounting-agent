@@ -21,6 +21,7 @@ DEFAULT_MODEL = "claude-opus-5-5"
 SYSTEM = """You are the preparer for a bookkeeping firm. You are shown one line from a client's bank feed and what that client's books already say. Propose how to categorize it, for a reviewer who will approve, change or reject your proposal.
 
 Rules of the firm:
+- Read the line's direction first. Money in is a receipt, a refund or a deposit, never a payment the client made.
 - Use only an account from the chart you are given, by its exact name. Never Opening Balance Equity. Never a bank account.
 - Follow how this client's books have treated the same payee before. If the books show the payee under more than one account, say what distinguishes the cases and choose only if this line clearly fits one.
 - If you cannot tell what the money was for from what you are shown, do not guess. Set decision to "needs_person" and write the one question the reviewer should get answered, and who would know (the client, the bank record, a receipt).
@@ -54,7 +55,8 @@ def evidence_for(line, ctx):
             seen = payees.setdefault(txn["vendor"], {"bank_text": txn["description"], "accounts": {}})
             seen["accounts"][txn["account"]] = seen["accounts"].get(txn["account"], 0) + 1
     return {
-        "bank_line": {k: line[k] for k in ("date", "description", "bank_account")} | {"amount": line["amount_cents"] / 100},
+        "bank_line": {k: line[k] for k in ("date", "description", "bank_account")} | {
+            "amount": abs(line["amount_cents"]) / 100, "direction": "money in" if line["amount_cents"] > 0 else "money out"},
         "chart_of_accounts": ctx.chart,
         "payees_in_the_books": payees,
     }
