@@ -254,14 +254,15 @@ class Qbo:
         for t in raw["Purchase"]:
             got = posted_by_rule("Purchase", t, "AccountBasedExpenseLineDetail", lambda t, part: t.get("EntityRef"))
             if got:
-                add("P%s" % t.get("Id"), t.get("TxnDate"), got["amount"], "out", t.get("AccountRef") or {}, ("Purchase", t.get("Id")), got["held_in"], t.get("PrivateNote"),
+                # a credit on a card (a refund, or a payment received) is a Purchase marked Credit: money in on the card
+                add("P%s" % t.get("Id"), t.get("TxnDate"), got["amount"], "in" if t.get("Credit") else "out", t.get("AccountRef") or {}, ("Purchase", t.get("Id")), got["held_in"], t.get("PrivateNote"),
                     note=got["note"], payee=got["payee"], posted_as="expense")
         for t in raw["Deposit"]:
             got = posted_by_rule("Deposit", t, "DepositLineDetail", lambda t, part: part["DepositLineDetail"].get("Entity"))
             if got:
                 add("D%s" % t.get("Id"), t.get("TxnDate"), got["amount"], "in", t.get("DepositToAccountRef") or {}, ("Deposit", t.get("Id")), got["held_in"], t.get("PrivateNote"),
                     note=got["note"], payee=got["payee"], posted_as="deposit")
-        recorded = [dict(type=entity, id=t.get("Id"), number=t.get("DocNumber"), date=t.get("TxnDate"), direction=direction,
+        recorded = [dict(type=entity, id=t.get("Id"), number=t.get("DocNumber"), date=t.get("TxnDate"), direction="in" if entity == "Purchase" and t.get("Credit") else direction,
                          amount_cents=cents(t.get("TotalAmt")), bank_account_id=(bank(t) or {}).get("value"),
                          payee=((t.get("EntityRef") or t.get("VendorRef") or t.get("CustomerRef") or {}).get("name")))
                     for entity, direction, bank in RECORDED_PAYMENTS for t in raw[entity] if (entity, t.get("Id")) not in own]

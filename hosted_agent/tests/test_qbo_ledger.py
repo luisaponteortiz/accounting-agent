@@ -242,17 +242,17 @@ class QboLedgerCase(unittest.TestCase):
         before = self.connect()
         self.intuit.add_card_payment_lines()
         got = self.run_agent()
-        out, into = got["P28"], got["D48"]
+        out, into = got["P28"], got["P38"]
         self.assertEqual((out["item_class"], out["class_key"], out["action"], out["confidence"], out["evidence"]["other_side"]),
-                         ("card_payment", "Checking > Mastercard", dict(kind="transfer", other_account="Mastercard"), 0.97, "D48"))
+                         ("card_payment", "Checking > Mastercard", dict(kind="transfer", other_account="Mastercard"), 0.97, "P38"))
         self.assertEqual((into["item_class"], into["class_key"], into["action"]), ("card_payment", "Checking > Mastercard", dict(kind="transfer", other_account="Checking")))
-        kept = json.loads(json.dumps([self.record("Purchase", "28"), self.record("Deposit", "48")]))
+        kept = json.loads(json.dumps([self.record("Purchase", "28"), self.record("Purchase", "38")]))
         self.assertEqual(review.decide(self.store, self.books, OWNER, into["id"], "approve"), "posted")       # approved from the card side
         self.assertEqual(self.writes(before), [("POST", "transfer")])
-        self.assertEqual([self.record("Purchase", "28"), self.record("Deposit", "48")], kept)
+        self.assertEqual([self.record("Purchase", "28"), self.record("Purchase", "38")], kept)
         posting = self.store.one("SELECT * FROM postings WHERE proposal_id=?", (into["id"],))
-        self.assertEqual((posting["verified"], posting["ledger_ref"]), (1, "Deposit 48"))
-        self.assertFalse({"P28", "D48"} & {i["id"] for i in self.books.pending_feed(REALM)})      # one approval clears both lines
+        self.assertEqual((posting["verified"], posting["ledger_ref"]), (1, "Purchase 38"))
+        self.assertFalse({"P28", "P38"} & {i["id"] for i in self.books.pending_feed(REALM)})      # one approval clears both lines
         sent = len(self.intuit.calls)
         self.assertEqual(review.decide(self.store, self.books, OWNER, out["id"], "approve"), "posted")        # the bank side: already done, nothing more is entered
         self.assertEqual(self.writes(sent), [])
@@ -262,13 +262,13 @@ class QboLedgerCase(unittest.TestCase):
         before = self.connect()
         self.intuit.add_card_payment_lines()
         self.record("Purchase", "28")["Line"][0]["Description"] = "ACH DEBIT 4411"
-        self.record("Deposit", "48")["Line"][0]["Description"] = ""
+        self.record("Purchase", "38")["Line"][0]["Description"] = ""
         self.intuit.records["Purchase"].append({"Id": "29", "SyncToken": "0", "TxnDate": "2026-11-12", "TotalAmt": 77.0, "PaymentType": "CreditCard", "AccountRef": {"value": "41", "name": "Mastercard"},
                                                 "Line": [{"Amount": 77.0, "Description": "PAYMENT TO A STORE", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})
         self.intuit.records["Deposit"].append({"Id": "52", "SyncToken": "0", "TxnDate": "2026-11-12", "TotalAmt": 77.0, "DepositToAccountRef": {"value": "35", "name": "Checking"},
                                                "Line": [{"Amount": 77.0, "Description": "PAYMENT FROM A CUSTOMER", "DepositLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]})
         got = self.run_agent()
-        for key in ("P28", "D48"):
+        for key in ("P28", "P38"):
             p = got[key]
             self.assertEqual((p["item_class"], p["confidence"], p["queue"]), ("card_payment", 0.7, "exception"), key)
             self.assertIn("neither bank text says payment", p["evidence"]["reasoning"])
@@ -276,8 +276,8 @@ class QboLedgerCase(unittest.TestCase):
         self.assertNotEqual(got["D52"]["item_class"], "card_payment")
         with self.assertRaises(LedgerError):
             self.books.transfer(REALM, "P29", "Checking")
-        self.intuit.records["Deposit"].append({"Id": "53", "SyncToken": "0", "TxnDate": "2026-11-12", "TotalAmt": 250.0, "DepositToAccountRef": {"value": "41", "name": "Mastercard"},
-                                               "Line": [{"Amount": 250.0, "DepositLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})
+        self.intuit.records["Purchase"].append({"Id": "53", "SyncToken": "0", "TxnDate": "2026-11-12", "TotalAmt": 250.0, "PaymentType": "CreditCard", "Credit": True, "AccountRef": {"value": "41", "name": "Mastercard"},
+                                                "Line": [{"Amount": 250.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})
         self.store.run("DELETE FROM proposals")
         again = self.run_agent()
         self.assertNotEqual(again["P28"]["item_class"], "card_payment")     # two lines on the card could be the other side: nothing is proposed
@@ -290,8 +290,8 @@ class QboLedgerCase(unittest.TestCase):
         self.intuit.add_card_payment_lines(held_in="90")                    # the card line was posted against the bank clearing account
         got = self.run_agent()
         self.assertEqual(review.decide(self.store, self.books, OWNER, got["P28"]["id"], "approve"), "posted")
-        self.assertEqual(self.writes(before), [("POST", "purchase"), ("POST", "deposit")])     # a note on each record, no new transfer
-        self.assertFalse({"P28", "D48"} & {i["id"] for i in self.books.pending_feed(REALM)})
+        self.assertEqual(self.writes(before), [("POST", "purchase"), ("POST", "purchase")])    # a note on each record, no new transfer
+        self.assertFalse({"P28", "P38"} & {i["id"] for i in self.books.pending_feed(REALM)})
 
     def test_a_transfer_with_two_possible_other_sides_is_not_paired(self):
         before = self.connect()

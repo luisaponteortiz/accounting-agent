@@ -75,11 +75,11 @@ class Intuit:
                                         "Line": [{"Amount": amount, "Description": "ONLINE TRANSFER FROM CHK 4502", "DepositLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]})
 
     def add_card_payment_lines(self, amount=250.0, out_date="2026-11-10", in_date="2026-11-11", held_in="91"):
-        """What the rules post when Checking pays the Mastercard: an expense against the bank clearing account and a deposit on the card against the card clearing account."""
+        """What the rules post when Checking pays the Mastercard: an expense against the bank clearing account and a credit on the card against the card clearing account."""
         self.records["Purchase"].append({"Id": "28", "SyncToken": "0", "TxnDate": out_date, "TotalAmt": amount, "PaymentType": "Cash", "AccountRef": {"value": "35", "name": "Checking"},
                                          "Line": [{"Amount": amount, "Description": "MASTERCARD PAYMENT 4411", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]})
-        self.records["Deposit"].append({"Id": "48", "SyncToken": "0", "TxnDate": in_date, "TotalAmt": amount, "DepositToAccountRef": {"value": "41", "name": "Mastercard"},
-                                        "Line": [{"Amount": amount, "Description": "PAYMENT THANK YOU", "DepositLineDetail": {"AccountRef": {"value": held_in, "name": "a clearing account"}}}]})
+        self.records["Purchase"].append({"Id": "38", "SyncToken": "0", "TxnDate": in_date, "TotalAmt": amount, "PaymentType": "CreditCard", "Credit": True, "AccountRef": {"value": "41", "name": "Mastercard"},
+                                         "Line": [{"Amount": amount, "Description": "PAYMENT THANK YOU", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": held_in, "name": "a clearing account"}}}]})
 
     def reply(self, status, data):
         return status, json.dumps(data).encode()
@@ -347,7 +347,8 @@ class QboCase(unittest.TestCase):
                   "AccountRef": {"value": "41", "name": "Mastercard"}, "Line": [{"Amount": 34.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]}
         self.intuit.records["Purchase"].append(charge)
         sent = len(self.intuit.calls)
-        with self.assertRaises(qbo.QboError):                                        # a refund on the card is money coming back, not a charge
+        self.assertEqual(self.line(self.q.clearing(), "T4")["recorded"][0]["id"], "B9")   # a refund on the card is money coming back: not this charge again
+        with self.assertRaises(qbo.QboError):
             self.q.move_to_clearing("T4", "Purchase", "77")
         self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[sent:]))
         del charge["Credit"]
@@ -427,48 +428,49 @@ class QboCase(unittest.TestCase):
         self.connect()
         self.intuit.add_card_payment_lines()
         got = self.q.clearing()
-        out, into = self.line(got, "P28"), self.line(got, "D48")
+        out, into = self.line(got, "P28"), self.line(got, "P38")
         self.assertEqual((out["cleared_by"], into["cleared_by"], out["clearing_id"], into["clearing_id"], got["bridges"]), ([], [], "90", "91", []))
-        kept = json.loads(json.dumps([self.intuit.records["Purchase"][-1], self.intuit.records["Deposit"][-1]]))
+        kept = json.loads(json.dumps(self.intuit.records["Purchase"][-2:]))
         sent, held = len(self.intuit.calls), len(self.intuit.transfers)
-        result = self.q.bridge_card_payment("D48", "P28")                              # either line can be named first
+        result = self.q.bridge_card_payment("P38", "P28")                              # either line can be named first
         made = self.intuit.transfers[-1]
         self.assertEqual((result["paired"], result["transfer"], self.posts(sent), len(self.intuit.transfers)), (True, made["Id"], ["transfer"], held + 1))
         self.assertEqual({k: made[k] for k in ("FromAccountRef", "ToAccountRef", "Amount", "TxnDate", "PrivateNote")},
                          {"FromAccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "ToAccountRef": {"value": "91", "name": "Card Feed Clearing"}, "Amount": 250.0,
-                          "TxnDate": "2026-11-10", "PrivateNote": "Card payment through clearing: Purchase 28 and Deposit 48"})
-        self.assertEqual([self.intuit.records["Purchase"][-1], self.intuit.records["Deposit"][-1]], kept)   # neither record is touched
+                          "TxnDate": "2026-11-10", "PrivateNote": "Card payment through clearing: Purchase 28 and Purchase 38"})
+        self.assertEqual(self.intuit.records["Purchase"][-2:], kept)   # neither record is touched
         got = self.q.clearing()
-        out, into = self.line(got, "P28"), self.line(got, "D48")
+        out, into = self.line(got, "P28"), self.line(got, "P38")
         self.assertEqual(([(c["type"], c["id"], c["bank_account"], c["bridge"]) for c in out["cleared_by"]], [(c["type"], c["id"], c["bank_account"], c["bridge"]) for c in into["cleared_by"]]),
-                         ([("Deposit", "48", "Mastercard", made["Id"])], [("Purchase", "28", "Checking", made["Id"])]))
+                         ([("Purchase", "38", "Mastercard", made["Id"])], [("Purchase", "28", "Checking", made["Id"])]))
         self.assertFalse([l for l in got["lines"] if l["id"] == made["Id"]])            # the clearing transfer is not a bank line itself
         again = len(self.intuit.calls)
-        self.assertTrue(self.q.bridge_card_payment("P28", "D48")["paired"])
+        self.assertTrue(self.q.bridge_card_payment("P28", "P38")["paired"])
         self.assertEqual(self.posts(again), [])                                       # asked twice, entered once
         made["Amount"] = 249.0                                                        # the transfer no longer agrees with the two lines: they are open again
         self.assertEqual(self.line(self.q.clearing(), "P28")["cleared_by"], [])
         with self.assertRaises(qbo.QboError):
-            self.q.bridge_card_payment("P28", "D48")                                  # and a second transfer for the same records is refused
+            self.q.bridge_card_payment("P28", "P38")                                  # and a second transfer for the same records is refused
         self.assertEqual(self.posts(again), [])
 
     def test_only_money_out_of_a_bank_account_and_in_on_a_card_is_a_card_payment(self):
         before = self.connect()
         self.intuit.add_card_payment_lines()
         self.intuit.add_transfer_lines(amount=250.0, out_date="2026-11-10", in_date="2026-11-10")     # P24 out of Checking, D34 in to Savings
-        deposit = lambda record_id, account, when, amount=250.0, category="91": self.intuit.records["Deposit"].append(
-            {"Id": record_id, "SyncToken": "0", "TxnDate": when, "TotalAmt": amount, "DepositToAccountRef": account,
-             "Line": [{"Amount": amount, "DepositLineDetail": {"AccountRef": {"value": category, "name": "a clearing account"}}}]})
-        deposit("49", {"value": "41", "name": "Mastercard"}, "2026-11-10", 249.0)       # another amount
-        deposit("50", {"value": "41", "name": "Mastercard"}, "2026-11-16")              # six days later
-        deposit("51", {"value": "41", "name": "Mastercard"}, "2026-11-10", category="90")   # the card line sits in the bank clearing account
-        deposit("54", {"value": "35", "name": "Checking"}, "2026-10-10", 34.0, category="90")  # money in to the bank, the amount of card charge T4
-        self.intuit.transfers.append({"Id": "T20", "SyncToken": "0", "TxnDate": "2026-11-10", "Amount": 250.0, "PrivateNote": "Card payment through clearing: Purchase 28 and Deposit 48",
+        credit = lambda record_id, when, amount=250.0, category="91": self.intuit.records["Purchase"].append(
+            {"Id": record_id, "SyncToken": "0", "TxnDate": when, "TotalAmt": amount, "PaymentType": "CreditCard", "Credit": True, "AccountRef": {"value": "41", "name": "Mastercard"},
+             "Line": [{"Amount": amount, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": category, "name": "a clearing account"}}}]})
+        credit("49", "2026-11-10", 249.0)                                             # another amount
+        credit("50", "2026-11-16")                                                    # six days later
+        credit("51", "2026-11-10", category="90")                                     # the card line sits in the bank clearing account
+        self.intuit.records["Deposit"].append({"Id": "54", "SyncToken": "0", "TxnDate": "2026-10-10", "TotalAmt": 34.0, "DepositToAccountRef": {"value": "35", "name": "Checking"},
+                                               "Line": [{"Amount": 34.0, "DepositLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]})   # money in to the bank, the amount of card charge T4
+        self.intuit.transfers.append({"Id": "T20", "SyncToken": "0", "TxnDate": "2026-11-10", "Amount": 250.0, "PrivateNote": "Card payment through clearing: Purchase 28 and Purchase 38",
                                       "FromAccountRef": {"value": "91", "name": "Card Feed Clearing"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}})
         self.assertEqual(self.line(self.q.clearing(), "P28")["cleared_by"], [])        # a transfer the wrong way round settles nothing
         self.intuit.records["Purchase"].append({"Id": "29", "SyncToken": "0", "TxnDate": "2026-11-10", "TotalAmt": 250.0, "PaymentType": "CreditCard", "AccountRef": {"value": "41", "name": "Mastercard"},
                                                 "Line": [{"Amount": 250.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})   # a charge on the card
-        for a, b in (("P28", "D49"), ("P28", "D50"), ("P28", "D51"), ("P28", "D34"), ("P29", "D34"), ("P28", "P29"), ("P28", "P28"), ("P28", "D99")):
+        for a, b in (("P28", "P49"), ("P28", "P50"), ("P28", "P51"), ("P28", "D34"), ("P29", "D34"), ("P28", "P29"), ("P28", "P28"), ("P28", "D99")):
             with self.assertRaises(qbo.QboError, msg=(a, b)):
                 self.q.bridge_card_payment(a, b)
         with self.assertRaises(qbo.QboError):
@@ -476,13 +478,13 @@ class QboCase(unittest.TestCase):
         with self.assertRaises(qbo.QboError):
             self.q.pair_transfer("T4", "D54")                                         # not even when both sit in the bank clearing account
         with self.assertRaises(qbo.QboError):
-            self.q.pair_transfer("P28", "D48")                                        # one line in each clearing account: a note alone would not cancel them
+            self.q.pair_transfer("P28", "P38")                                        # one line in each clearing account: a note alone would not cancel them
         self.assertEqual(self.posts(before), [])
-        self.assertTrue(self.q.pair_transfer("P28", "D51")["paired"])                  # both in the bank clearing account: they cancel as they stand
-        self.assertEqual(self.posts(before), ["purchase", "deposit"])
+        self.assertTrue(self.q.pair_transfer("P28", "P51")["paired"])                  # both in the bank clearing account: they cancel as they stand
+        self.assertEqual(self.posts(before), ["purchase", "purchase"])
         self.intuit.accounts[:] = [a for a in self.intuit.accounts if a["Id"] != "91"]
         with self.assertRaises(qbo.QboError):
-            self.q.bridge_card_payment("P28", "D48")                                  # no card clearing account in this company
+            self.q.bridge_card_payment("P28", "P38")                                  # no card clearing account in this company
 
     def test_a_pairing_note_is_never_read_as_the_banks_text(self):
         self.connect()
