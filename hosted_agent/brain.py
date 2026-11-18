@@ -16,7 +16,7 @@ FEE_WORDS = ("SERVICE FEE", "MONTHLY FEE", "WIRE FEE", "OVERDRAFT FEE", "MAINTEN
 PERSON_RAILS = ("ZELLE", "VENMO", "CASH APP", "ATM WITHDRAWAL")
 
 # Classes a standing approval may ever cover. Everything else always goes to a person.
-AUTO_ELIGIBLE = {"recurring_vendor", "bill_payment_match", "invoice_payment_match", "own_transfer", "bank_fee"}
+AUTO_ELIGIBLE = {"recurring_vendor", "bill_payment_match", "invoice_payment_match", "own_transfer", "bank_fee", "already_recorded"}
 
 
 def vendor_key(description):
@@ -56,6 +56,23 @@ class BaselineBrain:
                 and t["description"] == line["description"] and t["bank_account"] == line["bank_account"]]
         if same:
             return proposal("possible_duplicate", vendor_key(text), None, 0.5, already_posted=[t["id"] for t in same])
+
+        recorded = line.get("recorded") or []            # payments of this amount already in the books for this bank account
+        if recorded:
+            best = next((c for c in recorded if c.get("best_fit")), None)
+            if line.get("bank_account_type") != "Bank":
+                return proposal("already_recorded", "credit card", None, 0.0, candidates=recorded,
+                                why="already recorded in the books; moving a credit card payment to clearing is not built yet")
+            if not best:
+                return proposal("already_recorded", "no clear fit", None, 0.0, candidates=recorded,
+                                why="each recorded payment of this amount fits another bank line better")
+            label = " ".join(str(x) for x in (best.get("number"), best.get("payee")) if x)
+            sure = len(recorded) == 1 and best["days_apart"] <= 3
+            return proposal("already_recorded", best["type"], dict(kind="move", txn_type=best["type"], txn_id=best["id"], label=label),
+                            0.97 if sure else 0.7, candidates=recorded)
+
+        if not text.strip():
+            return proposal("no_bank_text", "no bank text", None, 0.0, why="the bank gave no description for this line")
 
         if any(text.startswith(rail) for rail in PERSON_RAILS):
             return proposal("person_payment", "person", None, 0.0, why="payment to an individual needs a person to say what it was for")

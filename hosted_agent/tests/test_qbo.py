@@ -9,9 +9,13 @@ from hosted_agent import qbo
 class Intuit:
     """A stand-in for Intuit: a token service and one small company whose recorded payments can be changed."""
     def __init__(self):
-        self.calls, self.token_status, self.issued, self.refuse_change, self.ignore_change = [], 200, 0, False, False
+        self.calls, self.token_status, self.issued, self.refuse_change, self.ignore_change, self.closed = [], 200, 0, False, False, None
         self.accounts = [{"Id": "35", "Name": "Checking", "AccountType": "Bank"}, {"Id": "36", "Name": "Savings", "AccountType": "Bank"},
                          {"Id": "41", "Name": "Mastercard", "AccountType": "Credit Card"},
+                         {"Id": "60", "Name": "Supplies", "AccountType": "Expense"}, {"Id": "61", "Name": "Legal", "AccountType": "Expense"},
+                         {"Id": "62", "Name": "Utilities", "AccountType": "Expense"},
+                         {"Id": "63", "Name": "Decks and Patios", "FullyQualifiedName": "Job Expenses:Decks and Patios", "AccountType": "Expense"},
+                         {"Id": "70", "Name": "Opening Balance Equity", "AccountType": "Equity"},
                          {"Id": "90", "Name": "Bank Feed Clearing", "AccountType": "Bank", "CurrentBalance": 377.22}]
         self.transfers = [
             {"Id": "T1", "TxnDate": "2026-10-21", "Amount": 114.09, "FromAccountRef": {"value": "35", "name": "Checking"}, "ToAccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "PrivateNote": "PG E"},
@@ -35,14 +39,29 @@ class Intuit:
                 {"Id": "20", "SyncToken": "0", "TxnDate": "2026-11-03", "TotalAmt": 228.75, "PaymentType": "Cash", "AccountRef": {"value": "35", "name": "Checking"},
                  "Line": [{"Amount": 228.75, "Description": "HICKS HARDWARE 0443", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]},
                 {"Id": "76", "SyncToken": "0", "DocNumber": "76", "TxnDate": "2026-10-22", "TotalAmt": 75.0, "PaymentType": "Check", "EntityRef": {"name": "Pam Seitz"}, "AccountRef": {"value": "35", "name": "Checking"},
-                 "Line": [{"Amount": 75.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "61", "name": "Legal"}}}]}],
+                 "Line": [{"Amount": 75.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "61", "name": "Legal"}}}]},
+                {"Id": "21", "SyncToken": "0", "TxnDate": "2026-11-14", "TotalAmt": 419.8, "PaymentType": "Cash", "AccountRef": {"value": "35", "name": "Checking"},
+                 "Line": [{"Amount": 419.8, "Description": "CITY POWER & LIGHT ACH 4502", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]},
+                {"Id": "22", "SyncToken": "0", "TxnDate": "2026-11-15", "TotalAmt": 642.1, "PaymentType": "Cash", "AccountRef": {"value": "35", "name": "Checking"},
+                 "Line": [{"Amount": 642.1, "Description": "NORTHSIDE PRODUCE CO", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]}] + [
+                {"Id": "H%d" % month, "SyncToken": "0", "TxnDate": "2026-%02d-12" % month, "TotalAmt": 412.5, "PaymentType": "Check", "EntityRef": {"value": "V1", "name": "City Power and Light"},
+                 "AccountRef": {"value": "35", "name": "Checking"}, "Line": [{"Amount": 412.5, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "62", "name": "Utilities"}}}]} for month in (8, 9, 10)],
+            "Bill": [{"Id": "B100", "DocNumber": "100", "VendorRef": {"value": "V2", "name": "Northside Produce Co"}, "TotalAmt": 642.1, "Balance": 642.1, "DueDate": "2026-11-16"},
+                     {"Id": "B101", "DocNumber": "101", "VendorRef": {"value": "V2", "name": "Northside Produce Co"}, "TotalAmt": 380.0, "Balance": 380.0, "DueDate": "2026-11-27"},
+                     {"Id": "B099", "DocNumber": "99", "VendorRef": {"value": "V2", "name": "Northside Produce Co"}, "TotalAmt": 50.0, "Balance": 0}],
+            "Invoice": [{"Id": "I200", "DocNumber": "200", "CustomerRef": {"value": "C1", "name": "Bayview Catering"}, "TotalAmt": 1840.0, "Balance": 1840.0, "DueDate": "2026-11-12"},
+                        {"Id": "I201", "DocNumber": "201", "CustomerRef": {"value": "C1", "name": "Bayview Catering"}, "TotalAmt": 642.1, "Balance": 642.1, "DueDate": "2026-11-20"}],
+            "Vendor": [{"Id": "V1", "DisplayName": "City Power and Light"}, {"Id": "V2", "DisplayName": "Northside Produce Co"}],
+            "Customer": [{"Id": "C1", "DisplayName": "Bayview Catering"}],
             "Deposit": [
                 {"Id": "30", "SyncToken": "0", "TxnDate": "2026-10-22", "TotalAmt": 868.15, "DepositToAccountRef": {"value": "35", "name": "Checking"},
                  "Line": [{"Amount": 868.15, "Description": "DEPOSIT 1022", "DepositLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]},
                 {"Id": "31", "SyncToken": "1", "TxnDate": "2026-10-21", "TotalAmt": 868.15, "DepositToAccountRef": {"value": "35", "name": "Checking"},
                  "Line": [{"Amount": 868.15, "LinkedTxn": [{"TxnId": "300", "TxnType": "Payment"}]}]},
                 {"Id": "32", "SyncToken": "0", "TxnDate": "2026-11-17", "TotalAmt": 200.0, "DepositToAccountRef": {"value": "35", "name": "Checking"},
-                 "Line": [{"Amount": 200.0, "Description": "A RENTAL", "DepositLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "Entity": {"name": "A Rental"}}}]}],
+                 "Line": [{"Amount": 200.0, "Description": "A RENTAL", "DepositLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}, "Entity": {"name": "A Rental"}}}]},
+                {"Id": "33", "SyncToken": "0", "TxnDate": "2026-11-16", "TotalAmt": 1840.0, "DepositToAccountRef": {"value": "35", "name": "Checking"},
+                 "Line": [{"Amount": 1840.0, "Description": "DEPOSIT BAYVIEW CATERING", "DepositLineDetail": {"AccountRef": {"value": "90", "name": "Bank Feed Clearing"}}}]}],
             "Payment": [
                 {"Id": "40", "SyncToken": "0", "TxnDate": "2026-11-16", "TotalAmt": 200.0, "CustomerRef": {"name": "A Rental Customer"}, "DepositToAccountRef": {"value": "35", "name": "Checking"}}]}
 
@@ -55,13 +74,26 @@ class Intuit:
             self.issued += 1
             return self.reply(self.token_status, dict(access_token="ACCESS-%d" % self.issued, refresh_token="REFRESH-%d" % self.issued, expires_in=3600))
         if "/companyinfo/" in url:
-            return self.reply(200, {"CompanyInfo": {"CompanyName": "Sandbox Company_US_1"}})
+            return self.reply(200, {"CompanyInfo": {"CompanyName": "Sandbox Company_US_1", "FiscalYearStartMonth": "January"}})
         parts = urllib.parse.urlsplit(url)
         tail = parts.path.split("/v3/company/")[-1].split("/")[1:]          # what follows the company number
         kind = next((k for k in self.records if tail and k.lower() == tail[0]), None)
         if kind and method == "GET" and len(tail) == 2:
             hit = [r for r in self.records[kind] if r["Id"] == tail[1]]
             return self.reply(200, {kind: hit[0]}) if hit else self.reply(400, {"Fault": {"Error": [{"Message": "Object Not Found"}]}})
+        if tail == ["preferences"]:
+            return self.reply(200, {"Preferences": {"AccountingInfoPrefs": {"BookCloseDate": self.closed} if self.closed else {}}})
+        if kind and method == "POST" and "Id" not in json.loads(body):         # a new record
+            sent = json.loads(body)
+            if self.refuse_change:
+                return self.reply(400, {"Fault": {"Error": [{"Message": "Business Validation Error", "Detail": "The change was refused."}]}})
+            made = dict(sent, Id="N%d" % (len(self.records[kind]) + 1), SyncToken="0")
+            self.records[kind].append(made)
+            for part in sent.get("Line", []):
+                for link in part.get("LinkedTxn", []):
+                    paid = next(r for r in self.records[link["TxnType"]] if r["Id"] == link["TxnId"])
+                    paid["Balance"] = round(paid["Balance"] - part["Amount"], 2)
+            return self.reply(200, {kind: made})
         if kind and method == "POST":
             sent = json.loads(body)
             held = next(r for r in self.records[kind] if r["Id"] == sent["Id"])
@@ -69,7 +101,7 @@ class Intuit:
                 return self.reply(400, {"Fault": {"Error": [{"Message": "Stale Object Error", "Detail": "You and another user were working on the same thing.", "code": "5010"}], "type": "ValidationFault"}})
             if not self.ignore_change:
                 place = dict(qbo.RECORDED_PLACES)[kind]
-                if place(sent)["value"] == "90" and place(held)["value"] != "90":
+                if (place(sent) or {}).get("value") == "90" and (place(held) or {}).get("value") != "90":
                     sign = 1 if kind in ("Payment", "Deposit", "SalesReceipt") else -1      # money in adds to the clearing account
                     self.accounts[-1]["CurrentBalance"] = round(self.accounts[-1]["CurrentBalance"] + sign * held["TotalAmt"], 2)
                 held.clear()
@@ -183,7 +215,7 @@ class QboCase(unittest.TestCase):
         before = self.connect()
         got = self.q.clearing()
         self.assertEqual((got["found"], got["id"], got["type"], got["balance_cents"]), (True, "90", "Bank", 37722))
-        self.assertEqual(sorted(l["id"] for l in got["lines"]), ["D30", "D32", "P20", "T1", "T2", "T4", "T5", "T6"])   # the Checking to Savings transfer is not a clearing line
+        self.assertEqual(sorted(l["id"] for l in got["lines"]), ["D30", "D32", "D33", "P20", "P21", "P22", "T1", "T2", "T4", "T5", "T6"])   # the Checking to Savings transfer is not a clearing line
         paid, plain = self.line(got, "T1"), self.line(got, "T2")
         self.assertEqual((paid["amount_cents"], paid["direction"], paid["bank_account"], paid["bank_account_type"], paid["note"], paid["posted_as"]),
                          (11409, "out", "Checking", "Bank", "PG E", "transfer"))

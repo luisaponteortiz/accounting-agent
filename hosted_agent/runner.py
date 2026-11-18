@@ -43,6 +43,8 @@ def execute(store, ledger, proposal_id, action, how, actor):
             ref = ledger.match(realm, feed_id, action["txn_type"], action["txn_id"])
         elif action["kind"] == "transfer":
             ref = ledger.transfer(realm, feed_id, action["other_account"])
+        elif action["kind"] == "move":
+            ref = ledger.move(realm, feed_id, action["txn_type"], action["txn_id"])
         else:
             raise LedgerError("unknown action " + str(action.get("kind")))
         back = ledger.read_back(realm, feed_id)
@@ -70,11 +72,17 @@ def verify(item, action, back, ref):
         return posted.get("account") == action["account"] and posted.get("vendor") == action.get("vendor")
     if action["kind"] == "match":
         return posted.get("matched_id") == action["txn_id"]
+    if action["kind"] == "move":
+        return (posted.get("moved_type"), posted.get("moved_id")) == (action["txn_type"], action["txn_id"])
     return posted.get("account") == action["other_account"]
 
 
-def treatment_of(posted):
+def treatment_of(posted, proposed=None):
     """The treatment a person gave a line outside the agent, in the agent's terms."""
+    if posted.get("kind") == "move":      # a payment in the clearing account cancels the line; it may also be the payment of an open item
+        if (proposed or {}).get("kind") == "match" and posted.get("matched_id"):
+            return dict(kind="match", txn_type=posted.get("matched_type"), txn_id=posted.get("matched_id"))
+        return dict(kind="move", txn_type=posted.get("moved_type"), txn_id=posted.get("moved_id"))
     if posted.get("kind") == "match":
         return dict(kind="match", txn_type=posted.get("matched_type"), txn_id=posted.get("matched_id"))
     if posted.get("kind") == "transfer":
@@ -94,7 +102,7 @@ def observe(store, ledger, client_id):
         back = ledger.read_back(client["realm_id"], p["item"]["id"])
         if back["status"] == "pending" or not back.get("posted"):
             continue
-        done = treatment_of(back["posted"])
+        done = treatment_of(back["posted"], p["action"])
         verdict = "approve" if same_treatment(p["action"], done) else "change"
         store.run("INSERT INTO decisions(client_id,proposal_id,actor,verdict,final_action,note,created) VALUES(?,?,?,?,?,?,?)",
                   (client_id, p["id"], "observed-in-books", verdict, dumps(done), "handled directly in the books", now()))
@@ -152,9 +160,14 @@ def run_client(store, ledger, brain, client_id, job="bank_feed"):
         store.run("UPDATE runs SET finished=?, status='blocked', summary=? WHERE id=?", (now(), dumps({"blocked": str(stop)}), run_id))
         store.audit(client_id, AGENT, "run_blocked", {"run": run_id, "why": str(stop)})
         return dict(run_id=run_id, status="blocked", why=str(stop))
-    counts["observed"] = observe(store, ledger, client_id)
-    counts["auto_posted"] += reroute(store, ledger, client_id, post=True)
-    ctx = Context(ledger, client["realm_id"])
+    try:
+        counts["observed"] = observe(store, ledger, client_id)
+        counts["auto_posted"] += reroute(store, ledger, client_id, post=True)
+        ctx = Context(ledger, client["realm_id"])
+    except LedgerError as problem:      # the books could not be read: nothing is proposed from half a picture
+        store.run("UPDATE runs SET finished=?, status='blocked', summary=? WHERE id=?", (now(), dumps({"blocked": str(problem)}), run_id))
+        store.audit(client_id, AGENT, "run_blocked", {"run": run_id, "why": str(problem)})
+        return dict(run_id=run_id, status="blocked", why=str(problem))
     standing = store.active_standing(client_id)
     known = {p["item_key"] for p in store.proposals(client_id)}
     for item in ctx.feed:

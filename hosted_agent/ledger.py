@@ -15,6 +15,28 @@ class LedgerError(Exception):
 OPENING_BALANCE_EQUITY = "Opening Balance Equity"
 
 
+class Books:
+    """Several sets of books behind one door. The company named in each call
+    chooses the ledger; a company nobody registered goes to the fallback, which
+    refuses what it does not hold."""
+    METHODS = ("company", "accounts", "bank_accounts", "pending_feed", "history", "open_bills", "open_invoices", "read_back",
+               "categorize", "match", "transfer", "move")
+
+    def __init__(self, fallback):
+        self.fallback, self.by_realm = fallback, {}
+
+    def add(self, realm_id, ledger):
+        self.by_realm[str(realm_id)] = ledger
+
+    def __getattr__(self, name):
+        if name not in Books.METHODS:
+            raise AttributeError(name)
+
+        def call(realm_id, *args, **kwargs):
+            return getattr(self.by_realm.get(str(realm_id), self.fallback), name)(realm_id, *args, **kwargs)
+        return call
+
+
 class FakeLedger:
     """In-memory fictional books. Amounts are integer cents; money out is negative."""
 
@@ -97,6 +119,9 @@ class FakeLedger:
         found[0]["status"] = "paid"
         line["status"] = "matched"
         return txn["id"]
+
+    def move(self, realm_id, feed_id, txn_type, txn_id):
+        raise LedgerError("these fictional books have no payments recorded ahead of the bank feed")
 
     def transfer(self, realm_id, feed_id, other_account):
         line = self._line(realm_id, feed_id)

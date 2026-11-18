@@ -7,6 +7,8 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
 from . import labs, qbo, review
+from .ledger import Books, LedgerError
+from .qbo_ledger import QboLedger
 from .runner import run_client
 
 PAGE = Path(__file__).parent / "page.html"
@@ -17,8 +19,17 @@ class ReviewServer(ThreadingHTTPServer):
 
     def __init__(self, address, store, ledger, brain, people, qbo=None, labs=None):
         """people: {token: {"name": ..., "role": "owner" | "reviewer"}}"""
-        self.store, self.ledger, self.brain, self.people, self.qbo, self.labs = store, ledger, brain, people, qbo, labs
+        self.store, self.brain, self.people, self.qbo, self.labs = store, brain, people, qbo, labs
+        self.ledger = Books(ledger) if qbo else ledger     # with QuickBooks keys, the sandbox company's books sit beside the fictional ones
         super().__init__(address, Handler)
+
+    def adopt_sandbox(self, person_name):
+        """The connected sandbox company becomes a client of its own, in prepare-only mode, with its own ledger."""
+        realm = self.qbo.connection["realm_id"]
+        books = QboLedger(self.qbo)
+        self.ledger.add(realm, books)
+        if not self.store.one("SELECT 1 FROM clients WHERE realm_id=?", (realm,)):
+            self.store.add_client("qbo-" + realm, books.company(realm)["name"], realm, actor=person_name)
 
     def person(self, token):
         for known, person in self.people.items():
@@ -121,7 +132,10 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200, {"person": person, "clients": review.roster(s.store), "brain": brain})
             if url.path == "/api/state":
                 state = review.state(s.store, query["client"][0])
-                state["accounts"] = [a["name"] for a in s.ledger.accounts(state["client"]["realm_id"])]
+                try:
+                    state["accounts"] = [a["name"] for a in s.ledger.accounts(state["client"]["realm_id"])]
+                except LedgerError as problem:
+                    state["accounts"], state["books_error"] = [], str(problem)
                 return self.send(200, state)
         except review.Refused as no:
             return self.send(403, str(no).encode(), "text/plain")
@@ -137,8 +151,9 @@ class Handler(BaseHTTPRequestHandler):
         try:
             person = s.qbo.finish(first("state"), first("code"), first("realmId"))
             s.store.audit("-", person, "qbo_sandbox_connected", {"realm_id": s.qbo.connection["realm_id"]})
+            s.adopt_sandbox(person)
             message = "QuickBooks sandbox connected. Returning to the agent."
-        except qbo.QboError as problem:
+        except (qbo.QboError, LedgerError) as problem:
             message = "QuickBooks was not connected: %s" % problem
         page = '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="2;url=/"><p style="font:16px system-ui;padding:24px">%s</p>' % message
         self.send(200, page.encode(), "text/html; charset=utf-8")

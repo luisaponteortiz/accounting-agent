@@ -2,7 +2,8 @@
 
 The agent that runs by itself on a host and brings people only the exceptions.
 Opened by owner decision D-040 (17 November 2026). Every company in this build
-is fictional; nothing here connects to a real client's books.
+is fictional or an Intuit sandbox company; nothing here connects to a real
+client's books.
 
 ## What it does today
 
@@ -27,13 +28,13 @@ People decide waiting items (approve, change, reject with a reason), grant and e
 
 ```sh
 python3 -m hosted_agent demo                               # review page on http://127.0.0.1:8770, sign-in links printed
-python3 -m unittest discover -s hosted_agent/tests -t .     # 66 review tests
+python3 -m unittest discover -s hosted_agent/tests -t .     # 79 review tests
 ```
 
 ## What is not built yet
 
 - **Claude is a first cut.** With `ANTHROPIC_API_KEY` set, `ClaudeBrain` asks Claude only about lines the books cannot settle, and its suggestions are always reviewed by a person (class `model suggestion` can never get a standing approval). Its instructions are a short list of the firm's rules written into `claude_brain.py`; the owner's skill library is not loaded yet. Set `AGENT_BRAIN=baseline` to switch it off, `AGENT_MODEL` to change the model.
-- **QuickBooks is connected to a sandbox only.** With `INTUIT_CLIENT_ID` and `INTUIT_CLIENT_SECRET` set, the owner can connect one Intuit sandbox company and the page shows what the agent can read from it. `qbo.py` can reach only the sandbox host. It cannot read the bank feed's unreviewed lines (tested, D-041). It reads the clearing account that bank rules post to (D-042) and makes one kind of change, started by the owner on the page: moving a payment that is already recorded into the clearing account, then reading it back. It never deletes. The agent's runs still use `FakeLedger`.
+- **QuickBooks is connected to a sandbox only.** With `INTUIT_CLIENT_ID` and `INTUIT_CLIENT_SECRET` set, the owner can connect one Intuit sandbox company. `qbo.py` can reach only the sandbox host. It cannot read the bank feed's unreviewed lines (tested, D-041), so bank rules in the company post every line to a clearing account (D-042) and `qbo_ledger.py` gives the agent those lines as its bank feed. On connecting, the sandbox company becomes a client of its own in `prepare only` mode and a run proposes a treatment for each clearing line. In `post approved` mode an approved item changes the sandbox books in one of three ways, each read back: the line's own record gets its category and payee; an open bill or invoice of the same amount is paid through the clearing account; or a payment that was already recorded is moved to the clearing account (D-043). It never deletes. Not built for QuickBooks: transfers between the company's own accounts, credit card lines that are already recorded, adding a vendor or customer that is not in the books, part payments. The fictional companies still use `FakeLedger`.
 - **Only the bank feed job.** Cards, documents, close and the other jobs follow the same frame.
 - **Sign-in is a link with a token**, good enough for fictional data and not for go-live. Storage is SQLite.
 - The page has been exercised in a headless browser, not reviewed by a person.

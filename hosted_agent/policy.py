@@ -15,7 +15,8 @@ MIN_CONFIDENCE = 0.9
 def same_treatment(a, b):
     if not a or not b or a.get("kind") != b.get("kind"):
         return False
-    keys = {"categorize": ("account", "vendor"), "match": ("txn_type", "txn_id"), "transfer": ("other_account",)}[a["kind"]]
+    keys = {"categorize": ("account", "vendor"), "match": ("txn_type", "txn_id"), "transfer": ("other_account",),
+            "move": ("txn_type", "txn_id")}[a["kind"]]
     return all(a.get(k) == b.get(k) for k in keys)
 
 
