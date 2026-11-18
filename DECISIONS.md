@@ -313,3 +313,15 @@ A test on the connected Intuit sandbox company (hosted_agent/qbo.py, `probe`) sh
 - **Result.** Intuit's server answered "Access Denied" (HTTP 403) to both requests, before any sign-in. Registration was not attempted, because the server that would be used refuses the service at the door. Intuit's help page describes the connector for use inside Claude.ai with a Claude account and says nothing about other programs.
 - **How Fable applies it (Fable's reading, not the owner's words).** The refusal is Intuit's control and is not worked around: no imitation of a browser or of another client, and no relaying through another network. The bank feed stays with the agent that runs inside the owner's Claude account, where Intuit supports the connector. The hosted agent keeps the work the public API supports. How the two hand work to each other is not decided.
 - **Records changed with this decision.** DECISIONS.md and PROGRESS.md. No gate, register state or requirement record changed.
+
+## D-042 — Owner decision: route the bank feed into a clearing account with rules — 17 November 2026
+
+After D-041 Fable proposed a hand-off between the agent inside the owner's Claude account and the hosted agent. The owner answered:
+
+> we should route everything to a clearing account with rules so the agent gets the feed in the clearing account
+
+- **What it means (Fable's reading, not the owner's words).** In each company, QuickBooks bank rules send every bank feed line to one clearing account. Each line is then a recorded transaction, which the hosted agent's own connection can read and change. The agent's work becomes moving each item out of the clearing account to its proper treatment, and a clearing balance of zero shows the work is done.
+- **What is known from Intuit's help pages, not yet tested.** Rules that post automatically run when a person signs in, uploads a file, or creates or changes such a rule, and stop when 300 or more lines are pending. Whether a rule or a match to an existing transaction wins is not stated.
+- **What is to be proven in the sandbox company first.** That a rule posts every line; that a line matching an existing transaction is not posted twice; that the agent can change a posted line through the connection and read it back; and how bill payments, customer payments and transfers between the company's own accounts are cleared without deleting anything.
+- **What stays closed.** A clearing account and rules in a real client's books are a change to those books and wait for the owner's explicit decision for that client (D-040).
+- **Records changed with this decision.** DECISIONS.md. The hand-off work begun after D-041 is parked on branch dev/handoff-door, unfinished.
