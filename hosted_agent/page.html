@@ -63,6 +63,13 @@ async function qbo(){const q=await get('/api/qbo'),el=$('#qbo');
  if(!q.configured){el.textContent='Keys are not set on this service yet.';return}
  if(!q.connected){el.innerHTML=(q.error?'<span class="bad">'+esc(q.error)+'</span><br>':'')+'Not connected.<br><a href="/qbo/connect"><button class="go" style="margin-top:8px">Connect the sandbox company</button></a><br><span class="muted">Intuit must list this address as a redirect URI:<br>'+esc(q.redirect_uri)+'</span>';return}
  el.innerHTML='<b style="color:var(--ink)">'+esc(q.company)+'</b><br>Sandbox · read only · connected by '+esc(q.connected_by)+'<br>'+['accounts','vendors','customers','purchases','bills','invoices'].map(k=>q[k]+' '+k).join(' · ')+
-  '<h3>Latest purchases in its books</h3>'+q.recent_purchases.map(p=>esc(p.date)+' · $'+esc(p.amount)+'<br>'+esc(p.payee||'no payee')+' → '+esc(p.category||'uncategorized')).join('<br>')}
+  '<h3>Latest purchases in its books</h3>'+q.recent_purchases.map(p=>esc(p.date)+' · $'+esc(p.amount)+'<br>'+esc(p.payee||'no payee')+' → '+esc(p.category||'uncategorized')).join('<br>')+
+  '<h3>Can this connection read the bank feed?</h3><button id="probe">Run the test</button><div id="probeout"></div>';
+ $('#probe').onclick=async()=>{const out=$('#probeout');out.textContent='Asking QuickBooks…';const r=await get('/api/qbo/probe');
+  if(r.error||!r.results){out.innerHTML='<span class="bad">'+esc(r.error||'The test could not run.')+'</span>';return}
+  const row=x=>esc(x.name)+': '+(x.readable?'readable'+(x.count==null?'':' ('+x.count+')'):'refused (HTTP '+esc(x.status)+(x.said?', '+esc(x.said):'')+')');
+  const part=k=>r.results.filter(x=>x.kind===k);const open=part('bank_feed').filter(x=>x.readable).length;
+  out.innerHTML='<b>Recorded in the books</b><br>'+part('recorded').map(row).join('<br>')+'<br><b>Unreviewed bank feed lines, by every name tried</b><br>'+part('bank_feed').map(row).join('<br>')+
+   '<br><b>Result: '+(open?open+' bank feed name(s) answered. Look closer.':'none of the bank feed names is readable through this connection.')+'</b>'}}
 roster();qbo();
 </script></body></html>

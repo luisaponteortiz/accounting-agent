@@ -20,6 +20,9 @@ API = "https://sandbox-quickbooks.api.intuit.com"   # sandbox only, on purpose
 SCOPE = "com.intuit.quickbooks.accounting"
 MINOR_VERSION = "75"
 STATE_SECONDS = 600
+RECORDED = ("Purchase", "Deposit", "Transfer", "JournalEntry", "BillPayment", "Payment", "SalesReceipt")
+FEED_NAMES = ("BankTransaction", "BankFeed", "BankFeedTransaction", "OlbTransaction", "PendingTransaction", "DownloadedTransaction")
+FEED_PATHS = ("banking/transactions", "bankfeeds", "olb/transactions")
 
 
 class QboError(Exception):
@@ -72,7 +75,7 @@ class Qbo:
                     expires_at=self.clock() + int(data.get("expires_in", 3600)) - 60)
 
     # -- reads ------------------------------------------------------------
-    def _get(self, path, params=None):
+    def _request(self, path, params=None):
         c = self.connection
         if not c:
             raise QboError("no QuickBooks sandbox company is connected")
@@ -80,7 +83,10 @@ class Qbo:
             c.update(self._token(dict(grant_type="refresh_token", refresh_token=c["refresh_token"])))
         query = urllib.parse.urlencode(dict(params or {}, minorversion=MINOR_VERSION))
         url = "%s/v3/company/%s/%s?%s" % (API, c["realm_id"], path, query)
-        status, raw = self.transport("GET", url, {"Authorization": "Bearer " + c["access_token"], "Accept": "application/json"})
+        return self.transport("GET", url, {"Authorization": "Bearer " + c["access_token"], "Accept": "application/json"})
+
+    def _get(self, path, params=None):
+        status, raw = self._request(path, params)
         if status != 200:
             raise QboError("QuickBooks answered HTTP %s for %s" % (status, path.split("/")[0]))
         return json.loads(raw)
@@ -105,6 +111,31 @@ class Qbo:
                     connected_by=c["connected_by"], accounts=count("Account"), vendors=count("Vendor"),
                     customers=count("Customer"), purchases=count("Purchase"), bills=count("Bill"),
                     invoices=count("Invoice"), recent_purchases=recent)
+
+
+    def probe(self):
+        """Ask the sandbox which kinds of record this connection can read. Reads only.
+
+        The first group is activity already recorded in the books. The second is every name a
+        bank feed's unreviewed ("For Review") lines could plausibly go by; none is documented by
+        Intuit, so each is expected to be refused, and the refusal is the evidence.
+        """
+        def ask(kind, name, path, params):
+            status, raw = self._request(path, params)
+            try:
+                data = json.loads(raw)
+            except ValueError:
+                data = {}
+            if status == 200:
+                return dict(kind=kind, name=name, readable=True, count=data.get("QueryResponse", {}).get("totalCount"))
+            fault = {k.lower(): v for k, v in data.items()}.get("fault") or {}
+            first = ({k.lower(): v for k, v in fault.items()}.get("error") or [{}])[0]
+            first = {k.lower(): v for k, v in first.items()}
+            said = first.get("detail") or first.get("message") or ""
+            return dict(kind=kind, name=name, readable=False, status=status, said=str(said)[:160])
+        count = lambda kind, entity: ask(kind, entity, "query", {"query": "select count(*) from " + entity})
+        return ([count("recorded", e) for e in RECORDED] + [count("bank_feed", e) for e in FEED_NAMES]
+                + [ask("bank_feed", path, path, None) for path in FEED_PATHS])
 
 
 def from_environment(environ):

@@ -17,7 +17,12 @@ class Intuit:
             return self.token_status, json.dumps(dict(access_token="ACCESS-%d" % self.issued, refresh_token="REFRESH-%d" % self.issued, expires_in=3600)).encode()
         if "/companyinfo/" in url:
             return 200, json.dumps({"CompanyInfo": {"CompanyName": "Sandbox Company_US_1"}}).encode()
-        statement = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)["query"][0]
+        asked = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
+        if "query" not in asked:
+            return 404, b"<html>Not Found</html>"
+        statement = asked["query"][0]
+        if statement.split()[-1] in qbo.FEED_NAMES:
+            return 400, json.dumps({"Fault": {"Error": [{"Message": "Error parsing query", "Detail": "QueryParserError: Invalid entity", "code": "4000"}], "type": "ValidationFault"}}).encode()
         if "count(*)" in statement:
             return 200, json.dumps({"QueryResponse": {"totalCount": 7}}).encode()
         return 200, json.dumps({"QueryResponse": {"Purchase": [{"TxnDate": "2026-11-01", "TotalAmt": 19.99, "EntityRef": {"name": "Sample Vendor"},
@@ -84,6 +89,24 @@ class QboCase(unittest.TestCase):
         refresh = [c for c in self.intuit.calls if c[1] == qbo.TOKEN][-1]
         self.assertIn(b"grant_type=refresh_token", refresh[3])
         self.assertIn("Bearer ACCESS-2", [c[2].get("Authorization") for c in self.intuit.calls if "/companyinfo/" in c[1]])
+
+    def test_the_bank_feed_test_only_reads_and_reports_each_refusal(self):
+        with self.assertRaises(qbo.QboError):
+            self.q.probe()                                   # nothing connected, nothing asked
+        self.q.finish(self.start()["state"][0], "code", "123")
+        before = len(self.intuit.calls)
+        got = self.q.probe()
+        recorded = [r for r in got if r["kind"] == "recorded"]
+        feed = [r for r in got if r["kind"] == "bank_feed"]
+        self.assertEqual([r["name"] for r in recorded], list(qbo.RECORDED))
+        self.assertTrue(all(r["readable"] and r["count"] == 7 for r in recorded))
+        self.assertEqual(len(feed), len(qbo.FEED_NAMES) + len(qbo.FEED_PATHS))
+        self.assertFalse(any(r["readable"] for r in feed))
+        self.assertEqual((feed[0]["status"], feed[0]["said"]), (400, "QueryParserError: Invalid entity"))
+        self.assertEqual(feed[-1]["status"], 404)
+        asked = self.intuit.calls[before:]
+        self.assertTrue(all(c[0] == "GET" and c[1].startswith(qbo.API + "/v3/company/123/") for c in asked))
+        self.assertNotIn("ACCESS-", json.dumps(got))
 
     def test_without_keys_there_is_no_connection_object(self):
         self.assertIsNone(qbo.from_environment({}))

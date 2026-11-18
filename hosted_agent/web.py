@@ -93,6 +93,14 @@ class Handler(BaseHTTPRequestHandler):
                     return self.send(200, dict(configured=True, redirect_uri=s.qbo.redirect_uri, **s.qbo.summary()))
                 except qbo.QboError as problem:
                     return self.send(200, dict(configured=True, connected=False, error=str(problem)))
+            if url.path == "/api/qbo/probe":
+                review.allow(person, "mode")
+                if not s.qbo:
+                    return self.send(404, {"error": "QuickBooks keys are not set on this service."})
+                try:
+                    return self.send(200, {"results": s.qbo.probe()})
+                except qbo.QboError as problem:
+                    return self.send(200, {"error": str(problem)})
             if url.path == "/":
                 return self.send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
             if url.path == "/api/roster":
