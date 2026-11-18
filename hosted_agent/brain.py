@@ -33,7 +33,8 @@ class Context:
     """What the books already say about one company. Built fresh for each run."""
 
     def __init__(self, ledger, realm_id):
-        self.accounts = [a["name"] for a in ledger.accounts(realm_id)]
+        self.chart = ledger.accounts(realm_id)
+        self.accounts = [a["name"] for a in self.chart]
         self.banks = ledger.bank_accounts(realm_id)
         self.bills = ledger.open_bills(realm_id)
         self.invoices = ledger.open_invoices(realm_id)

@@ -27,12 +27,12 @@ People decide waiting items (approve, change, reject with a reason), grant and e
 
 ```sh
 python3 -m hosted_agent demo                               # review page on http://127.0.0.1:8770, sign-in links printed
-python3 -m unittest discover -s hosted_agent/tests -t .     # 36 review tests
+python3 -m unittest discover -s hosted_agent/tests -t .     # 44 review tests
 ```
 
 ## What is not built yet
 
-- **The brain is a baseline.** `BaselineBrain` uses only each company's own history. Claude goes behind the same `propose` method, with the owner's skills as its instructions, and is held to the same routing. Needs an API key.
+- **Claude is a first cut.** With `ANTHROPIC_API_KEY` set, `ClaudeBrain` asks Claude only about lines the books cannot settle, and its suggestions are always reviewed by a person (class `model suggestion` can never get a standing approval). Its instructions are a short list of the firm's rules written into `claude_brain.py`; the owner's skill library is not loaded yet. Set `AGENT_BRAIN=baseline` to switch it off, `AGENT_MODEL` to change the model.
 - **The ledger is a fake.** `FakeLedger` stands in for QuickBooks. Whether a hosted service can read and act on the QuickBooks bank feed is the first thing to prove against an Intuit sandbox.
 - **Only the bank feed job.** Cards, documents, close and the other jobs follow the same frame.
 - **Sign-in is a link with a token**, good enough for fictional data and not for go-live. Storage is SQLite.

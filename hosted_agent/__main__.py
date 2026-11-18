@@ -6,7 +6,7 @@ import os
 import secrets
 
 from . import demo_books
-from .brain import BaselineBrain
+from .claude_brain import from_environment
 from .ledger import FakeLedger
 from .runner import run_client
 from .store import Store
@@ -35,10 +35,13 @@ def main():
     parser.add_argument("--host", default=os.environ.get("HOST", "127.0.0.1"))
     parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8770")))
     args = parser.parse_args()
-    store, ledger, brain = Store(args.db), FakeLedger(demo_books.companies()), BaselineBrain()
+    store, ledger, brain = Store(args.db), FakeLedger(demo_books.companies()), from_environment(os.environ)
+    print("Brain: %s" % brain.name, flush=True)
     seed_demo(store)
     for client in store.clients():
         print(json.dumps(dict(client=client["client_id"], **run_client(store, ledger, brain, client["client_id"]))), flush=True)
+    if getattr(brain, "calls", 0):
+        print("Model calls: %s. Last error: %s" % (brain.calls, brain.last_error), flush=True)
     if args.command == "run":
         return
     people, made_up = people_from_env()

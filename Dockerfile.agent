@@ -1,5 +1,6 @@
 FROM python:3.12-slim
 WORKDIR /app
+RUN pip install --no-cache-dir anthropic==2.10.0
 COPY hosted_agent ./hosted_agent
 ENV HOST=0.0.0.0 PYTHONUNBUFFERED=1
 CMD ["python", "-m", "hosted_agent", "demo"]

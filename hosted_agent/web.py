@@ -79,7 +79,8 @@ class Handler(BaseHTTPRequestHandler):
             if url.path == "/":
                 return self.send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
             if url.path == "/api/roster":
-                return self.send(200, {"person": person, "clients": review.roster(s.store)})
+                brain = dict(name=s.brain.name, calls=getattr(s.brain, "calls", 0), last_error=getattr(s.brain, "last_error", None))
+                return self.send(200, {"person": person, "clients": review.roster(s.store), "brain": brain})
             if url.path == "/api/state":
                 state = review.state(s.store, query["client"][0])
                 state["accounts"] = [a["name"] for a in s.ledger.accounts(state["client"]["realm_id"])]
