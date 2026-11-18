@@ -9,7 +9,7 @@ from hosted_agent import qbo
 class Intuit:
     """A stand-in for Intuit: a token service and one small company whose recorded payments can be changed."""
     def __init__(self):
-        self.calls, self.token_status, self.issued, self.refuse_change, self.ignore_change, self.closed = [], 200, 0, False, False, None
+        self.calls, self.token_status, self.issued, self.refuse_change, self.ignore_change, self.closed, self.flip_credit = [], 200, 0, False, False, None, False
         self.accounts = [{"Id": "35", "Name": "Checking", "AccountType": "Bank"}, {"Id": "36", "Name": "Savings", "AccountType": "Bank"},
                          {"Id": "41", "Name": "Mastercard", "AccountType": "Credit Card"},
                          {"Id": "60", "Name": "Supplies", "AccountType": "Expense"}, {"Id": "61", "Name": "Legal", "AccountType": "Expense"},
@@ -122,6 +122,8 @@ class Intuit:
                     self.accounts[-1]["CurrentBalance"] = round(self.accounts[-1]["CurrentBalance"] + sign * held["TotalAmt"], 2)
                 held.clear()
                 held.update(sent, SyncToken=str(int(sent.get("SyncToken") or 0) + 1))
+                if self.flip_credit:
+                    held["Credit"] = not held.get("Credit")
             return self.reply(200, {kind: held})
         asked = urllib.parse.parse_qs(parts.query)
         if "query" not in asked:
@@ -341,17 +343,65 @@ class QboCase(unittest.TestCase):
         self.assertEqual(([c["id"] for c in lines["T4"]["cleared_by"]], lines["T0"]["cleared_by"]), (["B9"], []))   # a bank line of the same amount is not cancelled from the card account
         self.assertEqual(len([c for c in self.intuit.calls[sent:] if c[0] == "POST" and c[1] != qbo.TOKEN]), 1)
 
-    def test_a_card_charge_moves_but_a_card_refund_does_not(self):
+    def test_a_recorded_card_refund_moves_for_money_in_on_the_card_and_never_for_a_charge(self):
         self.connect()
-        charge = {"Id": "77", "SyncToken": "0", "TxnDate": "2026-10-11", "TotalAmt": 34.0, "PaymentType": "CreditCard", "Credit": True, "EntityRef": {"name": "Card Vendor"},
+        refund = {"Id": "77", "SyncToken": "0", "TxnDate": "2026-10-11", "TotalAmt": 34.0, "PaymentType": "CreditCard", "Credit": True, "EntityRef": {"name": "Card Vendor"},
                   "AccountRef": {"value": "41", "name": "Mastercard"}, "Line": [{"Amount": 34.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]}
-        self.intuit.records["Purchase"].append(charge)
+        self.intuit.records["Purchase"].append(refund)
         sent = len(self.intuit.calls)
         self.assertEqual([c["id"] for c in self.line(self.q.clearing(), "T4")["recorded"]], ["B9"])   # a refund on the card is money coming back: not this charge again
         with self.assertRaises(qbo.QboError):
             self.q.move_to_clearing("T4", "Purchase", "77")
         self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[sent:]))
-        del charge["Credit"]
+        # The same refund as the card feed showed it: money in on the card, posted by a rule against the card clearing account.
+        self.intuit.records["Purchase"].append({"Id": "39", "SyncToken": "0", "TxnDate": "2026-10-12", "TotalAmt": 34.0, "PaymentType": "CreditCard", "Credit": True, "AccountRef": {"value": "41", "name": "Mastercard"},
+                                                "Line": [{"Amount": 34.0, "Description": "CARD VENDOR REFUND", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})
+        line = self.line(self.q.clearing(), "P39")
+        self.assertEqual((line["direction"], line["posted_as"], [(c["type"], c["id"]) for c in line["recorded"]], line["cleared_by"]), ("in", "card credit", [("Purchase", "77")], []))
+        with self.assertRaises(qbo.QboError):
+            self.q.move_to_clearing("P39", "BillPayment", "B9")                      # the bill paid by card is money out: not this refund
+        kept = json.loads(json.dumps(refund))
+        sent = len(self.intuit.calls)
+        result = self.q.move_to_clearing("P39", "Purchase", "77")
+        self.assertEqual((result["moved"], result["from_account"], result["to_account"]), (True, "Mastercard", "Card Feed Clearing"))
+        kept.update(AccountRef={"value": "91", "name": "Card Feed Clearing"}, SyncToken="1")
+        self.assertEqual(refund, kept)                                               # still a credit on a card, with its category and payee; only the card account changed
+        self.assertEqual(len([c for c in self.intuit.calls[sent:] if c[0] == "POST" and c[1] != qbo.TOKEN]), 1)
+        got = self.q.clearing()
+        self.assertEqual(([c["id"] for c in self.line(got, "P39")["cleared_by"]], self.line(got, "T4")["cleared_by"]), (["77"], []))   # the refund line is cancelled; the charge line is not
+        # Money in on the card that someone recorded as a deposit is not a card refund: it goes to a person.
+        self.intuit.records["Deposit"].append({"Id": "78", "SyncToken": "0", "TxnDate": "2026-10-20", "TotalAmt": 19.0, "DepositToAccountRef": {"value": "41", "name": "Mastercard"},
+                                               "Line": [{"Amount": 19.0, "DepositLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]})
+        self.intuit.records["Purchase"].append({"Id": "40", "SyncToken": "0", "TxnDate": "2026-10-20", "TotalAmt": 19.0, "PaymentType": "CreditCard", "Credit": True, "AccountRef": {"value": "41", "name": "Mastercard"},
+                                                "Line": [{"Amount": 19.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})
+        self.assertEqual([(c["type"], c["id"]) for c in self.line(self.q.clearing(), "P40")["recorded"]], [("Deposit", "78")])
+        sent = len(self.intuit.calls)
+        with self.assertRaises(qbo.QboError) as told:
+            self.q.move_to_clearing("P40", "Deposit", "78")
+        self.assertIn("not a card charge, a card refund or a bill paid by card", str(told.exception))
+        self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[sent:]))
+
+    def test_a_record_that_turned_into_the_other_kind_is_not_moved(self):
+        self.connect()
+        charge = {"Id": "77", "SyncToken": "0", "TxnDate": "2026-10-11", "TotalAmt": 34.0, "PaymentType": "CreditCard", "EntityRef": {"name": "Card Vendor"},
+                  "AccountRef": {"value": "41", "name": "Mastercard"}, "Line": [{"Amount": 34.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]}
+        self.intuit.records["Purchase"].append(charge)
+        read, sent = self.q._get, len(self.intuit.calls)
+        def changed_meanwhile(path, params=None):                                    # someone made the charge a credit between the agent's two reads
+            got = read(path, params)
+            if path == "purchase/77":
+                got["Purchase"]["Credit"] = True
+            return got
+        self.q._get = changed_meanwhile
+        with self.assertRaises(qbo.QboError) as told:
+            self.q.move_to_clearing("T4", "Purchase", "77")
+        self.assertIn("opposite ways", str(told.exception))
+        self.assertTrue(all(c[0] == "GET" for c in self.intuit.calls[sent:]))
+        self.q._get = read
+        self.intuit.flip_credit = True                                               # QuickBooks saves the move but the record comes back as a credit
+        self.assertFalse(self.q.move_to_clearing("T4", "Purchase", "77")["moved"])
+        self.intuit.flip_credit = False
+        charge.update(Credit=False, AccountRef={"value": "41", "name": "Mastercard"})
         self.assertTrue(self.q.move_to_clearing("T4", "Purchase", "77")["moved"])
         self.assertEqual((charge["PaymentType"], charge["AccountRef"], charge["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"]["name"], charge["TotalAmt"]),
                          ("CreditCard", {"value": "91", "name": "Card Feed Clearing"}, "Supplies", 34.0))   # still a card charge, with the category it was given

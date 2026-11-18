@@ -154,6 +154,54 @@ class QboLedgerCase(unittest.TestCase):
             self.books.move(REALM, "T4", "BillPayment", "B9")
         self.assertEqual(self.writes(before), [])
 
+    def test_a_recorded_card_refund_is_moved_to_the_card_clearing_account_on_approval(self):
+        before = self.connect()
+        refund = {"Id": "77", "SyncToken": "0", "TxnDate": "2026-11-12", "TotalAmt": 61.4, "PaymentType": "CreditCard", "Credit": True, "EntityRef": {"name": "Card Vendor"},
+                  "AccountRef": {"value": "41", "name": "Mastercard"}, "Line": [{"Amount": 61.4, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]}
+        self.intuit.records["Purchase"].append(refund)                    # a refund someone already entered on the card
+        self.intuit.records["Purchase"].append({"Id": "39", "SyncToken": "0", "TxnDate": "2026-11-13", "TotalAmt": 61.4, "PaymentType": "CreditCard", "Credit": True, "AccountRef": {"value": "41", "name": "Mastercard"},
+                                                "Line": [{"Amount": 61.4, "Description": "CARD VENDOR REFUND", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})
+        feed = {i["id"]: i for i in self.books.pending_feed(REALM)}
+        self.assertEqual((feed["P39"]["amount_cents"], feed["P39"]["bank_account"]), (6140, "Mastercard"))      # money in on the card
+        got = self.run_agent()
+        p = got["P39"]
+        self.assertEqual((p["item_class"], p["action"]["kind"], p["action"]["txn_type"], p["action"]["txn_id"], p["confidence"]), ("already_recorded", "move", "Purchase", "77", 0.97))
+        self.assertEqual(review.decide(self.store, self.books, OWNER, p["id"], "approve"), "posted")
+        self.assertEqual((self.writes(before), refund["AccountRef"], refund["Credit"], refund["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"]["name"]),
+                         ([("POST", "purchase")], {"value": "91", "name": "Card Feed Clearing"}, True, "Supplies"))
+        posting = self.store.one("SELECT * FROM postings WHERE proposal_id=?", (p["id"],))
+        self.assertEqual((posting["verified"], posting["ledger_ref"]), (1, "Purchase 77"))
+        self.assertNotIn("P39", [i["id"] for i in self.books.pending_feed(REALM)])
+        self.assertEqual(got["T4"]["action"]["txn_id"], "B9")             # the charge line still names the bill paid by card, never the refund
+
+    def test_a_card_refund_nobody_recorded_gets_the_vendors_category_and_stays_a_credit(self):
+        before = self.connect()
+        self.intuit.records["Purchase"].append({"Id": "39", "SyncToken": "0", "TxnDate": "2026-11-13", "TotalAmt": 61.4, "PaymentType": "CreditCard", "Credit": True, "AccountRef": {"value": "41", "name": "Mastercard"},
+                                                "Line": [{"Amount": 61.4, "Description": "CARD VENDOR REFUND", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})
+        self.assertEqual(self.books.categorize(REALM, "P39", "Supplies", "City Power and Light", ""), "Purchase 39")
+        now = self.record("Purchase", "39")
+        self.assertEqual((now["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"], now["AccountRef"]["name"], now["Credit"], now["EntityRef"]["name"]),
+                         ({"value": "60", "name": "Supplies"}, "Mastercard", True, "City Power and Light"))
+        back = self.books.read_back(REALM, "P39")
+        self.assertEqual((self.writes(before), back["posted"]["account"], back["amount_cents"], back["posted"]["amount_cents"]), ([("POST", "purchase")], "Supplies", 6140, 6140))
+        seen = next(h for h in self.books.history(REALM) if h["id"] == "Purchase 39")
+        self.assertEqual((seen["amount_cents"], seen["account"], seen["vendor"]), (6140, "Supplies", "City Power and Light"))    # history keeps it as money in
+
+    def test_an_approved_category_for_a_card_refund_is_posted_and_verified(self):
+        before = self.connect()
+        for month in (8, 9, 10):                                          # three earlier charges at the same vendor, all in Supplies
+            self.intuit.records["Purchase"].append({"Id": "C%d" % month, "SyncToken": "0", "TxnDate": "2026-%02d-05" % month, "TotalAmt": 80.0, "PaymentType": "CreditCard", "EntityRef": {"value": "V9", "name": "Deck Depot"},
+                                                    "AccountRef": {"value": "41", "name": "Mastercard"}, "Line": [{"Amount": 80.0, "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "60", "name": "Supplies"}}}]})
+        self.intuit.records["Vendor"].append({"Id": "V9", "DisplayName": "Deck Depot"})
+        self.intuit.records["Purchase"].append({"Id": "39", "SyncToken": "0", "TxnDate": "2026-11-13", "TotalAmt": 61.4, "PaymentType": "CreditCard", "Credit": True, "AccountRef": {"value": "41", "name": "Mastercard"},
+                                                "Line": [{"Amount": 61.4, "Description": "DECK DEPOT", "AccountBasedExpenseLineDetail": {"AccountRef": {"value": "91", "name": "Card Feed Clearing"}}}]})
+        p = self.run_agent()["P39"]
+        self.assertEqual((p["action"]["kind"], p["action"]["account"], p["action"]["vendor"]), ("categorize", "Supplies", "Deck Depot"))
+        self.assertEqual(review.decide(self.store, self.books, OWNER, p["id"], "approve"), "posted")
+        now = self.record("Purchase", "39")
+        self.assertEqual((self.writes(before), now["Credit"], now["AccountRef"]["name"], now["Line"][0]["AccountBasedExpenseLineDetail"]["AccountRef"]["name"]), ([("POST", "purchase")], True, "Mastercard", "Supplies"))
+        self.assertEqual(self.store.one("SELECT * FROM postings WHERE proposal_id=?", (p["id"],))["verified"], 1)
+
     def test_a_card_line_in_the_card_clearing_account_is_worked_like_any_other(self):
         before = self.connect()
         self.intuit.records["Purchase"].append({"Id": "23", "SyncToken": "0", "TxnDate": "2026-11-12", "TotalAmt": 12.0, "PaymentType": "CreditCard", "AccountRef": {"value": "41", "name": "Mastercard"},

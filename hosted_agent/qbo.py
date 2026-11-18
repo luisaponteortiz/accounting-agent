@@ -330,9 +330,10 @@ class Qbo:
         """Change one recorded payment's bank account to the clearing account, and read it back.
 
         Allowed only for a payment that clearing() paired with the named clearing line. A payment
-        recorded in a bank account moves to the bank clearing account. A charge or a bill payment
-        recorded on a credit card moves to the card clearing account (D-045), which must exist.
-        Nothing else in the record changes and nothing is deleted.
+        recorded in a bank account moves to the bank clearing account. A charge, a refund or a bill
+        payment recorded on a credit card moves to the card clearing account (D-045), which must
+        exist; a refund (a card credit) only for a line of money in on the card, a charge or a bill
+        payment only for a line of money out. Nothing else in the record changes and nothing is deleted.
         """
         before = self.clearing(name)
         if not before.get("found"):
@@ -352,13 +353,17 @@ class Qbo:
         record = self._get("%s/%s" % (kind.lower(), txn_id))[kind]
         if (place(record) or {}).get("value") != line["bank_account_id"]:
             raise QboError("%s %s is no longer recorded in %s" % (kind, txn_id, line["bank_account"]))
-        if on_card and (kind not in ("Purchase", "BillPayment") or record.get("Credit")):
-            raise QboError("%s %s is not a card charge or a bill paid by card" % (kind, txn_id))
+        if on_card and kind not in ("Purchase", "BillPayment"):
+            raise QboError("%s %s is not a card charge, a card refund or a bill paid by card" % (kind, txn_id))
+        if on_card and bool(record.get("Credit")) != (line["direction"] == "in"):      # a refund is money in on the card, a charge money out
+            raise QboError("%s %s and that line go opposite ways on the card" % (kind, txn_id))
+        was_credit = bool(record.get("Credit"))
         place(record).clear()
         place(record).update(value=target["id"], name=target["name"])
         self._post(kind.lower(), record)
         now = self._get("%s/%s" % (kind.lower(), txn_id))[kind]
-        moved = (place(now) or {}).get("value") == target["id"] and int(round(float(now.get("TotalAmt") or 0) * 100)) == line["amount_cents"]
+        moved = ((place(now) or {}).get("value") == target["id"] and int(round(float(now.get("TotalAmt") or 0) * 100)) == line["amount_cents"]
+                 and bool(now.get("Credit")) == was_credit)
         after = self.clearing(name)
         result = dict(moved=moved, kind=kind, id=str(txn_id), number=now.get("DocNumber"), from_account=line["bank_account"], to_account=target["name"],
                       balance_before_cents=before["balance_cents"], balance_after_cents=after["balance_cents"])

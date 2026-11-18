@@ -10,8 +10,9 @@ categorize   the line's own record gets its real category and payee in place
 match        an open bill or invoice of the same amount is paid from, or into,
              the clearing account
 move         a payment that was already recorded in the bank account is moved
-             to the clearing account (D-043); one recorded on a credit card
-             is moved to the card clearing account (D-045)
+             to the clearing account (D-043); a charge, a refund or a bill
+             payment recorded on a credit card is moved to the card clearing
+             account (D-045)
 transfer     the two bank lines of one transfer between the company's own
              accounts already cancel in the clearing account; each record
              gets a note naming the other, and nothing else changes
@@ -139,8 +140,8 @@ class QboLedger:
                 if not part or part[detail]["AccountRef"].get("value") in clearing or (bank or {}).get("value") in clearing:
                     continue
                 vendor = (party(t, part[detail]) or {}).get("name")
-                out.append(dict(id="%s %s" % (kind, t.get("Id")), date=t.get("TxnDate"), amount_cents=sign * cents(t.get("TotalAmt")), bank_account=(bank or {}).get("name"),
-                                description=part.get("Description") or t.get("PrivateNote") or vendor or "", feed_id=None, source="books",
+                out.append(dict(id="%s %s" % (kind, t.get("Id")), date=t.get("TxnDate"), amount_cents=(1 if t.get("Credit") else sign) * cents(t.get("TotalAmt")),   # a credit on a card is money in
+                                bank_account=(bank or {}).get("name"), description=part.get("Description") or t.get("PrivateNote") or vendor or "", feed_id=None, source="books",
                                 account=part[detail]["AccountRef"].get("name"), vendor=vendor, memo=t.get("PrivateNote") or "", kind="categorize"))
         return out
 
@@ -179,7 +180,7 @@ class QboLedger:
         part = next((l for l in record.get("Line", []) if (l.get(detail) or {}).get("AccountRef")), {})
         party = record.get("EntityRef") if kind == "Purchase" else (part.get(detail) or {}).get("Entity")
         bank = record.get("AccountRef") if kind == "Purchase" else record.get("DepositToAccountRef")
-        signed = (-1 if kind == "Purchase" else 1) * cents(record.get("TotalAmt"))
+        signed = (-1 if kind == "Purchase" and not record.get("Credit") else 1) * cents(record.get("TotalAmt"))   # a credit on a card is money in
         return dict(id=str(feed_id), date=record.get("TxnDate"), amount_cents=signed, description=part.get("Description") or "", bank_account=(bank or {}).get("name"),
                     status="categorized", posted=dict(id="%s %s" % (kind, record.get("Id")), date=record.get("TxnDate"), amount_cents=signed, kind="categorize",
                     account=((part.get(detail) or {}).get("AccountRef") or {}).get("name"), vendor=(party or {}).get("name")))
